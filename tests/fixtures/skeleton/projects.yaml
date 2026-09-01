@@ -1,0 +1,14 @@
+# Test fixture — the science body map with one fictional project.
+# Same restricted subset as the live projects.yaml (REFERENCE.md).
+
+example:
+  remote: none
+  local_path: /mnt/c/Users/Jammy/Science/example
+  ral_root: /mnt/ral/jnightin/example
+  mirror: /mnt/c/Users/Jammy/Science/example/mirror   # the pull root
+  sync_cli: hpc/sync
+  sync_verbs: [pull, submit, jobs, tail]
+  ledger: wiki/project/state.md
+  witness_file: output/**/checkpoint.hdf5
+  partition: gpu
+  status: active
