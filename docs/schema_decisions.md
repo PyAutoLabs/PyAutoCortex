@@ -121,3 +121,29 @@ Choices made while writing the files, beyond the plan:
     `audit` mode never merges, so without it audit mode reports nothing.
 31. **`cortex_check.yml` triggers on its own path too.** Why: a workflow edit
     that does not run itself is invisible until the next ledger push.
+
+Choices made while writing `cortex.py` (slice B), beyond the plan:
+
+32. **`Reset:` is a phase header key, written by `move ready --reason`.**
+    Why: the table demands a reason for `submitted | running → ready` and the
+    key table gave it no home; a reason in prose cannot be found again.
+33. **`move pulled` writes `pulled_to:` — `--pulled-to <path>`, or for a
+    `legacy` run its own `where:` — and is refused when no `done | legacy`
+    run would carry one.** Why: `check` requires it on a pulled phase, and a
+    verb that writes a state its own check rejects is a trap.
+34. **An unknown header key, a missing body section, a `gated` phase with an
+    empty `Gates:`, or a `Lane:` other than `local-dev` is drift.** Why:
+    `Gate-cleared:` is one letter from `Gates-cleared:` and would otherwise
+    pass silently while the invariant it carries fails.
+35. **The run-line partition on `move --run` and `new --legacy-run` is the
+    project's `partition:` row when that is `gpu | ral`; `both` requires
+    `--partition`.** Why: the row is a capability, the run records the
+    actual queue (decision 23), and the verb should not guess between two.
+36. **`rule --also` on an `accepted` phase supersedes that phase's own
+    `Ruling:`; the primary phase takes `--supersedes` explicitly.** Why: the
+    REWIND is N accepted phases with N different heads, and spelling N ids by
+    hand is the error-prone form of the same instruction.
+37. **`gates --grade --write` removes `Gates-cleared:` when it demotes
+    `ready → gated`; `--grade` exits 1 when any ref is unreadable.** Why: a
+    stale cleared-date on a gated phase misreads as cleared; an unreadable
+    ref fails closed and a scheduled run must notice.

@@ -73,6 +73,7 @@ sections are fixed: `## Question`, `## Witness`, `## Where to look`, `## Runs`,
 | `Gates:` | comma-separated GitHub refs | `Repo#N` (owner `PyAutoLabs`) or an issue/PR URL; **no `owner/Repo#N`** form |
 | `Gates-cleared:` | `YYYY-MM-DD` | written by `gates --grade --write` when every ref cleared |
 | `Gate-override:` | reason | written by `move --override "<reason>"` |
+| `Reset:` | reason | written by `move ready --reason "<reason>"` when a `submitted \| running` phase goes back to `ready` |
 | `Witness:` | free text | **mandatory before `submitted`** — the pre-registered checkable claim |
 | `Budget:` | `H+:MM` | wall budget per run |
 | `Runs:` | comma-separated job **stems** | the index of the `## Runs` body; equal to the set of body stems |
@@ -125,11 +126,11 @@ owns. The full table:
 | gated | ready | `gates --grade --write` (all refs cleared → writes `Gates-cleared:`) or `move --override "<reason>"` (→ writes `Gate-override:`) |
 | ready | gated | `gates --grade --write` only, when a cleared gate reopened; refused if `Gate-override:` present; for `submitted`+ phases a reopened gate is *reported*, never enforced |
 | ready | submitted | `Witness:` non-empty AND `--run <id>` supplied |
-| ready | pulled | legacy-born phase: every run line is `legacy\|legacy_wrong` (`new --legacy-run` / `move pulled`); `Witness:` still mandatory |
+| ready | pulled | legacy-born phase: every run line is `legacy\|legacy_wrong` (`new --legacy-run` / `move pulled`); `Witness:` still mandatory; every `legacy` run gets a `pulled_to:` (`--pulled-to`, else its own `where:`); refused when no run is `legacy` (nothing to review — `rule drop`) |
 | submitted / running | same | `--run <id>` appends a wave, a chained job or a checkpoint resubmit (`resumes:`); state unchanged |
 | submitted | running | — |
-| submitted / running | ready | no run line in `submitted\|running` AND ≥1 `failed\|timeout\|void`; `--reason` required |
-| running | pulled | no run line live; or `--partial` (a partial array), which `check` expects closed by a `leave-to-finish` ruling |
+| submitted / running | ready | no run line in `submitted\|running` AND ≥1 `failed\|timeout\|void`; `--reason` required (→ writes `Reset:`) |
+| running | pulled | no run line live; or `--partial` (a partial array), which `check` expects closed by a `leave-to-finish` ruling; `--pulled-to <path>` writes `pulled_to:` on every `done` run lacking one, and the move is refused when no `done` run would carry one |
 | pulled | awaiting-ruling | — (the phase joins the rolling board) |
 | awaiting-ruling | accepted / rerun / dropped | **`rule` only** |
 | running / pulled / awaiting-ruling | same | `rule leave-to-finish` (state unchanged) |
@@ -151,6 +152,13 @@ Offline invariants `check` enforces on top of the table:
   reachable only through `rule`).
 - `State = pulled` AND any run line `submitted | running` ⇒ `Ruling:` present
   and its head verb is `leave-to-finish` (the `--partial` case).
+- `State = gated` ⇒ `Gates:` non-empty (a gate that does not exist cannot
+  clear).
+- A header key outside the table is drift (`Gate-cleared:` must not pass as
+  a silent typo); the five body sections are present; `Lane:`, when present,
+  is `local-dev`; `Phase:` and `Review-minutes:` are integers, `Budget:` is
+  `H+:MM`, `Gates-cleared:` and `Filed:` are `YYYY-MM-DD`. A key with an
+  empty value is read as absent.
 
 ---
 
@@ -307,7 +315,9 @@ the same body and one `Batch:`; `rule --also <phase>` fans out.
 
 **Chain rules** (`check`):
 
-- the id is unique, equals the filename stem and the title;
+- the id is unique, equals the filename stem and the title, and its date is
+  the file's `<YYYY>/<MM>` directory; the body has `## Ruling` and
+  `## Evidence`;
 - `Supersedes:` resolves to an existing ruling, is not the ruling itself, is
   lexically smaller (earlier), and names the same project **and** phase;
 - **at most one successor per ruling** — a chain, not a tree: supersede the
@@ -344,8 +354,11 @@ Member line:
 
 `<slug>` is the phase file's stem; `<runs>` is comma-separated stems or
 `none`; `<state>` is the phase state at the last refresh. `check` verifies
-the path exists, the slug matches its stem, the runs ⊆ the phase's `Runs:`
-and the state is legal.
+the path exists, the slug matches its stem, the runs ⊆ the phase's `Runs:`,
+the review-minutes are an integer and the state is legal; a `review:` field
+must resolve. A review file's title is `# Batch review <slot>` for its own
+filename, its batch record `batches/<slot>.md` exists, and every section
+names a member of it.
 
 **One review grammar** (`batches/reviews/<slot>.md`):
 
@@ -450,24 +463,43 @@ Stdlib only; `main(argv)`; no import-time side effects; every verb takes
   absent. **Cleared** = PR ⇒ `merged_at != null` (closed-unmerged is a dead
   gate, reported); issue ⇒ `state == closed` and `state_reason ∈ {completed,
   null}` (`not_planned` / `duplicate` are dead gates); anything unreadable
-  fails closed. `--grade` reports only; `--write` flips `gated → ready`
-  (writing `Gates-cleared:`) and `ready → gated` when a cleared gate reopened
-  (refused when `Gate-override:` is present; for `submitted`+ phases a
-  reopened gate is reported, never enforced).
+  fails closed (reported, nothing flipped, exit 1). `--grade` reports only;
+  `--write` flips `gated → ready` (writing `Gates-cleared:`) and
+  `ready → gated` when a cleared gate reopened (removing the stale
+  `Gates-cleared:`; refused when `Gate-override:` is present; for
+  `submitted`+ phases a reopened gate is reported, never enforced). The
+  fetch is injectable (`gates_report(root, fetch=…)`) so the grading is
+  tested offline.
 - **`rule <phase> <verb> --body <file> [--supersedes <id>] [--batch <slot>]
   [--minutes n] [--follow-up <ref>]... [--also <phase>]...`** — assigns the
   next id for today, writes the ruling file(s) (one per phase; `--also` fans
   out with the same body and batch), updates the phase's `Ruling:` and
-  `State:` per the table; refuses to touch an existing ruling; refuses a verb
-  the table does not allow from the phase's state.
+  `State:` per the table (and appends `<id> — <verb>` to the phase's
+  `## Ruling`); the ruling's `Runs:` is the phase's, its `## Evidence` is the
+  phase's `## Where to look`; refuses to touch an existing ruling; refuses a
+  verb the table does not allow from the phase's state; validates everything
+  for every phase before writing anything. An `--also` phase in `accepted`
+  supersedes its own `Ruling:` (the REWIND is N accepted phases).
 - **`move <phase> <state> [--run <id>] [--reason ..] [--override ..]
-  [--partial]`** — the table; refuses every ruling edge with a message naming
-  `rule`. `--run` on `submitted`/`running` appends a run line and keeps the
-  state.
+  [--partial] [--pulled-to <path>] [--partition ..] [--after <run>]
+  [--resumes <run>] [--note ..]`** — the table; refuses every ruling edge
+  with a message naming `rule`. `--run` on `submitted`/`running` appends a
+  run line and keeps the state; the appended line is
+  `- <id>: submitted — <partition> — submitted <today> — wall 0:00[ — <note>]`
+  with `after:` / `resumes:` continuations from the flags, and its
+  partition is the project's `partition:` row unless that is `both`, when
+  `--partition` is required. Every edit is an in-place header edit or an
+  appended run line; every other byte of the file is preserved.
 - **`new <project> <slug> --phase <n> [--gates ..] [--epic ..]
-  [--legacy-run <id>]...`** — writes `phases/<project>/<slug>.md` from the
-  template in `planned` (or `ready` when `--legacy-run` is given and every run
-  is legacy); refuses a duplicate phase number or an unknown project.
+  [--legacy-run <id>]... [--legacy-wrong <id>]... [--where <path>]
+  [--partition ..] [--witness ..] [--budget ..] [--minutes n] [--title ..]`**
+  — writes `phases/<project>/<slug>.md` from the template in `planned` (or
+  `ready` when `--legacy-run` / `--legacy-wrong` is given and every run is
+  legacy); each legacy run line is written with today's date, `wall 0:00`
+  and the note `pre-Cortex run, migrated` — the human corrects the date and
+  wall by hand — and `--where` (required) as its `where:`; a legacy-born
+  phase refuses `--gates`. Refuses a duplicate phase number, an existing
+  file or an unknown project.
 
 ---
 
