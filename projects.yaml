@@ -1,0 +1,49 @@
+# projects.yaml — the science body map.
+#
+# One row per science project. This file is CODE, not ledger: `sync_cli` and
+# `local_path` are paths the batch conductor will execute under, so a change
+# here is always a human's turn (scripts/ledger_merge.py leaves it for review,
+# exactly like PyAutoMind/repos.yaml).
+#
+# Schema — a restricted YAML subset that scripts/cortex.py parses with the
+# stdlib (REFERENCE.md "The restricted YAML subset"). It is also real YAML:
+# `yaml.safe_load` reads it identically, and a test keeps the two in step.
+#
+#   <key>:                        # column 0, ^[a-z][a-z0-9_]*$ — the project key
+#     remote: <owner/repo | none> # the private PyAutoLabs remote (code, config, wiki, witness files only)
+#     local_path: <abs path>      # the laptop checkout
+#     ral_root: <abs path>        # the project root on RAL (/mnt/ral/jnightin/<project>)
+#     mirror: <abs path | none>   # the laptop pull root the sync CLI fills (holds data, not science)
+#     sync_cli: <path>            # the project's sync CLI, relative to local_path
+#     sync_verbs: [a, b, c]       # the verbs that CLI has — a flow list of bare words, the only list
+#     ledger: <path>              # the project's own commentary ledger, relative to local_path
+#     witness_file: <glob>        # where a run's witness lands, relative to the mirror
+#     partition: gpu | ral | both # which SLURM partition(s) the project runs on
+#     status: active | dormant
+#
+# Scalars are bare unless they contain `#`, `:` or edge spaces (then "..."
+# with no escapes); comments on their own line or after ` #`; no block lists,
+# no deeper nesting, no anchors, no `---`. Every field is required; an
+# unknown field is an error.
+#
+# THE WORKSPACE-PATHS EXCEPTION. `local_path` and `mirror` are absolute laptop
+# paths OUTSIDE the PyAutoLabs workspace — the Science folder under /mnt/c/…
+# where the datasets, output trees and pulled results live. This file is the
+# one place in the organism that carries such a path; a phase file or a ruling
+# reaches a project through its row here, never with a bare path of its own.
+#
+# Worked example — the JAX inference programme, the project the schema was
+# stress-tested against. Real rows are seeded in phase 3 of the birth epic;
+# until then the map is empty.
+#
+# autolens_profiling:
+#   remote: PyAutoLabs/autolens_profiling
+#   local_path: /home/jammy/Code/PyAutoLabs/autolens_profiling
+#   ral_root: /mnt/ral/jnightin/autolens_profiling
+#   mirror: /mnt/c/Users/Jammy/Science/inference_programme
+#   sync_cli: hpc/sync
+#   sync_verbs: [pull, logs, status, submit, jobs, sacct, cancel, tail, du, check]
+#   ledger: results/notes/inference/PROGRAMME.md
+#   witness_file: results/searches/**/*.json
+#   partition: both
+#   status: active

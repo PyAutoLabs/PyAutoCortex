@@ -1,0 +1,46 @@
+name: Cortex Check
+
+# Guards the run-and-ruling registry: every phase file parses and its state is
+# legal, every ruling id is unique and every Supersedes: resolves, every
+# project a phase names is in projects.yaml, the gates/witness invariants hold
+# (`scripts/cortex.py check`), then the script's own tests. No self-heal —
+# there is no generated render here; a failing check is a real contradiction.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "phases/**"
+      - "rulings/**"
+      - "batches/**"
+      - "projects.yaml"
+      - "epics.md"
+      - "scripts/**"
+      - "tests/**"
+      - ".github/workflows/cortex_check.yml"
+  pull_request:
+    paths:
+      - "phases/**"
+      - "rulings/**"
+      - "batches/**"
+      - "projects.yaml"
+      - "epics.md"
+      - "scripts/**"
+      - "tests/**"
+      - ".github/workflows/cortex_check.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: cortex check
+        run: python3 scripts/cortex.py check
+      - name: tests
+        run: |
+          python3 -m pip install --quiet pytest pyyaml
+          python3 -m pytest tests -q
