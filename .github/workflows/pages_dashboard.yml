@@ -1,0 +1,62 @@
+name: Pages Dashboard
+
+# Serves the generated `dashboard.html` — the Cortex board's one-tap-copy twin —
+# at this repo's GitHub Pages URL (as the site's index page).
+#
+# Why a twin exists at all: GitHub's markdown rendering strips JavaScript, so
+# `dashboard.md` can never write to the clipboard — on the GitHub mobile app its
+# fenced blocks have no copy affordance at all, leaving long-press text
+# selection as the only way to grab a phase's command. The HTML page carries a
+# real copy button instead: one tap and the command is on the clipboard, ready
+# to paste into a Claude Code chat. It is also where a review is done — the
+# board is read on a phone as often as on the laptop.
+#
+# The file itself is rendered by PyAutoBrain's cortex conductor alongside
+# `dashboard.md` (one census, two pages) and kept fresh by the same self-heal in
+# `dashboard_refresh.yml`; this workflow only publishes it.
+# Only the uploaded files reach Pages — nothing else in the repo, and in
+# particular not `phases/`, `rulings/` or `projects.yaml`, whose absolute laptop
+# paths are not for a public site.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "dashboard.html"
+      - "batches/packets/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      # enablement: true creates the Pages site on first run, so no manual
+      # Settings → Pages step is needed.
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+      - name: stage the dashboard as the site index
+        run: |
+          mkdir -p _site
+          cp dashboard.html _site/index.html
+          # Batch review packets — served under /packets/, as the Mind's are.
+          mkdir -p _site/packets
+          find batches/packets -maxdepth 1 -name "*.html" -exec cp {} _site/packets/ \;
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -5,9 +5,14 @@ properties that matter are the refusals: default deny for anything
 unclassified, no traversal or dotfile route past the ledger prefixes, no
 pytest-collectable file smuggled in beside a packet, every code home the repo
 has (scripts/, tests/, .github/, policy/, docs/, projects.yaml, the prose
-pages) staying on the human side of the line — and, the Cortex's own addition,
-a MODIFIED, DELETED or RENAMED ruling never auto-merging (rulings/ is
-append-only).
+pages) staying on the human side of the line, no doctrine file (AGENTS.md,
+TEMPLATE.md) riding along because it happens to sit under a ledger dir — and,
+the Cortex's own addition, a MODIFIED, DELETED or RENAMED ruling never
+auto-merging (rulings/ is append-only).
+
+The one thing this gate must NOT refuse is the generated board: `dashboard.md`
+and `dashboard.html` are rendered from the ledger and self-healed on main, so
+they are ledger too.
 """
 
 import subprocess
@@ -31,6 +36,9 @@ def test_ledger_dirs_and_registry_files_are_ledger():
         "batches/reviews/2026-09-01-pm.md",
         "batches/packets/2026-09-01-pm.html",
         "epics.md",
+        # generated from the ledger, self-healed on main by dashboard_refresh.yml
+        "dashboard.md",
+        "dashboard.html",
     ):
         assert ledger_merge.is_ledger_path(path), path
 
@@ -43,6 +51,9 @@ def test_every_code_home_needs_a_human():
         "tests/fixtures/skeleton/phases/example/01_scope.md",
         ".github/workflows/ledger_merge.yml",
         ".github/workflows/cortex_check.yml",
+        ".github/workflows/dashboard_refresh.yml",
+        ".github/workflows/pages_dashboard.yml",
+        ".github/workflows/gates_grade.yml",
         ".gitignore",
         ".claude/settings.json",
         ".claude/hooks/session-start.sh",
@@ -83,6 +94,38 @@ def test_inert_assets_ride_along_but_collectable_tests_do_not():
         "rulings/2026/09/thing_test.py",
     ):
         assert not ledger_merge.is_ledger_path(path), path
+
+
+def test_doctrine_under_a_ledger_dir_needs_a_human():
+    """A ledger dir holds entries; `AGENTS.md` and `TEMPLATE.md` inside one are
+    not entries, they are the doctrine that says what an entry may be and the
+    template every future entry is stamped from. A branch that could auto-merge
+    `rulings/AGENTS.md` could edit the rule governing its own merge."""
+    for path in (
+        "rulings/AGENTS.md",
+        "batches/AGENTS.md",
+        "batches/packets/AGENTS.md",
+        "batches/packets/TEMPLATE.md",
+        "batches/reviews/AGENTS.md",
+        # by name, not by that fixed list — a doctrine file in a dir nobody has
+        # created yet is code on the day it appears
+        "phases/example/AGENTS.md",
+    ):
+        assert not ledger_merge.is_ledger_path(path), path
+    # ordinary entries beside them still merge
+    assert ledger_merge.is_ledger_path("batches/packets/2026-09-01-pm.html")
+    assert ledger_merge.is_ledger_path("batches/reviews/2026-09-01-pm.md")
+
+
+def test_every_tracked_file_under_a_ledger_dir_gets_the_right_verdict():
+    """The witness on the live tree: every tracked path under phases/, rulings/
+    and batches/ is ledger unless it is doctrine."""
+    out = subprocess.run(["git", "ls-files", "phases", "rulings", "batches"], cwd=REPO,
+                         capture_output=True, text=True, check=True).stdout.split()
+    assert out, "no ledger-dir paths tracked"
+    for path in out:
+        doctrine = Path(path).name in ("AGENTS.md", "TEMPLATE.md")
+        assert ledger_merge.is_ledger_path(path) is not doctrine, path
 
 
 def test_classify_splits_and_dedupes_preserving_order():
@@ -226,3 +269,30 @@ def test_workflow_invokes_the_script_as_implemented():
     workflow = (REPO / ".github" / "workflows" / "ledger_merge.yml").read_text()
     assert "python3 scripts/ledger_merge.py classify --base origin/main" in workflow
     assert "python3 scripts/cortex.py check" in workflow
+
+
+def test_every_workflow_this_repo_has_is_code():
+    """Enumeration, not a sample: no workflow file may ever auto-merge, and the
+    three added with the dashboard (two of which push to main) are named here so
+    the list cannot silently fall behind the directory."""
+    tracked = set(subprocess.run(["git", "ls-files", ".github/workflows"], cwd=REPO,
+                                 capture_output=True, text=True, check=True).stdout.split())
+    for name in ("cortex_check.yml", "ledger_merge.yml", "dashboard_refresh.yml",
+                 "pages_dashboard.yml", "gates_grade.yml"):
+        assert f".github/workflows/{name}" in tracked, name
+    for path in tracked:
+        assert not ledger_merge.is_ledger_path(path), path
+
+
+def test_the_page_workflows_spell_the_conductor_and_the_grader_as_implemented():
+    """`--cortex` is a flag of the SUBCOMMAND, not a global: `dashboard --cortex
+    . --check` runs, `--cortex . dashboard --check` exits 2 (argparse) and the
+    check() wrapper would report a renderer failure. Pin the spelling."""
+    refresh = (REPO / ".github" / "workflows" / "dashboard_refresh.yml").read_text()
+    assert 'python3 "$BRAIN" dashboard --cortex . --check' in refresh
+    assert 'python3 "$BRAIN" dashboard --cortex . --apply' in refresh
+    assert "git add dashboard.md dashboard.html" in refresh
+    grade = (REPO / ".github" / "workflows" / "gates_grade.yml").read_text()
+    assert "python3 scripts/cortex.py gates --grade --write" in grade
+    # the one scheduled mutator commits phase headers and nothing else
+    assert "git add phases" in grade

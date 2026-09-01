@@ -1,0 +1,157 @@
+name: Dashboard Refresh
+
+# Keeps the generated Cortex pages (`dashboard.md`, linked from the README, and
+# `dashboard.html`, the Pages index) in step with the registry they describe.
+# The pages are rendered by PyAutoBrain's cortex conductor from `phases/`,
+# `rulings/`, `batches/`, `projects.yaml` and `epics.md`, so any push that files
+# a phase, moves it, records a run or lands a ruling makes them stale.
+#
+# Same shape as the Mind's dashboard_refresh.yml, and for the same reason: on
+# pull requests a stale page is an error the author fixes on the branch; on
+# pushes to main it is SELF-HEALED with a bot commit, because Cortex pushes land
+# directly on main from ledger_merge.yml and from branch-scoped sessions, and an
+# alarm-only check would just email a human.
+#
+# The generation stamp AND the visible `Last updated` banner are excluded from
+# the drift comparison (`--check`), so a re-render on an unchanged registry is
+# not drift and this never commits daily. (The Mind's normaliser strips only the
+# comment, which is why its nightly self-heals every night; the Cortex renderer
+# strips both — schema_decisions.md 38.)
+#
+# The nightly cron is the routine rebuild: it catches what push triggers cannot
+# — renderer changes merged in PyAutoBrain (the renderer lives there, so no
+# Cortex path fires) and any render that depends on the passage of time. A no-op
+# night commits nothing.
+
+on:
+  schedule:
+    - cron: "35 3 * * *"
+  push:
+    branches: [main]
+    paths:
+      - "phases/**"
+      - "rulings/**"
+      - "batches/**"
+      - "projects.yaml"
+      - "epics.md"
+      - "dashboard.md"
+      - "dashboard.html"
+  pull_request:
+    paths:
+      - "phases/**"
+      - "rulings/**"
+      - "batches/**"
+      - "projects.yaml"
+      - "epics.md"
+      - "dashboard.md"
+      - "dashboard.html"
+  workflow_dispatch:
+
+# contents: write is needed by the self-heal push on main; PR runs never push.
+# actions: write → re-dispatch pages_dashboard.yml after a heal: the heal commit
+# is made with GITHUB_TOKEN, which never triggers other workflows, so without
+# the explicit dispatch the Pages page stays stale while the repo copy is fresh
+# (the Mind was bitten by exactly this on 2026-08-21).
+permissions:
+  contents: write
+  actions: write
+
+# Every workflow in this repo that can push to main shares one queue —
+# ledger_merge.yml and gates_grade.yml carry the same group — so two bot writers
+# never race for the tip and spend their retries re-merging. Queue rather than
+# cancel: a cancelled heal can leave a rendered page uncommitted. PR runs never
+# push, but they share the group rather than carry a second, ref-scoped one; the
+# queue is short and one name is easier to reason about than two.
+concurrency:
+  group: cortex-main-writers
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: PyAutoCortex
+      # The renderer lives with the cortex conductor, not here — the Cortex
+      # holds the state, the Brain reasons over it (ORGANISM.md).
+      - uses: actions/checkout@v4
+        with:
+          repository: PyAutoLabs/PyAutoBrain
+          path: PyAutoBrain
+      # No setup-python: the conductor and cortex.py are stdlib only, and the
+      # runner's python3 is the interpreter the laptop render is compared to.
+      - name: dashboard freshness (self-healing on push to main)
+        working-directory: PyAutoCortex
+        run: |
+          BRAIN=../PyAutoBrain/agents/conductors/cortex/_cortex.py
+          # Exit 1 is drift and nothing else. Any other non-zero code means the
+          # renderer itself could not run — a Brain/Cortex version skew, say —
+          # and reporting that as "the page is stale" sends whoever reads the
+          # log to fix the wrong file. (2 is argparse: the verb or a flag this
+          # Brain main does not have.)
+          check() {
+            local rc=0
+            python3 "$BRAIN" dashboard --cortex . --check || rc=$?
+            if [ "$rc" -gt 1 ]; then
+              echo "::error::the dashboard renderer exited ${rc} — that is not drift. Check that PyAutoBrain main still provides 'cortex dashboard --check'."
+              exit 1
+            fi
+            return "$rc"
+          }
+          if check; then
+            # Fresh in the repo does NOT mean published. The commit that made it
+            # fresh is usually ledger_merge.yml's, pushed with GITHUB_TOKEN,
+            # which fires no push event -- so pages_dashboard.yml's own
+            # `push: main, paths: [dashboard.html]` trigger never sees it, and the
+            # heal-path dispatch below is never reached because we return here.
+            # That stranded the Mind's published board on 2026-08-27 while main
+            # was correct, and the nightly cron takes this same path, so nothing
+            # healed it. Ask the publisher explicitly: it is idempotent and
+            # collapses under pages_dashboard.yml's `concurrency: group: pages`.
+            # DO NOT fold this back into the heal path below -- that IS the bug.
+            if [ "${GITHUB_EVENT_NAME}" != "pull_request" ]; then
+              GH_TOKEN="${{ github.token }}" gh workflow run pages_dashboard.yml --ref main \
+                || echo "::warning::could not dispatch pages_dashboard.yml — the Pages page will lag until its next trigger"
+            fi
+            exit 0
+          fi
+          # Only PR runs error-without-healing; push, the nightly schedule and
+          # manual dispatch all self-heal main.
+          if [ "${GITHUB_EVENT_NAME}" = "pull_request" ]; then
+            echo "::error::dashboard.md/.html are stale — run 'pyauto-brain cortex dashboard --apply' on this branch and commit the result"
+            exit 1
+          fi
+          echo "the dashboard pages are stale on main — self-healing"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # Each attempt rebuilds on the current tip of main, so a concurrent
+          # push (the usual cause of a rejected push) never needs a rebase.
+          # The heal push uses the default GITHUB_TOKEN, which does not trigger
+          # workflow runs, so it cannot loop.
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git reset --hard FETCH_HEAD
+            if check; then
+              echo "tip of main is already fresh (healed by a concurrent push)"
+              exit 0
+            fi
+            python3 "$BRAIN" dashboard --cortex . --apply
+            if ! check; then
+              echo "::error::'dashboard --apply' did not converge — renderer bug, repair by hand"
+              exit 1
+            fi
+            git add dashboard.md dashboard.html
+            git commit -m "cortex: self-heal stale dashboard pages"
+            if git push origin HEAD:main; then
+              echo "healed on attempt ${attempt}"
+              # Token pushes never trigger pages_dashboard.yml — publish the
+              # healed page explicitly or the Pages site stays stale.
+              GH_TOKEN="${{ github.token }}" gh workflow run pages_dashboard.yml --ref main \
+                || echo "::warning::could not dispatch pages_dashboard.yml — the Pages page will lag until its next trigger"
+              exit 0
+            fi
+            echo "push rejected (attempt ${attempt}) — retrying on the new tip of main"
+          done
+          echo "::error::could not push the healed dashboard after 3 attempts"
+          exit 1

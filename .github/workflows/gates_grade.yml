@@ -1,0 +1,114 @@
+name: Gates Grade
+
+# THE ONE SCHEDULED JOB THAT MUTATES THE LEDGER. Everything else on a timer in
+# this repo reads (`cortex_check.yml`) or re-renders a generated page
+# (`dashboard_refresh.yml`); this one edits phase files on main. It may only
+# ever move a phase `gated → ready` — every gate a phase names has cleared, so
+# the work it was waiting on is done — and `ready → gated` when a cleared gate
+# reopened. It never rules, never submits, never touches a run line, and never
+# moves a phase that has left `ready`: for a `submitted`+ phase a reopened gate
+# is reported and nothing is written (`cortex.py gates --grade --write`).
+#
+# WHY A ROBOT MAY DO THIS. "Is issue #380 closed?" is a fact GitHub answers, not
+# a judgement. The human's judgement is the ruling, and no ruling is ever
+# written here. A phase arriving in `ready` costs nothing until a human admits
+# it into a slot.
+#
+# FAILS CLOSED. An unreadable ref (a deleted issue, a rate limit, a private
+# repo) grades as `unreadable`, that phase is skipped and the script exits 1.
+# This job commits whatever DID flip and then exits with that code, so the run
+# is red and a human sees the ref — a red job must never mean the flips were
+# lost.
+
+on:
+  schedule:
+    - cron: "47 6 * * *"   # daily 06:47 UTC — offset off the top of the hour
+  workflow_dispatch:
+
+# contents: write → the commit of the flipped phases.
+# actions: write → re-dispatch cortex_check.yml and dashboard_refresh.yml: this
+#   job pushes with GITHUB_TOKEN, which triggers no workflow runs at all, so
+#   without the explicit dispatches the flipped phases are never checked on main
+#   and the board keeps showing them as gated.
+permissions:
+  contents: write
+  actions: write
+
+# Shared with ledger_merge.yml and dashboard_refresh.yml: every workflow that
+# can push to main queues on one name, so two bot writers never race for the tip.
+concurrency:
+  group: cortex-main-writers
+  cancel-in-progress: false
+
+jobs:
+  grade:
+    # Never in a fork: this job writes to main.
+    if: github.repository == 'PyAutoLabs/PyAutoCortex'
+    runs-on: ubuntu-latest
+    steps:
+      # Only the Cortex — the grading is `scripts/cortex.py`'s own (stdlib, no
+      # Brain checkout, no setup-python), so a Brain outage cannot stall the
+      # gates. Shallow is enough: nothing here reads history.
+      - uses: actions/checkout@v4
+
+      - name: grade the gates, commit what flipped
+        id: grade
+        env:
+          # `gh api` reads the gated issues and PRs, which live in the sibling
+          # PyAuto repos; they are public, so the repo-scoped GITHUB_TOKEN can
+          # read them. A ref it cannot read is `unreadable` and fails closed.
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          rc=0
+          pushed=no
+          # Each attempt re-grades on the current tip of main, so a concurrent
+          # push (the usual cause of a rejected push) never needs a rebase.
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git reset --hard FETCH_HEAD
+            python3 scripts/cortex.py gates --grade --write | tee grade.txt
+            rc=${PIPESTATUS[0]}
+            if git diff --quiet; then
+              echo "no gate flipped (attempt ${attempt})"
+              break
+            fi
+            # Explicit pathspec: `gates --write` edits phase headers and nothing
+            # else, and grade.txt is a scratch file that must not be committed.
+            git add phases
+            git commit -m "cortex: gates graded — $(grep -c '→ ready' grade.txt || true) flipped"
+            if git push origin HEAD:main; then
+              echo "pushed on attempt ${attempt}"
+              pushed=yes
+              break
+            fi
+            echo "push rejected (attempt ${attempt}) — re-grading on the new tip of main"
+          done
+          echo "pushed=${pushed}" >> "$GITHUB_OUTPUT"
+          echo "rc=${rc}" >> "$GITHUB_OUTPUT"
+          {
+            echo '```'
+            cat grade.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      # A GITHUB_TOKEN push fires no events, so main's check and the board have
+      # to be asked by name or the flipped phases sit unchecked and unrendered.
+      - name: check and re-render main
+        if: steps.grade.outputs.pushed == 'yes'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run cortex_check.yml --repo "${{ github.repository }}" --ref main \
+            || echo "::warning::could not dispatch cortex_check.yml — its next push-triggered run will check main"
+          gh workflow run dashboard_refresh.yml --repo "${{ github.repository }}" --ref main \
+            || echo "::warning::could not dispatch dashboard_refresh.yml — the board will lag until its nightly run"
+
+      # Last, so an unreadable ref reddens the job only AFTER whatever cleared
+      # has been committed and published.
+      - name: fail on an unreadable gate ref
+        if: steps.grade.outputs.rc != '0'
+        run: |
+          echo "::error::'cortex.py gates --grade' exited ${{ steps.grade.outputs.rc }} — a gate ref could not be read; the phases it gates were skipped"
+          exit ${{ steps.grade.outputs.rc }}
