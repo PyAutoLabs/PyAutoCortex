@@ -2,8 +2,9 @@
 
 Project: subhalo_validation
 Phase: 1
-State: running
+State: ready
 Gates:
+Reset: job B (342234 / 342240) cancelled 2026-09-02 after 12 min at the human's request: the chain waits for the numba likelihood speed-ups in progress; source_lp[1] (job A) is complete and kept; the partial source_pix[1] outputs were removed on RAL
 Witness: evidence_increase < 5 in results/delaunay_adapt_split/pl_sersic_0_no_subhalo.json (test_mode false)
 Budget: 48:00
 Runs: 342027, 342231, 342234
@@ -52,8 +53,8 @@ Measured stage costs (the reason subhalo[2] was later switched off): `source_lp[
 - 342027_0: legacy — ral — submitted 2026-08-29 — wall 34:08 — pre-Cortex run, migrated; MaxRSS 27.0 GB, autolens 2026.8.17.1 + PyAutoFit 56fb8b63b (the PR #1548 pool fix); witness predates the subhalo_stage key — read it as subhalo[2]_[single_plane_refine]
     where: output/subhalo/detect/delaunay_adapt_split/pl_sersic_0_no_subhalo/
     pulled_to: output/subhalo/detect/delaunay_adapt_split/pl_sersic_0_no_subhalo/
-- 342231_0: submitted — ral — submitted 2026-09-02 — wall 0:00 — job A, source_lp[1] on JAX; rerun with the S/N-3 adapt-image cap and fixed over-sampling (R-20260902-04..07)
-- 342234_0: submitted — ral — submitted 2026-09-02 — wall 0:00 — job B, the full chain from source_pix[1]; reloads job A
+- 342231_0: done — ral — submitted 2026-09-02 — wall 0:02 — job A, source_lp[1] on JAX; rerun with the S/N-3 adapt-image cap and fixed over-sampling (R-20260902-04..07)
+- 342234_0: void — ral — submitted 2026-09-02 — wall 0:12 — job B, cancelled 2026-09-02 at 12 min inside source_pix[1] to wait for the numba likelihood speed-ups; partial source_pix[1] output removed on RAL
     after: 342231_0
 
 ## Ruling

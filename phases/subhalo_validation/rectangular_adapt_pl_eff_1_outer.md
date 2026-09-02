@@ -34,7 +34,7 @@ evidence_increase < 5 in results/rectangular_adapt/pl_eff_1_outer_no_subhalo.jso
 ## Runs
 
 - 342237_2: submitted — ral — submitted 2026-09-02 — wall 0:00 — job A, source_lp[1] on JAX
-- 342240_2: submitted — ral — submitted 2026-09-02 — wall 0:00 — job B, the full chain from source_pix[1]; reloads job A
+- 342240_2: void — ral — submitted 2026-09-02 — wall 0:00 — job B, cancelled 2026-09-02 while pending afterok, to wait for the numba likelihood speed-ups
     after: 342237_2
 
 ## Ruling

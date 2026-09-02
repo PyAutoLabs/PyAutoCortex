@@ -2,8 +2,9 @@
 
 Project: subhalo_validation
 Phase: 4
-State: running
+State: ready
 Gates:
+Reset: job B (342234 / 342240) cancelled 2026-09-02 after 12 min at the human's request: the chain waits for the numba likelihood speed-ups in progress; source_lp[1] (job A) is complete and kept; the partial source_pix[1] outputs were removed on RAL
 Witness: evidence_increase < 5 in results/rectangular_adapt/pl_sersic_0_no_subhalo.json (test_mode false)
 Budget: 48:00
 Runs: 342094, 342095, 342237, 342240
@@ -68,8 +69,8 @@ column's 21,386.823 — different mesh size and free-parameter count.
     where: output/subhalo/detect/rectangular_adapt/pl_sersic_0_no_subhalo/
     after: 342094_0
     pulled_to: output/subhalo/detect/rectangular_adapt/pl_sersic_0_no_subhalo/
-- 342237_0: submitted — ral — submitted 2026-09-02 — wall 0:00 — job A, source_lp[1] on JAX; rerun with the S/N-3 adapt-image cap and fixed over-sampling (R-20260902-04..07)
-- 342240_0: submitted — ral — submitted 2026-09-02 — wall 0:00 — job B, the full chain from source_pix[1]; reloads job A
+- 342237_0: done — ral — submitted 2026-09-02 — wall 0:02 — job A, source_lp[1] on JAX; rerun with the S/N-3 adapt-image cap and fixed over-sampling (R-20260902-04..07)
+- 342240_0: void — ral — submitted 2026-09-02 — wall 0:00 — job B, cancelled 2026-09-02 while pending afterok, to wait for the numba likelihood speed-ups
     after: 342237_0
 
 ## Ruling
