@@ -2,7 +2,7 @@
 
 Project: subhalo_validation
 Phase: 3
-State: submitted
+State: running
 Gates:
 Witness: evidence_increase < 5 in results/delaunay_adapt_split/pl_eff_1_outer_no_subhalo.json (test_mode false)
 Budget: 48:00

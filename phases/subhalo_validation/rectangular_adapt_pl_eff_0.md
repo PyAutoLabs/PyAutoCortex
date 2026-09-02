@@ -2,7 +2,7 @@
 
 Project: subhalo_validation
 Phase: 5
-State: submitted
+State: running
 Gates:
 Witness: evidence_increase < 5 in results/rectangular_adapt/pl_eff_0_no_subhalo.json (test_mode false; grid-derived, subhalo_stage subhalo[1])
 Budget: 48:00

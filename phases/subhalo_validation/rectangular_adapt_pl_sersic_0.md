@@ -2,7 +2,7 @@
 
 Project: subhalo_validation
 Phase: 4
-State: submitted
+State: running
 Gates:
 Witness: evidence_increase < 5 in results/rectangular_adapt/pl_sersic_0_no_subhalo.json (test_mode false)
 Budget: 48:00
