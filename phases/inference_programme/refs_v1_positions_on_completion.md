@@ -2,11 +2,11 @@
 
 Project: inference_programme
 Phase: 12
-State: ready
+State: submitted
 Gates:
 Witness: all 3 array tasks deliver on their own evidence — wall inside the 6:00 budget, a positions.info file in the run dir, a result row carrying version 2026.8.17.1 and a target_id that recomputes from _targets.py, .err free of Tracebacks, .out ending "Finished." with a .completed marker, zero "Fit Already Completed", no overflow signature; each row's maxLL lands within the 29,800–31,600 band of the accepted positions-on rows rather than 500+ nats below it
 Budget: 6:00
-Runs:
+Runs: 342241
 Ruling:
 Lane: local-dev
 Review-minutes: 15
@@ -43,6 +43,8 @@ all 3 array tasks deliver on their own evidence — wall inside the 6:00 budget,
 - autolens_profiling#209 (array rows), #201 (Phase 1 redo leg), #200 (queue anchor)
 
 ## Runs
+
+- 342241_[11-13]: submitted — gpu — submitted 2026-09-02 — wall 0:00 — sbatch --array=11-13 --requeue from hpc/batch_gpu on RAL, 2026-09-02 ~16:50Z; pending (Resources) at submit
 
 ## Ruling
 
