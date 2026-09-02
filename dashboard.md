@@ -10,17 +10,47 @@ Every science phase the Cortex is holding, on one page: what is waiting on your 
 
 | Where | Count |
 |-------|------:|
-| [Awaiting ruling](#awaiting-ruling) | 0 |
+| [Awaiting ruling](#awaiting-ruling) | 4 |
 | [Running / submitted](#running--submitted) | 0 |
 | [Ready](#ready) | 0 |
-| [Gated](#gated) | 0 |
-| [Recent rulings](#recent-rulings) | 0 |
+| [Gated](#gated) | 1 |
+| [Recent rulings](#recent-rulings) | 12 |
 
 ## Awaiting ruling
 
 [markdown version](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/phases/) — Results are in and nothing is running — the human's verdict is the only thing outstanding. Ordered failures first, then the phases a ruling is required for, then the clean ones.
 
-- _(nothing awaiting a ruling)_
+<details><summary>📋 <a href="phases/inference_programme/inference_refs_v1_redo.md">Inference_programme — phase 10: InferenceRefs_v1 redo — the Phase 1 restart wave (array 342091)</a> — inference_programme phase 10 · budget 6:00 · 20 review-min · runs 342091_[0-8,10]</summary>
+
+```
+Review the PyAutoCortex phase phases/inference_programme/inference_refs_v1_redo.md and help me rule on it: read its `## Witness` and the pulled evidence under its `## Where to look`, score the witness, then draft the ruling body for my approval and run `python3 scripts/cortex.py rule phases/inference_programme/inference_refs_v1_redo.md <accept|rerun|drop|leave-to-finish> --body <file>`.
+```
+
+</details>
+
+<details><summary>📋 <a href="phases/subhalo_validation/delaunay_adapt_split_pl_eff_0.md">Subhalo_validation — phase 2: delaunay_adapt_split on pl_eff_0 — the clumpy-source lens</a> — subhalo_validation phase 2 · budget 48:00 · 8 review-min · runs 342027_1</summary>
+
+```
+Review the PyAutoCortex phase phases/subhalo_validation/delaunay_adapt_split_pl_eff_0.md and help me rule on it: read its `## Witness` and the pulled evidence under its `## Where to look`, score the witness, then draft the ruling body for my approval and run `python3 scripts/cortex.py rule phases/subhalo_validation/delaunay_adapt_split_pl_eff_0.md <accept|rerun|drop|leave-to-finish> --body <file>`.
+```
+
+</details>
+
+<details><summary>📋 <a href="phases/subhalo_validation/delaunay_adapt_split_pl_eff_1_outer.md">Subhalo_validation — phase 3: delaunay_adapt_split on pl_eff_1_outer — the outer-component lens, plus the AdaptSplit fix rerun</a> — subhalo_validation phase 3 · budget 48:00 · 8 review-min · runs 342027_2, 342093_0</summary>
+
+```
+Review the PyAutoCortex phase phases/subhalo_validation/delaunay_adapt_split_pl_eff_1_outer.md and help me rule on it: read its `## Witness` and the pulled evidence under its `## Where to look`, score the witness, then draft the ruling body for my approval and run `python3 scripts/cortex.py rule phases/subhalo_validation/delaunay_adapt_split_pl_eff_1_outer.md <accept|rerun|drop|leave-to-finish> --body <file>`.
+```
+
+</details>
+
+<details><summary>📋 <a href="phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md">Subhalo_validation — phase 4: rectangular_adapt on pl_sersic_0 — the RectangularBilinear comparison</a> — subhalo_validation phase 4 · budget 48:00 · 15 review-min · runs 342094_0, 342095_0</summary>
+
+```
+Review the PyAutoCortex phase phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md and help me rule on it: read its `## Witness` and the pulled evidence under its `## Where to look`, score the witness, then draft the ruling body for my approval and run `python3 scripts/cortex.py rule phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md <accept|rerun|drop|leave-to-finish> --body <file>`.
+```
+
+</details>
 
 ## Running / submitted
 
@@ -38,19 +68,68 @@ Every science phase the Cortex is holding, on one page: what is waiting on your 
 
 [markdown version](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/phases/) — Waiting on development work. The daily grading job flips a phase to ready when every reference it names has closed.
 
-- _(nothing gated)_
+<details><summary>📋 <a href="phases/euclid/dr1_prelim_10_lens_science_run.md">Euclid — phase 4: DR1 prelim science run — 10 real Euclid lenses in euclid_dr1_prelim on RAL</a> — euclid phase 4 · budget 48:00 · 25 review-min — euclid_strong_lens_modeling_pipeline#48, euclid_strong_lens_modeling_pipeline#49</summary>
+
+```
+python3 scripts/cortex.py gates --grade   # euclid_strong_lens_modeling_pipeline#48, euclid_strong_lens_modeling_pipeline#49
+```
+
+</details>
 
 ## Recent rulings
 
 [markdown version](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/rulings/) — The ledger of record, newest first. A verdict recorded only outside the Cortex does not exist.
 
-- _(no rulings yet)_
+| Ruling | Verb | Phase | Batch |
+|---|---|---|---|
+| [R-20260901-04](rulings/2026/09/R-20260901-04.md) | drop | phases/inference_programme/failed_submissions_342008_10.md | - |
+| [R-20260901-03](rulings/2026/09/R-20260901-03.md) | drop | phases/inference_programme/delaunay_fp64_retro_baseline.md | 2026-08-31-pm |
+| [R-20260901-02](rulings/2026/09/R-20260901-02.md) | accept | phases/inference_programme/mge_fp64_retro_baseline.md | 2026-08-31-pm |
+| [R-20260901-01](rulings/2026/09/R-20260901-01.md) | accept | phases/inference_programme/mge_pos_ref_reuse.md | 2026-08-31-pm |
+| [R-20260831-08](rulings/2026/08/R-20260831-08.md) | leave-to-finish | phases/subhalo_validation/delaunay_adapt_split_pl_eff_1_outer.md | 2026-08-31-am |
+| [R-20260831-07](rulings/2026/08/R-20260831-07.md) | leave-to-finish | phases/subhalo_validation/delaunay_adapt_split_pl_eff_0.md | 2026-08-31-am |
+| [R-20260831-06](rulings/2026/08/R-20260831-06.md) | accept | phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md | 2026-08-31-am |
+| [R-20260831-05](rulings/2026/08/R-20260831-05.md) | drop | phases/inference_programme/slogdet_ab_342017.md | 2026-08-31-am |
+| [R-20260831-04](rulings/2026/08/R-20260831-04.md) | drop | phases/inference_programme/refs_5_6_342016_56.md | 2026-08-31-am |
+| [R-20260831-03](rulings/2026/08/R-20260831-03.md) | drop | phases/inference_programme/knn_rerun_342016_7.md | 2026-08-31-am |
+| [R-20260831-02](rulings/2026/08/R-20260831-02.md) | drop | phases/inference_programme/smc_probe_342018.md | 2026-08-31-am |
+| [R-20260831-01](rulings/2026/08/R-20260831-01.md) | drop | phases/inference_programme/rewind_2026_08_31.md | - |
 
 ## Epics
 
 [markdown version](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/epics.md) — Long-running programmes whose science half lives here; each card links its development half in the Mind.
 
-- _(no epics yet)_
+<details><summary>📋 <b>prepare the Euclid DR1 modelling pipeline, then prove it on real DR1 lenses</b> — Mind half: <code>PyAutoMind/epics.md#euclid-dr1-prep</code> — ledger: <code>phases/euclid/</code> — science half opens at phase 4, gated on the 3a PR and the 3b issue; 5–7 planned behind it</summary>
+
+```
+Work out where the Cortex half of the epic euclid-dr1-prep stands from phases/euclid/ and tell me what its next phase is.
+```
+
+</details>
+
+<details><summary>📋 <b>profile and certify the JAX inference stack — samplers, meshes, reference baselines</b> — Mind half: <code>PyAutoMind/epics.md#jax-inference-profiling</code> — ledger: <code>autolens_profiling/results/notes/inference/PROGRAMME.md</code> — REWOUND to Phase 1 (2026-08-31); the InferenceRefs_v1 refs redo is awaiting ruling</summary>
+
+```
+Work out where the Cortex half of the epic jax-inference-profiling stands from autolens_profiling/results/notes/inference/PROGRAMME.md and tell me what its next phase is.
+```
+
+</details>
+
+<details><summary>📋 <b>expectation propagation as the scalable alternative to graphical joint fits</b> — Mind half: <code>PyAutoMind/epics.md#graphical-ep</code> — ledger: <code>PyAutoMind/research/graphical_ep/ep_campaign.md</code> — both science phases planned; the projects are dormant and the campaign's</summary>
+
+```
+Work out where the Cortex half of the epic graphical-ep stands from PyAutoMind/research/graphical_ep/ep_campaign.md and tell me what its next phase is.
+```
+
+</details>
+
+<details><summary>📋 <b>the Source &amp; Cluster arc — cluster mass modelling and pixelized source inference</b> — Mind half: <code>PyAutoMind/epics.md#cluster-strong-lensing</code> — ledger: <code>PyAutoMind/draft/feature/autolens/source_cluster_arc.md</code> — one science phase (arc phase 11), planned behind the arc's phase 10</summary>
+
+```
+Work out where the Cortex half of the epic cluster-strong-lensing stands from PyAutoMind/draft/feature/autolens/source_cluster_arc.md and tell me what its next phase is.
+```
+
+</details>
 
 ## Projects
 

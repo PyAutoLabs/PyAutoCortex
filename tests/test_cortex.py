@@ -302,6 +302,21 @@ def test_illegal_state_unknown_key_and_missing_section(tmp_path):
                   "missing section ## Where to look")
 
 
+def test_migrated_from_is_legal_on_a_phase_and_a_ruling(tmp_path):
+    """Decision 53: the provenance key joins both key tables; everything else
+    outside them is still drift."""
+    root = _copy(tmp_path)
+    _edit(root, P["01_scope"], "Filed: 2026-08-25\n",
+          "Filed: 2026-08-25\nMigrated-from: PyAutoMind/draft/research/example/scope.md\n")
+    _edit(root, R + "R-20260901-05.md", "Ruling: drop\n",
+          "Ruling: drop\nMigrated-from: PyAutoMind/batches/reviews/2026-09-01-pm.md\n")
+    assert _problems(root) == []
+    _edit(root, P["01_scope"], "Migrated-from: PyAutoMind", "Migrated-to: PyAutoMind")
+    _edit(root, R + "R-20260901-05.md", "Migrated-from: PyAutoMind", "Migrated-to: PyAutoMind")
+    _assert_drift(root, "01_scope.md: unknown header key Migrated-to:",
+                  "R-20260901-05.md: unknown header key Migrated-to:")
+
+
 def test_owner_repo_gate_form_is_refused(tmp_path):
     root = _copy(tmp_path)
     _edit(root, P["02_gated_on_dev"], "Gates: PyAutoArray#431,", "Gates: PyAutoLabs/PyAutoArray#431,")

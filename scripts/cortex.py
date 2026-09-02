@@ -83,11 +83,11 @@ LANE = "local-dev"
 PHASE_KEYS = (
     "Project", "Phase", "State", "Gates", "Gates-cleared", "Gate-override",
     "Reset", "Witness", "Budget", "Runs", "Ruling", "Lane", "Review-minutes",
-    "Epic", "Filed",
+    "Epic", "Filed", "Migrated-from",
 )
 RULING_KEYS = (
     "Project", "Phase", "Runs", "Ruling", "Supersedes", "Batch", "Reviewed-at",
-    "Review-minutes-actual", "Follow-ups",
+    "Review-minutes-actual", "Follow-ups", "Migrated-from",
 )
 PHASE_SECTIONS = ("Question", "Witness", "Where to look", "Runs", "Ruling")
 RULING_SECTIONS = ("Ruling", "Evidence")

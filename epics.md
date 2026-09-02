@@ -18,10 +18,65 @@ Schema per entry — the Mind's, plus one field:
 - notes: <free text>
 ```
 
-`- mind-half:` names the Mind entry by slug; the Mind's entries gain the
-reciprocal `- cortex-half:` in phase 4 of the birth epic, when the split epics
-(`euclid-dr1-prep` phases 4, 5, 6a, 6b; `jax-inference-profiling` whole;
-`graphical-ep` phases 3/4 science halves; `cluster-strong-lensing` phase 11)
-move here. Until then this file holds no entries.
+`- mind-half:` names the Mind entry by slug; the Mind's entries carry the
+reciprocal `- cortex-half:`. The four split epics below moved their science
+halves here in phase 4 of the birth epic (2026-09-01): `euclid-dr1-prep`
+phases 4, 5, 6a and 6b (renumbered here as Cortex phases 4–7);
+`jax-inference-profiling` whole; the science halves of `graphical-ep` phases
+3 and 4; and `cluster-strong-lensing` phase 11.
 
 This file is ledger: it auto-merges (`scripts/ledger_merge.py`).
+
+---
+
+## euclid-dr1-prep
+- title: prepare the Euclid DR1 modelling pipeline, then prove it on real DR1 lenses
+- ledger: phases/euclid/
+- mind-half: PyAutoMind/epics.md#euclid-dr1-prep
+- status: science half opens at phase 4, gated on the 3a PR and the 3b issue; 5–7 planned behind it
+- notes: The Mind keeps the development phases (0–3, 8, 9) and renumbered them in
+  phase 4 of the birth epic so the old 3a/3b/6a/6b/6c collisions are gone. Here,
+  phase 4 is the 10-lens DR1 prelim science run, 5 the resimulator, 6 Sersic-index
+  recovery (was 6a) and 7 magnification robustness (was 6b); 6c stays in the Mind as
+  its `Phase: 8` because it is a source-code audit, not a run. Phase 4 gates 5, and 5
+  gates 6 and 7 — as intra-Cortex sequencing (decision 54) those waits are `Ready
+  when:` lines in each phase's `## Question`, not `Gates:` refs.
+
+## jax-inference-profiling
+- title: profile and certify the JAX inference stack — samplers, meshes, reference baselines
+- ledger: autolens_profiling/results/notes/inference/PROGRAMME.md
+- mind-half: PyAutoMind/epics.md#jax-inference-profiling
+- status: REWOUND to Phase 1 (2026-08-31); the InferenceRefs_v1 refs redo is awaiting ruling
+- notes: The whole epic's science half lives here. The 2026-08-31 REWIND quarantined
+  every mesh / pixelization result to `output/legacy_wrong/` and every MGE result to
+  `output/legacy/` (reusable pending batch review), made gates A, B pt 1 and B pt 2
+  provisional, and restarted the programme at Phase 1. Ten of the eleven phases here
+  are legacy-born (decision 56); the eleventh, `cluster_extended_source_inference`,
+  belongs to `cluster-strong-lensing` and sits in this project directory because that
+  is where its runs would land. R-20260901-03 binds the redo: a mesh row produced
+  without a `PositionsLH` positions penalty is not a citable reference.
+
+## graphical-ep
+- title: expectation propagation as the scalable alternative to graphical joint fits
+- ledger: PyAutoMind/research/graphical_ep/ep_campaign.md
+- mind-half: PyAutoMind/epics.md#graphical-ep
+- status: both science phases planned; the projects are dormant and the campaign's
+  development phases run first
+- notes: Two science phases, one per project — `slope_hierarchy/n25_scale_up` (the
+  optional N=25–50 scale-up of a project that answered all four of its goals at N=5)
+  and `ic50_workspace/ep_scale_up` (EP end to end on the real IC50 model, with the
+  derived-variable handling used exactly as it exists). Both wait on the campaign's
+  Mind phase 2 being issued — `Ready when:` lines, not `Gates:` refs, until that
+  prompt has an issue to point at. A planned phase on a dormant project is legal.
+
+## cluster-strong-lensing
+- title: the Source & Cluster arc — cluster mass modelling and pixelized source inference
+- ledger: PyAutoMind/draft/feature/autolens/source_cluster_arc.md
+- mind-half: PyAutoMind/epics.md#cluster-strong-lensing
+- status: one science phase (arc phase 11), planned behind the arc's phase 10
+- notes: Only the arc's line 11 — the feasibility study for joint gradient-based
+  inference of cluster mass plus pixelized sources — is a run-and-ruling phase; the
+  rest of the twelve are development. It is filed under `phases/inference_programme/`
+  because that is the project whose RAL tree and profiling harness its runs would use.
+  The arc's `Phase: 10` collision with `cluster_regime_narrative.md` is noted in the
+  Mind's arc ledger, not fixed here.

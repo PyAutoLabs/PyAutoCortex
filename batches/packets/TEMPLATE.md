@@ -71,6 +71,10 @@ The submit button assembles exactly:
 <note verbatim, or (no note)>
 ```
 
+Any non-member section the submit assembles (an optional `### Follow-ups accepted` block
+between the header and the first member) is an `###`: `check` requires every `##` in a
+review file to name a member of the slot's batch record.
+
 One `## <member-slug> — <HEALTH>` section per member, in page order; the slug is the phase
 file's stem (embed them in the page's `MEMBERS` JS array); `<HEALTH>` ∈ `HEALTHY | SUSPECT |
 FAILED | RUNNING`. The orchestrator parses on those exact heading forms and the two `- key:`
