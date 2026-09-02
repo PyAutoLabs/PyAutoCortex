@@ -165,9 +165,11 @@ Choices made in phase 2 — the conductor, the board and the workflows
     and `subhalo_validation` writes no structured version stamp — and scoring
     an unobservable leg as PASS would manufacture evidence while scoring it
     FAIL would cry wolf. SUSPECT says exactly what is true: nobody looked.
-40. **The pull manifest is `<mirror or local_path>/.cortex/pull.json`:
+40. **(amended by 51)** **The pull manifest is
+    `<mirror or local_path>/.cortex/pull.json`:
     `{"pulled_at": <ISO>, "runs": {"<jobid>": {"checkpoint_bytes": <int>,
-    "checkpoint_mtime": <ISO>}}}`, written by each project's own sync CLI
+    "checkpoint_mtime": <ISO>}}}` (decision 51 adds `schema` and
+    `checkpoints`), written by each project's own sync CLI
     (phase 3), read by `collect` when present.** Why: "when was this pulled,
     and did the checkpoint grow?" is knowable only at the moment of the pull;
     the puller is the only process that can record it. Until the CLIs write
@@ -235,3 +237,72 @@ Choices made in phase 2 — the conductor, the board and the workflows
     leaf in the path first) because `witness_file` is project-wide and phases
     share one tree. Also: `submitted → pulled` is not an edge, so a `submitted`
     member is scored but left with a note rather than moved.
+
+50. **`projects.yaml` gains `status: planned` and one optional field,
+    `note:`; every other field stays required and an unknown field stays an
+    error.** Why: phase 3 seeds the map with rows the phase-1 grammar could
+    not spell. `euclid_dr1_prelim` exists as a decision before it exists as a
+    directory — `planned` says "these are the paths it will have" without
+    lying that the project is `active`, and without the row being invented
+    twice later. And a third of the seeded rows are only intelligible with a
+    sentence attached: why `euclid` has no PyAutoLabs remote, that a dormant
+    row's `ral_root` is planned rather than observed, that a personal remote
+    is a recorded fact and not a target. That sentence had nowhere to live but
+    a comment, and a comment is not readable by the conductor. `note` is
+    optional because most rows do not need one, and the field set stays closed
+    (`PROJECT_FIELDS + PROJECT_OPTIONAL_FIELDS`) so a typo is still caught; an
+    empty `note:` is drift, exactly like an empty required field.
+
+51. **The pull manifest is v1 — `schema`, `checkpoints`, `runs` — and
+    `checkpoints` is the table that is always filled** (supersedes the shape
+    in decision 40, which stands as the record of why the manifest exists):
+    ```json
+    {"schema": 1,
+     "pulled_at": "<ISO UTC>",
+     "checkpoints": {"<run dir relative to the pull root>":
+                     {"bytes": <int>, "mtime": "<ISO>"}},
+     "runs": {"<jobid or jobid_task>":
+              {"checkpoint_bytes": <int>, "checkpoint_mtime": "<ISO>"}}}
+    ```
+    Why the second table: decision 40 assumed the puller knows which job id
+    produced which checkpoint, and one of the two projects cannot — the
+    profiling CLI pulls a results tree that carries no job id at all. The run
+    directory path *is* nameable on both sides, so `checkpoints` is keyed by
+    it (relative to the pull root, the same root `collect` resolves the run
+    directory under) and is always written; `runs` is written only where the
+    CLI can link a job id to a run directory (subhalo's `.out` names the
+    sample). `collect` therefore looks up `runs[ident]` → `runs[stem]` →
+    `checkpoints[<run dir rel>]`, and a manifest with no `schema` key is read
+    as the phase-2 shape so nothing that already exists breaks.
+    Gathered in **one** `ssh "$HPC_HOST" "find '<ral_root>/output' -name
+    checkpoint.hdf5 -printf '%s %T@ %p\n'"` over the existing ControlMaster
+    mux, immediately before the manifest is written — one round trip, and the
+    sizes are RAL's own, not the laptop's guess. The write is **dry-run
+    guarded** (`status` calls `pull --dry-run`, and a dry run must not
+    manufacture evidence that a pull happened), and `.cortex/` is gitignored
+    in every project: it is pull state, like `output/`.
+    Key shape, corrected by the first real pull: the checkpoint lives at
+    `<run dir>/files/search_internal/checkpoint.hdf5`, so the `checkpoints` key is the
+    run directory — the grandparent of the file — with any trailing `/files` stripped.
+
+52. **`Science/euclid` gets `remote: none` by ruling, and the dormant rows
+    follow three rules.** The euclid ruling (2026-09-01): it tracks a
+    DR1-derived catalogue keyed by tile/RA/DEC
+    (`catalogue/inspection/failure_mode_breakdown_consensus75.csv`), it
+    already pushes to the personal remote `Jammy2211/euclid-dr1-modeling`, it
+    nests the Overleaf paper repo, and it is 34 GB with an `output/` too large
+    to `du`. Any one of those refuses a PyAutoLabs remote under the
+    no-Euclid-data rule; together they settle it. Nothing is lost, because the
+    project's code half is already at
+    `PyAutoLabs/euclid_strong_lens_modeling_pipeline` at parity — what stays
+    outside the org is data and prose. The row is still written, because the
+    Cortex must be able to name a project it will never host.
+    The dormant rules: **(a) git repos only** — `subhalo`, `euclid_group` and
+    the `z_*` trees are storage, and storage is not a project with a
+    lifecycle; **(b) an assistant clone is not a project** — `aris_PJ011646`
+    is a copy of a workspace, so `pj011646` is the row and the clone is not;
+    **(c) a personal remote is recorded as a fact, never as a target** —
+    `slope_hierarchy`, `pj011646`, `concr` and `ic50_workspace` push to
+    `Jammy2211/…` and the row says so in `remote:` with the reason in
+    `note:`, so nobody re-derives the answer to "should this move into the
+    org?" once a quarter.

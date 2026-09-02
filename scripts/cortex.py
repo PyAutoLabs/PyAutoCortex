@@ -94,8 +94,12 @@ RULING_SECTIONS = ("Ruling", "Evidence")
 
 PROJECT_FIELDS = ("remote", "local_path", "ral_root", "mirror", "sync_cli",
                   "sync_verbs", "ledger", "witness_file", "partition", "status")
+#: the one optional field — free text about the row (why a remote is `none`,
+#: what a verb does). A row may omit it; an empty `note:` is still drift, and
+#: any field outside these two tuples is still an error.
+PROJECT_OPTIONAL_FIELDS = ("note",)
 PARTITIONS = ("gpu", "ral", "both")
-PROJECT_STATUSES = ("active", "dormant")
+PROJECT_STATUSES = ("active", "dormant", "planned")
 
 # --------------------------------------------------------------------------- #
 # grammars (REFERENCE.md)
@@ -335,7 +339,7 @@ def parse_projects(text: str) -> "tuple[dict[str, dict], list[str]]":
         m = PROJECT_FIELD_RE.match(line)
         if m and current is not None:
             field, value = m.group(1), (m.group(2) or "")
-            if field not in PROJECT_FIELDS:
+            if field not in PROJECT_FIELDS + PROJECT_OPTIONAL_FIELDS:
                 problems.append(f"{where}: unknown field `{field}` on {current}")
                 continue
             if field in rows[current]:
@@ -374,8 +378,8 @@ def _finish_row(key: str, row: dict, problems: "list[str]") -> None:
         problems.append(f"projects.yaml: {key}.partition must be gpu | ral | both, "
                         f"not {row['partition']}")
     if row.get("status") and row["status"] not in PROJECT_STATUSES:
-        problems.append(f"projects.yaml: {key}.status must be active | dormant, "
-                        f"not {row['status']}")
+        problems.append(f"projects.yaml: {key}.status must be "
+                        f"active | dormant | planned, not {row['status']}")
     remote = row.get("remote")
     if remote and remote != "none" and not re.match(r"^[\w.-]+/[\w.-]+$", remote):
         problems.append(f"projects.yaml: {key}.remote must be owner/repo or none")

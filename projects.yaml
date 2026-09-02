@@ -5,12 +5,17 @@
 # here is always a human's turn (scripts/ledger_merge.py leaves it for review,
 # exactly like PyAutoMind/repos.yaml).
 #
+# THE BOUNDARY. Science repos are NOT added to PyAutoMind/repos.yaml — that map
+# is the workspace; this one is the science. A project reaches the organism
+# through its row here and nowhere else.
+#
 # Schema — a restricted YAML subset that scripts/cortex.py parses with the
 # stdlib (REFERENCE.md "The restricted YAML subset"). It is also real YAML:
 # `yaml.safe_load` reads it identically, and a test keeps the two in step.
 #
 #   <key>:                        # column 0, ^[a-z][a-z0-9_]*$ — the project key
-#     remote: <owner/repo | none> # the private PyAutoLabs remote (code, config, wiki, witness files only)
+#     remote: <owner/repo | none> # the remote — PyAutoLabs for active projects; a
+#                                 # personal remote is recorded as a fact with a `note:`
 #     local_path: <abs path>      # the laptop checkout
 #     ral_root: <abs path>        # the project root on RAL (/mnt/ral/jnightin/<project>)
 #     mirror: <abs path | none>   # the laptop pull root the sync CLI fills (holds data, not science)
@@ -19,31 +24,169 @@
 #     ledger: <path>              # the project's own commentary ledger, relative to local_path
 #     witness_file: <glob>        # where a run's witness lands, relative to the mirror
 #     partition: gpu | ral | both # which SLURM partition(s) the project runs on
-#     status: active | dormant
+#     status: active | dormant | planned
+#     note: <text>                # OPTIONAL, and the only optional field — free text
+#                                 # about the row; an empty `note:` is drift
 #
 # Scalars are bare unless they contain `#`, `:` or edge spaces (then "..."
 # with no escapes); comments on their own line or after ` #`; no block lists,
-# no deeper nesting, no anchors, no `---`. Every field is required; an
-# unknown field is an error.
+# no deeper nesting, no anchors, no `---`. Every field but `note` is required;
+# an unknown field is an error.
 #
 # THE WORKSPACE-PATHS EXCEPTION. `local_path` and `mirror` are absolute laptop
 # paths OUTSIDE the PyAutoLabs workspace — the Science folder under /mnt/c/…
 # where the datasets, output trees and pulled results live. This file is the
 # one place in the organism that carries such a path; a phase file or a ruling
 # reaches a project through its row here, never with a bare path of its own.
-#
-# Worked example — the JAX inference programme, the project the schema was
-# stress-tested against. Real rows are seeded in phase 3 of the birth epic;
-# until then the map is empty.
-#
-# autolens_profiling:
-#   remote: PyAutoLabs/autolens_profiling
-#   local_path: /home/jammy/Code/PyAutoLabs/autolens_profiling
-#   ral_root: /mnt/ral/jnightin/autolens_profiling
-#   mirror: /mnt/c/Users/Jammy/Science/inference_programme
-#   sync_cli: hpc/sync
-#   sync_verbs: [pull, logs, status, submit, jobs, sacct, cancel, tail, du, check]
-#   ledger: results/notes/inference/PROGRAMME.md
-#   witness_file: results/searches/**/*.json
-#   partition: both
-#   status: active
+
+# --------------------------------------------------------------------------- #
+# active
+# --------------------------------------------------------------------------- #
+inference_programme:
+  remote: PyAutoLabs/autolens_profiling
+  local_path: /home/jammy/Code/PyAutoLabs/autolens_profiling
+  ral_root: /mnt/ral/jnightin/autolens_profiling
+  mirror: /mnt/c/Users/Jammy/Science/inference_programme
+  sync_cli: hpc/sync
+  sync_verbs: [pull, logs, status, submit, jobs, sacct, cancel, tail, du, check]
+  ledger: results/notes/inference/PROGRAMME.md
+  witness_file: results/searches/**/*.json
+  partition: both
+  status: active
+  note: "DECISIONS.md is commentary; pull-only CLI — RAL is a git checkout; gpu-1 excluded"
+
+subhalo_validation:
+  remote: PyAutoLabs/subhalo_validation
+  local_path: /mnt/c/Users/Jammy/Science/subhalo_validation
+  ral_root: /mnt/ral/jnightin/subhalo_validation
+  mirror: none
+  sync_cli: hpc/sync
+  sync_verbs: [push, pull, logs, sync, push-data-init, pull-full, status, submit, push-submit, jobs, sacct, cancel, wait-and-pull, tail, du, check, clear-logs]
+  ledger: wiki/project/state.md
+  witness_file: results/**/*.json
+  partition: ral
+  status: active
+  note: "pulls land in the checkout (PULL_DIRS output results); run_chain.sh chains A→B afterok; witness evidence_increase < 5, subhalo_stage, test_mode"
+
+euclid:
+  remote: none
+  local_path: /mnt/c/Users/Jammy/Science/euclid
+  ral_root: /mnt/ral/jnightin/euclid_strong_lens_modeling_pipeline
+  mirror: none
+  sync_cli: hpc/sync
+  sync_verbs: [push, pull, sync, status]
+  ledger: CLAUDE.md
+  witness_file: catalogue/**/*.csv
+  partition: both
+  status: active
+  note: "NO PyAutoLabs remote by ruling 2026-09-01: tracks DR1 tile-keyed catalogue CSV, personal remote Jammy2211/euclid-dr1-modeling, nested Overleaf paper repo, 34 GB; code half = PyAutoLabs/euclid_strong_lens_modeling_pipeline; witness undefined until a science phase pre-registers one"
+
+euclid_dr1_prelim:
+  remote: none
+  local_path: /mnt/c/Users/Jammy/Science/euclid_dr1_prelim
+  ral_root: /mnt/ral/jnightin/euclid_dr1_prelim
+  mirror: none
+  sync_cli: hpc/sync
+  sync_verbs: [push, pull, sync, status]
+  ledger: wiki/project/state.md
+  witness_file: results/**/*.json
+  partition: both
+  status: planned
+  note: "created by euclid-dr1-prep phase 4 (a Cortex phase after migration); every path is the planned one"
+
+# --------------------------------------------------------------------------- #
+# dormant — git repos only. The non-git trees (subhalo, euclid_group, z_*) are
+# storage, not projects, and aris_PJ011646 is an assistant clone; none get a
+# row. `ral_root` is the planned path and `sync_verbs` is unverified on every
+# row below — each note says so.
+# --------------------------------------------------------------------------- #
+profiling:
+  remote: none
+  local_path: /mnt/c/Users/Jammy/Science/profiling
+  ral_root: /mnt/ral/jnightin/profiling
+  mirror: none
+  sync_cli: hpc/sync
+  sync_verbs: [pull]
+  ledger: README.md
+  witness_file: results/**/*.json
+  partition: both
+  status: dormant
+  note: "2026-05 checkpointed sweep harness, PyAutoNSS venv; name collides with autolens_profiling; ral_root planned, sync_verbs unverified"
+
+cowls_diana:
+  remote: none
+  local_path: /mnt/c/Users/Jammy/Science/cowls_diana
+  ral_root: /mnt/ral/jnightin/cowls_diana
+  mirror: none
+  sync_cli: hpc/sync
+  sync_verbs: [pull]
+  ledger: README.md
+  witness_file: results/**/*.json
+  partition: both
+  status: dormant
+  note: "local git, no remote; ral_root planned, sync_verbs unverified"
+
+subhalo_simulations:
+  remote: none
+  local_path: /mnt/c/Users/Jammy/Science/subhalo_simulations
+  ral_root: /mnt/ral/jnightin/subhalo_simulations
+  mirror: none
+  sync_cli: hpc/sync
+  sync_verbs: [pull]
+  ledger: README.md
+  witness_file: results/**/*.json
+  partition: both
+  status: dormant
+  note: "git init, zero commits, 21 GB; ral_root planned, sync_verbs unverified"
+
+slope_hierarchy:
+  remote: Jammy2211/slope_hierarchy
+  local_path: /mnt/c/Users/Jammy/Science/slope_hierarchy
+  ral_root: /mnt/ral/jnightin/slope_hierarchy
+  mirror: none
+  sync_cli: hpc/sync
+  sync_verbs: [pull]
+  ledger: README.md
+  witness_file: results/**/*.json
+  partition: both
+  status: dormant
+  note: "personal remote, recorded as a fact — not a PyAutoLabs repo; ral_root planned, sync_verbs unverified"
+
+pj011646:
+  remote: Jammy2211/PJ011646
+  local_path: /mnt/c/Users/Jammy/Science/PJ011646
+  ral_root: /mnt/ral/jnightin/PJ011646
+  mirror: none
+  sync_cli: hpc/sync
+  sync_verbs: [pull]
+  ledger: README.md
+  witness_file: results/**/*.json
+  partition: both
+  status: dormant
+  note: "personal remote, recorded as a fact — not a PyAutoLabs repo; ral_root planned, sync_verbs unverified"
+
+concr:
+  remote: Jammy2211/cosmology_and_cancer
+  local_path: /mnt/c/Users/Jammy/Science/concr
+  ral_root: /mnt/ral/jnightin/concr
+  mirror: none
+  sync_cli: hpc/sync
+  sync_verbs: [pull]
+  ledger: README.md
+  witness_file: results/**/*.json
+  partition: both
+  status: dormant
+  note: "personal remote Jammy2211/cosmology_and_cancer, recorded as a fact; ral_root planned, sync_verbs unverified"
+
+ic50_workspace:
+  remote: Jammy2211/ic50_workspace
+  local_path: /mnt/c/Users/Jammy/Science/ic50_workspace
+  ral_root: /mnt/ral/jnightin/ic50_workspace
+  mirror: none
+  sync_cli: hpc/sync
+  sync_verbs: [pull]
+  ledger: README.md
+  witness_file: results/**/*.json
+  partition: both
+  status: dormant
+  note: "personal remote, recorded as a fact — not a PyAutoLabs repo; ral_root planned, sync_verbs unverified"

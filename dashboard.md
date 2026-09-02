@@ -56,7 +56,19 @@ Every science phase the Cortex is holding, on one page: what is waiting on your 
 
 [markdown version](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects.yaml) — The science body map — where each project lives, what syncs it and where its witness lands.
 
-- _(the science body map is empty)_
+| Project | Status | Partition | Sync | Ledger | Witness |
+|---|---|---|---|---|---|
+| concr | dormant | both | `hpc/sync` | `README.md` | `results/**/*.json` |
+| cowls_diana | dormant | both | `hpc/sync` | `README.md` | `results/**/*.json` |
+| euclid | active | both | `hpc/sync` | `CLAUDE.md` | `catalogue/**/*.csv` |
+| euclid_dr1_prelim | planned | both | `hpc/sync` | `wiki/project/state.md` | `results/**/*.json` |
+| ic50_workspace | dormant | both | `hpc/sync` | `README.md` | `results/**/*.json` |
+| inference_programme | active | both | `hpc/sync` | `results/notes/inference/PROGRAMME.md` | `results/searches/**/*.json` |
+| pj011646 | dormant | both | `hpc/sync` | `README.md` | `results/**/*.json` |
+| profiling | dormant | both | `hpc/sync` | `README.md` | `results/**/*.json` |
+| slope_hierarchy | dormant | both | `hpc/sync` | `README.md` | `results/**/*.json` |
+| subhalo_simulations | dormant | both | `hpc/sync` | `README.md` | `results/**/*.json` |
+| subhalo_validation | active | ral | `hpc/sync` | `wiki/project/state.md` | `results/**/*.json` |
 
 ---
 

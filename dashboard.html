@@ -234,7 +234,20 @@ table.recent button.copy{width:2.2rem;height:2.2rem;font-size:.95rem}
 <a id="epics"></a><h2>Epics <a class="mdsrc" href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/epics.md">markdown version</a></h2><p class="muted">Long-running programmes whose science half lives here; each card links its development half in the Mind.</p>
 <p class="muted">(no epics yet)</p>
 <a id="projects"></a><h2>Projects <a class="mdsrc" href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects.yaml">markdown version</a></h2><p class="muted">The science body map — where each project lives, what syncs it and where its witness lands.</p>
-<p class="muted">(the science body map is empty)</p>
+<table class="map">
+<tr><th>Project</th><th>Status</th><th>Partition</th><th>Sync</th><th>Witness</th></tr>
+<tr><td><b>concr</b></td><td>dormant</td><td>both</td><td><code>hpc/sync</code></td><td><code>results/**/*.json</code></td></tr>
+<tr><td><b>cowls_diana</b></td><td>dormant</td><td>both</td><td><code>hpc/sync</code></td><td><code>results/**/*.json</code></td></tr>
+<tr><td><b>euclid</b></td><td>active</td><td>both</td><td><code>hpc/sync</code></td><td><code>catalogue/**/*.csv</code></td></tr>
+<tr><td><b>euclid_dr1_prelim</b></td><td>planned</td><td>both</td><td><code>hpc/sync</code></td><td><code>results/**/*.json</code></td></tr>
+<tr><td><b>ic50_workspace</b></td><td>dormant</td><td>both</td><td><code>hpc/sync</code></td><td><code>results/**/*.json</code></td></tr>
+<tr><td><b>inference_programme</b></td><td>active</td><td>both</td><td><code>hpc/sync</code></td><td><code>results/searches/**/*.json</code></td></tr>
+<tr><td><b>pj011646</b></td><td>dormant</td><td>both</td><td><code>hpc/sync</code></td><td><code>results/**/*.json</code></td></tr>
+<tr><td><b>profiling</b></td><td>dormant</td><td>both</td><td><code>hpc/sync</code></td><td><code>results/**/*.json</code></td></tr>
+<tr><td><b>slope_hierarchy</b></td><td>dormant</td><td>both</td><td><code>hpc/sync</code></td><td><code>results/**/*.json</code></td></tr>
+<tr><td><b>subhalo_simulations</b></td><td>dormant</td><td>both</td><td><code>hpc/sync</code></td><td><code>results/**/*.json</code></td></tr>
+<tr><td><b>subhalo_validation</b></td><td>active</td><td>ral</td><td><code>hpc/sync</code></td><td><code>results/**/*.json</code></td></tr>
+</table>
 <ul class="boards"><li class="muted" style="padding:.3rem 0">Boards:</li><li><a data-organ="brain" href="https://pyautolabs.github.io/PyAutoBrain/">Brain</a></li><li><a data-organ="mind" href="https://pyautolabs.github.io/PyAutoMind/">Mind</a></li><li><a data-organ="memory" href="https://pyautolabs.github.io/PyAutoMemory/">Memory</a></li><li><a data-organ="heart" href="https://pyautolabs.github.io/PyAutoHeart/">Heart</a></li><li><a data-organ="hands" href="https://pyautolabs.github.io/PyAutoHands/">Hands</a></li><li><a data-organ="organism" href="https://pyautolabs.github.io/PyAutoScientist/">Scientist</a></li></ul>
 <script>async function copyCmd(b){
   const cmd=b.dataset.cmd;

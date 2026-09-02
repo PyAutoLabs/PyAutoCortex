@@ -184,10 +184,23 @@ def test_gate_ref_regex_rejects_owner_repo_form():
 # projects.yaml — the restricted subset
 # --------------------------------------------------------------------------- #
 def test_comment_only_projects_yaml_parses_to_an_empty_map():
-    rows, problems = cortex.parse_projects((REPO / "projects.yaml").read_text())
-    assert rows == {} and problems == []
     rows, problems = cortex.parse_projects((EMPTY / "projects.yaml").read_text())
     assert rows == {} and problems == []
+
+
+def test_the_live_body_map_parses_clean_and_matches_pyyaml():
+    """The seeded map (phase 3) is the real witness for the subset: it is the
+    only file that exercises `planned`, `note`, and a 17-verb flow list."""
+    yaml = pytest.importorskip("yaml")
+    text = (REPO / "projects.yaml").read_text()
+    rows, problems = cortex.parse_projects(text)
+    assert problems == []
+    assert yaml.safe_load(text) == rows
+    assert {"inference_programme", "subhalo_validation", "euclid",
+            "euclid_dr1_prelim"} <= set(rows)
+    assert rows["euclid_dr1_prelim"]["status"] == "planned"
+    assert rows["euclid"]["remote"] == "none"
+    assert "PyAutoLabs remote" in rows["euclid"]["note"]
 
 
 def test_projects_parse_matches_pyyaml_on_the_fixture():
@@ -222,6 +235,32 @@ def test_missing_projects_field_and_bad_enums(tmp_path):
     _edit(root, "projects.yaml", "  partition: gpu\n", "  partition: cpu\n")
     _edit(root, "projects.yaml", "  ledger: wiki/project/state.md\n", "")
     _assert_drift(root, "example is missing ledger", "partition must be gpu | ral | both")
+
+
+def test_planned_is_a_legal_status(tmp_path):
+    root = _copy(tmp_path)
+    _edit(root, "projects.yaml", "  status: active\n", "  status: planned\n")
+    assert _problems(root) == []
+    _edit(root, "projects.yaml", "  status: planned\n", "  status: someday\n")
+    _assert_drift(root, "status must be active | dormant | planned")
+
+
+def test_note_is_optional_but_never_empty_and_the_field_set_still_closes(tmp_path):
+    """`note` is the one field a row may omit. An empty one is still drift,
+    and everything outside the field set is still an unknown field."""
+    root = _copy(tmp_path)
+    assert _problems(root) == [], "the fixture carries no `note:`"
+    _edit(root, "projects.yaml", "  status: active\n",
+          '  status: active\n  note: "a fact: with a colon # and a hash"\n')
+    assert _problems(root) == []
+    rows, problems = cortex.parse_projects((root / "projects.yaml").read_text())
+    assert problems == [] and rows["example"]["note"] == \
+        "a fact: with a colon # and a hash"
+    yaml = pytest.importorskip("yaml")
+    assert yaml.safe_load((root / "projects.yaml").read_text()) == rows
+    _edit(root, "projects.yaml", '  note: "a fact: with a colon # and a hash"\n',
+          "  note:\n")
+    _assert_drift(root, "example.note is empty")
 
 
 def test_projects_outside_the_subset(tmp_path):
