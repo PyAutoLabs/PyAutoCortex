@@ -2,12 +2,12 @@
 
 Project: inference_programme
 Phase: 10
-State: awaiting-ruling
+State: accepted
 Gates:
 Witness: all 10 array tasks deliver on their own evidence — wall inside the 6:00 budget, a result row carrying version 2026.8.17.1 and a matching target_id, `.err` free of Tracebacks, `.out` ending "Finished." with a `.completed` marker, zero "Fit Already Completed" and no overflow signature
 Budget: 6:00
 Runs: 342091
-Ruling:
+Ruling: R-20260902-01
 Lane: local-dev
 Review-minutes: 20
 Epic: jax-inference-profiling
@@ -73,4 +73,4 @@ Prodigy arm bar 30,557.03, so the knn cell genuinely underperforms.
 
 ## Ruling
 
-(none)
+R-20260902-01 — accept
