@@ -10,8 +10,8 @@ Every science phase the Cortex is holding, on one page: what is waiting on your 
 
 | Where | Count |
 |-------|------:|
-| [Awaiting ruling](#awaiting-ruling) | 0 |
-| [Running / submitted](#running--submitted) | 2 |
+| [Awaiting ruling](#awaiting-ruling) | 3 |
+| [Running / submitted](#running--submitted) | 3 |
 | [Ready](#ready) | 4 |
 | [Gated](#gated) | 1 |
 | [Recent rulings](#recent-rulings) | 19 |
@@ -20,11 +20,41 @@ Every science phase the Cortex is holding, on one page: what is waiting on your 
 
 [markdown version](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/phases/) — Results are in and nothing is running — the human's verdict is the only thing outstanding. Ordered failures first, then the phases a ruling is required for, then the clean ones.
 
-- _(nothing awaiting a ruling)_
+<details><summary>📋 <a href="phases/inference_programme/phase2_nss_mainline_gate_a_reuse.md">Inference_programme — phase 13: the legacy MGE NSS-vs-Nautilus evidence behind GATE A</a> — inference_programme phase 13 · budget 10:00 · 12 review-min · runs 338491, 338492, 338493, 338870, 338871, 338872, 338873, 339067_[0-3], 339068, 339070, 339069, 339071 — ⚠️ failed runs: 339069, 339071</summary>
+
+```
+Review the PyAutoCortex phase phases/inference_programme/phase2_nss_mainline_gate_a_reuse.md and help me rule on it: read its `## Witness` and the pulled evidence under its `## Where to look`, score the witness, then draft the ruling body for my approval and run `python3 scripts/cortex.py rule phases/inference_programme/phase2_nss_mainline_gate_a_reuse.md <accept|rerun|drop|leave-to-finish> --body <file>`.
+```
+
+</details>
+
+<details><summary>📋 <a href="phases/inference_programme/phase3_prodigy_reliability_gate_b1_reuse.md">Inference_programme — phase 14: the legacy MGE Prodigy-reliability evidence behind GATE B part 1</a> — inference_programme phase 14 · budget 0:15 · 12 review-min · runs 338523_[0-4], 338524_[0-4], 338525_[0-4], 338526_[0-4], 339065_[0-4], 339066_[0-9], 339070</summary>
+
+```
+Review the PyAutoCortex phase phases/inference_programme/phase3_prodigy_reliability_gate_b1_reuse.md and help me rule on it: read its `## Witness` and the pulled evidence under its `## Where to look`, score the witness, then draft the ruling body for my approval and run `python3 scripts/cortex.py rule phases/inference_programme/phase3_prodigy_reliability_gate_b1_reuse.md <accept|rerun|drop|leave-to-finish> --body <file>`.
+```
+
+</details>
+
+<details><summary>📋 <a href="phases/inference_programme/phase4_positions_gate_b2_reuse.md">Inference_programme — phase 15: the legacy MGE PositionsLH evidence behind GATE B part 2</a> — inference_programme phase 15 · budget 0:15 · 15 review-min · runs 340114_[0-4], 340114_[5-9], 340115_[0-4], 341892_[0-4], 341892_[5-9], 338525_[0-4]</summary>
+
+```
+Review the PyAutoCortex phase phases/inference_programme/phase4_positions_gate_b2_reuse.md and help me rule on it: read its `## Witness` and the pulled evidence under its `## Where to look`, score the witness, then draft the ruling body for my approval and run `python3 scripts/cortex.py rule phases/inference_programme/phase4_positions_gate_b2_reuse.md <accept|rerun|drop|leave-to-finish> --body <file>`.
+```
+
+</details>
 
 ## Running / submitted
 
 [markdown version](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/phases/) — On the queue or on the machine. Wall is what the run lines record at the last refresh, against the phase's own budget.
+
+<details><summary>📋 <a href="phases/inference_programme/refs_v1_positions_on_completion.md">Inference_programme — phase 12: InferenceRefs_v1 positions-on completion — pixelization / knn / delaunay_matern (array tasks 11-13)</a> — inference_programme phase 12 · budget 6:00 · 15 review-min · runs 342241_[11-13] — wall 0:00 of 6:00 (0%)</summary>
+
+```
+cd /home/jammy/Code/PyAutoLabs/autolens_profiling && hpc/sync jobs
+```
+
+</details>
 
 <details><summary>📋 <a href="phases/subhalo_validation/rectangular_adapt_pl_eff_0.md">Subhalo_validation — phase 5: rectangular_adapt on pl_eff_0 — the clumpy-source lens on the RectangularBilinear comparison</a> — subhalo_validation phase 5 · budget 48:00 · 8 review-min · runs 342237_1, 342240_1 — wall 0:00 of 48:00 (0%)</summary>
 
@@ -129,7 +159,7 @@ Work out where the Cortex half of the epic euclid-dr1-prep stands from phases/eu
 
 </details>
 
-<details><summary>📋 <b>profile and certify the JAX inference stack — samplers, meshes, reference baselines</b> — Mind half: <code>PyAutoMind/epics.md#jax-inference-profiling</code> — ledger: <code>autolens_profiling/results/notes/inference/PROGRAMME.md</code> — REWOUND to Phase 1 (2026-08-31); the InferenceRefs_v1 refs redo is awaiting ruling</summary>
+<details><summary>📋 <b>profile and certify the JAX inference stack — samplers, meshes, reference baselines</b> — Mind half: <code>PyAutoMind/epics.md#jax-inference-profiling</code> — ledger: <code>autolens_profiling/results/notes/inference/PROGRAMME.md</code> — Phase 1 RULED 2026-09-02 (R-20260902-01, accept scoped to the four positions-on rows) and closed out; certified InferenceRefs_v1 set = 6 baselines (mge_fp64, mge_pos_fp64, delaunay_nn_pos, slam_source_pix_pos, slam_source_pix_nn_pos, delaunay_pos); next: positions-on refs for pixelization / knn / delaunay_matern (new phase), then the legacy MGE phases 2–4 by packet, then Phase 5 positions-on</summary>
 
 ```
 Work out where the Cortex half of the epic jax-inference-profiling stands from autolens_profiling/results/notes/inference/PROGRAMME.md and tell me what its next phase is.
