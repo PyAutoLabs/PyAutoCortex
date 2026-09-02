@@ -399,6 +399,7 @@ Real YAML, parsed with the stdlib by a ~40-line line loop. The subset:
 <key>:                        # column 0, ^[a-z][a-z0-9_]*$
   <field>: <scalar>           # exactly two spaces; fixed field set, unknown field = error
   sync_verbs: [pull, push]    # flow list of bare words — the only list
+  note: "free text"           # the one optional field
 ```
 
 - Scalars are bare unless they contain `#`, `:` or edge spaces, then
@@ -406,11 +407,17 @@ Real YAML, parsed with the stdlib by a ~40-line line loop. The subset:
 - Comments on their own line or after ` #`. Blank lines anywhere.
 - No block lists, no nesting beyond the two levels, no anchors, no `---`, no
   quoted keys.
-- Fields (all required): `remote` (`owner/repo` | `none`), `local_path`
-  (absolute laptop path — the Cortex-only exception to the workspace-paths
-  rule), `ral_root`, `mirror` (path | `none`), `sync_cli`, `sync_verbs`,
-  `ledger`, `witness_file` (glob), `partition` (`gpu | ral | both`),
-  `status` (`active | dormant`).
+- Fields (required): `remote` (`owner/repo` | `none` — PyAutoLabs for active
+  projects; a personal remote is recorded as a fact with a `note:`),
+  `local_path` (absolute laptop path — the Cortex-only exception to the
+  workspace-paths rule), `ral_root`, `mirror` (path | `none`), `sync_cli`,
+  `sync_verbs`, `ledger`, `witness_file` (glob), `partition`
+  (`gpu | ral | both`), `status` (`active | dormant | planned`).
+- `note` (free text) is the **one optional field**: a row may omit it, an
+  empty `note:` is drift, and any other field is still an unknown-field
+  error. A note holding `:` or `#` is quoted like any other scalar.
+- Science repos are **not** added to `PyAutoMind/repos.yaml` — that map is the
+  workspace, this one is the science.
 - A file with no rows parses to an empty map (`{}`); PyYAML returns `None`
   for a comment-only document, so the `yaml.safe_load(text) == parse(text)`
   parity test runs on the fixture, which has a row.
