@@ -1,4 +1,4 @@
-# Subhalo_validation — phase 5: Subhalo_validation — phase 5: rectangular_adapt on pl_eff_0 — the clumpy-source lens on the RectangularBilinear comparison
+# Subhalo_validation — phase 5: rectangular_adapt on pl_eff_0 — the clumpy-source lens on the RectangularBilinear comparison
 
 Project: subhalo_validation
 Phase: 5

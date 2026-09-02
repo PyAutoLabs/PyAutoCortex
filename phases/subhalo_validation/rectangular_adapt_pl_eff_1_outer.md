@@ -1,4 +1,4 @@
-# Subhalo_validation — phase 6: Subhalo_validation — phase 6: rectangular_adapt on pl_eff_1_outer — the outer-component lens on the RectangularBilinear comparison
+# Subhalo_validation — phase 6: rectangular_adapt on pl_eff_1_outer — the outer-component lens on the RectangularBilinear comparison
 
 Project: subhalo_validation
 Phase: 6
