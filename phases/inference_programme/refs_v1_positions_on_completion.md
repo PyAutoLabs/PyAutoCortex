@@ -2,7 +2,7 @@
 
 Project: inference_programme
 Phase: 12
-State: submitted
+State: awaiting-ruling
 Gates:
 Witness: all 3 array tasks deliver on their own evidence — wall inside the 6:00 budget, a positions.info file in the run dir, a result row carrying version 2026.8.17.1 and a target_id that recomputes from _targets.py, .err free of Tracebacks, .out ending "Finished." with a .completed marker, zero "Fit Already Completed", no overflow signature; each row's maxLL lands within the 29,800–31,600 band of the accepted positions-on rows rather than 500+ nats below it
 Budget: 6:00
@@ -44,7 +44,8 @@ all 3 array tasks deliver on their own evidence — wall inside the 6:00 budget,
 
 ## Runs
 
-- 342241_[11-13]: submitted — gpu — submitted 2026-09-02 — wall 0:00 — sbatch --array=11-13 --requeue from hpc/batch_gpu on RAL, 2026-09-02 ~16:50Z; pending (Resources) at submit
+- 342241_[11-13]: done — gpu — submitted 2026-09-02 — wall 0:55 — three tasks serial on euclid-ral-gpu-2, 20:59 BST 2 Sep → 00:50 BST 3 Sep; wall shown is the longest single task (knn, sampler 3,257 s); sbatch --array=11-13 --requeue from hpc/batch_gpu on RAL, 2026-09-02 ~16:50Z; pending (Resources) at submit
+    pulled_to: output/searches/nautilus/imaging
 
 ## Ruling
 
