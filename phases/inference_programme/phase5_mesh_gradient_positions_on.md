@@ -9,11 +9,14 @@ Budget: 8:00
 Runs:
 Ruling:
 Lane: local-dev
-Review-minutes: 25
+Review-minutes: 30
 Epic: jax-inference-profiling
 Filed: 2026-09-02
 
 ## Question
+
+**Widened 2026-09-02: DelaunayNN and the SLaM cells are in scope via new autoconv
+leaves (human decision).**
 
 Programme Phase 5 (`PROGRAMME.md` "Phase 5 — Pixelized / mesh global searches with
 PositionsLH"), restated under the redo and under the design note of
@@ -57,37 +60,48 @@ phase produces: a mesh run dir without `positions.info` is unreliable and cannot
 
 ### Dispatch plan
 
-**Cells.** Only cells that have *both* a `multi_start_prodigy` leaf script and a positions-on
-Nautilus reference are in scope. The intersection is smaller than the programme text assumes,
-and it is entirely phase-12 rows:
+**Cells.** The human's decision of 2026-09-02 makes the Gate B1 config
+(`multi_start_prodigy_autoconv`) the config of *every* gradient arm, and the widened dev leg
+adds one autoconv leaf per cell. So scope is no longer the intersection of "has a
+`multi_start_prodigy` leaf" with "has a positions-on Nautilus reference" — it is simply every
+cell with a positions-on reference row, once its autoconv leaf lands:
 
-| cell (`model_type`) | gradient leaf script | positions-on Nautilus reference | in scope? |
-|---|---|---|---|
-| `pixelization` | `scripts/imaging/searches/multi_start_prodigy/pixelization.py` | `pixelization_pos_fp64` — phase 12, 342241_11, **not yet ruled** | **IN** (bar arrives with phase 12) |
-| `knn` | `.../multi_start_prodigy/knn.py` | `knn_pos_fp64` — phase 12, 342241_12, **not yet ruled** | **IN** (bar arrives with phase 12) |
-| `delaunay_matern` | `.../multi_start_prodigy/delaunay.py` (its `model_type` is `delaunay_matern`, **not** `delaunay`) | `delaunay_matern_pos_fp64` — phase 12, 342241_13, **not yet ruled** | **IN** (bar arrives with phase 12) |
-| `delaunay_adapt_split` | `.../multi_start_prodigy/delaunay_adapt_split.py` | none — there is no `scripts/imaging/searches/nautilus/delaunay_adapt_split.py`, so the cell has no reference row of any kind | **DEFERRED** — no bar exists |
-| `delaunay` (plain) | none | `delaunay_pos` 31,338.43 (ruled) | **DEFERRED** — no gradient leaf |
-| `delaunay_nn` | none | `delaunay_nn_pos` 31,351.39 (ruled) | **DEFERRED** — no gradient leaf |
-| `slam_source_pix` | none | `slam_source_pix_pos` 31,547.24 (ruled) | **DEFERRED** — no gradient leaf |
-| `slam_source_pix_nn` | none | `slam_source_pix_nn_pos` 31,405.63 (ruled) | **DEFERRED** — no gradient leaf |
+| cell (`model_type`) | autoconv leaf (the arm's script) | fixed-step leaf today | positions-on Nautilus reference | in scope? |
+|---|---|---|---|---|
+| `pixelization` | `scripts/imaging/searches/multi_start_prodigy_autoconv/pixelization.py` — dev leg | `.../multi_start_prodigy/pixelization.py` | `pixelization_pos_fp64` — phase 12, 342241_11, **not yet ruled** | **IN** (bar arrives with phase 12) |
+| `knn` | `.../multi_start_prodigy_autoconv/knn.py` — dev leg | `.../multi_start_prodigy/knn.py` | `knn_pos_fp64` — phase 12, 342241_12, **not yet ruled** | **IN** (bar arrives with phase 12) |
+| `delaunay_matern` | `.../multi_start_prodigy_autoconv/delaunay_matern.py` — dev leg (named for the cell; the fixed-step leaf is `delaunay.py` whose `model_type` is `delaunay_matern`, **not** `delaunay`) | `.../multi_start_prodigy/delaunay.py` | `delaunay_matern_pos_fp64` — phase 12, 342241_13, **not yet ruled** | **IN** (bar arrives with phase 12) |
+| `delaunay` (plain) | `.../multi_start_prodigy_autoconv/delaunay.py` — dev leg | none | `delaunay_pos` 31,338.43 (ruled) | **IN once the dev leg lands its autoconv leaf** |
+| `delaunay_nn` | `.../multi_start_prodigy_autoconv/delaunay_nn.py` — dev leg | none | `delaunay_nn_pos` 31,351.39 (ruled) | **IN once the dev leg lands its autoconv leaf** — H5.2 needs this cell |
+| `slam_source_pix` | `.../multi_start_prodigy_autoconv/slam_source_pix.py` — dev leg | none | `slam_source_pix_pos` 31,547.24 (ruled) | **IN once the dev leg lands its autoconv leaf** |
+| `slam_source_pix_nn` | `.../multi_start_prodigy_autoconv/slam_source_pix_nn.py` — dev leg | none | `slam_source_pix_nn_pos` 31,405.63 (ruled) | **IN once the dev leg lands its autoconv leaf** |
+| `delaunay_adapt_split` | not planned | `.../multi_start_prodigy/delaunay_adapt_split.py` | none — there is no `scripts/imaging/searches/nautilus/delaunay_adapt_split.py`, so the cell has no reference row of any kind | **DEFERRED** — no bar exists, and no reference row of any kind |
 
-So the four *ruled* reference rows have no gradient leaf, and the three cells that have one are
-waiting on phase 12. That is the whole reason this phase is `planned` and gated on phase 12
-being ruled: filed today it has no bar to score against. H5.2's DelaunayNN/kernel-CDF ranking
-cannot be answered at all until `delaunay_nn` (and, for the SLaM cells, `slam_source_pix*`)
-gain gradient leaves — a separate dev leg, not this phase.
+Seven cells, then, not three. Four of them (`delaunay`, `delaunay_nn`, `slam_source_pix`,
+`slam_source_pix_nn`) already carry a *ruled* bar and were deferred only for want of a gradient
+leaf; the widened dev leg removes that, so this phase now answers H5.2's DelaunayNN /
+kernel-CDF ranking rather than parking it. The three phase-12 cells still wait on their bars,
+which is why this phase stays `planned` and gated on phase 12 being ruled. The dev leg
+established (in `autolens_profiling`) that `searches/_setup.py`'s `build_for_cell` is
+sampler-agnostic and already builds all seven cells — the SLaM pair even gets SLaM's own `auto`
+threshold convention for free — so the leaves are thin `run_search(...)` scripts plus a set of
+per-cell `n_starts` / `n_steps` / `batch_size` rows in `_samplers.py`. Two properties of the
+DelaunayNN cells travel with them into the scoring: their broad-prior-draw finite rates are
+3/8 (`delaunay_nn`) and 1/8 (`slam_source_pix_nn`) against `delaunay`'s 8/8, so a 256-lane
+broad-start arm should be read with a materially lower live-lane count in mind.
 
 **Arms.**
 
 | arm | cells | seeds | config |
 |---|---|---|---|
-| primary — `pos_tauto0.2_f1e5` | `pixelization`, `knn`, `delaunay_matern` | 0–4 | `MultiStartProdigy` n=256, `prior_box`, `scaler=none`, autoconv, `batch_size=4` (mandatory on pixelized cells), fp64, viz off |
+| primary — `pos_tauto0.2_f1e5` | all 7: `pixelization`, `knn`, `delaunay_matern`, `delaunay`, `delaunay_nn`, `slam_source_pix`, `slam_source_pix_nn` | 0–4 | `multi_start_prodigy_autoconv` — `MultiStartProdigy` n=256, `prior_box`, `scaler=none`, **autoconv (the Gate B1 criterion: window 50, rtol 1e-4, atol 1e-3, min_steps 100)**, `batch_size=4` (mandatory on pixelized cells), fp64, viz off |
 | bridge — `pos_t0.3_f1e5` | `knn` only | 0–4 | as above; the *only* threshold/factor pair with a 5/5 Prodigy result on MGE (R-20260902-10), so it is the arm that carries Phase 4's evidence onto a mesh; `tauto0.2` was measured on MGE only at `f1e8`, where it was 0/4 |
 | control — Nautilus `pos_tauto0.2_f1e5` | `knn` only | 0 | `nautilus`, n_live 2× fiducial (300), fp64, `--config-name hpc_a100_fp64_ref` — the reference-row recipe with the factor changed |
 
-**Array size: 21 tasks** — 15 primary (3 cells × 5 seeds) + 5 bridge + 1 Nautilus control.
-`--array=0-20`, one task per arm/seed, `--requeue` (the `_gpu_preflight.sh` MIG bounce).
+**Array size: 41 tasks** — 35 primary (7 cells × 5 seeds) + 5 bridge + 1 Nautilus control.
+`--array=0-40`, one task per arm/seed, `--requeue` (the `_gpu_preflight.sh` MIG bounce). The
+step-rate probe set (one truncated arm per in-scope cell, 7 tasks) is **separate and runs
+first** — see the cost section below; it is not part of the 41.
 
 **Cost, and the one number this phase must not invent.** There is **no measured step rate for
 any mesh cell at 256 lanes** (`scripts/misc/wall/rates.py`): the only mesh rows are 16 lanes /
@@ -99,11 +113,15 @@ Quoting a rate across a configuration is exactly what killed RAL 340576 (35 of 3
 
 - **Budget 8:00 per task** — the array's `--time`, being the slowest *measured* mesh arm
   (8B `delaunay_adapt_split`, 14,540 s = 4:02) rounded up with headroom for the unmeasured lane
-  scaling. **Ceiling: 21 × 8:00 = 168 A100-h.**
-- **Step 0 is a probe, not an assumption.** Before the array is sized, one short truncated arm
-  per in-scope cell at the dispatch lane tier measures s/step, the row goes into
+  scaling. **Ceiling: 41 × 8:00 = 328 A100-h**, plus the probe set (7 truncated tasks, minutes
+  each, and the number that decides whether the 41 are submitted at n=256 at all).
+- **Step 0 is a probe, not an assumption, and the human runs it first.** Before the array is
+  sized, the dev leg's **per-cell step-rate probe task set** — one short truncated arm per
+  in-scope cell (7 tasks) at the dispatch lane tier — measures s/step, each row goes into
   `wall/rates.py` with its job id, and the submit's `WALL-BASIS` block cites `source: rates`
-  (`wall/check_submits.py` enforces this). Autoconv early-stopping is what makes n=256 plausible
+  (`wall/check_submits.py` enforces this). Five of the seven cells have **no** `rates.py` row of
+  any kind today, so the probe set is the only thing standing between this phase and another
+  quoted-across-configurations kill. Autoconv early-stopping is what makes n=256 plausible
   at all — the 3000 steps are a ceiling, not a cost — and its stopping step on a mesh is
   unmeasured.
 - **If the probe says n=256 does not fit 8:00,** the human's call at dispatch is a lower lane
@@ -114,18 +132,27 @@ Quoting a rate across a configuration is exactly what killed RAL 340576 (35 of 3
 
 1. **Phase 12 ruled.** All three in-scope cells take their bar from it; without it the witness
    has no numbers.
-2. **The dev leg merged** (PyAutoMind prompt filed 2026-09-02, `autolens_profiling` target):
-   verify the `multi_start_prodigy` leaves honour `SEARCHES_POSITIONS` / `_THRESHOLD` /
-   `_FACTOR` through `scripts/misc/searches/_setup.py`; add
-   `hpc/batch_gpu/submit_search_multi_start_prodigy_phase5_positions_array.sh` with the 21-task
-   mapping above and the Nautilus control task; dry-run one task under
-   `AUTOLENS_PROFILING_SMOKE=1`. **No submission** — dispatch is an act of this phase.
-3. **A decision on `autoconv`.** The Gate B pt 1 config is `multi_start_prodigy_autoconv`, and
-   the only leaf under that sampler is `mge.py` — there is no autoconv leaf for any mesh cell.
-   Either the dev leg adds `multi_start_prodigy_autoconv/{pixelization,knn,delaunay}.py`, or the
-   arms run the genuinely fixed-step `multi_start_prodigy` cell and this phase is **not** the
-   Gate B1 config and must say so in its ruling. This is a human decision at dispatch, recorded
-   here so it is not made silently.
+2. **The widened dev leg merged** (PyAutoMind prompt
+   `draft/feature/workspaces/phase_5_dev_leg_prepare_the_mesh.md`, filed 2026-09-02 and widened
+   the same day, `autolens_profiling` target): the seven
+   `scripts/imaging/searches/multi_start_prodigy_autoconv/{pixelization,knn,delaunay_matern,
+   delaunay,delaunay_nn,slam_source_pix,slam_source_pix_nn}.py` leaves; the per-cell
+   `n_starts` / `n_steps` / `batch_size` rows the four new cells lack in
+   `scripts/misc/searches/_samplers.py` (without them an un-overridden run defaults to
+   `batch_size=None`, the ~58 GB unbatched jvp on a pixelized cell, and a 300-step budget
+   artefact); verification that the leaves honour `SEARCHES_POSITIONS` / `_THRESHOLD` /
+   `_FACTOR` through `scripts/misc/searches/_setup.py`;
+   `hpc/batch_gpu/submit_search_multi_start_prodigy_phase5_positions_array.sh` with the 41-task
+   mapping above and the Nautilus control task; the separate probe-set submit; and one dry-run
+   task under `AUTOLENS_PROFILING_SMOKE=1`. **No submission** — dispatch is an act of this
+   phase.
+3. **`autoconv` — DECIDED 2026-09-02 by the human.** Auto-convergence is ON for **every**
+   Phase 5 gradient arm, at the Gate B1 settings (`check_for_convergence=True`, window 50,
+   rtol 1e-4, atol 1e-3, min_steps 100 — `scripts/misc/searches/_samplers.py`,
+   `_MULTI_START_AUTOCONV` / `_convergence()`, lines ~746-790). Every arm therefore runs the
+   `multi_start_prodigy_autoconv` sampler through its own new leaf, and this phase **is** the
+   Gate B pt 1 config — the fixed-step fallback, and the caveat its ruling would have had to
+   carry, are both off the table. The autoconv leaves are item 2's first deliverable.
 
 ## Witness
 
@@ -133,11 +160,11 @@ every arm delivers on its own artefacts — positions.info present in the run di
 
 ## Where to look
 
-- `inference_programme` (project row): `output/searches/multi_start_prodigy/imaging/{pixelization,knn,delaunay_matern}/hst/hpc_a100_fp64_n256_seed{0..4}_pos_tauto0.2_f1e5/` — the 15 primary run trees, each of which must carry `positions.info` (R-20260902-01)
-- `output/searches/multi_start_prodigy/imaging/knn/hst/hpc_a100_fp64_n256_seed{0..4}_pos_t0.3_f1e5/` — the 5 bridge-arm run trees
+- `inference_programme` (project row): `output/searches/multi_start_prodigy_autoconv/imaging/{pixelization,knn,delaunay_matern,delaunay,delaunay_nn,slam_source_pix,slam_source_pix_nn}/hst/hpc_a100_fp64_n256_seed{0..4}_pos_tauto0.2_f1e5/` — the 35 primary run trees, each of which must carry `positions.info` (R-20260902-01)
+- `output/searches/multi_start_prodigy_autoconv/imaging/knn/hst/hpc_a100_fp64_n256_seed{0..4}_pos_t0.3_f1e5/` — the 5 bridge-arm run trees
 - `output/searches/nautilus/imaging/knn/hst/pos_tauto0.2_f1e5/hpc_a100_fp64_ref_pos_tauto0.2_f1e5/` — the Nautilus inertness control
 - `logs/output/output.<job>_{0-20}.out` and the matching `logs/error/error.<job>_{0-20}.err` on the mirror
-- Result rows: `autolens_profiling/results/searches/multi_start_prodigy/imaging/<cell>/hst/hpc_hpc_a100_fp64_n256_seed<N>_pos_tauto0.2_f1e5.json` (and `_pos_t0.3_f1e5.json` for the bridge arm); the control at `results/searches/nautilus/imaging/knn/hst/hpc_hpc_a100_fp64_ref_pos_tauto0.2_f1e5.json`
+- Result rows: `autolens_profiling/results/searches/multi_start_prodigy_autoconv/imaging/<cell>/hst/hpc_hpc_a100_fp64_n256_seed<N>_pos_tauto0.2_f1e5.json` (and `_pos_t0.3_f1e5.json` for the bridge arm); the control at `results/searches/nautilus/imaging/knn/hst/hpc_hpc_a100_fp64_ref_pos_tauto0.2_f1e5.json`
 - The bars: `autolens_profiling/results/baselines/InferenceRefs_v1/<key>/` plus `INDEX.json` / `INDEX.md` / `SUBMIT_LIST.md` — `pixelization_pos_fp64`, `knn_pos_fp64`, `delaunay_matern_pos_fp64` once phase 12 is ruled, and the four rows ruled by R-20260902-01
 - `autolens_profiling/results/notes/inference/PROGRAMME.md` — "### Phase 5 — Pixelized / mesh global searches with PositionsLH" (the pre-registered design) and the "2026-08-31 REWIND" section
 - `autolens_profiling/scripts/misc/wall/rates.py` — the step-rate rows the probe must add before the array is sized; `hpc/batch_gpu/submit_search_multi_start_prodigy_phase5_positions_array.sh` once the dev leg lands
