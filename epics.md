@@ -46,7 +46,7 @@ This file is ledger: it auto-merges (`scripts/ledger_merge.py`).
 - title: profile and certify the JAX inference stack — samplers, meshes, reference baselines
 - ledger: autolens_profiling/results/notes/inference/PROGRAMME.md
 - mind-half: PyAutoMind/epics.md#jax-inference-profiling
-- status: REWOUND to Phase 1 (2026-08-31); the InferenceRefs_v1 refs redo is awaiting ruling
+- status: Phase 1 RULED 2026-09-02 (R-20260902-01, accept scoped to the four positions-on rows) and closed out; certified InferenceRefs_v1 set = 6 baselines (mge_fp64, mge_pos_fp64, delaunay_nn_pos, slam_source_pix_pos, slam_source_pix_nn_pos, delaunay_pos); next: positions-on refs for pixelization / knn / delaunay_matern (new phase), then the legacy MGE phases 2–4 by packet, then Phase 5 positions-on
 - notes: The whole epic's science half lives here. The 2026-08-31 REWIND quarantined
   every mesh / pixelization result to `output/legacy_wrong/` and every MGE result to
   `output/legacy/` (reusable pending batch review), made gates A, B pt 1 and B pt 2
@@ -55,6 +55,9 @@ This file is ledger: it auto-merges (`scripts/ledger_merge.py`).
   belongs to `cluster-strong-lensing` and sits in this project directory because that
   is where its runs would land. R-20260901-03 binds the redo: a mesh row produced
   without a `PositionsLH` positions penalty is not a citable reference.
+  R-20260902-01 generalises it (human rule, 2026-09-02): a mesh run without a
+  `positions.info` file is unreliable and cannot be used; `pos_tauto0.2_f1e8` is the
+  confirmed physical configuration for mesh sources.
 
 ## graphical-ep
 - title: expectation propagation as the scalable alternative to graphical joint fits
