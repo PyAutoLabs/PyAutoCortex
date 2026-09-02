@@ -10,11 +10,11 @@ Every science phase the Cortex is holding, on one page: what is waiting on your 
 
 | Where | Count |
 |-------|------:|
-| [Awaiting ruling](#awaiting-ruling) | 2 |
+| [Awaiting ruling](#awaiting-ruling) | 1 |
 | [Running / submitted](#running--submitted) | 0 |
 | [Ready](#ready) | 0 |
 | [Gated](#gated) | 1 |
-| [Recent rulings](#recent-rulings) | 14 |
+| [Recent rulings](#recent-rulings) | 15 |
 
 ## Awaiting ruling
 
@@ -24,14 +24,6 @@ Every science phase the Cortex is holding, on one page: what is waiting on your 
 
 ```
 Review the PyAutoCortex phase phases/subhalo_validation/delaunay_adapt_split_pl_eff_1_outer.md and help me rule on it: read its `## Witness` and the pulled evidence under its `## Where to look`, score the witness, then draft the ruling body for my approval and run `python3 scripts/cortex.py rule phases/subhalo_validation/delaunay_adapt_split_pl_eff_1_outer.md <accept|rerun|drop|leave-to-finish> --body <file>`.
-```
-
-</details>
-
-<details><summary>📋 <a href="phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md">Subhalo_validation — phase 4: rectangular_adapt on pl_sersic_0 — the RectangularBilinear comparison</a> — subhalo_validation phase 4 · budget 48:00 · 15 review-min · runs 342094_0, 342095_0</summary>
-
-```
-Review the PyAutoCortex phase phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md and help me rule on it: read its `## Witness` and the pulled evidence under its `## Where to look`, score the witness, then draft the ruling body for my approval and run `python3 scripts/cortex.py rule phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md <accept|rerun|drop|leave-to-finish> --body <file>`.
 ```
 
 </details>
@@ -66,6 +58,7 @@ python3 scripts/cortex.py gates --grade   # euclid_strong_lens_modeling_pipeline
 
 | Ruling | Verb | Phase | Batch |
 |---|---|---|---|
+| [R-20260902-03](rulings/2026/09/R-20260902-03.md) | accept | phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md | - |
 | [R-20260902-02](rulings/2026/09/R-20260902-02.md) | accept | phases/subhalo_validation/delaunay_adapt_split_pl_eff_0.md | - |
 | [R-20260902-01](rulings/2026/09/R-20260902-01.md) | accept | phases/inference_programme/inference_refs_v1_redo.md | - |
 | [R-20260901-04](rulings/2026/09/R-20260901-04.md) | drop | phases/inference_programme/failed_submissions_342008_10.md | - |
@@ -77,7 +70,6 @@ python3 scripts/cortex.py gates --grade   # euclid_strong_lens_modeling_pipeline
 | [R-20260831-06](rulings/2026/08/R-20260831-06.md) | accept | phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md | 2026-08-31-am |
 | [R-20260831-05](rulings/2026/08/R-20260831-05.md) | drop | phases/inference_programme/slogdet_ab_342017.md | 2026-08-31-am |
 | [R-20260831-04](rulings/2026/08/R-20260831-04.md) | drop | phases/inference_programme/refs_5_6_342016_56.md | 2026-08-31-am |
-| [R-20260831-03](rulings/2026/08/R-20260831-03.md) | drop | phases/inference_programme/knn_rerun_342016_7.md | 2026-08-31-am |
 
 ## Epics
 
