@@ -20,6 +20,12 @@ about them; the board is the live view of run progress. Each pull appends a
 
 ## Schema
 
+The record is **opened by the batch conductor** — `pyauto-brain batch plan
+--kind cortex --apply --review-at <ISO> [--slot <YYYY-MM-DD-label>] [--shift
+<label>]` (`PyAutoBrain/agents/conductors/batch/AGENTS.md`, "Two kinds, two
+records"). The schema below is unchanged by that: the conductor writes what a
+hand-written record always wrote.
+
 ```markdown
 # Batch 2026-09-01 pm
 - dispatched: 2026-09-01T09:00Z      # when the board was opened
@@ -27,6 +33,7 @@ about them; the board is the live view of run progress. Each pull appends a
 - shift: day                         # free-text label the human gives it
 - lane: local-dev                    # always — the review happens at the laptop
 - review-minutes-planned: 20
+- carried-from: batches/2026-08-31-pm.md   # optional — the record the carried members came from
 - members:
   - <slug>: <phase path> — <runs> — <review-minutes> — <state>
 - refreshed: 2026-09-01T11:40Z — <slug> pulled      # one line per pull, appended in order
@@ -37,6 +44,7 @@ about them; the board is the live view of run progress. Each pull appends a
 - packet: batches/packets/<YYYY-MM-DD>-<slot>.html
 - review: batches/reviews/<YYYY-MM-DD>-<slot>.md
 - review-minutes-actual: <n>
+- carried: <slug> — still <state> at review          # one per still-running member, written at close
 - notes: |
     What actually happened. Anything that stalled, and why.
 ```
@@ -71,7 +79,18 @@ and their own `review-at:`.
 
 **`refreshed:` is the board's history.** A member joins on the pull that
 fills its results in; the line says when and which. A packet refreshed without
-the line is a board whose history cannot be audited.
+the line is a board whose history cannot be audited. The lines are written by
+`pyauto-brain batch collect --kind cortex --apply`, one per member it moves —
+a member already `awaiting-ruling` is on the board and is not re-stamped.
+
+**`carried:` is how a run outlives its slot. A Cortex member never blocks a
+Cortex review.** At close, every member still `submitted` or `running` gets a
+`- carried: <slug> — still <state> at review` line, and the next `batch plan
+--kind cortex --apply` includes those members automatically — current state,
+with `- carried-from:` naming the record they came from. The human
+re-specifies nothing and nothing is re-dispatched: the run was already running.
+The old record's member line stays as the ledger of what that state was at its
+own review.
 
 **`review-minutes-actual:` is the only calibration there is.** The planned
 figure is a seed; this is what the slot really cost.

@@ -24,9 +24,13 @@ Rules:
   fills — the `mirror:` of its `projects.yaml` row), because the review
   happens at the laptop. A pointer may stay remote only when the pull cannot
   fetch it by design, and must say so.
-- **Not hand-written.** The renderer is the batch conductor's (phase 2 of the
-  birth epic). Until it exists a packet is whatever the session produced,
-  archived unchanged.
+- **Not hand-written.** The renderer is `pyauto-brain batch collect --kind
+  cortex --apply` (phase 5 of the birth epic); it writes this page and appends
+  each member as it joins. A member still `submitted`/`running` renders with
+  **no review control** — no ruling chips, no ruled box — because there is
+  nothing to rule on yet; carry-forward, not a ruling, moves it to the next
+  board. The follow-ups block a review submits is a `###` heading: `cortex.py
+  check` requires every `##` in a review to name a member.
 
 **Visibility.** Packets and reviews are public in this repository, as the
 Mind's are (ruled 2026-08-31): science numbers, figures and run paths in a
