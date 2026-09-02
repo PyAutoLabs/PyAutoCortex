@@ -2,12 +2,12 @@
 
 Project: subhalo_validation
 Phase: 2
-State: accepted
+State: submitted
 Gates:
 Witness: evidence_increase < 5 in results/delaunay_adapt_split/pl_eff_0_no_subhalo.json (test_mode false)
 Budget: 48:00
-Runs: 342027
-Ruling: R-20260902-02
+Runs: 342027, 342231, 342234
+Ruling: R-20260902-05
 Lane: local-dev
 Review-minutes: 8
 Epic:
@@ -47,8 +47,12 @@ predates the `subhalo_stage` key.
 - 342027_1: legacy — ral — submitted 2026-08-29 — wall 45:10 — pre-Cortex run, migrated; COMPLETED 0:0 in 1-21:10:24, ended 00:04:55 BST 2026-09-01 — inside the 2-day wall after all; witness predates the subhalo_stage key
     where: output/subhalo/detect/delaunay_adapt_split/pl_eff_0_no_subhalo/
     pulled_to: output/subhalo/detect/delaunay_adapt_split/pl_eff_0_no_subhalo/
+- 342231_1: submitted — ral — submitted 2026-09-02 — wall 0:00 — job A, source_lp[1] on JAX; rerun with the S/N-3 adapt-image cap and fixed over-sampling (R-20260902-04..07)
+- 342234_1: submitted — ral — submitted 2026-09-02 — wall 0:00 — job B, the full chain from source_pix[1]; reloads job A
+    after: 342231_1
 
 ## Ruling
 
 R-20260831-07 — leave-to-finish
 R-20260902-02 — accept
+R-20260902-05 — rerun (supersedes R-20260902-02)

@@ -2,12 +2,12 @@
 
 Project: subhalo_validation
 Phase: 4
-State: accepted
+State: submitted
 Gates:
 Witness: evidence_increase < 5 in results/rectangular_adapt/pl_sersic_0_no_subhalo.json (test_mode false)
 Budget: 48:00
-Runs: 342094, 342095
-Ruling: R-20260902-03
+Runs: 342094, 342095, 342237, 342240
+Ruling: R-20260902-06
 Lane: local-dev
 Review-minutes: 15
 Epic:
@@ -68,7 +68,11 @@ column's 21,386.823 — different mesh size and free-parameter count.
     where: output/subhalo/detect/rectangular_adapt/pl_sersic_0_no_subhalo/
     after: 342094_0
     pulled_to: output/subhalo/detect/rectangular_adapt/pl_sersic_0_no_subhalo/
+- 342237_0: submitted — ral — submitted 2026-09-02 — wall 0:00 — job A, source_lp[1] on JAX; rerun with the S/N-3 adapt-image cap and fixed over-sampling (R-20260902-04..07)
+- 342240_0: submitted — ral — submitted 2026-09-02 — wall 0:00 — job B, the full chain from source_pix[1]; reloads job A
+    after: 342237_0
 
 ## Ruling
 
 R-20260902-03 — accept
+R-20260902-06 — rerun (supersedes R-20260902-03)

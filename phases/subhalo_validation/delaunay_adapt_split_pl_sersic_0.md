@@ -2,12 +2,12 @@
 
 Project: subhalo_validation
 Phase: 1
-State: accepted
+State: submitted
 Gates:
 Witness: evidence_increase < 5 in results/delaunay_adapt_split/pl_sersic_0_no_subhalo.json (test_mode false)
 Budget: 48:00
-Runs: 342027
-Ruling: R-20260831-06
+Runs: 342027, 342231, 342234
+Ruling: R-20260902-07
 Lane: local-dev
 Review-minutes: 10
 Epic:
@@ -52,7 +52,11 @@ Measured stage costs (the reason subhalo[2] was later switched off): `source_lp[
 - 342027_0: legacy — ral — submitted 2026-08-29 — wall 34:08 — pre-Cortex run, migrated; MaxRSS 27.0 GB, autolens 2026.8.17.1 + PyAutoFit 56fb8b63b (the PR #1548 pool fix); witness predates the subhalo_stage key — read it as subhalo[2]_[single_plane_refine]
     where: output/subhalo/detect/delaunay_adapt_split/pl_sersic_0_no_subhalo/
     pulled_to: output/subhalo/detect/delaunay_adapt_split/pl_sersic_0_no_subhalo/
+- 342231_0: submitted — ral — submitted 2026-09-02 — wall 0:00 — job A, source_lp[1] on JAX; rerun with the S/N-3 adapt-image cap and fixed over-sampling (R-20260902-04..07)
+- 342234_0: submitted — ral — submitted 2026-09-02 — wall 0:00 — job B, the full chain from source_pix[1]; reloads job A
+    after: 342231_0
 
 ## Ruling
 
 R-20260831-06 — accept
+R-20260902-07 — rerun (supersedes R-20260831-06)
