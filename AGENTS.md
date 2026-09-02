@@ -91,11 +91,70 @@ human's turn. Full rules in [rulings/AGENTS.md](rulings/AGENTS.md).
     REFERENCE.md; refuses the ruling edges.
   - `new <project> <slug> --phase <n> …` — writes a phase file from the
     template.
+- **`dashboard.md` / `dashboard.html`** — GENERATED, never hand-edited: the
+  board, rendered by the Brain's cortex conductor and self-healed on `main`
+  (see "Driving the Cortex" below). They are ledger for the merge gate.
 - **`scripts/ledger_merge.py`** — the default-deny classifier behind
   `.github/workflows/ledger_merge.yml`: a `claude/**` push whose whole diff is
-  ledger (`phases/`, `rulings/`, `batches/`, `epics.md`) lands on `main` by
-  itself; anything else waits for a human. `python3 scripts/ledger_merge.py
-  classify --base origin/main` predicts the verdict.
+  ledger (`phases/`, `rulings/`, `batches/`, `epics.md`, the two generated
+  dashboards) lands on `main` by itself; anything else waits for a human — and
+  that "anything else" includes an `AGENTS.md` or `TEMPLATE.md` *inside* a
+  ledger dir, which is doctrine, not an entry. `python3
+  scripts/ledger_merge.py classify --base origin/main` predicts the verdict.
+
+## Driving the Cortex
+
+The Cortex holds state and checks itself; it does not reason. The reasoning
+lives in the Brain's **cortex conductor** — `pyauto-brain cortex <verb>`, or
+`python3 PyAutoBrain/agents/conductors/cortex/_cortex.py <verb> --cortex
+<checkout>` with no Brain install. It is read-mostly: it renders, it plans and
+it scores. The only bytes it writes of its own are the two generated pages;
+every change to a *phase* goes through `scripts/cortex.py`, which owns the
+state table.
+
+| Verb | What it does |
+|------|--------------|
+| `census [--json]` | what the Cortex is holding, by state — the one-screen answer |
+| `dashboard --check` \| `--apply` | render `dashboard.md` + `dashboard.html`; `--check` exits **1 on drift**, **2 on bad args**, anything else = the renderer could not run |
+| `gates [--grade] [--apply]` | the gate refs; `--grade` polls GitHub, `--apply` flips `gated → ready` (and `ready → gated` on a reopen) |
+| `plan [--budget N]` | which `ready` phases fit a laptop slot, cheapest first; it hands over a command, never a decision |
+| `collect [--slot S] [--pull] [--refreshed ISO] [--apply]` | score a pulled run's legs into a packet member; `--pull` is opt-in and runs the *project's own* sync CLI |
+
+**`--apply` here, `--write` there.** The conductor's verbs spell the writing
+flag `--apply` (the Brain's house spelling, as intake does); `scripts/cortex.py`
+spells it `--write`. `cortex gates --grade --apply` is a thin wrapper over
+`cortex.py gates --grade --write` — same edit, two doors.
+
+**Nothing here submits a job.** `plan` prints the project's own `sync_cli
+submit` line and the `cortex.py move <phase> submitted --run <jobid>` follow-up;
+a human runs both. `collect --pull` is the one leg that shells out, and only to
+the project's own CLI.
+
+### What runs by itself
+
+Four workflows, and only these may write:
+
+| Workflow | Trigger | May write |
+|---|---|---|
+| `cortex_check.yml` | push/PR on ledger, scripts, tests, the dashboards | **nothing** — `cortex.py check` + pytest |
+| `dashboard_refresh.yml` | push to main, PR, nightly 03:35 UTC, dispatch | `dashboard.md`, `dashboard.html` (self-heal on main; a PR run errors instead of healing) |
+| `pages_dashboard.yml` | push to `dashboard.html` / `batches/packets/**`, dispatch | nothing in the repo — it publishes to Pages |
+| `gates_grade.yml` | daily 06:47 UTC, dispatch | phase headers — **`State:` and `Gates-cleared:` only**, and only `gated → ready` (or `ready → gated` on a reopened gate) |
+| `ledger_merge.yml` | push to `claude/**`, dispatch | merges a ledger-only branch to main |
+
+`gates_grade.yml` is **the one scheduled job that mutates the ledger**. It never
+rules, never submits, never edits a run line. An unreadable gate ref fails
+closed: the phase is skipped, whatever else flipped is still committed, and the
+job then goes red so a human sees the ref.
+
+All three main-writers share `concurrency: group: cortex-main-writers`, so two
+bots never race for the tip of main. And because a `GITHUB_TOKEN` push triggers
+no workflow at all, each of them re-dispatches by name what its push should have
+woken (`pages_dashboard.yml` after a heal; `cortex_check.yml` +
+`dashboard_refresh.yml` after a grading commit).
+
+The board is published at **<https://pyautolabs.github.io/PyAutoCortex/>** —
+`dashboard.html` as the index, archived packets under `/packets/`.
 
 ## The workspace-paths exception
 
@@ -143,9 +202,9 @@ the batch conductor's lane filter reads one vocabulary across both surfaces.
 4. **Run `python3 scripts/cortex.py check` before you push** a phase, ruling
    or batch change; `ledger_merge.yml` runs it on the trial-merge tree and a
    failing check leaves the branch for a human.
-5. **No hand-written HTML.** Packets are rendered by the batch conductor
-   (phase 2 of the birth epic); until then a packet is whatever the session
-   produced, archived unchanged.
+5. **No hand-written HTML.** `dashboard.html` is rendered by the cortex
+   conductor and packets by the batch conductor; a hand edit is drift that
+   `dashboard_refresh.yml` will overwrite on the next push to `main`.
 
 <!-- repos_sync:remote:begin -->
 ## Remote sessions (Claude Code on web and mobile)

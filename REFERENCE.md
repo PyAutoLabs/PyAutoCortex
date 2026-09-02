@@ -174,6 +174,8 @@ PyAutoCortex/
 │
 ├── projects.yaml            ← the science body map — CODE, not ledger (restricted YAML subset)
 ├── epics.md                 ← the Cortex half of each split epic (`- mind-half:`)
+├── dashboard.md             ← GENERATED board — cortex conductor (`dashboard --apply`); LEDGER
+├── dashboard.html           ← GENERATED board, the Pages index; LEDGER
 │
 ├── phases/<project>/<slug>.md          ← one file per phase (LEDGER)
 ├── rulings/AGENTS.md                   ← the append-only rule
@@ -192,13 +194,17 @@ PyAutoCortex/
 ├── tests/fixtures/skeleton/ ← one project, one phase per state, five rulings, one batch — the witness
 ├── tests/fixtures/empty/    ← an empty map passes `check`
 │
-├── .github/workflows/cortex_check.yml   ← check + pytest on push/PR
-├── .github/workflows/ledger_merge.yml   ← lands ledger-only `claude/**` branches
+├── .github/workflows/cortex_check.yml       ← check + pytest on push/PR
+├── .github/workflows/ledger_merge.yml       ← lands ledger-only `claude/**` branches
+├── .github/workflows/dashboard_refresh.yml  ← renders the board; self-heals main
+├── .github/workflows/pages_dashboard.yml    ← publishes dashboard.html to Pages
+├── .github/workflows/gates_grade.yml        ← daily gate grading — the one scheduled mutator
 └── .claude/hooks/session-start.sh  .claude/settings.json   ← GENERATED — repos_sync --write
 ```
 
-No `skills/` — the Cortex exposes no commands of its own in phase 1; the
-conductor that drives it lives in the Brain (phase 2).
+No `skills/` — the Cortex exposes no commands of its own; the conductor that
+drives it lives in the Brain (`pyauto-brain cortex …`, AGENTS.md "Driving the
+Cortex"), and the workflows above are the only things that run it unattended.
 
 ---
 
@@ -422,13 +428,27 @@ deny**:
 |---|---|
 | `phases/**`, `rulings/**`, `batches/**` | `scripts/`, `tests/`, `.github/`, `policy/`, `docs/` |
 | `epics.md` | `projects.yaml`, `README.md`, `AGENTS.md`, `REFERENCE.md`, … |
+| `dashboard.md`, `dashboard.html` (generated) | **`AGENTS.md` / `TEMPLATE.md` inside a ledger dir** |
 | | anything unclassified — a new root file, a new top-level folder |
 | | **any modification or deletion under `rulings/`** (append-only) |
 
-Two exceptions inside the ledger dirs, as in the Mind: a **dot-path** anywhere,
-and a file pytest would **collect** (`conftest.py`, `test_*.py`, `*_test.py`).
-The Cortex adds a third: `ledger_merge.py` classifies via `git diff
---name-status`, and an `M`, `D` or `R` entry under `rulings/**` is code.
+Three exceptions inside the ledger dirs. Two are the Mind's: a **dot-path**
+anywhere, and a file pytest would **collect** (`conftest.py`, `test_*.py`,
+`*_test.py`). The third is the Cortex's own **doctrine carve-out** —
+`rulings/AGENTS.md`, `batches/AGENTS.md`, `batches/packets/AGENTS.md`,
+`batches/packets/TEMPLATE.md`, `batches/reviews/AGENTS.md` are ledger by
+location but instructional by content: they say what an entry may be and what
+every future entry is stamped from, so a change to one is a change to
+behaviour. Auto-merging a rewrite of `rulings/AGENTS.md` would let a branch
+edit the rule that governs its own merge.
+
+Pulling the other way, the two **generated** board pages are ledger: a branch
+that moves a phase re-renders them in the same push, and
+`dashboard_refresh.yml`'s self-heal commit has to land without a human.
+
+And a fourth Cortex rule on *kind* rather than path: `ledger_merge.py`
+classifies via `git diff --name-status`, and an `M`, `D` or `R` entry under
+`rulings/**` is code.
 
 The blocking check is `python3 scripts/cortex.py check` run on the **trial-merge
 tree** — after `git merge --no-ff`, before `git push` — which is what catches
@@ -500,6 +520,79 @@ Stdlib only; `main(argv)`; no import-time side effects; every verb takes
   wall by hand — and `--where` (required) as its `where:`; a legacy-born
   phase refuses `--gates`. Refuses a duplicate phase number, an existing
   file or an unknown project.
+
+---
+
+## Driving the Cortex — the conductor and the workflows
+
+The Cortex is state plus `cortex.py`. The reasoning over it — the board, the
+slot, the daily grading — is the Brain's **cortex conductor**:
+
+```bash
+pyauto-brain cortex census [--json]                  # what is held, by state
+pyauto-brain cortex dashboard --check | --apply      # render the two pages
+pyauto-brain cortex gates [--grade] [--apply]        # poll the refs; flip what cleared
+pyauto-brain cortex plan [--budget N] [--lane ..]    # which ready phases fit a slot
+pyauto-brain cortex collect [--slot S] [--pull] [--refreshed ISO] [--apply] [--out F]
+```
+
+With no Brain install, or from a workflow:
+
+```bash
+python3 ../PyAutoBrain/agents/conductors/cortex/_cortex.py dashboard --cortex . --check
+```
+
+`--cortex` is a flag of the **subcommand**, not a global one: it follows the
+verb. (`--cortex . dashboard --check` exits 2.) The root is resolved
+`--cortex` → `$PYAUTO_CORTEX` → `PyAutoCortex` beside the Brain checkout.
+
+**Two spellings of the same flag.** The conductor writes with `--apply` (the
+Brain's house spelling); `scripts/cortex.py` writes with `--write`. `cortex
+gates --grade --apply` is a thin wrapper over `cortex.py gates --grade
+--write`; the edit is `cortex.py`'s either way.
+
+**The `--check` exit-code contract** (`dashboard_refresh.yml` depends on it):
+
+| Code | Meaning | What the caller does |
+|---|---|---|
+| 0 | the committed pages match a fresh render | nothing |
+| 1 | **drift** — and nothing else | error on a PR, self-heal on main |
+| 2 | bad args — this Brain has no such verb/flag | report a renderer failure |
+| other | the renderer could not run (a Brain/Cortex skew) | report a renderer failure |
+
+Treating 2 as drift sends whoever reads the log to fix `dashboard.md` when the
+broken thing is the Brain: `dashboard_refresh.yml` wraps the call in `check()`
+for exactly that reason.
+
+### What each workflow may write
+
+| Workflow | Trigger | Writes |
+|---|---|---|
+| `cortex_check.yml` | push/PR on `phases/ rulings/ batches/ projects.yaml epics.md dashboard.* scripts/ tests/` | nothing (`cortex.py check` + pytest) |
+| `dashboard_refresh.yml` | push to main + PR on the ledger paths and the two pages, nightly **03:35 UTC**, dispatch | `dashboard.md`, `dashboard.html` on main (3-attempt fetch/reset/render/commit/push); a PR run errors instead of healing |
+| `pages_dashboard.yml` | push to `dashboard.html` / `batches/packets/**`, dispatch | nothing in git — publishes `dashboard.html` as the Pages index and `batches/packets/*.html` under `/packets/` |
+| `gates_grade.yml` | daily **06:47 UTC**, dispatch | phase headers, `State:` + `Gates-cleared:` only, and only `gated → ready` / `ready → gated` |
+| `ledger_merge.yml` | push to `claude/**`, dispatch | merges a ledger-only branch into main |
+
+`gates_grade.yml` is the **one scheduled job that mutates the ledger**. It
+grades with `cortex.py gates --grade --write`, commits `phases` with an explicit
+pathspec, and an unreadable ref (deleted issue, rate limit, private repo) fails
+closed: that phase is skipped, whatever else flipped is still committed and
+pushed, and the job then exits non-zero so the run is red.
+
+Every workflow that can push to main shares `concurrency: group:
+cortex-main-writers, cancel-in-progress: false` — `dashboard_refresh.yml`,
+`gates_grade.yml`, `ledger_merge.yml` — so two bot writers never race for the
+tip. `pages_dashboard.yml` keeps its own `group: pages`.
+
+A push made with `GITHUB_TOKEN` triggers **no** workflow, so each writer
+re-dispatches by name what its push should have woken: `dashboard_refresh.yml`
+asks for `pages_dashboard.yml` (on both paths — fresh *and* healed; folding the
+fresh one away is the bug that stranded the Mind's published board),
+`gates_grade.yml` asks for `cortex_check.yml` and `dashboard_refresh.yml`, and
+`ledger_merge.yml` asks for `cortex_check.yml`.
+
+The board is published at **<https://pyautolabs.github.io/PyAutoCortex/>**.
 
 ---
 

@@ -59,12 +59,30 @@ LEDGER_DIRS = ("phases/", "rulings/", "batches/")
 # and on purpose — and projects.yaml, which is CODE: `sync_cli` and
 # `local_path` are paths the batch conductor executes under, worse than the
 # Mind's repos.yaml, which is already on the human side of its line.
-LEDGER_FILES = ("epics.md",)
+#
+# `dashboard.md` / `dashboard.html` join it as GENERATED ledger: the cortex
+# conductor renders them from the registry, `dashboard_refresh.yml` self-heals
+# them on main, and a branch that moves a phase re-renders them in the same
+# push. If they were code, every ordinary ledger branch would stop for a human
+# on two files nobody wrote by hand.
+LEDGER_FILES = ("epics.md", "dashboard.md", "dashboard.html")
 
-# Names that are ledger by location but executable by collection. A file
-# pytest would *collect* runs in CI from anywhere in the tree, so it is code
-# wherever it sits — a `test_*.py` dropped beside a batch packet included.
-EXCLUDED_NAMES = ("conftest.py", "test_*.py", "*_test.py")
+# Names that are ledger by location but must not ride along, for two different
+# reasons.
+#
+# EXECUTABLE BY COLLECTION: a file pytest would *collect* runs in CI from
+# anywhere in the tree, so it is code wherever it sits — a `test_*.py` dropped
+# beside a batch packet included.
+#
+# INSTRUCTIONAL BY CONTENT: `AGENTS.md` and `TEMPLATE.md` under a ledger dir
+# (`rulings/AGENTS.md`, `batches/AGENTS.md`, `batches/packets/AGENTS.md`,
+# `batches/packets/TEMPLATE.md`, `batches/reviews/AGENTS.md`) are not entries in
+# the ledger — they are the doctrine that says what an entry may be, and the
+# template every future entry is stamped from. They are read by agents as
+# instructions, so a change to one is a change to behaviour: it needs a human,
+# exactly as `scripts/` does. Auto-merging a rewrite of `rulings/AGENTS.md`
+# would let a branch edit the rule that governs its own merge.
+EXCLUDED_NAMES = ("conftest.py", "test_*.py", "*_test.py", "AGENTS.md", "TEMPLATE.md")
 
 
 def is_ledger_path(path: str) -> bool:

@@ -3,8 +3,11 @@ name: Cortex Check
 # Guards the run-and-ruling registry: every phase file parses and its state is
 # legal, every ruling id is unique and every Supersedes: resolves, every
 # project a phase names is in projects.yaml, the gates/witness invariants hold
-# (`scripts/cortex.py check`), then the script's own tests. No self-heal —
-# there is no generated render here; a failing check is a real contradiction.
+# (`scripts/cortex.py check`), then the script's own tests. No self-heal here:
+# a failing check is a real contradiction and only a human can resolve it. The
+# generated pages that DO self-heal (`dashboard.md`, `dashboard.html`) are
+# `dashboard_refresh.yml`'s; this workflow only watches them for the drift that
+# a hand-edit of a generated page would leave behind.
 
 on:
   push:
@@ -15,6 +18,8 @@ on:
       - "batches/**"
       - "projects.yaml"
       - "epics.md"
+      - "dashboard.md"
+      - "dashboard.html"
       - "scripts/**"
       - "tests/**"
       - ".github/workflows/cortex_check.yml"
@@ -25,6 +30,8 @@ on:
       - "batches/**"
       - "projects.yaml"
       - "epics.md"
+      - "dashboard.md"
+      - "dashboard.html"
       - "scripts/**"
       - "tests/**"
       - ".github/workflows/cortex_check.yml"
