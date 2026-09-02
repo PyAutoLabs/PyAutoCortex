@@ -120,6 +120,11 @@ state table.
 | `plan [--budget N]` | which `ready` phases fit a laptop slot, cheapest first; it hands over a command, never a decision |
 | `collect [--slot S] [--pull] [--refreshed ISO] [--apply]` | score a pulled run's legs into a packet member; `--pull` is opt-in and runs the *project's own* sync CLI |
 
+The batch conductor is the **slot door** over the same two verbs:
+`pyauto-brain batch plan --kind cortex` and `batch collect --kind cortex` drive
+this `plan` and `collect` for one review slot and write `batches/` — the record,
+its `refreshed:` lines and the packet (`batches/AGENTS.md`).
+
 **`--apply` here, `--write` there.** The conductor's verbs spell the writing
 flag `--apply` (the Brain's house spelling, as intake does); `scripts/cortex.py`
 spells it `--write`. `cortex gates --grade --apply` is a thin wrapper over
