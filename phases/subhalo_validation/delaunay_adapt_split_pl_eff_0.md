@@ -2,12 +2,12 @@
 
 Project: subhalo_validation
 Phase: 2
-State: awaiting-ruling
+State: accepted
 Gates:
 Witness: evidence_increase < 5 in results/delaunay_adapt_split/pl_eff_0_no_subhalo.json (test_mode false)
 Budget: 48:00
 Runs: 342027
-Ruling: R-20260831-07
+Ruling: R-20260902-02
 Lane: local-dev
 Review-minutes: 8
 Epic:
@@ -51,3 +51,4 @@ predates the `subhalo_stage` key.
 ## Ruling
 
 R-20260831-07 — leave-to-finish
+R-20260902-02 — accept
