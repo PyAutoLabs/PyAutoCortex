@@ -306,3 +306,63 @@ Choices made in phase 2 — the conductor, the board and the workflows
     `Jammy2211/…` and the row says so in `remote:` with the reason in
     `note:`, so nobody re-derives the answer to "should this move into the
     org?" once a quarter.
+
+53. **Provenance header: `Migrated-from:` joins `PHASE_KEYS` and `RULING_KEYS`**
+    (one tuple edit each, plus the REFERENCE key tables and a test); its value
+    is the Mind path or ledger anchor the file was transcribed from. Batch
+    records may carry `- migrated-from:` (there is no key check on a record).
+    Why: phase 4's whole job is moving records that were written somewhere
+    else, and a migrated file that cannot name its source is a claim without a
+    provenance. The prompt already required the line; without the key the
+    current schema would have flagged every migrated file as unknown-key
+    drift, so the requirement and the checker had to be reconciled — in favour
+    of the requirement.
+
+54. **Intra-Cortex sequencing is a body line, not a gate.** `Gates:` stays
+    GitHub-refs-only. A phase that waits on another *Cortex* phase's ruling is
+    `State: planned` with a line under `## Question` reading `Ready when:
+    <phase> accepted (ruling R-…)`; the human moves it to `ready` once that
+    ruling lands. A phase whose development gate has no issue yet is likewise
+    `planned`, with `Ready when: <Mind prompt> is issued — add its ref to
+    Gates: and move to gated`.
+    Why: `gates --grade` polls GitHub, and the daily grader is the one
+    scheduled job that mutates the ledger. A gate it cannot poll would either
+    have to fail closed for ever or teach the grader a second, non-GitHub
+    vocabulary. A science phase waiting on a sibling phase is waiting on a
+    *human ruling*, which is exactly the thing the Cortex refuses to automate,
+    so it belongs in prose the human reads and not in a field a robot grades.
+
+55. **A Cortex-spawned development follow-up gets its issue at filing, without
+    leaving `draft/`.** The Mind prompt carries a body line `Issue: <url>
+    (opened <date> as a Cortex gate ref; reuse in start_dev — never open a
+    second)`, and `create_issue` reuses that ref instead of opening another;
+    Mind `REFERENCE.md` gains the rule. The same mechanism is what gives the
+    euclid 3b gate its ref.
+    Why: `Gates:` is GitHub-refs-only (decision 54), so a Cortex phase gated on
+    work the Mind has not started yet has nothing to point at. The alternatives
+    were to promote the prompt to `active/` before anyone works it — which
+    lies about the workflow state — or to leave the phase ungated and hope. An
+    issue is cheap, is the organism's real join key, and is the one artefact
+    both halves can name; the `Issue:` line stops the second, duplicate issue
+    that `start_dev` would otherwise open.
+
+56. **Legacy-born encodings: how pre-Cortex history enters the ledger.** A run
+    that happened before the Cortex existed is a `legacy` (reusable) or
+    `legacy_wrong` (quarantined) run line carrying `where:`; a phase whose runs
+    are *all* `legacy_wrong` is ruled `drop` straight from `ready`, because it
+    cannot be pulled — there is nothing reviewable to pull. A programme-wide
+    directive such as the 2026-08-31 REWIND is one ruling on a synthetic phase
+    (`inference_programme/rewind_2026_08_31`) whose runs are the ids the
+    directive itself names, with the directive verbatim as the ruling body. A
+    multi-lens project gets one phase per lens. Transcribed batch records are
+    rewritten in the Cortex grammar (member slug = phase slug) and the Mind
+    originals stay intact with a `- moved-to:` line rather than being reduced
+    to stubs; dev-only members of a mixed slot are noted in the record's
+    `notes:`, never transcribed as science members.
+    Why: the alternative — inventing `done` run lines for runs nobody reviewed
+    — would let quarantined evidence re-enter the programme through the back
+    door, which is the precise failure the REWIND was called to stop. Keeping
+    the Mind originals verbatim is a deviation from the prompt's "stub": a
+    history that only survives in `git log` is a history the next reader will
+    not find, and two records that disagree are worse than one record and a
+    pointer.

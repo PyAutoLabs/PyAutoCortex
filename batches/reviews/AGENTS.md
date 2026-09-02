@@ -21,6 +21,9 @@ follow-ups.
 - reviewed-at: 2026-09-01T17:10Z
 - review-minutes-actual: 18
 
+### Follow-ups accepted
+- <the human's accepted follow-ups, one per line>
+
 ## <member slug> — <HEALTH>
 - decision: accept | rerun | drop | leave-to-finish | (none)
 - ruled: yes | no
@@ -28,6 +31,10 @@ follow-ups.
 The human's words, verbatim, or (no note). For rerun this paragraph becomes
 the rerun phase's seed; for drop it is the ruling body.
 ```
+
+`Follow-ups accepted` is optional and is an `###`, not a `##`: `check` requires
+every `##` in a review file to name a member of the slot's batch record, so a
+non-member section has to sit a level down.
 
 `<HEALTH>` ∈ `HEALTHY | SUSPECT | FAILED | RUNNING`. The four verbs are the
 **whole** vocabulary — the Mind's `merge | tweak | reject | defer` belongs to

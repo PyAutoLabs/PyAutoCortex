@@ -82,6 +82,7 @@ sections are fixed: `## Question`, `## Witness`, `## Where to look`, `## Runs`,
 | `Review-minutes:` | integer | a seed, not a measurement |
 | `Epic:` | slug | shared with the Mind — the join key across the two dashboards |
 | `Filed:` | `YYYY-MM-DD` | |
+| `Migrated-from:` | source path or ledger anchor | the Mind prompt, review file or project-ledger entry this phase was transcribed from (phase 4 of the birth epic) |
 
 Gate refs are matched by `GATE_REF_RE`, copied verbatim from
 `PyAutoMind/scripts/lifecycle.py`:
@@ -313,6 +314,7 @@ The human's words, verbatim.
 | `Reviewed-at:` | timestamp | |
 | `Review-minutes-actual:` | integer | |
 | `Follow-ups:` | comma-separated GitHub refs | `GATE_REF_RE`; **the issue is created before `rule` runs** |
+| `Migrated-from:` | source path or ledger anchor | the review file or project-ledger entry a backfilled ruling was transcribed from |
 
 Body: `## Ruling` — the human's words verbatim; `## Evidence` — pointers.
 
@@ -375,12 +377,18 @@ names a member of it.
 - reviewed-at: <free text>
 - review-minutes-actual: <integer or (not given)>
 
+### Follow-ups accepted
+- <accepted follow-up, one per line>
+
 ## <slug> — <HEALTH>
 - decision: accept|rerun|drop|leave-to-finish|(none)
 - ruled: yes|no
 
 <note verbatim, or (no note)>
 ```
+
+`Follow-ups accepted` is optional and is `###`, not `##`, because `check`
+requires every `##` to name a member of the slot's batch record.
 
 `<HEALTH>` ∈ `HEALTHY | SUSPECT | FAILED | RUNNING`. `(none)` with
 `ruled: no` is a member the human left untouched — listed, never silently
