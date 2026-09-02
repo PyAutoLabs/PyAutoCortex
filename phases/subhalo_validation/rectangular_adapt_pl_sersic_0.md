@@ -2,12 +2,12 @@
 
 Project: subhalo_validation
 Phase: 4
-State: awaiting-ruling
+State: accepted
 Gates:
 Witness: evidence_increase < 5 in results/rectangular_adapt/pl_sersic_0_no_subhalo.json (test_mode false)
 Budget: 48:00
 Runs: 342094, 342095
-Ruling:
+Ruling: R-20260902-03
 Lane: local-dev
 Review-minutes: 15
 Epic:
@@ -71,4 +71,4 @@ column's 21,386.823 — different mesh size and free-parameter count.
 
 ## Ruling
 
-(none)
+R-20260902-03 — accept
