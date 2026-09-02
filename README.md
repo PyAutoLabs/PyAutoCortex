@@ -30,6 +30,15 @@ and ends in a **ruling**:
    `leave-to-finish` — is written into `rulings/` with a permanent id. *A
    verdict recorded only outside the Cortex does not exist.*
 
+In full those four steps are ten states — `planned`, `gated`, `ready`,
+`submitted`, `running`, `pulled`, `awaiting-ruling`, then `accepted`, `rerun`
+or `dropped` — of which only the last three are reachable, and only through
+`scripts/cortex.py rule` (`legacy` and `legacy_wrong` are states of a *run*,
+never of a phase). The review slot itself is opened and refreshed from the
+Brain's batch conductor: `pyauto-brain batch plan --kind cortex --apply
+--review-at <ISO>` writes the record under `batches/`, and `batch collect
+--kind cortex` fills the board in as results are pulled.
+
 The Cortex is **not a second PyAutoMind**: development tasks stay in the Mind
 and are named here only as gates. Its one script, `scripts/cortex.py`, checks
 the tree and moves phases between states; the ledger folders auto-merge from
