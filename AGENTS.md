@@ -174,7 +174,7 @@ with a bare absolute path of its own.
 
 ## The laptop lane — what is out of scope, and why
 
-Quoted verbatim from `PyAutoMind/draft/research/euclid/batch_science_lane.md`
+Quoted verbatim from `PyAutoMind/complete/archive/shelved/batch_science_lane.md`
 so nobody re-derives these:
 
 > ## What is now out of scope, and why
@@ -261,7 +261,7 @@ several, which is exactly the session no hook fires in.
 ## When in doubt
 
 Read [README.md](README.md) and [REFERENCE.md](REFERENCE.md). The birth epic's
-ledger is `PyAutoMind/draft/feature/pyautocortex/cortex_birth_epic.md`.
+ledger is `PyAutoMind/complete/archive/epics/cortex_birth_epic.md`.
 
 <!-- repos_sync:history:begin -->
 ## Never rewrite history
