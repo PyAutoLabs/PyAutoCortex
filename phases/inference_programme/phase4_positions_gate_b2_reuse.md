@@ -2,12 +2,12 @@
 
 Project: inference_programme
 Phase: 15
-State: awaiting-ruling
+State: accepted
 Gates:
 Witness: the Stage 2 and Stage 3 legacy runs are health-clean on the current stack (2026.8.17.1) with the one known invalid resume isolated, and the 5/5 vs 2/5 vs 0/4 hit counts behind Gate B part 2 recompute from their committed result rows
 Budget: 0:15
 Runs: 338525, 340114, 340115, 341892
-Ruling:
+Ruling: R-20260902-10
 Lane: local-dev
 Review-minutes: 15
 Epic: jax-inference-profiling
@@ -212,4 +212,4 @@ compared to. `log_evidence` is `NaN` on every Prodigy row (MAP-only, caveat (6) 
 
 ## Ruling
 
-(none)
+R-20260902-10 — accept

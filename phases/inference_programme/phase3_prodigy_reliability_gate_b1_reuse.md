@@ -2,12 +2,12 @@
 
 Project: inference_programme
 Phase: 14
-State: awaiting-ruling
+State: accepted
 Gates:
 Witness: the 35 legacy Prodigy runs behind Gate B part 1 are health-clean on the current stack (2026.8.17.1), and the hit counts, the 15/15 fresh-seed record and the wall ratio recompute from their committed result rows
 Budget: 0:15
 Runs: 338523, 338524, 338525, 338526, 339065, 339066, 339070
-Ruling:
+Ruling: R-20260902-09
 Lane: local-dev
 Review-minutes: 12
 Epic: jax-inference-profiling
@@ -175,4 +175,4 @@ call, not a defect of these runs.
 
 ## Ruling
 
-(none)
+R-20260902-09 — accept
