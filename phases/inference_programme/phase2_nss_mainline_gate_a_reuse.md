@@ -2,12 +2,12 @@
 
 Project: inference_programme
 Phase: 13
-State: awaiting-ruling
+State: accepted
 Gates:
 Witness: the Phase 2 scan's twelve legacy runs are health-clean on the current stack (2026.8.17.1), and every number GATE A was called on recomputes from their committed result rows
 Budget: 10:00
 Runs: 338491, 338492, 338493, 338870, 338871, 338872, 338873, 339067, 339068, 339069, 339070, 339071
-Ruling:
+Ruling: R-20260902-08
 Lane: local-dev
 Review-minutes: 12
 Epic: jax-inference-profiling
@@ -181,4 +181,4 @@ second ruling. 339071 is already ruled too: R-20260901-03 **dropped** it.
 
 ## Ruling
 
-(none)
+R-20260902-08 — accept
