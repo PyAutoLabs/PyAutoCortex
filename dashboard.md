@@ -16,6 +16,8 @@ Every science phase the Cortex is holding, on one page: what is waiting on your 
 | [Gated](#gated) | 1 |
 | [Recent rulings](#recent-rulings) | 22 |
 
+> **No batch in flight.**
+
 ## Awaiting ruling
 
 [markdown version](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/phases/) — Results are in and nothing is running — the human's verdict is the only thing outstanding. Ordered failures first, then the phases a ruling is required for, then the clean ones.
