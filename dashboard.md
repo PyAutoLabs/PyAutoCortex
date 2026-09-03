@@ -137,7 +137,7 @@ Work out where the Cortex half of the epic euclid-dr1-prep stands from phases/eu
 
 </details>
 
-<details><summary>📋 <b>profile and certify the JAX inference stack — samplers, meshes, reference baselines</b> — Mind half: <code>PyAutoMind/epics.md#jax-inference-profiling</code> — ledger: <code>autolens_profiling/results/notes/inference/PROGRAMME.md</code> — Phase 1 RULED 2026-09-02 (R-20260902-01, accept scoped to the four positions-on rows) and closed out; certified InferenceRefs_v1 set = 6 baselines (mge_fp64, mge_pos_fp64, delaunay_nn_pos, slam_source_pix_pos, slam_source_pix_nn_pos, delaunay_pos); Step 2 filed 2026-09-02 as phase 12 (RAL 342241, tasks 11–13, positions-on refs for pixelization / knn / delaunay_matern; submitted); Step 3 ruled 2026-09-02 — phases 13/14/15 accepted (R-20260902-08/09/10), Gates A, B pt 1, B pt 2 re-called on the legacy MGE evidence (Gate A's Delaunay leg struck); next: rule phase 12 when pulled, then Phase 5 positions-on (penalty factor to be decided — 1e5 recommended per Gate B pt 2)</summary>
+<details><summary>📋 <b>profile and certify the JAX inference stack — samplers, meshes, reference baselines</b> — Mind half: <code>none — the Mind entry was retired 2026-09-03 (mind-post-cortex phase 2); the</code> — ledger: <code>autolens_profiling/results/notes/inference/PROGRAMME.md</code> — Phase 1 RULED 2026-09-02 (R-20260902-01, accept scoped to the four positions-on rows) and closed out; certified InferenceRefs_v1 set = 6 baselines (mge_fp64, mge_pos_fp64, delaunay_nn_pos, slam_source_pix_pos, slam_source_pix_nn_pos, delaunay_pos); Step 2 filed 2026-09-02 as phase 12 (RAL 342241, tasks 11–13, positions-on refs for pixelization / knn / delaunay_matern; submitted); Step 3 ruled 2026-09-02 — phases 13/14/15 accepted (R-20260902-08/09/10), Gates A, B pt 1, B pt 2 re-called on the legacy MGE evidence (Gate A's Delaunay leg struck); next: rule phase 12 when pulled, then Phase 5 positions-on (penalty factor to be decided — 1e5 recommended per Gate B pt 2)</summary>
 
 ```
 Work out where the Cortex half of the epic jax-inference-profiling stands from autolens_profiling/results/notes/inference/PROGRAMME.md and tell me what its next phase is.
@@ -145,10 +145,10 @@ Work out where the Cortex half of the epic jax-inference-profiling stands from a
 
 </details>
 
-<details><summary>📋 <b>expectation propagation as the scalable alternative to graphical joint fits</b> — Mind half: <code>PyAutoMind/epics.md#graphical-ep</code> — ledger: <code>PyAutoMind/research/graphical_ep/ep_campaign.md</code> — both science phases planned; the projects are dormant and the campaign's</summary>
+<details><summary>📋 <b>expectation propagation as the scalable alternative to graphical joint fits</b> — Mind half: <code>PyAutoMind/epics.md#graphical-ep</code> — ledger: <code>PyAutoMind/draft/research/graphical_ep/ep_campaign.md</code> — both science phases planned; the projects are dormant and the campaign's</summary>
 
 ```
-Work out where the Cortex half of the epic graphical-ep stands from PyAutoMind/research/graphical_ep/ep_campaign.md and tell me what its next phase is.
+Work out where the Cortex half of the epic graphical-ep stands from PyAutoMind/draft/research/graphical_ep/ep_campaign.md and tell me what its next phase is.
 ```
 
 </details>
