@@ -57,8 +57,8 @@ permissions:
   actions: write
 
 # Every workflow in this repo that can push to main shares one queue —
-# ledger_merge.yml and gates_grade.yml carry the same group — so two bot writers
-# never race for the tip and spend their retries re-merging. Queue rather than
+# ledger_merge.yml carries the same group — so two bot writers never race for
+# the tip and spend their retries re-merging. Queue rather than
 # cancel: a cancelled heal can leave a rendered page uncommitted. PR runs never
 # push, but they share the group rather than carry a second, ref-scoped one; the
 # queue is short and one name is easier to reason about than two.

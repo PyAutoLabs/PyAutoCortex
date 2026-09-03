@@ -106,7 +106,7 @@ def test_check_problems_is_quiet_on_the_witness():
 
 def test_check_reports_drift_in_lifecycle_shape(tmp_path):
     root = _copy(tmp_path)
-    _edit(root, P["03_ready_cleared"], "Gates-cleared: 2026-08-30\n", "")
+    _edit(root, P["03_ready_cleared"], "State: ready\n", "State: flying\n")
     result = _run("check", root=root)
     assert result.returncode == 1
     lines = result.stdout.splitlines()
@@ -146,11 +146,11 @@ def test_edit_header_preserves_every_other_byte(tmp_path):
     after = cortex.edit_header(before, {"State": "submitted"})
     assert after.replace("State: submitted", "State: ready") == before
     # a removed key drops exactly one line; an inserted key lands at its slot
-    removed = cortex.edit_header(before, {"Gates-cleared": None})
-    assert removed == before.replace("Gates-cleared: 2026-08-30\n", "")
-    inserted = cortex.edit_header(removed, {"Gate-override": "why"})
+    removed = cortex.edit_header(before, {"Budget": None})
+    assert removed == before.replace("Budget: 5:00\n", "")
+    inserted = cortex.edit_header(removed, {"Reset": "why"})
     lines = inserted.splitlines()
-    assert lines[lines.index("Gates: PyAutoGalaxy#486") + 1] == "Gate-override: why"
+    assert lines[lines.index("Gates: PyAutoGalaxy#486") + 1] == "Reset: why"
 
 
 def test_run_line_regex_matches_reference_examples():
@@ -181,21 +181,19 @@ def test_gate_ref_regex_rejects_owner_repo_form():
 
 
 # --------------------------------------------------------------------------- #
-# projects.yaml — the restricted subset
+# projects.yaml — PyYAML plus the field validation
 # --------------------------------------------------------------------------- #
 def test_comment_only_projects_yaml_parses_to_an_empty_map():
     rows, problems = cortex.parse_projects((EMPTY / "projects.yaml").read_text())
     assert rows == {} and problems == []
 
 
-def test_the_live_body_map_parses_clean_and_matches_pyyaml():
-    """The seeded map (phase 3) is the real witness for the subset: it is the
-    only file that exercises `planned`, `note`, and a 17-verb flow list."""
-    yaml = pytest.importorskip("yaml")
+def test_the_live_body_map_parses_clean():
+    """The seeded map (phase 3) is the real witness for the field validation:
+    it is the only file that exercises `planned`, `note`, and a 17-verb list."""
     text = (REPO / "projects.yaml").read_text()
     rows, problems = cortex.parse_projects(text)
     assert problems == []
-    assert yaml.safe_load(text) == rows
     assert {"inference_programme", "subhalo_validation", "euclid",
             "euclid_dr1_prelim"} <= set(rows)
     assert rows["euclid_dr1_prelim"]["status"] == "planned"
@@ -203,31 +201,45 @@ def test_the_live_body_map_parses_clean_and_matches_pyyaml():
     assert "PyAutoLabs remote" in rows["euclid"]["note"]
 
 
-def test_projects_parse_matches_pyyaml_on_the_fixture():
-    yaml = pytest.importorskip("yaml")
-    text = (SKELETON / "projects.yaml").read_text()
-    rows, problems = cortex.parse_projects(text)
+def test_a_block_list_and_a_quoted_scalar_are_ordinary_yaml(tmp_path):
+    """What the retired hand parser refused, PyYAML reads: a block list, and a
+    quoted scalar holding a colon or a hash."""
+    root = _copy(tmp_path)
+    _edit(root, "projects.yaml", "  sync_verbs: [pull, submit, jobs, tail]\n",
+          "  sync_verbs:\n    - pull\n    - submit\n")
+    _edit(root, "projects.yaml", "  status: active\n",
+          '  status: active\n  note: "a fact: with a colon # and a hash"\n')
+    assert _problems(root) == []
+    rows, problems = cortex.parse_projects((root / "projects.yaml").read_text())
     assert problems == []
-    assert yaml.safe_load(text) == rows
+    assert rows["example"]["sync_verbs"] == ["pull", "submit"]
+    assert rows["example"]["note"] == "a fact: with a colon # and a hash"
 
 
-def test_projects_quoted_scalars_and_comments():
-    text = ('p:\n  remote: none\n  local_path: "/a: b"   # trailing\n  ral_root: /r\n'
-            '  mirror: none\n  sync_cli: "x # y"\n  sync_verbs: [pull]\n  ledger: l\n'
-            '  witness_file: "**/*.json"\n  partition: gpu\n  status: active\n')
-    rows, problems = cortex.parse_projects(text)
-    assert problems == []
-    assert rows["p"]["local_path"] == "/a: b"
-    assert rows["p"]["sync_cli"] == "x # y"
-    assert rows["p"]["sync_verbs"] == ["pull"]
-    yaml = pytest.importorskip("yaml")
-    assert yaml.safe_load(text) == rows
+def test_a_document_pyyaml_cannot_read_is_one_problem():
+    rows, problems = cortex.parse_projects("example:\n  remote: [unclosed\n")
+    assert rows == {} and len(problems) == 1
+    assert "not valid YAML" in problems[0]
+
+
+def test_a_document_that_is_not_a_mapping_of_rows():
+    rows, problems = cortex.parse_projects("- example\n")
+    assert rows == {} and problems == ["projects.yaml: the document is not a mapping of project keys"]
+    rows, problems = cortex.parse_projects("example: a string\n")
+    assert rows == {} and problems == ["projects.yaml: example is not a mapping of fields"]
+
+
+def test_sync_verbs_must_hold_bare_words(tmp_path):
+    root = _copy(tmp_path)
+    _edit(root, "projects.yaml", "  sync_verbs: [pull, submit, jobs, tail]\n",
+          "  sync_verbs: [pull, 'Not A Verb']\n")
+    _assert_drift(root, "example.sync_verbs holds a non-bare word")
 
 
 def test_unknown_projects_field_is_an_error(tmp_path):
     root = _copy(tmp_path)
     _edit(root, "projects.yaml", "  status: active\n", "  status: active\n  colour: blue\n")
-    _assert_drift(root, "projects.yaml:15: unknown field `colour` on example")
+    _assert_drift(root, "projects.yaml: unknown field `colour` on example")
 
 
 def test_missing_projects_field_and_bad_enums(tmp_path):
@@ -256,18 +268,9 @@ def test_note_is_optional_but_never_empty_and_the_field_set_still_closes(tmp_pat
     rows, problems = cortex.parse_projects((root / "projects.yaml").read_text())
     assert problems == [] and rows["example"]["note"] == \
         "a fact: with a colon # and a hash"
-    yaml = pytest.importorskip("yaml")
-    assert yaml.safe_load((root / "projects.yaml").read_text()) == rows
     _edit(root, "projects.yaml", '  note: "a fact: with a colon # and a hash"\n',
           "  note:\n")
     _assert_drift(root, "example.note is empty")
-
-
-def test_projects_outside_the_subset(tmp_path):
-    root = _copy(tmp_path)
-    _edit(root, "projects.yaml", "  sync_verbs: [pull, submit, jobs, tail]\n",
-          "  sync_verbs:\n    - pull\n")
-    _assert_drift(root, "sync_verbs must be a flow list", "outside the subset")
 
 
 # --------------------------------------------------------------------------- #
@@ -330,24 +333,6 @@ def test_gated_with_empty_gates(tmp_path):
     _assert_drift(root, "02_gated_on_dev.md: State: gated with an empty Gates:")
 
 
-@pytest.mark.parametrize("rel,line", [
-    (P["03_ready_cleared"], "Gates-cleared: 2026-08-30\n"),
-    (P["04_submitted_override"], "Gate-override: the fix is verified locally on the branch; not waiting for the merge\n"),
-    (P["08_accepted"], "Gates-cleared: 2026-08-25\n"),
-])
-def test_gates_invariant_needs_cleared_or_override(tmp_path, rel, line):
-    root = _copy(tmp_path)
-    _edit(root, rel, line, "")
-    _assert_drift(root, f"{rel}: State: {_fields(root, rel)['State']} with Gates: needs "
-                        "Gates-cleared: or Gate-override:")
-
-
-def test_rerun_is_inside_the_gates_invariant(tmp_path):
-    root = _copy(tmp_path)
-    _edit(root, P["09_rerun"], "Budget: 8:00\n", "Budget: 8:00\nGates: PyAutoLens#1\n")
-    _assert_drift(root, "09_rerun.md: State: rerun with Gates: needs Gates-cleared: or Gate-override:")
-
-
 @pytest.mark.parametrize("rel", [P["04_submitted_override"], P["05_running_array"], P["06_pulled"],
                                  P["07_awaiting_ruling"], P["08_accepted"], P["09_rerun"]])
 def test_witness_invariant(tmp_path, rel):
@@ -401,8 +386,8 @@ def test_run_line_that_does_not_parse_and_stray_continuation(tmp_path):
     _edit(root, P["06_pulled"], "- 342120_[0-4]: done — gpu — submitted 2026-08-31 — wall 3:40",
           "- 342120_[0-4]: done — gpu — 2026-08-31 — wall 3:40")
     _edit(root, P["04_submitted_override"], "## Runs\n\n", "## Runs\n\n    after: 1\n")
-    _assert_drift(root, "06_pulled.md: line 28: run line does not parse",
-                  "04_submitted_override.md: line 30: continuation line without a run line")
+    _assert_drift(root, "06_pulled.md: line 27: run line does not parse",
+                  "04_submitted_override.md: line 28: continuation line without a run line")
 
 
 def test_pulled_needs_a_pulled_to(tmp_path):
@@ -540,109 +525,6 @@ def test_two_chains_of_one_on_a_phase_are_fine(tmp_path):
 
 
 # --------------------------------------------------------------------------- #
-# check — batches and reviews
-# --------------------------------------------------------------------------- #
-B = "batches/2026-09-01-pm.md"
-V = "batches/reviews/2026-09-01-pm.md"
-R2 = "batches/reviews/2026-09-01-pm-r2.md"
-
-
-def test_batch_member_lines(tmp_path):
-    root = _copy(tmp_path)
-    _edit(root, B, "  - 06_pulled: phases/example/06_pulled.md — 342120 — 5 — pulled",
-          "  - 06_pull: phases/example/06_pulled.md — 342120, 1 — five — parked")
-    _edit(root, B, "  - 09_rerun: phases/example/09_rerun.md — 341900 — 5 — awaiting-ruling",
-          "  - 09_rerun: phases/example/09_rerun.md — 341900 — 5")
-    _edit(root, B, "  - 10_dropped: phases/example/10_dropped.md", "  - 10_dropped: phases/example/10_drop.md")
-    _assert_drift(root, "2026-09-01-pm.md: member slug '06_pull' != phase stem '06_pulled'",
-                  "member 06_pull: runs {1} not in the phase's runs",
-                  "member 06_pull: review-minutes 'five' is not an integer",
-                  "member 06_pull: state 'parked' is not a phase state",
-                  "line 12: member line does not parse",
-                  "member 10_dropped: phases/example/10_drop.md does not exist")
-
-
-def test_review_grammar(tmp_path):
-    root = _copy(tmp_path)
-    _edit(root, V, "## 10_dropped — FAILED", "## 10_dropped — BROKEN")
-    _edit(root, V, "## 09_rerun — SUSPECT\n- decision: rerun", "## 09_rerun — SUSPECT\n- decision: tweak")
-    _edit(root, V, "## 08_accepted — HEALTHY\n- decision: accept\n- ruled: yes",
-          "## 08_accepted — HEALTHY\n- decision: accept\n- ruled: maybe")
-    _edit(root, V, "## 06_pulled — HEALTHY\n- decision: (none)\n- ruled: no",
-          "## 06_pulled — HEALTHY\n- decision: (none)\n- ruled: yes")
-    _edit(root, V, "## 05_running_array — RUNNING", "## 05_running — RUNNING")
-    _assert_drift(root, "10_dropped: health 'BROKEN' not in HEALTHY | SUSPECT | FAILED | RUNNING",
-                  "09_rerun: decision 'tweak' is not a ruling verb or (none)",
-                  "08_accepted: ruled 'maybe' is not yes | no",
-                  "06_pulled: ruled: yes needs a verb, not (none)",
-                  "section '05_running' names no member of batches/2026-09-01-pm.md")
-
-
-def test_review_title_and_record_must_exist(tmp_path):
-    root = _copy(tmp_path)
-    shutil.move(root / V, root / "batches" / "reviews" / "2026-09-01-am.md")
-    _assert_drift(root, "2026-09-01-am.md: title must be `# Batch review 2026-09-01-am`",
-                  "2026-09-01-am.md: no batch record batches/2026-09-01-am.md",
-                  "2026-09-01-pm.md: review: batches/reviews/2026-09-01-pm.md does not exist")
-
-
-def _partial(root: Path, rel: str, title: str, slug: str = "06_pulled") -> None:
-    """A later, partial review of the 2026-09-01-pm slot — one member ruled."""
-    (root / rel).write_text(
-        f"# Batch review {title}\n\n"
-        "- packet: batches/packets/2026-09-01-pm.html\n"
-        "- reviewed-at: 2026-09-01T21:30Z\n\n"
-        f"## {slug} — HEALTHY\n"
-        "- decision: accept\n"
-        "- ruled: yes\n\n"
-        "The phase 6 half is in now. Accept.\n")
-
-
-def test_partial_review_belongs_to_its_slot(tmp_path):
-    root = _copy(tmp_path)
-    _partial(root, R2, "2026-09-01-pm-r2")
-    assert _problems(root) == []
-    # either title is the slot's: the file's own stem, or the slot it rules on
-    _partial(root, R2, "2026-09-01-pm")
-    assert _problems(root) == []
-    # and the record carries one `- review:` line per file
-    _edit(root, B, "- review: batches/reviews/2026-09-01-pm.md\n",
-          f"- review: batches/reviews/2026-09-01-pm.md\n- review: {R2}\n")
-    assert _problems(root) == []
-    _edit(root, B, f"- review: {R2}\n", "- review: batches/reviews/2026-09-01-pm-r9.md\n")
-    _assert_drift(root, "review: batches/reviews/2026-09-01-pm-r9.md does not exist")
-
-
-def test_partial_review_is_checked_like_any_other(tmp_path):
-    root = _copy(tmp_path)
-    _partial(root, "batches/reviews/2026-09-01-pm-r3.md", "2026-09-01-pm-r3", slug="05_running")
-    _partial(root, "batches/reviews/2026-09-01-pm-r1.md", "2026-09-01-pm-r1")
-    _partial(root, "batches/reviews/2026-09-05-am-r2.md", "2026-09-05-am-r2")
-    _partial(root, R2, "2026-09-01-am")
-    _assert_drift(root, "2026-09-01-pm-r3.md: section '05_running' names no member of "
-                        "batches/2026-09-01-pm.md",
-                  "2026-09-01-pm-r1.md: a partial review is -r2 or later "
-                  "(the first review of a slot is 2026-09-01-pm.md)",
-                  "2026-09-05-am-r2.md: no batch record batches/2026-09-05-am.md",
-                  "2026-09-01-pm-r2.md: title must be `# Batch review 2026-09-01-pm-r2` "
-                  "or `# Batch review 2026-09-01-pm`")
-
-
-def test_rule_batch_traces_to_a_partial_review(tmp_path):
-    """A member the human ruled only in `<slot>-r2.md` is ruled `--batch <slot>`."""
-    root = _copy(tmp_path)
-    _partial(root, R2, "2026-09-01-pm-r2")
-    _edit(root, B, "- review: batches/reviews/2026-09-01-pm.md\n",
-          f"- review: batches/reviews/2026-09-01-pm.md\n- review: {R2}\n")
-    _move(root, P["06_pulled"], "awaiting-ruling")
-    r = _rule(root, P["06_pulled"], "accept", _body(tmp_path), "--batch", "2026-09-01-pm")
-    assert r.returncode == 0, r.stderr
-    rf = _fields(root, "rulings/2026/09/R-20260902-01.md")
-    assert rf["Phase"] == P["06_pulled"] and rf["Batch"] == "2026-09-01-pm"
-    assert _problems(root) == []
-
-
-# --------------------------------------------------------------------------- #
 # move — every legal transition, every refused one
 # --------------------------------------------------------------------------- #
 def test_planned_to_gated_or_ready_by_gates(tmp_path):
@@ -659,21 +541,23 @@ def test_planned_to_gated_or_ready_by_gates(tmp_path):
     assert _problems(root) == []
 
 
-def test_gated_to_ready_needs_override_or_gates_write(tmp_path):
+def test_gated_to_ready_is_a_plain_move(tmp_path):
+    """Gate grading is retired: the human reads `gates`, judges the refs and
+    moves the phase. No flag, and nothing written but `State:`."""
     root = _copy(tmp_path)
+    before = (root / P["02_gated_on_dev"]).read_text()
     r = _move(root, P["02_gated_on_dev"], "ready")
-    assert r.returncode == 1 and "gates --grade --write" in r.stderr and "--override" in r.stderr
-    r = _move(root, P["02_gated_on_dev"], "ready", "--override", "verified on the branch")
-    assert r.returncode == 0
-    f = _fields(root, P["02_gated_on_dev"])
-    assert f["State"] == "ready" and f["Gate-override"] == "verified on the branch"
+    assert r.returncode == 0, r.stderr
+    assert _fields(root, P["02_gated_on_dev"])["State"] == "ready"
+    assert (root / P["02_gated_on_dev"]).read_text() == \
+        before.replace("State: gated", "State: ready")
     assert _problems(root) == []
 
 
-def test_ready_to_gated_is_gates_write_only(tmp_path):
+def test_ready_to_gated_is_a_hand_edit(tmp_path):
     root = _copy(tmp_path)
     r = _move(root, P["03_ready_cleared"], "gated")
-    assert r.returncode == 1 and "gates --grade --write" in r.stderr
+    assert r.returncode == 1 and "hand edit of the header" in r.stderr
 
 
 def test_ready_to_submitted_needs_witness_and_run(tmp_path):
@@ -865,24 +749,6 @@ def test_rule_supersedes_an_accepted_ruling(tmp_path):
     assert _problems(root) == []
 
 
-def test_rule_also_fans_out_with_one_batch(tmp_path):
-    root = _copy(tmp_path)
-    body = _body(tmp_path, "Drop the lot.\n")
-    _move(root, P["06_pulled"], "awaiting-ruling")
-    r = _rule(root, P["07_awaiting_ruling"], "drop", body, "--batch", "2026-09-01-pm",
-              "--also", P["06_pulled"], "--also", P["08_accepted"], "--also", P["01_scope"])
-    assert r.returncode == 0, r.stderr
-    assert r.stdout.splitlines() == [f"wrote rulings/2026/09/R-20260902-0{n}.md" for n in (1, 2, 3, 4)]
-    for n, rel in ((1, P["07_awaiting_ruling"]), (2, P["06_pulled"]), (3, P["08_accepted"]), (4, P["01_scope"])):
-        rf = _fields(root, f"rulings/2026/09/R-20260902-0{n}.md")
-        assert rf["Batch"] == "2026-09-01-pm" and rf["Phase"] == rel and rf["Ruling"] == "drop"
-        assert "Drop the lot." in (root / f"rulings/2026/09/R-20260902-0{n}.md").read_text()
-        assert _fields(root, rel)["State"] == "dropped"
-    # the accepted --also phase superseded its own head
-    assert _fields(root, "rulings/2026/09/R-20260902-03.md")["Supersedes"] == "R-20260901-02"
-    assert _problems(root) == []
-
-
 def test_rule_refuses_a_verb_the_table_forbids(tmp_path):
     root = _copy(tmp_path)
     body = _body(tmp_path)
@@ -949,116 +815,12 @@ def test_gates_offline_lists_gated_phases():
         "gates: 1 phase(s)",
         "  phases/example/02_gated_on_dev.md: gated — PyAutoArray#431, "
         "https://github.com/PyAutoLabs/PyAutoFit/pull/1436",
+        "    PyAutoArray#431 → https://github.com/PyAutoLabs/PyAutoArray/issues/431",
+        "    https://github.com/PyAutoLabs/PyAutoFit/pull/1436 → "
+        "https://github.com/PyAutoLabs/PyAutoFit/issues/1436",
     ]
     r = _run("gates", root=EMPTY)
     assert r.returncode == 0 and r.stdout.strip() == "gates: no gated phase"
-
-
-def _pr(merged: bool, state: str = "closed"):
-    return {"state": state, "state_reason": None, "merged_at": "2026-09-01T00:00:00Z" if merged else None,
-            "is_pr": True}
-
-
-def _issue(state: str, reason=None):
-    return {"state": state, "state_reason": reason, "merged_at": None, "is_pr": False}
-
-
-ARRAY = "https://github.com/PyAutoLabs/PyAutoArray/issues/431"
-FIT_PR = "https://github.com/PyAutoLabs/PyAutoFit/issues/1436"
-GALAXY = "https://github.com/PyAutoLabs/PyAutoGalaxy/issues/486"
-LENS = "https://github.com/PyAutoLabs/PyAutoLens/issues/900"
-FIT_ISSUE = "https://github.com/PyAutoLabs/PyAutoFit/issues/1400"
-
-
-def _grade(root, states, write=False, today=date(2026, 9, 2)):
-    lines, rc = cortex.gates_report(root, grade=True, write=write, fetch=lambda urls: states, today=today)
-    return "\n".join(lines), rc
-
-
-def test_grade_gate_verdicts():
-    assert cortex.grade_gate(_pr(True))[0] == "cleared"
-    assert cortex.grade_gate(_pr(False))[0] == "dead"
-    assert cortex.grade_gate(_pr(False, "open"))[0] == "open"
-    assert cortex.grade_gate(_issue("closed", "completed"))[0] == "cleared"
-    assert cortex.grade_gate(_issue("closed"))[0] == "cleared"
-    assert cortex.grade_gate(_issue("closed", "not_planned"))[0] == "dead"
-    assert cortex.grade_gate(_issue("closed", "duplicate"))[0] == "dead"
-    assert cortex.grade_gate(_issue("open"))[0] == "open"
-    assert cortex.grade_gate("unreadable: HTTP 404")[0] == "unreadable"
-
-
-def test_grade_reports_without_writing(tmp_path):
-    root = _copy(tmp_path)
-    before = (root / P["02_gated_on_dev"]).read_text()
-    out, rc = _grade(root, {ARRAY: _issue("closed", "completed"), FIT_PR: _pr(True),
-                            GALAXY: _issue("closed"), LENS: _issue("closed"), FIT_ISSUE: _issue("closed")})
-    assert rc == 0
-    assert "02_gated_on_dev.md: gated\n    PyAutoArray#431 → cleared (issue closed (completed))\n" in out
-    assert "→ cleared (PR merged)" in out
-    assert "verdict: cleared (gates --grade --write flips it to ready)" in out
-    assert (root / P["02_gated_on_dev"]).read_text() == before
-
-
-def test_grade_write_flips_gated_to_ready(tmp_path):
-    root = _copy(tmp_path)
-    out, rc = _grade(root, {ARRAY: _issue("closed", "completed"), FIT_PR: _pr(True),
-                            GALAXY: _issue("closed"), LENS: _issue("closed"), FIT_ISSUE: _issue("closed")},
-                     write=True)
-    assert rc == 0 and "gated → ready, Gates-cleared: 2026-09-02" in out
-    f = _fields(root, P["02_gated_on_dev"])
-    assert f["State"] == "ready" and f["Gates-cleared"] == "2026-09-02"
-    assert _problems(root) == []
-
-
-@pytest.mark.parametrize("info,needle", [
-    (_pr(False), "dead gate"),
-    (_issue("closed", "not_planned"), "dead gate"),
-    (_issue("open"), "verdict: waiting"),
-    ("unreadable: HTTP 404", "unreadable ref — fails closed, nothing flipped"),
-])
-def test_grade_write_does_not_flip_dead_open_or_unreadable(tmp_path, info, needle):
-    root = _copy(tmp_path)
-    out, rc = _grade(root, {ARRAY: info, FIT_PR: _pr(True), GALAXY: _issue("closed"),
-                            LENS: _issue("closed"), FIT_ISSUE: _issue("closed")}, write=True)
-    assert needle in out
-    assert _fields(root, P["02_gated_on_dev"])["State"] == "gated"
-    assert rc == (1 if "unreadable" in needle else 0)
-
-
-def test_grade_write_demotes_ready_on_reopen_but_not_with_override(tmp_path):
-    root = _copy(tmp_path)
-    states = {ARRAY: _issue("open"), FIT_PR: _pr(False, "open"), GALAXY: _issue("open"),
-              LENS: _issue("open"), FIT_ISSUE: _issue("open")}
-    out, rc = _grade(root, states)
-    assert "03_ready_cleared.md: ready" in out and "(gates --grade --write demotes it to gated)" in out
-    assert _fields(root, P["03_ready_cleared"])["State"] == "ready"
-    out, rc = _grade(root, states, write=True)
-    assert "03_ready_cleared.md: ready\n    PyAutoGalaxy#486 → open (issue open)\n    verdict: reopened PyAutoGalaxy#486 — ready → gated" in out
-    f = _fields(root, P["03_ready_cleared"])
-    assert f["State"] == "gated" and "Gates-cleared" not in f
-    # submitted+ phases: reported, never enforced; override: kept ready
-    assert "04_submitted_override.md: submitted\n    PyAutoLens#900 → open (issue open)\n    verdict: reopened PyAutoLens#900 — reported, never enforced past ready" in out
-    assert "08_accepted.md" not in out  # accepted is not graded
-    assert _fields(root, P["04_submitted_override"])["State"] == "submitted"
-    _edit(root, P["03_ready_cleared"], "State: gated\n", "State: ready\nGate-override: on purpose\n")
-    out, rc = _grade(root, states, write=True)
-    assert "Gate-override: present, kept ready" in out
-    assert _fields(root, P["03_ready_cleared"])["State"] == "ready"
-    assert _problems(root) == []
-
-
-def test_grade_unreadable_ready_phase_is_not_demoted(tmp_path):
-    root = _copy(tmp_path)
-    out, rc = _grade(root, {GALAXY: "unreadable: HTTP 500"}, write=True)
-    assert rc == 1
-    assert _fields(root, P["03_ready_cleared"])["State"] == "ready"
-
-
-def test_gh_jq_shape_and_http_fallback_user_agent():
-    assert cortex.GATE_JQ == ('{state, state_reason, merged_at: .pull_request.merged_at, '
-                              'is_pr: (.pull_request != null)}')
-    src = SCRIPT.read_text()
-    assert '"User-Agent": "pyautocortex"' in src
 
 
 # --------------------------------------------------------------------------- #
@@ -1074,7 +836,7 @@ def test_new_writes_a_parseable_phase(tmp_path):
     text = (root / "phases/example/11_next.md").read_text()
     assert text.startswith("# Example — phase 11: 11 next\n\nProject: example\nPhase: 11\nState: planned\n")
     f = _fields(root, "phases/example/11_next.md")
-    assert f["Gates"] == "PyAutoLens#1, https://github.com/o/r/pull/2" and f["Lane"] == "local-dev"
+    assert f["Gates"] == "PyAutoLens#1, https://github.com/o/r/pull/2" and "Lane" not in f
     assert f["Filed"] == TODAY and f["Budget"] == "6:00" and f["Review-minutes"] == "5"
     for name in cortex.PHASE_SECTIONS:
         assert f"\n## {name}\n" in text

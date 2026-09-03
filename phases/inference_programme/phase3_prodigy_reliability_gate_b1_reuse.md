@@ -8,7 +8,6 @@ Witness: the 35 legacy Prodigy runs behind Gate B part 1 are health-clean on the
 Budget: 0:15
 Runs: 338523, 338524, 338525, 338526, 339065, 339066, 339070
 Ruling: R-20260902-09
-Lane: local-dev
 Review-minutes: 12
 Epic: jax-inference-profiling
 Filed: 2026-09-02

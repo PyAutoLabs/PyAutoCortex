@@ -4,12 +4,10 @@ Project: example
 Phase: 5
 State: running
 Gates: PyAutoArray#431
-Gates-cleared: 2026-08-29
 Witness: nine of ten array tasks write a sane checkpoint.hdf5 within 8:00 wall
 Budget: 8:00
 Runs: 342091, 342102
 Ruling: R-20260901-03
-Lane: local-dev
 Review-minutes: 8
 Epic: example-programme
 Filed: 2026-08-29

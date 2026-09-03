@@ -6,7 +6,7 @@ This is the markdown version of the [PyAutoCortex Dashboard](https://pyautolabs.
 
 Every science phase the Cortex is holding, on one page: what is waiting on your verdict, what is running, what could be launched next and what is still gated on development work. The verdict is always yours — this page hands you the command, never the ruling.
 
-> **Last updated 2026-09-03.** This page is generated from `phases/`, `rulings/`, `batches/`, `epics.md` and `projects.yaml`, so it is only as current as they are. `dashboard_refresh.yml` re-renders it on every push to `main`, and the daily gate grading flips cleared gates before it runs.
+> **Last updated 2026-09-03.** This page is generated from `phases/`, `rulings/`, `epics.md` and `projects.yaml`, so it is only as current as they are. `dashboard_refresh.yml` re-renders it on every push to `main`.
 
 | Where | Count |
 |-------|------:|
@@ -15,8 +15,6 @@ Every science phase the Cortex is holding, on one page: what is waiting on your 
 | [Ready](#ready) | 4 |
 | [Gated](#gated) | 1 |
 | [Recent rulings](#recent-rulings) | 22 |
-
-> **No batch in flight.**
 
 ## Awaiting ruling
 
@@ -52,7 +50,7 @@ cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync jobs
 
 ## Ready
 
-[markdown version](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/phases/) — Gate cleared, witness registered — these are what `cortex plan` admits into a laptop slot.
+[markdown version](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/phases/) — Gate cleared, witness registered — everything that could be submitted today.
 
 <details><summary>📋 <a href="phases/subhalo_validation/delaunay_adapt_split_pl_eff_0.md">Subhalo_validation — phase 2: delaunay_adapt_split on pl_eff_0 — the clumpy-source lens</a> — subhalo_validation phase 2 · budget 48:00 · 8 review-min · runs 342027_1, 342231_1, 342234_1</summary>
 
@@ -96,12 +94,13 @@ python3 scripts/cortex.py move phases/subhalo_validation/rectangular_adapt_pl_se
 
 ## Gated
 
-[markdown version](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/phases/) — Waiting on development work. The daily grading job flips a phase to ready when every reference it names has closed.
+[markdown version](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/phases/) — Waiting on development work. Open the references; when they have all closed, `cortex.py move <phase> ready`.
 
 <details><summary>📋 <a href="phases/euclid/dr1_prelim_10_lens_science_run.md">Euclid — phase 4: DR1 prelim science run — 10 real Euclid lenses in euclid_dr1_prelim on RAL</a> — euclid phase 4 · budget 48:00 · 25 review-min — euclid_strong_lens_modeling_pipeline#48, euclid_strong_lens_modeling_pipeline#49</summary>
 
 ```
-python3 scripts/cortex.py gates --grade   # euclid_strong_lens_modeling_pipeline#48, euclid_strong_lens_modeling_pipeline#49
+python3 scripts/cortex.py gates   # then, once they have closed: move phases/euclid/dr1_prelim_10_lens_science_run.md ready
+# gates: euclid_strong_lens_modeling_pipeline#48, euclid_strong_lens_modeling_pipeline#49
 ```
 
 </details>

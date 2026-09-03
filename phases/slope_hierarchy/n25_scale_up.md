@@ -8,7 +8,6 @@ Witness: an N=25–50 parity table in the same shape as the N=5 one, committed u
 Budget: 48:00
 Runs:
 Ruling:
-Lane: local-dev
 Review-minutes: 20
 Epic: graphical-ep
 Filed: 2026-07-22

@@ -8,7 +8,6 @@ Witness: the Stage 2 and Stage 3 legacy runs are health-clean on the current sta
 Budget: 0:15
 Runs: 338525, 340114, 340115, 341892
 Ruling: R-20260902-10
-Lane: local-dev
 Review-minutes: 15
 Epic: jax-inference-profiling
 Filed: 2026-09-02

@@ -8,7 +8,6 @@ Witness: one committed EP-vs-graphical parity table (means ± errors) at small N
 Budget: 48:00
 Runs:
 Ruling:
-Lane: local-dev
 Review-minutes: 25
 Epic: graphical-ep
 Filed: 2026-08-19

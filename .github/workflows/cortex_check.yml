@@ -45,9 +45,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: dependencies
+        # `cortex.py` reads projects.yaml with PyYAML, so the deps go in before
+        # the check step, not only before the tests.
+        run: python3 -m pip install --quiet pytest pyyaml
       - name: cortex check
         run: python3 scripts/cortex.py check
       - name: tests
-        run: |
-          python3 -m pip install --quiet pytest pyyaml
-          python3 -m pytest tests -q
+        run: python3 -m pytest tests -q

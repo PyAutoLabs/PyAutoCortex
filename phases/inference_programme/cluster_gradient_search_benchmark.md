@@ -8,7 +8,6 @@ Witness: a cluster point-source sweep whose `results/searches/…` JSONs carry, 
 Budget: 24:00
 Runs:
 Ruling:
-Lane: local-dev
 Review-minutes: 20
 Filed: 2026-07-31
 Migrated-from: PyAutoMind/draft/research/autolens_profiling/cluster_gradient_search_benchmark.md

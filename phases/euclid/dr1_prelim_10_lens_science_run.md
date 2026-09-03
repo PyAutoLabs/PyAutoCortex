@@ -8,7 +8,6 @@ Witness: 10 lenses fitted end to end on RAL from the pipeline repo alone, with a
 Budget: 48:00
 Runs:
 Ruling:
-Lane: local-dev
 Review-minutes: 25
 Epic: euclid-dr1-prep
 Filed: 2026-08-28

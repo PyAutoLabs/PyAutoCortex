@@ -24,8 +24,8 @@ and ends in a **ruling**:
    it `submitted` and then `running`, with every job id recorded in the file's
    `## Runs` block in SLURM notation.
 3. **Pull and review.** When the results are pulled to the laptop the phase
-   joins the **rolling review board** (`batches/`); a member joins when its
-   results are in hand, never mid-flight.
+   becomes `pulled` and then `awaiting-ruling` — it is waiting on the human's
+   eyes, and on nothing else.
 4. **Rule.** The human's verdict — `accept`, `rerun`, `drop` or
    `leave-to-finish` — is written into `rulings/` with a permanent id. *A
    verdict recorded only outside the Cortex does not exist.*
@@ -34,18 +34,24 @@ In full those four steps are ten states — `planned`, `gated`, `ready`,
 `submitted`, `running`, `pulled`, `awaiting-ruling`, then `accepted`, `rerun`
 or `dropped` — of which only the last three are reachable, and only through
 `scripts/cortex.py rule` (`legacy` and `legacy_wrong` are states of a *run*,
-never of a phase). The review slot itself is opened and refreshed from the
-Brain's batch conductor: `pyauto-brain batch plan --kind cortex --apply
---review-at <ISO>` writes the record under `batches/`, and `batch collect
---kind cortex` fills the board in as results are pulled.
+never of a phase). Checking in is one command from the Brain's cortex
+conductor — `pyauto-brain cortex collect --pull --apply` pulls every submitted
+or running phase's results, scores them and moves what came back to
+`awaiting-ruling`. `batches/` is closed history: the three 2026-08/09 batch
+records and the human's verbatim reviews stay readable because 13 rulings cite
+them, and nothing writes new ones.
 
 The Cortex is **not a second PyAutoMind**: development tasks stay in the Mind
 and are named here only as gates. Its one script, `scripts/cortex.py`, checks
 the tree and moves phases between states; the ledger folders auto-merge from
 any surface that can push.
 
-The schemas — phase files, the run-line grammar, rulings, batches, the
-`projects.yaml` subset — are in [REFERENCE.md](REFERENCE.md); how agents should
+`scripts/cortex.py` needs Python 3.10+ and **PyYAML** (`python3 -m pip install
+pyyaml`), which is how it reads `projects.yaml`; the tests additionally need
+`pytest`. Nothing else.
+
+The schemas — phase files, the run-line grammar, rulings, the `projects.yaml`
+fields — are in [REFERENCE.md](REFERENCE.md); how agents should
 operate this repo is in [AGENTS.md](AGENTS.md); every design choice the birth
 epic did not fix is dated in [docs/schema_decisions.md](docs/schema_decisions.md).
 The organism this repo is the Cortex of is described once in

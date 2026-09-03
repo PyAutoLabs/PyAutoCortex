@@ -34,7 +34,6 @@ def test_ledger_dirs_and_registry_files_are_ledger():
         "rulings/2026/09/R-20260901-01.md",
         "batches/2026-09-01-pm.md",
         "batches/reviews/2026-09-01-pm.md",
-        "batches/packets/2026-09-01-pm.html",
         "epics.md",
         # generated from the ledger, self-healed on main by dashboard_refresh.yml
         "dashboard.md",
@@ -53,7 +52,6 @@ def test_every_code_home_needs_a_human():
         ".github/workflows/cortex_check.yml",
         ".github/workflows/dashboard_refresh.yml",
         ".github/workflows/pages_dashboard.yml",
-        ".github/workflows/gates_grade.yml",
         ".gitignore",
         ".claude/settings.json",
         ".claude/hooks/session-start.sh",
@@ -87,9 +85,9 @@ def test_dot_paths_are_never_ledger_wherever_they_sit():
 
 
 def test_inert_assets_ride_along_but_collectable_tests_do_not():
-    assert ledger_merge.is_ledger_path("batches/packets/2026-09-01-pm.html")
+    assert ledger_merge.is_ledger_path("batches/reviews/2026-09-01-pm.md")
     for path in (
-        "batches/packets/conftest.py",
+        "batches/conftest.py",
         "phases/example/test_thing.py",
         "rulings/2026/09/thing_test.py",
     ):
@@ -104,8 +102,6 @@ def test_doctrine_under_a_ledger_dir_needs_a_human():
     for path in (
         "rulings/AGENTS.md",
         "batches/AGENTS.md",
-        "batches/packets/AGENTS.md",
-        "batches/packets/TEMPLATE.md",
         "batches/reviews/AGENTS.md",
         # by name, not by that fixed list — a doctrine file in a dir nobody has
         # created yet is code on the day it appears
@@ -113,7 +109,7 @@ def test_doctrine_under_a_ledger_dir_needs_a_human():
     ):
         assert not ledger_merge.is_ledger_path(path), path
     # ordinary entries beside them still merge
-    assert ledger_merge.is_ledger_path("batches/packets/2026-09-01-pm.html")
+    assert ledger_merge.is_ledger_path("batches/2026-09-01-pm.md")
     assert ledger_merge.is_ledger_path("batches/reviews/2026-09-01-pm.md")
 
 
@@ -137,19 +133,22 @@ def test_classify_splits_and_dedupes_preserving_order():
 
 
 # --------------------------------------------------------------------------- #
-# append-only rulings/
+# append-only rulings/ and batches/
 # --------------------------------------------------------------------------- #
-def test_added_ruling_is_ledger_but_any_other_status_is_code():
-    rid = "rulings/2026/09/R-20260901-01.md"
-    assert not ledger_merge.is_append_only_violation("A", rid)
-    for status in ("M", "D", "R100", "R", "T", "C75", "U"):
-        assert ledger_merge.is_append_only_violation(status, rid), status
-    # the leg is rulings/ only — a modified phase or batch record is still ledger
+def test_added_ledger_of_record_is_ledger_but_any_other_status_is_code():
+    """`rulings/` is append-only because a ruling is superseded, never edited;
+    `batches/` joined it on 2026-09-03 when the slot apparatus was retired and
+    the records became history — never modified, only added."""
+    for rel in ("rulings/2026/09/R-20260901-01.md", "batches/2026-09-01-pm.md",
+                "batches/reviews/2026-09-01-pm.md"):
+        assert not ledger_merge.is_append_only_violation("A", rel), rel
+        for status in ("M", "D", "R100", "R", "T", "C75", "U"):
+            assert ledger_merge.is_append_only_violation(status, rel), (rel, status)
+    # a modified phase file is still ledger — phases move, that is their job
     assert not ledger_merge.is_append_only_violation("M", "phases/example/01_scope.md")
-    assert not ledger_merge.is_append_only_violation("D", "batches/2026-09-01-pm.md")
 
 
-def test_classify_entries_blocks_a_modified_ruling():
+def test_classify_entries_blocks_a_modified_ruling_or_record():
     ledger, blocked = ledger_merge.classify_entries([
         ("A", "rulings/2026/09/R-20260901-06.md"),
         ("M", "rulings/2026/09/R-20260901-01.md"),
@@ -157,9 +156,9 @@ def test_classify_entries_blocks_a_modified_ruling():
         ("D", "batches/2026-09-01-pm.md"),
         ("A", "scripts/new.py"),
     ])
-    assert ledger == ["rulings/2026/09/R-20260901-06.md", "phases/example/08_accepted.md",
-                      "batches/2026-09-01-pm.md"]
-    assert blocked == ["rulings/2026/09/R-20260901-01.md", "scripts/new.py"]
+    assert ledger == ["rulings/2026/09/R-20260901-06.md", "phases/example/08_accepted.md"]
+    assert blocked == ["rulings/2026/09/R-20260901-01.md", "batches/2026-09-01-pm.md",
+                       "scripts/new.py"]
 
 
 def _git(cwd, *args):
@@ -273,18 +272,18 @@ def test_workflow_invokes_the_script_as_implemented():
 
 def test_every_workflow_this_repo_has_is_code():
     """Enumeration, not a sample: no workflow file may ever auto-merge, and the
-    three added with the dashboard (two of which push to main) are named here so
+    two added with the dashboard (one of which pushes to main) are named here so
     the list cannot silently fall behind the directory."""
     tracked = set(subprocess.run(["git", "ls-files", ".github/workflows"], cwd=REPO,
                                  capture_output=True, text=True, check=True).stdout.split())
     for name in ("cortex_check.yml", "ledger_merge.yml", "dashboard_refresh.yml",
-                 "pages_dashboard.yml", "gates_grade.yml"):
+                 "pages_dashboard.yml"):
         assert f".github/workflows/{name}" in tracked, name
     for path in tracked:
         assert not ledger_merge.is_ledger_path(path), path
 
 
-def test_the_page_workflows_spell_the_conductor_and_the_grader_as_implemented():
+def test_the_page_workflow_spells_the_conductor_as_implemented():
     """`--cortex` is a flag of the SUBCOMMAND, not a global: `dashboard --cortex
     . --check` runs, `--cortex . dashboard --check` exits 2 (argparse) and the
     check() wrapper would report a renderer failure. Pin the spelling."""
@@ -292,7 +291,15 @@ def test_the_page_workflows_spell_the_conductor_and_the_grader_as_implemented():
     assert 'python3 "$BRAIN" dashboard --cortex . --check' in refresh
     assert 'python3 "$BRAIN" dashboard --cortex . --apply' in refresh
     assert "git add dashboard.md dashboard.html" in refresh
-    grade = (REPO / ".github" / "workflows" / "gates_grade.yml").read_text()
-    assert "python3 scripts/cortex.py gates --grade --write" in grade
-    # the one scheduled mutator commits phase headers and nothing else
-    assert "git add phases" in grade
+
+
+def test_no_scheduled_job_mutates_the_ledger():
+    """Gate grading was the one cron that wrote phase headers; it was retired
+    on 2026-09-03. Nothing schedules a ledger write any more."""
+    workflows = (REPO / ".github" / "workflows")
+    for path in sorted(workflows.glob("*.yml")):
+        text = path.read_text()
+        if "schedule:" not in text:
+            continue
+        assert "git add phases" not in text, path.name
+        assert "git add rulings" not in text, path.name

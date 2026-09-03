@@ -6,7 +6,6 @@ State: awaiting-ruling
 Witness: five faint lenses' checkpoint.hdf5 sane after the checkpoint resubmit
 Budget: 8:00
 Runs: 342110, 342120
-Lane: local-dev
 Review-minutes: 5
 Epic: example-programme
 Filed: 2026-08-30

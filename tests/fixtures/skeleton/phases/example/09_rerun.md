@@ -7,7 +7,6 @@ Witness: the legacy run's mask edge matches the released mask within one pixel
 Budget: 8:00
 Runs: 341900
 Ruling: R-20260901-04
-Lane: local-dev
 Review-minutes: 5
 Epic: example-programme
 Filed: 2026-08-31

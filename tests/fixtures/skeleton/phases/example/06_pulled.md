@@ -6,7 +6,6 @@ State: pulled
 Witness: five lenses' checkpoint.hdf5 sane and .err clean under 4:00 wall
 Budget: 4:00
 Runs: 342120
-Lane: local-dev
 Review-minutes: 5
 Epic: example-programme
 Filed: 2026-08-30

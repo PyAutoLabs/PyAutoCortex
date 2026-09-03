@@ -8,7 +8,6 @@ Witness: `output/legacy_point/` exists on RAL and on the laptop mirror holding a
 Budget: 2:00
 Runs:
 Ruling:
-Lane: local-dev
 Review-minutes: 5
 Filed: 2026-09-01
 Migrated-from: PyAutoMind/draft/maintenance/autolens_profiling/legacy_point_output_sweep.md
