@@ -366,3 +366,16 @@ Choices made in phase 2 — the conductor, the board and the workflows
     history that only survives in `git log` is a history the next reader will
     not find, and two records that disagree are worse than one record and a
     pointer.
+
+57. **A rolling slot is ruled more than once: `batches/reviews/<slot>-r<N>.md`,
+    N ≥ 2** (2026-09-02, PyAutoBrain#341 — after phase 1). The first review
+    stays `<slot>.md`; every later sitting is a numbered file in the same
+    grammar, titled for its own stem or for the slot, ruling only on the
+    members that had landed. The record carries one `- review:` line per file
+    — the key repeats — and `check` resolves a numbered review to
+    `batches/<slot>.md` and applies every review rule to it unchanged.
+    Why: the board was rolling but the review was not. One file per slot meant
+    the first sitting closed it, so a human who ruled on the two members that
+    had arrived could only rule on the third by editing a ledger file that is
+    already someone's evidence. Numbering the sittings keeps each file
+    append-only and leaves one record resolving them all.

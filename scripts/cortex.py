@@ -149,6 +149,8 @@ MEMBER_RE = re.compile(
 )
 REVIEW_SECTION_RE = re.compile(r"^## (?P<slug>.+?) — (?P<health>[A-Z]+)$")
 REVIEW_KEY_RE = re.compile(r"^- (decision|ruled): (.+?)\s*$")
+#: the `-r<N>` suffix of a slot's later, partial reviews (`<slot>-r2.md`, N ≥ 2).
+REVIEW_PART_RE = re.compile(r"-r(\d+)$")
 
 
 class CortexError(Exception):
@@ -784,6 +786,17 @@ def _record_members(text: str) -> "tuple[list[tuple[int, re.Match | None, str]],
     return members, keys
 
 
+def _record_values(text: str, key: str) -> "list[str]":
+    """Every non-empty value of a repeatable `- <key>:` line, in file order.
+    `review:` repeats — one line per review file a rolling slot collected."""
+    out = []
+    for raw in text.split("\n"):
+        m = RECORD_KEY_RE.match(raw)
+        if m and m.group(1) == key and (m.group(2) or "").strip():
+            out.append(m.group(2).strip())
+    return out
+
+
 def batch_problems(root: Path, phases_by_rel: "dict[str, Phase]") -> "list[str]":
     problems: "list[str]" = []
     members_by_slot: "dict[str, set[str]]" = {}
@@ -793,7 +806,7 @@ def batch_problems(root: Path, phases_by_rel: "dict[str, Phase]") -> "list[str]"
         if not SLOT_RE.match(slot):
             problems.append(f"{rel}: not a slot name (<YYYY-MM-DD>-<slot>.md)")
         text = path.read_text(encoding="utf-8")
-        members, keys = _record_members(text)
+        members, _ = _record_members(text)
         slugs: "set[str]" = set()
         for lineno, m, raw in members:
             if m is None:
@@ -817,16 +830,26 @@ def batch_problems(root: Path, phases_by_rel: "dict[str, Phase]") -> "list[str]"
             if m.group("state") not in PHASE_STATES:
                 problems.append(f"{rel}: member {slug}: state '{m.group('state')}' is not a phase state")
         members_by_slot[slot] = slugs
-        review = keys.get("review")
-        if review and not (root / review).is_file():
-            problems.append(f"{rel}: review: {review} does not exist")
+        for review in _record_values(text, "review"):
+            if not (root / review).is_file():
+                problems.append(f"{rel}: review: {review} does not exist")
     for path in batch_reviews(root):
         rel = path.relative_to(root).as_posix()
-        slot = path.stem
+        stem = path.stem
+        # A rolling slot is ruled more than once: the first review is
+        # `<slot>.md`, every later partial `<slot>-r<N>.md`. They are all the
+        # same slot's review, so they resolve to the one record. A record whose
+        # own name ends `-r<N>` wins over the strip.
+        slot = stem if stem in members_by_slot else REVIEW_PART_RE.sub("", stem)
+        part = REVIEW_PART_RE.search(stem) if slot != stem else None
+        if part and int(part.group(1)) < 2:
+            problems.append(f"{rel}: a partial review is -r2 or later "
+                            f"(the first review of a slot is {slot}.md)")
         lines = path.read_text(encoding="utf-8").split("\n")
         title = lines[0] if lines else ""
-        if title != f"# Batch review {slot}":
-            problems.append(f"{rel}: title must be `# Batch review {slot}`")
+        titles = [f"# Batch review {stem}"] + ([f"# Batch review {slot}"] if slot != stem else [])
+        if title not in titles:
+            problems.append(f"{rel}: title must be " + " or ".join(f"`{t}`" for t in titles))
         if slot not in members_by_slot:
             problems.append(f"{rel}: no batch record batches/{slot}.md")
         section = None

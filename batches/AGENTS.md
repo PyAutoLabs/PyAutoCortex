@@ -18,6 +18,15 @@ shown as running, and a `leave-to-finish` is the only thing the human can say
 about them; the board is the live view of run progress. Each pull appends a
 `refreshed:` line — that list is the record of the board filling in.
 
+**The first review does not close the slot.** The human rules on whatever is
+reviewable whenever they come in; the slot stays open while any non-carried
+member is still `submitted`, `running`, `pulled` or `awaiting-ruling`, and
+closes when nothing is left in a board state. Every later sitting lands as
+`reviews/<slot>-r<N>.md` (N ≥ 2 — the first review is `reviews/<slot>.md`) and
+the record gains another `- review:` line: the field repeats, one line per
+file. The live view is the batch status box at the top of both dashboards,
+whose button opens the slot's packet on Pages.
+
 ## Schema
 
 The record is **opened by the batch conductor** — `pyauto-brain batch plan
@@ -42,7 +51,8 @@ hand-written record always wrote.
 - reviewed-at: 2026-09-01T17:10Z     # when they actually sat down
 - delivered: <n>/<n>
 - packet: batches/packets/<YYYY-MM-DD>-<slot>.html
-- review: batches/reviews/<YYYY-MM-DD>-<slot>.md
+- review: batches/reviews/<YYYY-MM-DD>-<slot>.md   # repeats — one line per review file
+- review: batches/reviews/<YYYY-MM-DD>-<slot>-r2.md
 - review-minutes-actual: <n>
 - carried: <slug> — still <state> at review          # one per still-running member, written at close
 - notes: |
@@ -98,4 +108,6 @@ figure is a seed; this is what the slot really cost.
 **`packet:` is the page the human actually reviewed, archived** — see
 `packets/AGENTS.md`. **`review:` is what the human said, verbatim** — see
 `reviews/AGENTS.md`; every ruling `cortex.py rule --batch <slot>` files
-traces back to a line in that file.
+traces back to a line in one of those files. A rolling slot has more than one:
+the field repeats in the order the sittings happened, and `check` resolves
+every line.

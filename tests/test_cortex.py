@@ -544,6 +544,7 @@ def test_two_chains_of_one_on_a_phase_are_fine(tmp_path):
 # --------------------------------------------------------------------------- #
 B = "batches/2026-09-01-pm.md"
 V = "batches/reviews/2026-09-01-pm.md"
+R2 = "batches/reviews/2026-09-01-pm-r2.md"
 
 
 def test_batch_member_lines(tmp_path):
@@ -583,6 +584,62 @@ def test_review_title_and_record_must_exist(tmp_path):
     _assert_drift(root, "2026-09-01-am.md: title must be `# Batch review 2026-09-01-am`",
                   "2026-09-01-am.md: no batch record batches/2026-09-01-am.md",
                   "2026-09-01-pm.md: review: batches/reviews/2026-09-01-pm.md does not exist")
+
+
+def _partial(root: Path, rel: str, title: str, slug: str = "06_pulled") -> None:
+    """A later, partial review of the 2026-09-01-pm slot — one member ruled."""
+    (root / rel).write_text(
+        f"# Batch review {title}\n\n"
+        "- packet: batches/packets/2026-09-01-pm.html\n"
+        "- reviewed-at: 2026-09-01T21:30Z\n\n"
+        f"## {slug} — HEALTHY\n"
+        "- decision: accept\n"
+        "- ruled: yes\n\n"
+        "The phase 6 half is in now. Accept.\n")
+
+
+def test_partial_review_belongs_to_its_slot(tmp_path):
+    root = _copy(tmp_path)
+    _partial(root, R2, "2026-09-01-pm-r2")
+    assert _problems(root) == []
+    # either title is the slot's: the file's own stem, or the slot it rules on
+    _partial(root, R2, "2026-09-01-pm")
+    assert _problems(root) == []
+    # and the record carries one `- review:` line per file
+    _edit(root, B, "- review: batches/reviews/2026-09-01-pm.md\n",
+          f"- review: batches/reviews/2026-09-01-pm.md\n- review: {R2}\n")
+    assert _problems(root) == []
+    _edit(root, B, f"- review: {R2}\n", "- review: batches/reviews/2026-09-01-pm-r9.md\n")
+    _assert_drift(root, "review: batches/reviews/2026-09-01-pm-r9.md does not exist")
+
+
+def test_partial_review_is_checked_like_any_other(tmp_path):
+    root = _copy(tmp_path)
+    _partial(root, "batches/reviews/2026-09-01-pm-r3.md", "2026-09-01-pm-r3", slug="05_running")
+    _partial(root, "batches/reviews/2026-09-01-pm-r1.md", "2026-09-01-pm-r1")
+    _partial(root, "batches/reviews/2026-09-05-am-r2.md", "2026-09-05-am-r2")
+    _partial(root, R2, "2026-09-01-am")
+    _assert_drift(root, "2026-09-01-pm-r3.md: section '05_running' names no member of "
+                        "batches/2026-09-01-pm.md",
+                  "2026-09-01-pm-r1.md: a partial review is -r2 or later "
+                  "(the first review of a slot is 2026-09-01-pm.md)",
+                  "2026-09-05-am-r2.md: no batch record batches/2026-09-05-am.md",
+                  "2026-09-01-pm-r2.md: title must be `# Batch review 2026-09-01-pm-r2` "
+                  "or `# Batch review 2026-09-01-pm`")
+
+
+def test_rule_batch_traces_to_a_partial_review(tmp_path):
+    """A member the human ruled only in `<slot>-r2.md` is ruled `--batch <slot>`."""
+    root = _copy(tmp_path)
+    _partial(root, R2, "2026-09-01-pm-r2")
+    _edit(root, B, "- review: batches/reviews/2026-09-01-pm.md\n",
+          f"- review: batches/reviews/2026-09-01-pm.md\n- review: {R2}\n")
+    _move(root, P["06_pulled"], "awaiting-ruling")
+    r = _rule(root, P["06_pulled"], "accept", _body(tmp_path), "--batch", "2026-09-01-pm")
+    assert r.returncode == 0, r.stderr
+    rf = _fields(root, "rulings/2026/09/R-20260902-01.md")
+    assert rf["Phase"] == P["06_pulled"] and rf["Batch"] == "2026-09-01-pm"
+    assert _problems(root) == []
 
 
 # --------------------------------------------------------------------------- #
