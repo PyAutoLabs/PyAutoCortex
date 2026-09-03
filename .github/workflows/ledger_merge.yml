@@ -157,6 +157,11 @@ jobs:
       # header contradicts, a dangling Supersedes:, a run line that does not
       # parse — nothing heals that automatically, and merging it would put the
       # contradiction on main. Also the only check audit mode gets to report.
+      # `cortex.py` reads `projects.yaml` with PyYAML — its one dependency.
+      - name: dependencies
+        if: steps.classify.outputs.verdict == 'ledger'
+        run: python3 -m pip install --quiet pyyaml
+
       - name: Structural drift on the branch (blocking)
         if: steps.classify.outputs.verdict == 'ledger'
         run: python3 scripts/cortex.py check

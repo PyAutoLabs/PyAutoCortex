@@ -79,8 +79,11 @@ jobs:
         with:
           repository: PyAutoLabs/PyAutoBrain
           path: PyAutoBrain
-      # No setup-python: the conductor and cortex.py are stdlib only, and the
-      # runner's python3 is the interpreter the laptop render is compared to.
+      # No setup-python: the runner's python3 is the interpreter the laptop
+      # render is compared to. PyYAML is `cortex.py`'s one dependency (it reads
+      # `projects.yaml`), and the conductor imports that script at runtime.
+      - name: dependencies
+        run: python3 -m pip install --quiet pyyaml
       - name: dashboard freshness (self-healing on push to main)
         working-directory: PyAutoCortex
         run: |
