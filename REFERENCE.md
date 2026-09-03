@@ -184,7 +184,7 @@ PyAutoCortex/
 ├── batches/AGENTS.md                   ← batch-record schema (rolling board)
 ├── batches/<YYYY-MM-DD>-<slot>.md      ← one record per slot (LEDGER)
 ├── batches/packets/{AGENTS.md,TEMPLATE.md,<slot>.html}
-├── batches/reviews/{AGENTS.md,<slot>.md}
+├── batches/reviews/{AGENTS.md,<slot>.md,<slot>-r<N>.md}
 │
 ├── docs/schema_decisions.md ← every dated choice the epic did not fix
 ├── policy/never_rewrite_history.md  policy/remote_sessions.md   ← copies of the Mind's; spliced into AGENTS.md
@@ -363,12 +363,15 @@ Member line:
 `<slug>` is the phase file's stem; `<runs>` is comma-separated stems or
 `none`; `<state>` is the phase state at the last refresh. `check` verifies
 the path exists, the slug matches its stem, the runs ⊆ the phase's `Runs:`,
-the review-minutes are an integer and the state is legal; a `review:` field
-must resolve. A review file's title is `# Batch review <slot>` for its own
-filename, its batch record `batches/<slot>.md` exists, and every section
-names a member of it.
+the review-minutes are an integer and the state is legal; every `review:`
+field must resolve — the key repeats, one line per review file. A review
+file's title is `# Batch review <slot>` for its own filename, its batch record
+`batches/<slot>.md` exists, and every section names a member of it. A rolling
+slot's later sittings are `batches/reviews/<slot>-r<N>.md` (N ≥ 2); they
+resolve to the same record, may be titled for the file or for the slot, and
+are checked identically.
 
-**One review grammar** (`batches/reviews/<slot>.md`):
+**One review grammar** (`batches/reviews/<slot>.md`, `…-<slot>-r<N>.md`):
 
 ```markdown
 # Batch review <YYYY-MM-DD>-<slot>

@@ -83,10 +83,13 @@ lines. `(none)` + `ruled: no` is an untouched member.
 Delivery affordances, in this order: **Copy to clipboard** (always works; clipboard API with
 `execCommand` fallback), **Download .md** (inert inside a Claude-artifact sandbox — say so in
 small print), **Commit on GitHub** — a link to
-`https://github.com/PyAutoLabs/PyAutoCortex/new/main?filename=batches/reviews/<slot>.md&value=<urlencoded>`,
+`https://github.com/PyAutoLabs/PyAutoCortex/new/main?filename=<review path>&value=<urlencoded>`,
 disabled with a use-Copy hint when the URL exceeds 7,500 chars. Close with: "tell the
-orchestrator chat 'review submitted'." The committed file lands at
-`PyAutoCortex/batches/reviews/<YYYY-MM-DD>-<slot>.md`.
+orchestrator chat 'review submitted'." `<review path>` is the **next free** review path for
+the slot — `batches/reviews/<YYYY-MM-DD>-<slot>.md` the first time, then
+`…-<slot>-r2.md`, `…-r3.md` as the rolling slot is ruled on again; the refresh writes it
+into the page's `REVIEW_PATH`, so a re-submitted packet never overwrites the earlier
+sitting.
 
 ## Design tokens (brief)
 
