@@ -18,8 +18,12 @@ Schema per entry — the Mind's, plus one field:
 - notes: <free text>
 ```
 
-`- mind-half:` names the Mind entry by slug; the Mind's entries carry the
-reciprocal `- cortex-half:`. The four split epics below moved their science
+`- mind-half:` names the Mind entry by slug, or `none` when the epic moved
+whole. The Mind carried a reciprocal `- cortex-half:` key until 2026-09-03,
+when mind-post-cortex phase 2 removed it — nothing read it, and the pointer
+now lives in the Mind entry's own `notes:` as a "Science half:" clause. This
+file's `- mind-half:` stays the machine-readable half of the join.
+The four split epics below moved their science
 halves here in phase 4 of the birth epic (2026-09-01): `euclid-dr1-prep`
 phases 4, 5, 6a and 6b (renumbered here as Cortex phases 4–7);
 `jax-inference-profiling` whole; the science halves of `graphical-ep` phases
@@ -45,7 +49,8 @@ This file is ledger: it auto-merges (`scripts/ledger_merge.py`).
 ## jax-inference-profiling
 - title: profile and certify the JAX inference stack — samplers, meshes, reference baselines
 - ledger: autolens_profiling/results/notes/inference/PROGRAMME.md
-- mind-half: PyAutoMind/epics.md#jax-inference-profiling
+- mind-half: none — the Mind entry was retired 2026-09-03 (mind-post-cortex phase 2); the
+  whole programme lives here, and its slices ship as autolens_profiling issues/PRs
 - status: Phase 1 RULED 2026-09-02 (R-20260902-01, accept scoped to the four positions-on rows) and closed out; certified InferenceRefs_v1 set = 6 baselines (mge_fp64, mge_pos_fp64, delaunay_nn_pos, slam_source_pix_pos, slam_source_pix_nn_pos, delaunay_pos); Step 2 filed 2026-09-02 as phase 12 (RAL 342241, tasks 11–13, positions-on refs for pixelization / knn / delaunay_matern; submitted); Step 3 ruled 2026-09-02 — phases 13/14/15 accepted (R-20260902-08/09/10), Gates A, B pt 1, B pt 2 re-called on the legacy MGE evidence (Gate A's Delaunay leg struck); next: rule phase 12 when pulled, then Phase 5 positions-on (penalty factor to be decided — 1e5 recommended per Gate B pt 2)
 - notes: The whole epic's science half lives here. The 2026-08-31 REWIND quarantined
   every mesh / pixelization result to `output/legacy_wrong/` and every MGE result to
@@ -61,7 +66,7 @@ This file is ledger: it auto-merges (`scripts/ledger_merge.py`).
 
 ## graphical-ep
 - title: expectation propagation as the scalable alternative to graphical joint fits
-- ledger: PyAutoMind/research/graphical_ep/ep_campaign.md
+- ledger: PyAutoMind/draft/research/graphical_ep/ep_campaign.md
 - mind-half: PyAutoMind/epics.md#graphical-ep
 - status: both science phases planned; the projects are dormant and the campaign's
   development phases run first
