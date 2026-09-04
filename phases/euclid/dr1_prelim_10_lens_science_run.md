@@ -2,8 +2,9 @@
 
 Project: euclid
 Phase: 4
-State: gated
+State: ready
 Gates: euclid_strong_lens_modeling_pipeline#48, euclid_strong_lens_modeling_pipeline#49
+Gates-cleared: 2026-09-04
 Witness: 10 lenses fitted end to end on RAL from the pipeline repo alone, with a complete catalogue folder (latents present) whose numerics match the 20260623 reference within the tolerance stated before the run
 Budget: 48:00
 Runs:
