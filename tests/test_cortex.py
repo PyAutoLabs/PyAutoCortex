@@ -297,6 +297,32 @@ def test_directory_must_equal_project(tmp_path):
                   "01_scope.md: Project: sample is not a projects.yaml key")
 
 
+def test_where_to_look_must_name_somewhere_past_planned(tmp_path):
+    """The section is rendered, not just parsed — the dashboard's
+    `## By project` view and `checkin` print these bullets verbatim as the
+    folders to open. A phase that has left `planned` carrying only the
+    template placeholder names nowhere."""
+    root = _copy(tmp_path)
+    holder = f"- {cortex.WHERE_PLACEHOLDER}\n"
+    # `planned` is the one state the placeholder is honest on
+    _edit(root, P["01_scope"], "- `/mnt/c/Users/Jammy/Science/example/wiki/project/state.md`\n",
+          holder)
+    assert _problems(root) == []
+    _edit(root, P["07_awaiting_ruling"],
+          "- `/mnt/c/Users/Jammy/Science/example/output/phase_07/`\n", holder)
+    _assert_drift(root, "07_awaiting_ruling.md: ## Where to look names nowhere")
+
+
+def test_a_new_phase_ships_the_placeholder_and_no_other_bullet(tmp_path):
+    """`new` writes `planned`, so the phase it writes passes `check` — and
+    the placeholder it writes is the exact string the rule exempts."""
+    root = _copy(tmp_path)
+    _run("new", "example", "11_fresh", "--phase", "11", "--today", TODAY, root=root)
+    text = (root / "phases/example/11_fresh.md").read_text()
+    assert f"- {cortex.WHERE_PLACEHOLDER}" in text
+    assert _problems(root) == []
+
+
 def test_illegal_state_unknown_key_and_missing_section(tmp_path):
     root = _copy(tmp_path)
     _edit(root, P["01_scope"], "State: planned\n", "State: queued\nGate-cleared: x\n")

@@ -16,6 +16,340 @@ Every science phase the Cortex is holding, on one page: what is waiting on your 
 | [Gated](#gated) | 1 |
 | [Recent rulings](#recent-rulings) | 22 |
 
+## By project
+
+[markdown version](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects.yaml) — Where every project is: the folders it lives in, every phase of it that is still open, the locations its `## Where to look` names, and the prompt for each thing that phase could become. This is the check-in view — `pyauto-brain cortex checkin` and `census --by-project` print the same tree.
+
+### euclid
+
+- local `/mnt/c/Users/Jammy/Science/euclid` · RAL `/mnt/ral/jnightin/euclid_strong_lens_modeling_pipeline`
+- phases: gated 1 · planned 3
+
+**Gated**
+
+<a href="phases/euclid/dr1_prelim_10_lens_science_run.md">Euclid — phase 4: DR1 prelim science run — 10 real Euclid lenses in euclid_dr1_prelim on RAL</a> — euclid phase 4 · budget 48:00 · 25 review-min — **gated**
+
+- where to look: `euclid_dr1_prelim` (project row `euclid_dr1_prelim`): the new project tree, once created
+- where to look: `euclid` (project row `euclid`): `catalogue/catalogue/dr1_prelim_grade_ab_catalogue_csvs_20260623/`
+- where to look: `autolens_assistant/skills/euclid_{prepare_data,setup_pipeline,model_lens,hpc_runs}.md`
+- where to look: `euclid_strong_lens_modeling_pipeline`: `catalogue/scripts/`, `hpc/batch_cpu/`
+
+<details><summary>📋 its gates</summary>
+
+```
+python3 scripts/cortex.py gates   # then, once they have closed: move phases/euclid/dr1_prelim_10_lens_science_run.md ready
+# gates: euclid_strong_lens_modeling_pipeline#48, euclid_strong_lens_modeling_pipeline#49
+```
+
+</details>
+
+**Planned**
+
+<a href="phases/euclid/resimulate_fitted_lens_simulator.md">Euclid — phase 5: resimulate a fitted Euclid lens, and resimulate the 10 prelim lenses with true magnifications recorded</a> — euclid phase 5 · budget 24:00 · 20 review-min — **planned**
+
+- where to look: `euclid_strong_lens_modeling_pipeline`: `scripts/simulator.py`, `smoke_tests.txt`
+- where to look: `euclid_dr1_prelim` (project row): the 10 simulated datasets and their truth table
+- where to look: `phases/euclid/dr1_prelim_10_lens_science_run.md` — the fits these resimulations start from
+
+<details><summary>📋 open it</summary>
+
+```
+python3 scripts/cortex.py move phases/euclid/resimulate_fitted_lens_simulator.md ready   # when the `Ready when:` clause in its `## Question` is met
+```
+
+</details>
+
+<a href="phases/euclid/sersic_index_recovery.md">Euclid — phase 6: do we recover Sersic indices? 10 simulated Euclid lenses vs the real prior-edge pile-up</a> — euclid phase 6 · budget 24:00 · 20 review-min — **planned**
+
+- where to look: `euclid` (project row): `catalogue/scripts/plot_lens_sersic_index.py` — already plots this
+- where to look: `euclid_dr1_prelim` (project row): the phase-5 simulated datasets and their truth table
+- where to look: `euclid_strong_lens_modeling_pipeline`: the `sersic_lens_model.py` family used on the real data
+
+<details><summary>📋 open it</summary>
+
+```
+python3 scripts/cortex.py move phases/euclid/sersic_index_recovery.md ready   # when the `Ready when:` clause in its `## Question` is met
+```
+
+</details>
+
+<a href="phases/euclid/magnification_robustness.md">Euclid — phase 7: how robust are magnification estimates? model-match vs mismatch across the 10 Euclid lenses</a> — euclid phase 7 · budget 24:00 · 20 review-min — **planned**
+
+- where to look: `euclid_dr1_prelim` (project row): the phase-5 simulations and their recorded true magnifications
+- where to look: Mind `draft/bug/autoarray/delaunay_area_magnification_audit.md` — the source-code half (6c),
+- where to look: Mind `draft/test/workspaces/mesh_magnification_correctness.md` — the cluster epic's
+
+<details><summary>📋 open it</summary>
+
+```
+python3 scripts/cortex.py move phases/euclid/magnification_robustness.md ready   # when the `Ready when:` clause in its `## Question` is met
+```
+
+</details>
+
+### inference_programme
+
+- local `/home/jammy/Code/PyAutoLabs/autolens_profiling` · mirror `/mnt/c/Users/Jammy/Science/inference_programme` · RAL `/mnt/ral/jnightin/autolens_profiling`
+- phases: accepted 6 · awaiting-ruling 1 · dropped 7 · planned 5
+
+**Awaiting your ruling**
+
+<a href="phases/inference_programme/refs_v1_positions_on_completion.md">Inference_programme — phase 12: InferenceRefs_v1 positions-on completion — pixelization / knn / delaunay_matern (array tasks 11-13)</a> — inference_programme phase 12 · budget 6:00 · 15 review-min · runs 342241_[11-13] — **awaiting-ruling**
+
+- where to look: `inference_programme` (project row): `output/searches/nautilus/imaging/{pixelization,knn,delaunay_matern}/hst/pos_tauto0.2_f1e8/hpc_a100_fp64_ref_pos_tauto0.2_f1e8/` — the three run trees, each with `positions.info`
+- where to look: `logs/output/output.<job>_{11,12,13}.out` and the matching `logs/error/` files on the mirror
+- where to look: `autolens_profiling/results/searches/nautilus/imaging/{pixelization,knn,delaunay_matern}/hst/hpc_hpc_a100_fp64_ref_pos_tauto0.2_f1e8.json` on RAL (result rows; not pulled to the mirror)
+- where to look: `autolens_profiling/results/baselines/InferenceRefs_v1/SUBMIT_LIST.md` rows 11–13
+- where to look: autolens_profiling#209 (array rows), #201 (Phase 1 redo leg), #200 (queue anchor)
+
+<details><summary>📋 rule on it</summary>
+
+```
+Review the PyAutoCortex phase phases/inference_programme/refs_v1_positions_on_completion.md and help me rule on it: read its `## Witness` and the pulled evidence under its `## Where to look`, score the witness, then draft the ruling body for my approval and run `python3 scripts/cortex.py rule phases/inference_programme/refs_v1_positions_on_completion.md <accept|rerun|drop|leave-to-finish> --body <file>`.
+```
+
+</details>
+
+<details><summary>📋 the results are good — accept and open phase 13</summary>
+
+```
+The results for the PyAutoCortex phase phases/inference_programme/refs_v1_positions_on_completion.md are good. Read its `## Witness` and the evidence under its `## Where to look`, draft the accept body for my approval, then file it and open the next phase:
+python3 scripts/cortex.py rule phases/inference_programme/refs_v1_positions_on_completion.md accept --body <file>
+# phase 13 is taken (phases/inference_programme/phase2_nss_mainline_gate_a_reuse.md, accepted) — the next free number is 20:
+python3 scripts/cortex.py new inference_programme <slug> --phase 20 --epic jax-inference-profiling --title "<the tail only — `new` writes '<Project> — phase 20: ' itself>"
+python3 scripts/cortex.py move phases/inference_programme/<slug>.md ready
+cd /home/jammy/Code/PyAutoLabs/autolens_profiling && hpc/sync submit <script>
+```
+
+</details>
+
+<details><summary>📋 run it again</summary>
+
+```
+The PyAutoCortex phase phases/inference_programme/refs_v1_positions_on_completion.md needs running again. Draft the rerun body — what came back, and what changes — for my approval, then file it and relaunch:
+python3 scripts/cortex.py rule phases/inference_programme/refs_v1_positions_on_completion.md rerun --body <file>
+python3 scripts/cortex.py move phases/inference_programme/refs_v1_positions_on_completion.md ready
+cd /home/jammy/Code/PyAutoLabs/autolens_profiling && hpc/sync submit <script>
+python3 scripts/cortex.py move phases/inference_programme/refs_v1_positions_on_completion.md submitted --run <jobid>   # one run per call; --after <run> chains the next
+```
+
+</details>
+
+**Planned**
+
+<a href="phases/inference_programme/cluster_extended_source_inference.md">Inference_programme — phase 11: cluster extended-source inference — gradient-based fitting building on JAX knowledge</a> — inference_programme phase 11 · budget 24:00 · 25 review-min — **planned**
+
+- where to look: Mind `draft/feature/autolens/source_cluster_arc.md` — the arc ledger (this is its line 11)
+- where to look: Mind `draft/feature/workspaces/cluster_pixelized_analysisfactor.md` — cluster phase 10, the gate
+- where to look: `inference_programme` (project row): `output/searches/*/cluster/` — the cluster trees the
+
+<details><summary>📋 open it</summary>
+
+```
+python3 scripts/cortex.py move phases/inference_programme/cluster_extended_source_inference.md ready   # when the `Ready when:` clause in its `## Question` is met
+```
+
+</details>
+
+<a href="phases/inference_programme/phase5_mesh_gradient_positions_on.md">Inference_programme — phase 16: Phase 5 — mesh global gradient searches with PositionsLH at factor 1e5 (the first mesh science since the rewind)</a> — inference_programme phase 16 · budget 8:00 · 30 review-min — **planned**
+
+- where to look: `inference_programme` (project row): `output/searches/multi_start_prodigy_autoconv/imaging/{pixelization,knn,delaunay_matern,delaunay,delaunay_nn,slam_source_pix,slam_source_pix_nn}/hst/hpc_a100_fp64_n256_seed{0..4}_pos_tauto0.2_f1e5/` — the 35 primary run trees, each of which must carry `positions.info` (R-20260902-01)
+- where to look: `output/searches/multi_start_prodigy_autoconv/imaging/knn/hst/hpc_a100_fp64_n256_seed{0..4}_pos_t0.3_f1e5/` — the 5 bridge-arm run trees
+- where to look: `output/searches/nautilus/imaging/knn/hst/pos_tauto0.2_f1e5/hpc_a100_fp64_ref_pos_tauto0.2_f1e5/` — the Nautilus inertness control
+- where to look: `logs/output/output.<job>_{0-20}.out` and the matching `logs/error/error.<job>_{0-20}.err` on the mirror
+- where to look: Result rows: `autolens_profiling/results/searches/multi_start_prodigy_autoconv/imaging/<cell>/hst/hpc_hpc_a100_fp64_n256_seed<N>_pos_tauto0.2_f1e5.json` (and `_pos_t0.3_f1e5.json` for the bridge arm); the control at `results/searches/nautilus/imaging/knn/hst/hpc_hpc_a100_fp64_ref_pos_tauto0.2_f1e5.json`
+- where to look: The bars: `autolens_profiling/results/baselines/InferenceRefs_v1/<key>/` plus `INDEX.json` / `INDEX.md` / `SUBMIT_LIST.md` — `pixelization_pos_fp64`, `knn_pos_fp64`, `delaunay_matern_pos_fp64` once phase 12 is ruled, and the four rows ruled by R-20260902-01
+- where to look: `autolens_profiling/results/notes/inference/PROGRAMME.md` — "### Phase 5 — Pixelized / mesh global searches with PositionsLH" (the pre-registered design) and the "2026-08-31 REWIND" section
+- where to look: `autolens_profiling/scripts/misc/wall/rates.py` — the step-rate rows the probe must add before the array is sized; `hpc/batch_gpu/submit_search_multi_start_prodigy_phase5_positions_array.sh` once the dev leg lands
+- where to look: `PyAutoCortex/phases/inference_programme/refs_v1_positions_on_completion.md` (phase 12) — the prerequisite
+
+<details><summary>📋 open it</summary>
+
+```
+python3 scripts/cortex.py move phases/inference_programme/phase5_mesh_gradient_positions_on.md ready   # when the `Ready when:` clause in its `## Question` is met
+```
+
+</details>
+
+<a href="phases/inference_programme/cluster_gradient_search_benchmark.md">Inference_programme — phase 17: cluster-scale gradient-search benchmark (Prodigy vs Nautilus, point-source)</a> — inference_programme phase 17 · budget 24:00 · 20 review-min — **planned**
+
+- where to look: `/home/jammy/Code/PyAutoLabs/autolens_profiling/results/searches/`
+- where to look: `/mnt/ral/jnightin/autolens_profiling/`
+
+<details><summary>📋 open it</summary>
+
+```
+python3 scripts/cortex.py move phases/inference_programme/cluster_gradient_search_benchmark.md ready   # when the `Ready when:` clause in its `## Question` is met
+```
+
+</details>
+
+<a href="phases/inference_programme/multiband_compile_census_completion.md">Inference_programme — phase 18: multi-band compile census completion — A100/multi-core + hetero GPU rows</a> — inference_programme phase 18 · budget 12:00 · 20 review-min — **planned**
+
+- where to look: `autolens_profiling/results/notes/multiband_pyloop_productized.md`
+- where to look: `autolens_profiling/scripts/misc/jax_compile/README.md` (multi-band section)
+- where to look: `/mnt/ral/jnightin/pixgrad_logs/census_gpu.sbatch`
+
+<details><summary>📋 open it</summary>
+
+```
+python3 scripts/cortex.py move phases/inference_programme/multiband_compile_census_completion.md ready   # when the `Ready when:` clause in its `## Question` is met
+```
+
+</details>
+
+<a href="phases/inference_programme/legacy_point_output_sweep.md">Inference_programme — phase 19: sweep the RAL active output/ tree into output/legacy_point/</a> — inference_programme phase 19 · budget 2:00 · 5 review-min — **planned**
+
+- where to look: `/mnt/ral/jnightin/autolens_profiling/output/`
+- where to look: `/mnt/c/Users/Jammy/Science/inference_programme/`
+- where to look: `autolens_profiling/results/notes/inference/DECISIONS.md` (2026-09-01 entry)
+
+<details><summary>📋 open it</summary>
+
+```
+python3 scripts/cortex.py move phases/inference_programme/legacy_point_output_sweep.md ready   # when the `Ready when:` clause in its `## Question` is met
+```
+
+</details>
+
+### subhalo_validation
+
+- local `/mnt/c/Users/Jammy/Science/subhalo_validation` · RAL `/mnt/ral/jnightin/subhalo_validation`
+- phases: ready 4 · running 2
+
+**Still out there**
+
+<a href="phases/subhalo_validation/rectangular_adapt_pl_eff_0.md">Subhalo_validation — phase 5: rectangular_adapt on pl_eff_0 — the clumpy-source lens on the RectangularBilinear comparison</a> — subhalo_validation phase 5 · budget 48:00 · 8 review-min · runs 342237_1, 342240_1 — **running** — ⚠️ failed runs: 342240_1
+
+- wall 0:00 of 48:00 (0%)
+
+- where to look: `subhalo_validation` (project row): `output/subhalo/detect/rectangular_adapt/pl_eff_0_no_subhalo/`
+- where to look: `results/rectangular_adapt/pl_eff_0_no_subhalo.json` — the witness (untracked in git by the human's ruling; laptop only)
+- where to look: `wiki/project/results_summary.md`, `wiki/project/state.md`
+
+<details><summary>📋 where the jobs stand</summary>
+
+```
+cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync jobs
+```
+
+</details>
+
+<details><summary>📋 run it again</summary>
+
+```
+The PyAutoCortex phase phases/subhalo_validation/rectangular_adapt_pl_eff_0.md needs running again. Draft the rerun body — what came back, and what changes — for my approval, then file it and relaunch:
+python3 scripts/cortex.py rule phases/subhalo_validation/rectangular_adapt_pl_eff_0.md rerun --body <file>
+python3 scripts/cortex.py move phases/subhalo_validation/rectangular_adapt_pl_eff_0.md ready
+cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync submit <script>
+python3 scripts/cortex.py move phases/subhalo_validation/rectangular_adapt_pl_eff_0.md submitted --run <jobid>   # one run per call; --after <run> chains the next
+```
+
+</details>
+
+<a href="phases/subhalo_validation/rectangular_adapt_pl_eff_1_outer.md">Subhalo_validation — phase 6: rectangular_adapt on pl_eff_1_outer — the outer-component lens on the RectangularBilinear comparison</a> — subhalo_validation phase 6 · budget 48:00 · 8 review-min · runs 342237_2, 342240_2 — **running** — ⚠️ failed runs: 342240_2
+
+- wall 0:00 of 48:00 (0%)
+
+- where to look: `subhalo_validation` (project row): `output/subhalo/detect/rectangular_adapt/pl_eff_1_outer_no_subhalo/`
+- where to look: `results/rectangular_adapt/pl_eff_1_outer_no_subhalo.json` — the witness (untracked in git by the human's ruling; laptop only)
+- where to look: `wiki/project/results_summary.md`, `wiki/project/state.md`
+
+<details><summary>📋 where the jobs stand</summary>
+
+```
+cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync jobs
+```
+
+</details>
+
+<details><summary>📋 run it again</summary>
+
+```
+The PyAutoCortex phase phases/subhalo_validation/rectangular_adapt_pl_eff_1_outer.md needs running again. Draft the rerun body — what came back, and what changes — for my approval, then file it and relaunch:
+python3 scripts/cortex.py rule phases/subhalo_validation/rectangular_adapt_pl_eff_1_outer.md rerun --body <file>
+python3 scripts/cortex.py move phases/subhalo_validation/rectangular_adapt_pl_eff_1_outer.md ready
+cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync submit <script>
+python3 scripts/cortex.py move phases/subhalo_validation/rectangular_adapt_pl_eff_1_outer.md submitted --run <jobid>   # one run per call; --after <run> chains the next
+```
+
+</details>
+
+**Ready to submit**
+
+<a href="phases/subhalo_validation/delaunay_adapt_split_pl_eff_0.md">Subhalo_validation — phase 2: delaunay_adapt_split on pl_eff_0 — the clumpy-source lens</a> — subhalo_validation phase 2 · budget 48:00 · 8 review-min · runs 342027_1, 342231_1, 342234_1 — **ready** — ⚠️ failed runs: 342234_1
+
+- where to look: `subhalo_validation` (project row): `output/subhalo/detect/delaunay_adapt_split/pl_eff_0_no_subhalo/`
+- where to look: `results/delaunay_adapt_split/pl_eff_0_no_subhalo.json` — the witness
+- where to look: `wiki/project/results_summary.md`, `wiki/project/state.md`
+
+<details><summary>📋 submit it</summary>
+
+```
+phases/subhalo_validation/delaunay_adapt_split_pl_eff_0.md
+cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync submit <script>
+python3 scripts/cortex.py move phases/subhalo_validation/delaunay_adapt_split_pl_eff_0.md submitted --run <jobid>
+```
+
+</details>
+
+<a href="phases/subhalo_validation/delaunay_adapt_split_pl_eff_1_outer.md">Subhalo_validation — phase 3: delaunay_adapt_split on pl_eff_1_outer — the outer-component lens, plus the AdaptSplit fix rerun</a> — subhalo_validation phase 3 · budget 48:00 · 8 review-min · runs 342027_2, 342093_0, 342231_2, 342234_2 — **ready** — ⚠️ failed runs: 342234_2
+
+- where to look: `subhalo_validation` (project row): `output/subhalo/detect/delaunay_adapt_split/pl_eff_1_outer_no_subhalo/`
+- where to look: `output/subhalo/detect/delaunay_adapt_split/pl_eff_1_outer_no_subhalo_adapt_split_fix/source_pix[1]/085f85ba6970436a1b8b115b6c9b3fbf`
+- where to look: `results/delaunay_adapt_split/pl_eff_1_outer_no_subhalo.json` — the witness
+- where to look: `results/figures/adapt_split_fix_{regularization,source_plane,residuals}_before_after.jpg`
+- where to look: `wiki/project/2026-08-31-adapt-split-fix-and-rectangular.md`, `wiki/project/state.md`
+
+<details><summary>📋 submit it</summary>
+
+```
+phases/subhalo_validation/delaunay_adapt_split_pl_eff_1_outer.md
+cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync submit <script>
+python3 scripts/cortex.py move phases/subhalo_validation/delaunay_adapt_split_pl_eff_1_outer.md submitted --run <jobid>
+```
+
+</details>
+
+<a href="phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md">Subhalo_validation — phase 1: delaunay_adapt_split on pl_sersic_0 — the false-positive null</a> — subhalo_validation phase 1 · budget 48:00 · 10 review-min · runs 342027_0, 342231_0, 342234_0 — **ready** — ⚠️ failed runs: 342234_0
+
+- where to look: `subhalo_validation` (project row): `output/subhalo/detect/delaunay_adapt_split/pl_sersic_0_no_subhalo/`
+- where to look: `results/delaunay_adapt_split/pl_sersic_0_no_subhalo.json` — the witness
+- where to look: `wiki/project/results_summary.md` — the scientific commentary and the provenance row
+
+<details><summary>📋 submit it</summary>
+
+```
+phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md
+cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync submit <script>
+python3 scripts/cortex.py move phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md submitted --run <jobid>
+```
+
+</details>
+
+<a href="phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md">Subhalo_validation — phase 4: rectangular_adapt on pl_sersic_0 — the RectangularBilinear comparison</a> — subhalo_validation phase 4 · budget 48:00 · 15 review-min · runs 342094_0, 342095_0, 342237_0, 342240_0 — **ready** — ⚠️ failed runs: 342240_0
+
+- where to look: `subhalo_validation` (project row): `output/subhalo/detect/rectangular_adapt/pl_sersic_0_no_subhalo/`
+- where to look: `output/subhalo/detect/rectangular_adapt/pl_sersic_0_no_subhalo/source_lp[1]/3e9ced20d8180a15d972b1874636c5c1` — job A
+- where to look: `results/rectangular_adapt/pl_sersic_0_no_subhalo.json` — the witness (untracked; laptop only)
+- where to look: `wiki/project/2026-08-31-adapt-split-fix-and-rectangular.md`, `wiki/project/results_summary.md`
+
+<details><summary>📋 submit it</summary>
+
+```
+phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md
+cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync submit <script>
+python3 scripts/cortex.py move phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md submitted --run <jobid>
+```
+
+</details>
+
+<details><summary>8 dormant project(s) with nothing open</summary>
+
+`concr` (none) · `cowls_diana` (none) · `euclid_dr1_prelim` (none) · `ic50_workspace` (planned 1) · `pj011646` (none) · `profiling` (none) · `slope_hierarchy` (planned 2) · `subhalo_simulations` (none)
+
+</details>
+
 ## Awaiting ruling
 
 [markdown version](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/phases/) — Results are in and nothing is running — the human's verdict is the only thing outstanding. Ordered failures first, then the phases a ruling is required for, then the clean ones.
@@ -24,6 +358,31 @@ Every science phase the Cortex is holding, on one page: what is waiting on your 
 
 ```
 Review the PyAutoCortex phase phases/inference_programme/refs_v1_positions_on_completion.md and help me rule on it: read its `## Witness` and the pulled evidence under its `## Where to look`, score the witness, then draft the ruling body for my approval and run `python3 scripts/cortex.py rule phases/inference_programme/refs_v1_positions_on_completion.md <accept|rerun|drop|leave-to-finish> --body <file>`.
+```
+
+</details>
+
+<details><summary>📋 ↳ the results are good — accept and open phase 13</summary>
+
+```
+The results for the PyAutoCortex phase phases/inference_programme/refs_v1_positions_on_completion.md are good. Read its `## Witness` and the evidence under its `## Where to look`, draft the accept body for my approval, then file it and open the next phase:
+python3 scripts/cortex.py rule phases/inference_programme/refs_v1_positions_on_completion.md accept --body <file>
+# phase 13 is taken (phases/inference_programme/phase2_nss_mainline_gate_a_reuse.md, accepted) — the next free number is 20:
+python3 scripts/cortex.py new inference_programme <slug> --phase 20 --epic jax-inference-profiling --title "<the tail only — `new` writes '<Project> — phase 20: ' itself>"
+python3 scripts/cortex.py move phases/inference_programme/<slug>.md ready
+cd /home/jammy/Code/PyAutoLabs/autolens_profiling && hpc/sync submit <script>
+```
+
+</details>
+
+<details><summary>📋 ↳ run it again</summary>
+
+```
+The PyAutoCortex phase phases/inference_programme/refs_v1_positions_on_completion.md needs running again. Draft the rerun body — what came back, and what changes — for my approval, then file it and relaunch:
+python3 scripts/cortex.py rule phases/inference_programme/refs_v1_positions_on_completion.md rerun --body <file>
+python3 scripts/cortex.py move phases/inference_programme/refs_v1_positions_on_completion.md ready
+cd /home/jammy/Code/PyAutoLabs/autolens_profiling && hpc/sync submit <script>
+python3 scripts/cortex.py move phases/inference_programme/refs_v1_positions_on_completion.md submitted --run <jobid>   # one run per call; --after <run> chains the next
 ```
 
 </details>
@@ -40,10 +399,34 @@ cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync jobs
 
 </details>
 
+<details><summary>📋 ↳ run it again</summary>
+
+```
+The PyAutoCortex phase phases/subhalo_validation/rectangular_adapt_pl_eff_0.md needs running again. Draft the rerun body — what came back, and what changes — for my approval, then file it and relaunch:
+python3 scripts/cortex.py rule phases/subhalo_validation/rectangular_adapt_pl_eff_0.md rerun --body <file>
+python3 scripts/cortex.py move phases/subhalo_validation/rectangular_adapt_pl_eff_0.md ready
+cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync submit <script>
+python3 scripts/cortex.py move phases/subhalo_validation/rectangular_adapt_pl_eff_0.md submitted --run <jobid>   # one run per call; --after <run> chains the next
+```
+
+</details>
+
 <details><summary>📋 <a href="phases/subhalo_validation/rectangular_adapt_pl_eff_1_outer.md">Subhalo_validation — phase 6: rectangular_adapt on pl_eff_1_outer — the outer-component lens on the RectangularBilinear comparison</a> — subhalo_validation phase 6 · budget 48:00 · 8 review-min · runs 342237_2, 342240_2 — wall 0:00 of 48:00 (0%)</summary>
 
 ```
 cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync jobs
+```
+
+</details>
+
+<details><summary>📋 ↳ run it again</summary>
+
+```
+The PyAutoCortex phase phases/subhalo_validation/rectangular_adapt_pl_eff_1_outer.md needs running again. Draft the rerun body — what came back, and what changes — for my approval, then file it and relaunch:
+python3 scripts/cortex.py rule phases/subhalo_validation/rectangular_adapt_pl_eff_1_outer.md rerun --body <file>
+python3 scripts/cortex.py move phases/subhalo_validation/rectangular_adapt_pl_eff_1_outer.md ready
+cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync submit <script>
+python3 scripts/cortex.py move phases/subhalo_validation/rectangular_adapt_pl_eff_1_outer.md submitted --run <jobid>   # one run per call; --after <run> chains the next
 ```
 
 </details>
