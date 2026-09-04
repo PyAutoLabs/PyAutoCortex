@@ -249,12 +249,14 @@ def test_missing_projects_field_and_bad_enums(tmp_path):
     _assert_drift(root, "example is missing ledger", "partition must be gpu | ral | both")
 
 
-def test_planned_is_a_legal_status(tmp_path):
+def test_planned_and_retired_are_legal_statuses(tmp_path):
     root = _copy(tmp_path)
-    _edit(root, "projects.yaml", "  status: active\n", "  status: planned\n")
-    assert _problems(root) == []
-    _edit(root, "projects.yaml", "  status: planned\n", "  status: someday\n")
-    _assert_drift(root, "status must be active | dormant | planned")
+    for status in ("planned", "retired"):
+        _edit(root, "projects.yaml", "  status: active\n", f"  status: {status}\n")
+        assert _problems(root) == [], status
+        _edit(root, "projects.yaml", f"  status: {status}\n", "  status: active\n")
+    _edit(root, "projects.yaml", "  status: active\n", "  status: someday\n")
+    _assert_drift(root, "status must be active | dormant | planned | retired")
 
 
 def test_note_is_optional_but_never_empty_and_the_field_set_still_closes(tmp_path):
@@ -271,6 +273,120 @@ def test_note_is_optional_but_never_empty_and_the_field_set_still_closes(tmp_pat
     _edit(root, "projects.yaml", '  note: "a fact: with a colon # and a hash"\n',
           "  note:\n")
     _assert_drift(root, "example.note is empty")
+
+
+# --------------------------------------------------------------------------- #
+# retire
+# --------------------------------------------------------------------------- #
+#: The states `retire` allows a project to still hold: the three ruled ones
+#: plus `planned`, which is an unasked question.
+_QUIET = {"01_scope", "08_accepted", "09_rerun", "10_dropped"}
+
+
+def _quiesce(root: Path, project: str = "example") -> "list[str]":
+    """Leave `project` holding only ruled and planned phases — dropping the
+    rulings that named the phases removed, so `check` stays clean."""
+    gone = []
+    for p in sorted((root / "phases" / project).glob("*.md")):
+        if p.stem not in _QUIET:
+            gone.append(p.relative_to(root).as_posix())
+            p.unlink()
+    for r in sorted((root / "rulings").rglob("*.md")):
+        if any(f"Phase: {g}" in r.read_text() for g in gone):
+            r.unlink()
+    assert _problems(root) == [], _problems(root)
+    return gone
+
+
+def test_retire_flips_the_status_and_stamps_the_note(tmp_path):
+    """Two lines change and nothing else — the row, its phases and its
+    rulings all stay, and `check` is clean afterwards."""
+    root = _copy(tmp_path)
+    _quiesce(root)
+    before = (root / "projects.yaml").read_text().split("\n")
+    phases_before = sorted(p.name for p in (root / "phases" / "example").glob("*.md"))
+    assert cortex.retire_project(root, "example", "the question was answered",
+                                 date(2026, 9, 4)) == "retired example"
+    after = (root / "projects.yaml").read_text().split("\n")
+    assert "  status: retired" in after
+    assert '  note: "retired 2026-09-04: the question was answered"' in after
+    # every byte outside the two edited lines is identical: the fixture row
+    # carries no `note:`, so the note is an appended line.
+    assert [ln for ln in after if not ln.startswith(("  status:", "  note:"))] == \
+        [ln for ln in before if not ln.startswith("  status:")]
+    assert sorted(p.name for p in (root / "phases" / "example").glob("*.md")) == \
+        phases_before
+    assert _problems(root) == []
+    rows, problems = cortex.parse_projects((root / "projects.yaml").read_text())
+    assert problems == [] and rows["example"]["status"] == "retired"
+
+
+def test_retire_rewrites_an_existing_note_in_place(tmp_path):
+    root = _copy(tmp_path)
+    _quiesce(root)
+    _edit(root, "projects.yaml", "  status: active\n",
+          '  status: active\n  note: "a fact: recorded"\n')
+    before = (root / "projects.yaml").read_text()
+    cortex.retire_project(root, "example", "no science since 2026-05",
+                          date(2026, 9, 4))
+    after = (root / "projects.yaml").read_text()
+    assert '  note: "a fact: recorded"' not in after
+    assert '  note: "retired 2026-09-04: no science since 2026-05"' in after
+    assert after.count("  note:") == before.count("  note:") == 1
+    assert _problems(root) == []
+
+
+def test_retire_refuses_while_a_phase_is_still_live(tmp_path):
+    """Every state outside `accepted | rerun | dropped | planned` is an
+    unfinished question, and the refusal names each one."""
+    root = _copy(tmp_path)
+    before = (root / "projects.yaml").read_text()
+    with pytest.raises(cortex.CortexError) as e:
+        cortex.retire_project(root, "example", "why", date(2026, 9, 4))
+    message = str(e.value)
+    assert "still has live work" in message
+    for name in ("02_gated_on_dev", "03_ready_cleared", "04_submitted_override",
+                 "05_running_array", "06_pulled", "07_awaiting_ruling"):
+        assert f"phases/example/{name}.md — " in message
+    # planned and the ruled states are not named — they are allowed to stay
+    for name in ("01_scope", "08_accepted", "09_rerun", "10_dropped"):
+        assert f"phases/example/{name}.md" not in message
+    assert (root / "projects.yaml").read_text() == before
+
+
+def test_retire_refuses_an_unknown_key_a_repeat_and_a_bad_why(tmp_path):
+    root = _copy(tmp_path)
+    _quiesce(root)
+    before = (root / "projects.yaml").read_text()
+    for why, needle in ((" ", "--why must say why"),
+                        ('a "quoted" reason', "double quote")):
+        with pytest.raises(cortex.CortexError) as e:
+            cortex.retire_project(root, "example", why, date(2026, 9, 4))
+        assert needle in str(e.value)
+    with pytest.raises(cortex.CortexError) as e:
+        cortex.retire_project(root, "nobody", "why", date(2026, 9, 4))
+    assert "not a projects.yaml key" in str(e.value)
+    assert (root / "projects.yaml").read_text() == before
+    cortex.retire_project(root, "example", "done", date(2026, 9, 4))
+    with pytest.raises(cortex.CortexError) as e:
+        cortex.retire_project(root, "example", "done again", date(2026, 9, 4))
+    assert "already retired" in str(e.value)
+
+
+def test_retire_round_trips_through_the_cli(tmp_path):
+    root = _copy(tmp_path)
+    r = _run("retire", "example", "--why", "the question was answered",
+             "--today", TODAY, root=root)
+    assert r.returncode == 1 and "still has live work" in r.stderr
+    _quiesce(root)
+    r = _run("retire", "example", "--why", "the question was answered",
+             "--today", TODAY, root=root)
+    assert r.returncode == 0, r.stderr
+    assert r.stdout.strip() == "retired example"
+    text = (root / "projects.yaml").read_text()
+    assert "  status: retired" in text
+    assert f'  note: "retired {TODAY}: the question was answered"' in text
+    assert _run("check", root=root).returncode == 0
 
 
 # --------------------------------------------------------------------------- #

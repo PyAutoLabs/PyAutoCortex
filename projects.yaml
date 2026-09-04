@@ -24,7 +24,7 @@
 #     ledger: <path>              # the project's own commentary ledger, relative to local_path
 #     witness_file: <glob>        # where a run's witness lands, relative to the mirror
 #     partition: gpu | ral | both # which SLURM partition(s) the project runs on
-#     status: active | dormant | planned
+#     status: active | dormant | planned | retired   # `cortex.py retire` writes the last
 #     note: <text>                # OPTIONAL, and the only optional field — free text
 #                                 # about the row; an empty `note:` is drift
 #
