@@ -95,6 +95,11 @@ human's turn. Full rules in [rulings/AGENTS.md](rulings/AGENTS.md).
     REFERENCE.md; refuses the ruling edges.
   - `new <project> <slug> --phase <n> …` — writes a phase file from the
     template.
+  - `retire <project> --why "<one line>"` — the only verb that writes
+    `projects.yaml`: the row's `status:` becomes `retired` and its
+    `note:` records `retired <today>: <why>`. The row, its phases and its
+    rulings all stay; it refuses while any phase of that project is
+    outside `accepted | rerun | dropped | planned`.
 - **`dashboard.md` / `dashboard.html`** — GENERATED, never hand-edited: the
   board, rendered by the Brain's cortex conductor and self-healed on `main`
   (see "Driving the Cortex" below). They are ledger for the merge gate.

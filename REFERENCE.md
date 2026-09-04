@@ -188,7 +188,7 @@ PyAutoCortex/
 ├── docs/schema_decisions.md ← every dated choice the epic did not fix
 ├── policy/never_rewrite_history.md  policy/remote_sessions.md   ← copies of the Mind's; spliced into AGENTS.md
 │
-├── scripts/cortex.py        ← check · gates · rule · move · new (stdlib + PyYAML)
+├── scripts/cortex.py        ← check · gates · rule · move · new · retire (stdlib + PyYAML)
 ├── scripts/ledger_merge.py  ← the default-deny ledger classifier (+ append-only on rulings/, batches/)
 ├── tests/test_cortex.py  tests/test_ledger_merge.py
 ├── tests/fixtures/skeleton/ ← one project, one phase per state, five rulings — the witness
@@ -387,10 +387,24 @@ listed here. A document PyYAML cannot read is reported as one problem.
   `local_path` (absolute laptop path — the Cortex-only exception to the
   workspace-paths rule), `ral_root`, `mirror` (path | `none`), `sync_cli`,
   `sync_verbs`, `ledger`, `witness_file` (glob), `partition`
-  (`gpu | ral | both`), `status` (`active | dormant | planned`).
+  (`gpu | ral | both`), `status`
+  (`active | dormant | planned | retired`).
 - `note` (free text) is the **one optional field**: a row may omit it, an
   empty `note:` is drift, and any other field is still an unknown-field
   error. A note holding `:` or `#` is quoted like any other scalar.
+- **Retiring a project.** `cortex.py retire <key> --why "<one line>"` is
+  the one verb that writes this file: it flips the row's `status:` to
+  `retired` and rewrites (or appends) its `note:` as
+  `"retired <today>: <why>"`. The **row stays** — it is the only record of
+  where that project's data lives — and no phase or ruling is touched;
+  `rulings/` is append-only and a change of status is not a rewrite of
+  history. It refuses while the project holds a phase in any state
+  outside `accepted | rerun | dropped | planned`, naming each one, so the
+  live questions are ruled or dropped first; `planned` phases are unasked
+  questions and may stay. The edit is exactly those two lines — every
+  other byte of the file is preserved — and the result is re-parsed
+  before it is kept, the original bytes restored if it does not read
+  back clean.
 - Science repos are **not** added to `PyAutoMind/repos.yaml` — that map is the
   workspace, this one is the science.
 - A file with no rows parses to an empty map (`{}`); PyYAML returns `None`
@@ -493,6 +507,13 @@ Stdlib only; `main(argv)`; no import-time side effects; every verb takes
   wall by hand — and `--where` (required) as its `where:`; a legacy-born
   phase refuses `--gates`. Refuses a duplicate phase number, an existing
   file or an unknown project.
+- **`retire <project> --why "<one line>"`** — the only verb that writes
+  `projects.yaml`: `status: retired` plus a `note:` reading
+  `"retired <today>: <why>"`, two lines edited in place and every other
+  byte preserved. Refuses an unknown key, an already-retired row, and any
+  project still holding a phase outside `accepted | rerun | dropped |
+  planned` (the message names each `<phase> — <state>`). The row, its
+  phases and its rulings all stay; see `projects.yaml` above.
 
 ---
 

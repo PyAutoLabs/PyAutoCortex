@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""cortex.py — the Cortex's lifecycle script: check · gates · rule · move · new.
+"""cortex.py — the Cortex's lifecycle script: check · gates · rule · move · new · retire.
 
 The run-and-ruling registry (project → phase → runs → rulings) is a tree of
 markdown files with light headers, and this script is the one thing that
@@ -19,6 +19,7 @@ Usage:
     python3 scripts/cortex.py rule <phase> <verb> --body <file> [...]
     python3 scripts/cortex.py move <phase> <state> [...]
     python3 scripts/cortex.py new <project> <slug> --phase <n> [...]
+    python3 scripts/cortex.py retire <project> --why "<one line>"   # a project's row
 
 Exit codes: 0 = done · 1 = drift or a refused edit · 2 = bad arguments.
 """
@@ -99,7 +100,7 @@ PROJECT_FIELDS = ("remote", "local_path", "ral_root", "mirror", "sync_cli",
 #: any field outside these two tuples is still an error.
 PROJECT_OPTIONAL_FIELDS = ("note",)
 PARTITIONS = ("gpu", "ral", "both")
-PROJECT_STATUSES = ("active", "dormant", "planned")
+PROJECT_STATUSES = ("active", "dormant", "planned", "retired")
 
 # --------------------------------------------------------------------------- #
 # grammars (REFERENCE.md)
@@ -347,7 +348,7 @@ def _finish_row(key: str, row: dict, problems: "list[str]") -> None:
                         f"not {row['partition']}")
     if row.get("status") and row["status"] not in PROJECT_STATUSES:
         problems.append(f"projects.yaml: {key}.status must be "
-                        f"active | dormant | planned, not {row['status']}")
+                        f"active | dormant | planned | retired, not {row['status']}")
     remote = row.get("remote")
     if remote and remote != "none" and not re.match(r"^[\w.-]+/[\w.-]+$", remote):
         problems.append(f"projects.yaml: {key}.remote must be owner/repo or none")
@@ -1011,6 +1012,89 @@ def cmd_move(args) -> int:
 
 
 # --------------------------------------------------------------------------- #
+# retire
+# --------------------------------------------------------------------------- #
+def retire_project(root: Path, key: str, why: str, today: date) -> str:
+    """Flip one `projects.yaml` row to `status: retired` and stamp the reason
+    on its `note:`. The only verb that writes `projects.yaml`.
+
+    Three things it deliberately does not do. It does not **delete the row**:
+    that row is the only record of where the project's data lives, and a
+    retired project still has to be findable. It does not touch a **phase** or
+    a **ruling**: `rulings/` is append-only and history is not rewritten by a
+    change of status. And it does not retire over **live work** — every state
+    outside `RULED_STATES` and `planned` is an unfinished question, so the
+    refusal names each one and the human rules or drops it first. `planned`
+    stays: an unasked question costs nothing to leave behind.
+
+    The edit is two lines. Everything else in the file — comments, blank
+    lines, the order of the rows, the other rows' bytes — is preserved, and
+    the result is re-parsed before it is kept: a `projects.yaml` this verb
+    could not read back is restored to the bytes it had.
+    """
+    why = (why or "").strip()
+    if not why:
+        raise CortexError("--why must say why, in one line")
+    if '"' in why or "\n" in why:
+        raise CortexError("--why cannot hold a double quote or a newline "
+                          "(projects.yaml quotes with no escapes)")
+    projects, problems = load_projects(root)
+    if problems:
+        raise CortexError("projects.yaml does not parse clean — run `check` "
+                          "and fix it before retiring: " + "; ".join(problems))
+    if key not in projects:
+        raise CortexError(f"{key} is not a projects.yaml key")
+    if projects[key].get("status") == "retired":
+        raise CortexError(f"{key} is already retired")
+    phases, _ = load_phases(root)
+    live = [f"{ph.rel} — {ph.state}" for ph in phases
+            if ph.project_dir == key
+            and ph.state not in RULED_STATES | {"planned"}]
+    if live:
+        raise CortexError(f"{key} still has live work — rule or drop it "
+                          f"first: {', '.join(live)}")
+
+    path = root / "projects.yaml"
+    original = path.read_text(encoding="utf-8")
+    lines = original.split("\n")
+    starts = [i for i, ln in enumerate(lines) if ln == f"{key}:"]
+    if len(starts) != 1:
+        raise CortexError(f"projects.yaml: expected one `{key}:` line, "
+                          f"found {len(starts)}")
+    start = starts[0]
+    stop = start + 1
+    while stop < len(lines) and lines[stop].startswith("  "):
+        stop += 1
+    block = lines[start:stop]
+    at_status = [i for i, ln in enumerate(block) if re.match(r"^  status: .*$", ln)]
+    at_note = [i for i, ln in enumerate(block) if re.match(r"^  note:(?: .*)?$", ln)]
+    if len(at_status) != 1 or len(at_note) > 1:
+        raise CortexError(f"projects.yaml: {key} is not one `  status:` line "
+                          f"and at most one `  note:` line")
+    block[at_status[0]] = "  status: retired"
+    note = f'  note: "retired {today.isoformat()}: {why}"'
+    if at_note:
+        block[at_note[0]] = note
+    else:
+        block.append(note)
+    lines[start:stop] = block
+    path.write_text("\n".join(lines), encoding="utf-8")
+
+    rows, problems = load_projects(root)
+    if problems or rows.get(key, {}).get("status") != "retired":
+        path.write_text(original, encoding="utf-8")
+        raise CortexError("the edit would not read back — projects.yaml is "
+                          "unchanged: " + ("; ".join(problems) or
+                                           f"{key} did not come back retired"))
+    return f"retired {key}"
+
+
+def cmd_retire(args) -> int:
+    print(retire_project(args.root, args.project, args.why, _today(args)))
+    return 0
+
+
+# --------------------------------------------------------------------------- #
 # rule
 # --------------------------------------------------------------------------- #
 def next_ruling_id(root: Path, day: date, taken: "set[str] | None" = None) -> str:
@@ -1317,6 +1401,13 @@ def build_parser() -> argparse.ArgumentParser:
     n.add_argument("--minutes", type=int, help="Review-minutes seed")
     n.add_argument("--title", help="the title after `phase <n>:` (default: the slug's words)")
     n.set_defaults(func=cmd_new)
+
+    t = sub.add_parser("retire", help="flip a project's row to status: retired")
+    _common(t, dated=True)
+    t.add_argument("project", help="the projects.yaml key")
+    t.add_argument("--why", required=True,
+                   help="one line: why the project is being retired")
+    t.set_defaults(func=cmd_retire)
     return parser
 
 

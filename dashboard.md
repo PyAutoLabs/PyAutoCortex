@@ -38,16 +38,72 @@ One row per active project — the next thing, what it is holding, and when it l
 
 #### Nothing open
 
-| Project | Status | Phases |
-|---|---|---|
-| euclid_dr1_prelim | planned | none |
-| concr | dormant | none |
-| cowls_diana | dormant | none |
-| ic50_workspace | dormant | planned 1 |
-| pj011646 | dormant | none |
-| profiling | dormant | none |
-| slope_hierarchy | dormant | planned 2 |
-| subhalo_simulations | dormant | none |
+| Project | Status | Phases | Retire |
+|---|---|---|---|
+| euclid_dr1_prelim | planned | none |  |
+| concr | dormant | none | retire ↓ |
+| cowls_diana | dormant | none | retire ↓ |
+| ic50_workspace | dormant | planned 1 | retire ↓ |
+| pj011646 | dormant | none | retire ↓ |
+| profiling | dormant | none | retire ↓ |
+| slope_hierarchy | dormant | planned 2 | retire ↓ |
+| subhalo_simulations | dormant | none | retire ↓ |
+
+<details><summary>📋 retire concr</summary>
+
+```
+/cortex — retire the science project concr: confirm it is holding nothing live, then in PyAutoCortex run `python3 scripts/cortex.py retire concr --why "<one line on why>"`, `python3 scripts/cortex.py check`, `pyauto-brain cortex dashboard --apply`, and push the ledger. The row, its phases and its rulings all stay — only the status and the note change.
+```
+
+</details>
+
+<details><summary>📋 retire cowls_diana</summary>
+
+```
+/cortex — retire the science project cowls_diana: confirm it is holding nothing live, then in PyAutoCortex run `python3 scripts/cortex.py retire cowls_diana --why "<one line on why>"`, `python3 scripts/cortex.py check`, `pyauto-brain cortex dashboard --apply`, and push the ledger. The row, its phases and its rulings all stay — only the status and the note change.
+```
+
+</details>
+
+<details><summary>📋 retire ic50_workspace</summary>
+
+```
+/cortex — retire the science project ic50_workspace: confirm it is holding nothing live, then in PyAutoCortex run `python3 scripts/cortex.py retire ic50_workspace --why "<one line on why>"`, `python3 scripts/cortex.py check`, `pyauto-brain cortex dashboard --apply`, and push the ledger. The row, its phases and its rulings all stay — only the status and the note change.
+```
+
+</details>
+
+<details><summary>📋 retire pj011646</summary>
+
+```
+/cortex — retire the science project pj011646: confirm it is holding nothing live, then in PyAutoCortex run `python3 scripts/cortex.py retire pj011646 --why "<one line on why>"`, `python3 scripts/cortex.py check`, `pyauto-brain cortex dashboard --apply`, and push the ledger. The row, its phases and its rulings all stay — only the status and the note change.
+```
+
+</details>
+
+<details><summary>📋 retire profiling</summary>
+
+```
+/cortex — retire the science project profiling: confirm it is holding nothing live, then in PyAutoCortex run `python3 scripts/cortex.py retire profiling --why "<one line on why>"`, `python3 scripts/cortex.py check`, `pyauto-brain cortex dashboard --apply`, and push the ledger. The row, its phases and its rulings all stay — only the status and the note change.
+```
+
+</details>
+
+<details><summary>📋 retire slope_hierarchy</summary>
+
+```
+/cortex — retire the science project slope_hierarchy: confirm it is holding nothing live, then in PyAutoCortex run `python3 scripts/cortex.py retire slope_hierarchy --why "<one line on why>"`, `python3 scripts/cortex.py check`, `pyauto-brain cortex dashboard --apply`, and push the ledger. The row, its phases and its rulings all stay — only the status and the note change.
+```
+
+</details>
+
+<details><summary>📋 retire subhalo_simulations</summary>
+
+```
+/cortex — retire the science project subhalo_simulations: confirm it is holding nothing live, then in PyAutoCortex run `python3 scripts/cortex.py retire subhalo_simulations --why "<one line on why>"`, `python3 scripts/cortex.py check`, `pyauto-brain cortex dashboard --apply`, and push the ledger. The row, its phases and its rulings all stay — only the status and the note change.
+```
+
+</details>
 
 ## Projects
 
