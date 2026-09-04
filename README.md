@@ -35,9 +35,11 @@ In full those four steps are ten states — `planned`, `gated`, `ready`,
 or `dropped` — of which only the last three are reachable, and only through
 `scripts/cortex.py rule` (`legacy` and `legacy_wrong` are states of a *run*,
 never of a phase). Checking in is one command from the Brain's cortex
-conductor — `pyauto-brain cortex collect --pull --apply` pulls every submitted
-or running phase's results, scores them and moves what came back to
-`awaiting-ruling`. `batches/` is closed history: the three 2026-08/09 batch
+conductor — **`pyauto-brain cortex checkin --apply`** (see `--dry-run` first)
+pulls every active project through its own sync CLI, scores every submitted or
+running phase against its pre-registered witness, moves what came back to
+`awaiting-ruling`, re-renders the board, pushes the ledger where it is allowed
+to, and prints a summary **by project** with the next prompt for each phase. `batches/` is closed history: the three 2026-08/09 batch
 records and the human's verbatim reviews stay readable because 13 rulings cite
 them, and nothing writes new ones.
 

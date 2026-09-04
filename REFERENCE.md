@@ -485,20 +485,84 @@ Stdlib only; `main(argv)`; no import-time side effects; every verb takes
 
 ---
 
+## Check-in
+
+**One command.** `pyauto-brain cortex checkin` is the door the human types when
+they want to know where their science is:
+
+```bash
+pyauto-brain cortex checkin --dry-run             # what it would pull and score
+pyauto-brain cortex checkin --apply               # pull, score, move, render, push
+pyauto-brain cortex checkin --apply --no-push     # ... without the push
+pyauto-brain cortex checkin --apply --project subhalo_validation
+pyauto-brain cortex checkin --apply --skip-pull   # re-score what is already here
+```
+
+It sweeps every `status: active` row of `projects.yaml`, plus any project that
+owns a phase in `submitted | running`, and runs **that project's own**
+`<local_path>/<sync_cli> pull` — the verb all seven implement. Nothing else
+reaches a cluster; the conductor adds no SSH. A pull that exits non-zero is
+recorded against its project and the sweep continues. Then it scores every live
+phase (the six legs below), moves `running → pulled → awaiting-ruling`,
+re-renders `dashboard.md` + `dashboard.html`, and prints a summary keyed **by
+project** — the last thing on screen, so a chat sees it first.
+
+### `.cortex/pull.json` — the pull manifest
+
+After a successful pull the door writes the manifest at the top of that
+project's pull root (its `mirror` if it has one, else its `local_path`) —
+the same file `collect`'s checkpoint leg reads:
+
+| Key | Written by | Meaning |
+|---|---|---|
+| `project` | the check-in | the `projects.yaml` key this tree belongs to |
+| `pulled_at` | the check-in | UTC `YYYY-MM-DDTHH:MMZ` of the pull that just finished |
+| `cmd` | the check-in | the pull as a human would type it (`cd <local_path> && <sync_cli> pull`) |
+| `rc` | the check-in | that pull's exit code — `0`, or the manifest is not written |
+| `phases_live` | the check-in | the phase paths that were `submitted \| running` when it ran |
+| `schema` | a project's own CLI | `1` where the CLI writes the richer shape; absent = the older `runs`-only one |
+| `checkpoints` | a project's own CLI | `{"<run dir, relative to the pull root>": {"bytes": N, "mtime": ISO}}` |
+| `runs` | a project's own CLI | `{"<jobid|jobid_task>": {"checkpoint_bytes": N, "checkpoint_mtime": ISO}}` |
+
+**Merged, never clobbered.** `autolens_profiling`'s own `hpc/sync` already
+writes `checkpoints` / `runs` here — the only window onto the RAL-only
+`search_internal/checkpoint.hdf5`, which no pull mirrors. The check-in adds its
+five keys and leaves every other key exactly as it found it, so the richer
+manifest keeps making the checkpoint leg scorable. Without a manifest that leg
+is `UNOBSERVABLE`, not `FAIL`.
+
+The manifests live **outside** this repository, in the science trees, so
+`cortex.py check` says nothing about them; the check-in's own note line
+(`<project>: pulled → <path>`) is the record that one was written.
+
+### The push
+
+`--push` is allowed only when **`gh auth status` succeeds** *and* **this
+checkout is clean on `main`** — checked before anything is written, since
+"clean" stops being true the moment the phases move. That is the cloud/laptop
+split and it is also the default: a laptop pushes without asking, a cloud
+session cannot and says so. The push cuts `claude/checkin-<YYYY-MM-DD>` from a
+fresh `origin/main`, commits the changed paths explicitly and pushes;
+`ledger_merge.yml` then merges it into `main` and deletes the branch (below).
+`scripts/ledger_merge.py classify` is asked **first** and a code-classified
+diff — `projects.yaml`, `scripts/`, the prose pages — is refused before the
+branch is cut. Never `main` directly, never `--force`.
+
 ## Driving the Cortex — the conductor and the workflows
 
 The Cortex is state plus `cortex.py`. The reasoning over it — the board and the
 check-in — is the Brain's **cortex conductor**:
 
 ```bash
+pyauto-brain cortex checkin [--dry-run|--apply] [--push|--no-push] [--project KEY] [--skip-pull] [--refreshed ISO]
 pyauto-brain cortex census [--json]                  # what is held, by state
 pyauto-brain cortex dashboard --check | --apply      # render the two pages
 pyauto-brain cortex gates                            # the gated phases and their refs
 pyauto-brain cortex collect [--phase REL] [--pull] [--refreshed ISO] [--apply] [--out F]
 ```
 
-`collect` with no `--phase` scopes to **every** phase in `submitted | running`
-— that is the check-in: pull what came back, score it, move it on.
+`checkin` composes the others (above). `collect` with no `--phase` scopes to
+**every** phase in `submitted | running` — the scorer on its own.
 
 With no Brain install, or from a workflow:
 

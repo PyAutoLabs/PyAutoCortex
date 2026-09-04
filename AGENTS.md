@@ -115,6 +115,7 @@ state table.
 
 | Verb | What it does |
 |------|--------------|
+| `checkin [--dry-run \| --apply] [--push \| --no-push] [--project KEY] [--skip-pull]` | **the check-in** — the one door: pull every active project through its own `sync_cli`, score every live phase, move what came back, re-render the board, push the ledger where the rule allows, and summarise **by project**. `--dry-run` is the default and reaches nothing |
 | `census [--json]` | what the Cortex is holding, by state — the one-screen answer |
 | `dashboard --check` \| `--apply` | render `dashboard.md` + `dashboard.html`; `--check` exits **1 on drift**, **2 on bad args**, anything else = the renderer could not run |
 | `gates` | every gated phase, its refs and their URLs — read-only, offline |
@@ -126,8 +127,11 @@ spells it `--write`.
 
 **Nothing here submits a job.** A human runs the project's own `sync_cli
 submit` line and the `cortex.py move <phase> submitted --run <jobid>` follow-up.
-`collect --pull` is the one leg that shells out, and only to the project's own
-CLI.
+`checkin` and `collect --pull` are the only legs that shell out, and only to
+the project's own CLI — the conductor adds no SSH of its own. Each project
+`checkin` pulls gets a `<pull root>/.cortex/pull.json` manifest
+(REFERENCE.md "Check-in"), merged into whatever that project's CLI already
+wrote there.
 
 ### What runs by itself
 
