@@ -34,7 +34,7 @@ def test_ledger_dirs_and_registry_files_are_ledger():
         "rulings/2026/09/R-20260901-01.md",
         "batches/2026-09-01-pm.md",
         "batches/reviews/2026-09-01-pm.md",
-        "epics.md",
+        "checkin.yaml",
         # generated from the ledger, self-healed on main by dashboard_refresh.yml
         "dashboard.md",
         "dashboard.html",
@@ -126,9 +126,9 @@ def test_every_tracked_file_under_a_ledger_dir_gets_the_right_verdict():
 
 def test_classify_splits_and_dedupes_preserving_order():
     ledger, blocked = ledger_merge.classify(
-        ["epics.md", "scripts/x.py", "epics.md", "phases/a/b.md", "", "  "]
+        ["checkin.yaml", "scripts/x.py", "checkin.yaml", "phases/a/b.md", "", "  "]
     )
-    assert ledger == ["epics.md", "phases/a/b.md"]
+    assert ledger == ["checkin.yaml", "phases/a/b.md"]
     assert blocked == ["scripts/x.py"]
 
 
@@ -175,7 +175,7 @@ def _repo(tmp_path):
     (repo / "phases" / "p").mkdir(parents=True)
     (repo / "rulings/2026/09/R-20260901-01.md").write_text("# R-20260901-01\n\nRuling: accept\n")
     (repo / "phases/p/01_a.md").write_text("# a\n\nState: ready\n")
-    (repo / "epics.md").write_text("# Epics\n")
+    (repo / "checkin.yaml").write_text("refreshed: 2026-09-04T12:00Z\n")
     _git(repo, "add", "-A")
     _git(repo, "commit", "-q", "-m", "base")
     _git(repo, "checkout", "-q", "-b", "claude/work")
@@ -211,7 +211,7 @@ def test_a_renamed_or_deleted_ruling_is_code_but_added_ones_merge(tmp_path):
     _git(repo, "checkout", "-q", "-b", "claude/clean")
     (repo / "rulings/2026/09/R-20260901-04.md").write_text("# R-20260901-04\n")
     (repo / "phases/p/01_a.md").write_text("# a\n\nState: accepted\n")
-    (repo / "epics.md").write_text("# Epics\n\n## x\n")
+    (repo / "checkin.yaml").write_text("refreshed: 2026-09-04T13:00Z\n")
     _git(repo, "add", "-A")
     _git(repo, "commit", "-q", "-m", "clean")
     ledger, blocked = ledger_merge.classify_entries(ledger_merge.changed_entries("main", cwd=repo))
@@ -228,8 +228,8 @@ def _run(*args, stdin=""):
 
 
 def test_cli_exit_codes_separate_ledger_from_code():
-    assert _run("epics.md", "phases/a/b.md", "rulings/2026/09/R-20260901-01.md").returncode == 0
-    result = _run("epics.md", "scripts/cortex.py")
+    assert _run("checkin.yaml", "phases/a/b.md", "rulings/2026/09/R-20260901-01.md").returncode == 0
+    result = _run("checkin.yaml", "scripts/cortex.py")
     assert result.returncode == 1
     assert "scripts/cortex.py" in result.stdout
 

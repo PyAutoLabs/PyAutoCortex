@@ -3,8 +3,9 @@ name: Dashboard Refresh
 # Keeps the generated Cortex pages (`dashboard.md`, linked from the README, and
 # `dashboard.html`, the Pages index) in step with the registry they describe.
 # The pages are rendered by PyAutoBrain's cortex conductor from `phases/`,
-# `rulings/`, `batches/`, `projects.yaml` and `epics.md`, so any push that files
-# a phase, moves it, records a run or lands a ruling makes them stale.
+# `rulings/`, `batches/`, `projects.yaml` and `checkin.yaml`, so any push that
+# files a phase, moves it, records a run, lands a ruling or stamps a check-in
+# makes them stale.
 #
 # Same shape as the Mind's dashboard_refresh.yml, and for the same reason: on
 # pull requests a stale page is an error the author fixes on the branch; on
@@ -33,7 +34,7 @@ on:
       - "rulings/**"
       - "batches/**"
       - "projects.yaml"
-      - "epics.md"
+      - "checkin.yaml"
       - "dashboard.md"
       - "dashboard.html"
   pull_request:
@@ -42,7 +43,7 @@ on:
       - "rulings/**"
       - "batches/**"
       - "projects.yaml"
-      - "epics.md"
+      - "checkin.yaml"
       - "dashboard.md"
       - "dashboard.html"
   workflow_dispatch:

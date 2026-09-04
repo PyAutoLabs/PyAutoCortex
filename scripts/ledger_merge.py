@@ -8,7 +8,7 @@ it: no workflow looks at a `claude/**` push. The branch sits there until a
 human writes an explicit "merge this" prompt.
 
 Almost all of what strands is *ledger*: a phase file under `phases/`, a ruling
-under `rulings/`, a batch record or review under `batches/`, an epic entry.
+under `rulings/`, a batch record or review under `batches/`, a check-in stamp.
 It is the organism's own bookkeeping, it is template-shaped, its drift check
 (`cortex.py check`) is already automated, and a human reviewing it adds
 nothing. The minority that is *code* — `scripts/`, `tests/`, `.github/`,
@@ -64,8 +64,9 @@ LEDGER_DIRS = ("phases/", "rulings/", "batches/")
 # conductor renders them from the registry, `dashboard_refresh.yml` self-heals
 # them on main, and a branch that moves a phase re-renders them in the same
 # push. If they were code, every ordinary ledger branch would stop for a human
-# on two files nobody wrote by hand.
-LEDGER_FILES = ("epics.md", "dashboard.md", "dashboard.html")
+# on two files nobody wrote by hand. `checkin.yaml` is the same kind of thing:
+# one machine-written stamp, pushed by the check-in that earned it.
+LEDGER_FILES = ("checkin.yaml", "dashboard.md", "dashboard.html")
 
 # Names that are ledger by location but must not ride along, for two different
 # reasons.

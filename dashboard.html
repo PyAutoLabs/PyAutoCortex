@@ -219,200 +219,82 @@ a.go{display:inline-block;margin-top:.15rem;padding:.35rem .8rem;
 a.go:hover{opacity:.9;text-decoration:none}
 .mdsrc{font-size:.85em}
 .boards a[data-organ="brain"]{color:#2159c9}@media(prefers-color-scheme:dark){.boards a[data-organ="brain"]{color:#6f9dff}}.boards a[data-organ="mind"]{color:#0a7d72}@media(prefers-color-scheme:dark){.boards a[data-organ="mind"]{color:#2ee6cf}}.boards a[data-organ="cortex"]{color:#a5177d}@media(prefers-color-scheme:dark){.boards a[data-organ="cortex"]{color:#ff7ad9}}.boards a[data-organ="memory"]{color:#6b34d6}@media(prefers-color-scheme:dark){.boards a[data-organ="memory"]{color:#b37eff}}.boards a[data-organ="heart"]{color:#b50f1a}@media(prefers-color-scheme:dark){.boards a[data-organ="heart"]{color:#ff6b73}}.boards a[data-organ="hands"]{color:#9a5400}@media(prefers-color-scheme:dark){.boards a[data-organ="hands"]{color:#ffa733}}.boards a[data-organ="organism"]{color:#0b6fa4}@media(prefers-color-scheme:dark){.boards a[data-organ="organism"]{color:#5ec7f5}}
-.fresh{border-left:3px solid var(--edge);padding:.1rem .9rem;margin:1.2rem 0;background:var(--tint)}.fresh p{margin:.5rem 0}table.map{width:100%;border-collapse:collapse;font-size:.95em}table.map th{text-align:left;color:var(--muted);font-weight:600}table.map td,table.map th{border-bottom:1px solid var(--line);padding:.4rem .5rem .4rem 0;vertical-align:top}</style>
+.fresh{border-left:3px solid var(--edge);padding:.1rem .9rem;margin:1.2rem 0;background:var(--tint)}.fresh p{margin:.5rem 0}table.map{width:100%;border-collapse:collapse;font-size:.95em}table.map th{text-align:left;color:var(--muted);font-weight:600}table.map td,table.map th{border-bottom:1px solid var(--line);padding:.4rem .5rem .4rem 0;vertical-align:top}.checkin{margin:.2rem 0 1.4rem}.paths{margin:.2rem 0}.paths b{display:inline-block;min-width:3.6rem}.stale{color:var(--bad);font-weight:600}</style>
 </head>
 <body>
 <header class="hero"><span class="orb"><svg class="mark" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="24" cy="24" r="20.4"/><path d="M11.8,18.6 C14.4,14.8 17.8,14.4 20.1,17.1 C22.4,19.8 25.8,20.2 28.5,17.9 C31.2,15.6 34.4,16.2 36.1,19.1"/><path d="M11.6,24.6 C14.2,20.8 17.6,20.4 19.9,23.1 C22.2,25.8 25.6,26.2 28.3,23.9 C31.0,21.6 34.2,22.2 35.9,25.1"/><path d="M12.8,30.6 C15.3,27.2 18.4,26.8 20.5,29.4 C22.6,32.0 25.7,32.4 28.2,30.2"/><circle cx="32.6" cy="33.0" r="3.8"/><g fill="currentColor" stroke="none"><circle cx="32.6" cy="33.0" r="1.5"/><circle cx="11.7" cy="18.6" r="1.2"/><circle cx="11.5" cy="24.6" r="1.2"/></g></svg></span><h1>PyAuto<b>Cortex</b><span class="kind">Dashboard</span></h1><div class="rule"></div><p class="tag">Question. Run. Rule.</p></header><p class="lede">Every science phase the Cortex is holding. Tap a phase's 📋 and its next command is on your clipboard. The verdict is always yours — this page hands you the command, never the ruling.</p>
 <ul class="stats"><li><b>0</b><span>Awaiting ruling</span></li><li><b>2</b><span>Running / submitted</span></li><li><b>5</b><span>Ready</span></li><li><b>1</b><span>Gated</span></li><li><b>27</b><span>Recent rulings</span></li></ul>
-<div class="fresh"><p><b>Last updated 2026-09-04.</b> This page is generated from <code>phases/</code>, <code>rulings/</code>, <code>epics.md</code> and <code>projects.yaml</code>, so it is only as current as they are. <code>dashboard_refresh.yml</code> re-renders it on every push to <code>main</code>.</p></div>
+<div class="fresh"><p><b>Last updated 2026-09-04.</b> This page is generated from <code>phases/</code>, <code>rulings/</code> and <code>projects.yaml</code>, so it is only as current as they are. <code>dashboard_refresh.yml</code> re-renders it on every push to <code>main</code>.</p></div>
 <p class="muted mdsrc"><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/dashboard.md">markdown version</a> · <a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/README.md">GitHub Page</a></p>
-<a id="by-project"></a><h2>By project <a class="mdsrc" href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects.yaml">markdown version</a></h2><p class="muted">Where every project is: the folders it lives in, every phase of it that is still open, the locations its <code>## Where to look</code> names, and the prompt for each thing that phase could become. This is the check-in view — <code>pyauto-brain cortex checkin</code> and <code>census --by-project</code> print the same tree.</p>
+<div class="task"><button class="copy" data-cmd="/cortex — check in on every active science project since the last check-in (2026-09-04T17:18Z): pull each project through its sync CLI, score every live run against its pre-registered witness, move what came back, re-render and push the board, then read me the by-project summary with the prompt each phase needs next." aria-label="Copy the Claude command">📋</button><p>check in since last time</p></div>
+<p class="checkin"><b>Last check-in:</b> <time id="checkin" datetime="2026-09-04T17:18Z">2026-09-04T17:18Z</time></p>
+<a id="summary"></a><h2>Summary</h2>
+<p class="muted">One row per active project — the next thing, what it is holding, and when it last ruled.</p>
+<table class="map">
+<tr><th>Project</th><th>Next phase</th><th>Awaiting</th><th>Running</th><th>Ready</th><th>Last ruling</th></tr>
+<tr><td><b>euclid</b></td><td>4 ready</td><td>0</td><td>0</td><td>1</td><td>-</td></tr>
+<tr><td><b>inference_programme</b></td><td>21 gated</td><td>0</td><td>0</td><td>0</td><td>2026-09-04</td></tr>
+<tr><td><b>subhalo_validation</b></td><td>5 running</td><td>0</td><td>2</td><td>4</td><td>2026-09-02</td></tr>
+</table>
+<a id="projects"></a><h2>Projects <a class="mdsrc" href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects.yaml">markdown version</a></h2><p class="muted">The science body map, active first: where each project lives, what it is holding, and the one phase of it to act on next. The plans and the issues are one click away — this page routes to them rather than reprinting them; <code>census --by-project</code> and the check-in printout keep the full per-phase tree.</p>
 <h3>euclid</h3>
-<p class="muted">local <code>/mnt/c/Users/Jammy/Science/euclid</code> · RAL <code>/mnt/ral/jnightin/euclid_strong_lens_modeling_pipeline</code> — phases: planned 3 · ready 1</p>
-<p><b>Ready to submit</b></p>
-<p><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/euclid/dr1_prelim_10_lens_science_run.md">Euclid — phase 4: DR1 prelim science run — 10 real Euclid lenses in euclid_dr1_prelim on RAL</a><span class="tags"><span class="pill n">ready</span></span><span class="facets"> — euclid phase 4 · budget 48:00 · 25 review-min</span></p>
-<ul>
-<li><code>euclid_dr1_prelim</code> (project row <code>euclid_dr1_prelim</code>): the new project tree, once created</li>
-<li><code>euclid</code> (project row <code>euclid</code>): <code>catalogue/catalogue/dr1_prelim_grade_ab_catalogue_csvs_20260623/</code></li>
-<li><code>autolens_assistant/skills/euclid_{prepare_data,setup_pipeline,model_lens,hpc_runs}.md</code></li>
-<li><code>euclid_strong_lens_modeling_pipeline</code>: <code>catalogue/scripts/</code>, <code>hpc/batch_cpu/</code></li>
-</ul>
+<p class="paths"><b>Local</b> <code>/mnt/c/Users/Jammy/Science/euclid</code></p>
+<p class="paths"><b>RAL</b> <code>/mnt/ral/jnightin/euclid_strong_lens_modeling_pipeline</code></p>
+<p class="muted">active · both partition · phases: planned 3 · ready 1</p>
 <div class="task"><button class="copy" data-cmd="phases/euclid/dr1_prelim_10_lens_science_run.md
 # project euclid: no `submit` verb in projects.yaml — submit by hand
-python3 scripts/cortex.py move phases/euclid/dr1_prelim_10_lens_science_run.md submitted --run &lt;jobid&gt;" aria-label="Copy the Claude command">📋</button><p>submit it</p></div>
-<p><b>Planned</b></p>
-<p><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/euclid/resimulate_fitted_lens_simulator.md">Euclid — phase 5: resimulate a fitted Euclid lens, and resimulate the 10 prelim lenses with true magnifications recorded</a><span class="tags"><span class="pill n">planned</span></span><span class="facets"> — euclid phase 5 · budget 24:00 · 20 review-min</span></p>
-<ul>
-<li><code>euclid_strong_lens_modeling_pipeline</code>: <code>scripts/simulator.py</code>, <code>smoke_tests.txt</code></li>
-<li><code>euclid_dr1_prelim</code> (project row): the 10 simulated datasets and their truth table</li>
-<li><code>phases/euclid/dr1_prelim_10_lens_science_run.md</code> — the fits these resimulations start from</li>
-</ul>
-<div class="task"><button class="copy" data-cmd="python3 scripts/cortex.py move phases/euclid/resimulate_fitted_lens_simulator.md ready   # when the `Ready when:` clause in its `## Question` is met" aria-label="Copy the Claude command">📋</button><p>open it</p></div>
-<p><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/euclid/sersic_index_recovery.md">Euclid — phase 6: do we recover Sersic indices? 10 simulated Euclid lenses vs the real prior-edge pile-up</a><span class="tags"><span class="pill n">planned</span></span><span class="facets"> — euclid phase 6 · budget 24:00 · 20 review-min</span></p>
-<ul>
-<li><code>euclid</code> (project row): <code>catalogue/scripts/plot_lens_sersic_index.py</code> — already plots this</li>
-<li><code>euclid_dr1_prelim</code> (project row): the phase-5 simulated datasets and their truth table</li>
-<li><code>euclid_strong_lens_modeling_pipeline</code>: the <code>sersic_lens_model.py</code> family used on the real data</li>
-</ul>
-<div class="task"><button class="copy" data-cmd="python3 scripts/cortex.py move phases/euclid/sersic_index_recovery.md ready   # when the `Ready when:` clause in its `## Question` is met" aria-label="Copy the Claude command">📋</button><p>open it</p></div>
-<p><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/euclid/magnification_robustness.md">Euclid — phase 7: how robust are magnification estimates? model-match vs mismatch across the 10 Euclid lenses</a><span class="tags"><span class="pill n">planned</span></span><span class="facets"> — euclid phase 7 · budget 24:00 · 20 review-min</span></p>
-<ul>
-<li><code>euclid_dr1_prelim</code> (project row): the phase-5 simulations and their recorded true magnifications</li>
-<li>Mind <code>draft/bug/autoarray/delaunay_area_magnification_audit.md</code> — the source-code half (6c),</li>
-<li>Mind <code>draft/test/workspaces/mesh_magnification_correctness.md</code> — the cluster epic's</li>
-</ul>
-<div class="task"><button class="copy" data-cmd="python3 scripts/cortex.py move phases/euclid/magnification_robustness.md ready   # when the `Ready when:` clause in its `## Question` is met" aria-label="Copy the Claude command">📋</button><p>open it</p></div>
+python3 scripts/cortex.py move phases/euclid/dr1_prelim_10_lens_science_run.md submitted --run &lt;jobid&gt;" aria-label="Copy the Claude command">📋</button><p><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/euclid/dr1_prelim_10_lens_science_run.md">Euclid — phase 4: DR1 prelim science run — 10 real Euclid lenses in euclid_dr1_prelim on RAL</a><span class="tags"><span class="pill n">ready</span></span><span class="facets"> — euclid phase 4 · budget 48:00 · 25 review-min</span></p></div>
+<details><summary>3 more open phase(s) · plans and issues</summary><ul>
+<li><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/euclid/resimulate_fitted_lens_simulator.md">Euclid — phase 5: resimulate a fitted Euclid lens, and resimulate the 10 prelim lenses with true magnifications recorded</a> <span class="facets">— planned</span></li>
+<li><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/euclid/sersic_index_recovery.md">Euclid — phase 6: do we recover Sersic indices? 10 simulated Euclid lenses vs the real prior-edge pile-up</a> <span class="facets">— planned</span></li>
+<li><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/euclid/magnification_robustness.md">Euclid — phase 7: how robust are magnification estimates? model-match vs mismatch across the 10 Euclid lenses</a> <span class="facets">— planned</span></li>
+</ul><p><a href="https://github.com/PyAutoLabs/PyAutoCortex/tree/main/phases/euclid/">phases/euclid/</a></p></details>
 <h3>inference_programme</h3>
-<p class="muted">local <code>/home/jammy/Code/PyAutoLabs/autolens_profiling</code> · mirror <code>/mnt/c/Users/Jammy/Science/inference_programme</code> · RAL <code>/mnt/ral/jnightin/autolens_profiling</code> — phases: accepted 7 · dropped 11 · gated 1 · planned 4</p>
-<p><b>Gated</b></p>
-<p><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/inference_programme/nautilus_mass_pix_baseline.md">Inference_programme — phase 21: the Nautilus bar on mass_pix — f1e8 (refs convention) and f1e5 (like-for-like)</a><span class="tags"><span class="pill n">gated</span></span><span class="facets"> — inference_programme phase 21 · budget 4:00 · 15 review-min</span></p>
-<ul>
-<li><code>autolens_profiling/results/notes/gradient_slam/LEDGER.md</code> — the <code>mass_pix</code> target definition and the provenance of every fixed value</li>
-<li><code>autolens_profiling/scripts/imaging/searches/nautilus/mass_pix.py</code> — the driver (written by the dev leg)</li>
-<li><code>autolens_profiling/hpc/batch_gpu/</code> — the two-arm submit script and its <code>WALL-BASIS</code> block</li>
-<li><code>inference_programme</code> (project row): <code>output/searches/nautilus/imaging/mass_pix/hst/pos_tauto0.2_f1e8/</code> and <code>.../pos_tauto0.2_f1e5/</code> — the two run trees, each with <code>positions.info</code></li>
-<li><code>autolens_profiling/results/searches/nautilus/imaging/mass_pix/hst/</code> — the result rows</li>
-<li><code>logs/output/</code> and <code>logs/error/</code> on the mirror</li>
-<li><code>autolens_profiling/results/baselines/InferenceRefs_v1/pixelization_pos_fp64/</code> — the nearest certified neighbour (12 free parameters vs this cell's 7)</li>
-</ul>
+<p class="paths"><b>Local</b> <code>/home/jammy/Code/PyAutoLabs/autolens_profiling</code></p>
+<p class="paths"><b>Mirror</b> <code>/mnt/c/Users/Jammy/Science/inference_programme</code></p>
+<p class="paths"><b>RAL</b> <code>/mnt/ral/jnightin/autolens_profiling</code></p>
+<p class="muted">active · both partition · phases: accepted 7 · dropped 11 · gated 1 · planned 4</p>
 <div class="task"><button class="copy" data-cmd="python3 scripts/cortex.py gates   # then, once they have closed: move phases/inference_programme/nautilus_mass_pix_baseline.md ready
-# gates: autolens_profiling#218" aria-label="Copy the Claude command">📋</button><p>its gates</p></div>
-<p><b>Planned</b></p>
-<p><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/inference_programme/cluster_extended_source_inference.md">Inference_programme — phase 11: cluster extended-source inference — gradient-based fitting building on JAX knowledge</a><span class="tags"><span class="pill n">planned</span></span><span class="facets"> — inference_programme phase 11 · budget 24:00 · 25 review-min</span></p>
-<ul>
-<li>Mind <code>draft/feature/autolens/source_cluster_arc.md</code> — the arc ledger (this is its line 11)</li>
-<li>Mind <code>draft/feature/workspaces/cluster_pixelized_analysisfactor.md</code> — cluster phase 10, the gate</li>
-<li><code>inference_programme</code> (project row): <code>output/searches/*/cluster/</code> — the cluster trees the</li>
-</ul>
-<div class="task"><button class="copy" data-cmd="python3 scripts/cortex.py move phases/inference_programme/cluster_extended_source_inference.md ready   # when the `Ready when:` clause in its `## Question` is met" aria-label="Copy the Claude command">📋</button><p>open it</p></div>
-<p><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/inference_programme/legacy_point_output_sweep.md">Inference_programme — phase 19: sweep the point-source families out of the RAL active output/ tree into output/legacy_point/</a><span class="tags"><span class="pill n">planned</span></span><span class="facets"> — inference_programme phase 19 · budget 2:00 · 5 review-min</span></p>
-<ul>
-<li><code>/mnt/ral/jnightin/autolens_profiling/output/</code> — the three point-source</li>
-<li><code>/mnt/c/Users/Jammy/Science/inference_programme/</code></li>
-<li><code>autolens_profiling/results/notes/inference/DECISIONS.md</code> (2026-09-01 entry —</li>
-<li><code>autolens_profiling/results/baselines/InferenceRefs_v1/SUBMIT_LIST.md</code> — the</li>
-<li><code>rulings/2026/09/R-20260902-01.md</code>, <code>rulings/2026/09/R-20260904-01.md</code></li>
-</ul>
-<div class="task"><button class="copy" data-cmd="python3 scripts/cortex.py move phases/inference_programme/legacy_point_output_sweep.md ready   # when the `Ready when:` clause in its `## Question` is met" aria-label="Copy the Claude command">📋</button><p>open it</p></div>
-<p><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/inference_programme/prodigy_mass_pix.md">Inference_programme — phase 22: MultiStartProdigy on mass_pix — does a gradient search beat Nautilus in a SLaM mass[1] shape?</a><span class="tags"><span class="pill n">planned</span></span><span class="facets"> — inference_programme phase 22 · budget 4:00 · 25 review-min</span></p>
-<ul>
-<li><code>autolens_profiling/results/notes/gradient_slam/LEDGER.md</code> — the question, the inherited MGE Prodigy evidence and the engine-split positions rule</li>
-<li><code>autolens_profiling/scripts/imaging/searches/multi_start_prodigy_autoconv/mass_pix.py</code> — the driver (written by the dev leg)</li>
-<li><code>autolens_profiling/scripts/misc/searches/_samplers.py</code> — the per-cell <code>imaging:mass_pix</code> rows (n_starts 16, batch 4, n_steps 3000)</li>
-<li><code>autolens_profiling/hpc/batch_gpu/</code> — the seeds 0–4 array submit and its <code>WALL-BASIS</code> block</li>
-<li><code>inference_programme</code> (project row): <code>output/searches/multi_start_prodigy_autoconv/imaging/mass_pix/hst/pos_tauto0.2_f1e5/</code> — the five run trees, each with <code>positions.info</code></li>
-<li><code>autolens_profiling/results/searches/multi_start_prodigy_autoconv/imaging/mass_pix/hst/</code> — the result rows</li>
-<li><code>logs/output/</code> and <code>logs/error/</code> on the mirror</li>
-<li>phase 21 (<code>nautilus_mass_pix_baseline</code>) — the bar this is scored against</li>
-</ul>
-<div class="task"><button class="copy" data-cmd="python3 scripts/cortex.py move phases/inference_programme/prodigy_mass_pix.md ready   # when the `Ready when:` clause in its `## Question` is met" aria-label="Copy the Claude command">📋</button><p>open it</p></div>
-<p><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/inference_programme/likelihood_term_levers.md">Inference_programme — phase 23: likelihood-term levers on mass_pix — slogdet vs cholesky, relative jitter on reg.Adapt</a><span class="tags"><span class="pill n">planned</span></span><span class="facets"> — inference_programme phase 23 · budget 4:00 · 20 review-min</span></p>
-<ul>
-<li><code>autolens_profiling/results/notes/gradient_slam/LEDGER.md</code> — the phase table and the inherited rules</li>
-<li>phase 22 (<code>prodigy_mass_pix</code>) — the control this phase is paired against; its ruling decides whether this arms at all</li>
-<li><code>autolens_profiling#166</code> — the slogdet-as-PyAutoArray-default reminder this lever folds</li>
-<li><code>autolens_profiling/results/notes/inference/phase_08_regularization/RESULTS.md</code> — the retired programme's slogdet A/B, for what was already learned</li>
-<li><code>PyAutoArray</code> <code>constant.py:53</code> and the <code>adapt.py</code> regularization schemes — the absolute <code>1e-8</code> lift vs <code>jitter_relative</code></li>
-<li><code>inference_programme</code> (project row): <code>output/searches/multi_start_prodigy_autoconv/imaging/mass_pix/hst/</code> — the lever arms land beside the phase 22 control</li>
-<li><code>logs/output/</code> and <code>logs/error/</code> on the mirror</li>
-</ul>
-<div class="task"><button class="copy" data-cmd="python3 scripts/cortex.py move phases/inference_programme/likelihood_term_levers.md ready   # when the `Ready when:` clause in its `## Question` is met" aria-label="Copy the Claude command">📋</button><p>open it</p></div>
+# gates: autolens_profiling#218" aria-label="Copy the Claude command">📋</button><p><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/inference_programme/nautilus_mass_pix_baseline.md">Inference_programme — phase 21: the Nautilus bar on mass_pix — f1e8 (refs convention) and f1e5 (like-for-like)</a><span class="tags"><span class="pill n">gated</span></span><span class="facets"> — inference_programme phase 21 · budget 4:00 · 15 review-min</span></p></div>
+<details><summary>4 more open phase(s) · plans and issues</summary><ul>
+<li><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/inference_programme/cluster_extended_source_inference.md">Inference_programme — phase 11: cluster extended-source inference — gradient-based fitting building on JAX knowledge</a> <span class="facets">— planned</span></li>
+<li><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/inference_programme/legacy_point_output_sweep.md">Inference_programme — phase 19: sweep the point-source families out of the RAL active output/ tree into output/legacy_point/</a> <span class="facets">— planned</span></li>
+<li><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/inference_programme/prodigy_mass_pix.md">Inference_programme — phase 22: MultiStartProdigy on mass_pix — does a gradient search beat Nautilus in a SLaM mass[1] shape?</a> <span class="facets">— planned</span></li>
+<li><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/inference_programme/likelihood_term_levers.md">Inference_programme — phase 23: likelihood-term levers on mass_pix — slogdet vs cholesky, relative jitter on reg.Adapt</a> <span class="facets">— planned</span></li>
+</ul><p><a href="https://github.com/PyAutoLabs/PyAutoCortex/tree/main/phases/inference_programme/">phases/inference_programme/</a> · <a href="https://github.com/PyAutoLabs/autolens_profiling/issues">issues</a></p></details>
 <h3>subhalo_validation</h3>
-<p class="muted">local <code>/mnt/c/Users/Jammy/Science/subhalo_validation</code> · RAL <code>/mnt/ral/jnightin/subhalo_validation</code> — phases: ready 4 · running 2</p>
-<p><b>Still out there</b></p>
-<p><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/subhalo_validation/rectangular_adapt_pl_eff_0.md">Subhalo_validation — phase 5: rectangular_adapt on pl_eff_0 — the clumpy-source lens on the RectangularBilinear comparison</a><span class="tags"><span class="pill n">running</span></span><span class="facets"> — subhalo_validation phase 5 · budget 48:00 · 8 review-min · runs 342237_1, 342240_1</span><span class="facets"> — ⚠️ failed runs: 342240_1</span><span class="facets"> — wall 0:00 of 48:00 (0%)</span></p>
-<ul>
-<li><code>subhalo_validation</code> (project row): <code>output/subhalo/detect/rectangular_adapt/pl_eff_0_no_subhalo/</code></li>
-<li><code>results/rectangular_adapt/pl_eff_0_no_subhalo.json</code> — the witness (untracked in git by the human's ruling; laptop only)</li>
-<li><code>wiki/project/results_summary.md</code>, <code>wiki/project/state.md</code></li>
-</ul>
-<div class="task"><button class="copy" data-cmd="cd /mnt/c/Users/Jammy/Science/subhalo_validation &amp;&amp; hpc/sync jobs" aria-label="Copy the Claude command">📋</button><p>where the jobs stand</p></div>
-<div class="task"><button class="copy" data-cmd="The PyAutoCortex phase phases/subhalo_validation/rectangular_adapt_pl_eff_0.md needs running again. Draft the rerun body — what came back, and what changes — for my approval, then file it and relaunch:
-python3 scripts/cortex.py rule phases/subhalo_validation/rectangular_adapt_pl_eff_0.md rerun --body &lt;file&gt;
-python3 scripts/cortex.py move phases/subhalo_validation/rectangular_adapt_pl_eff_0.md ready
-cd /mnt/c/Users/Jammy/Science/subhalo_validation &amp;&amp; hpc/sync submit &lt;script&gt;
-python3 scripts/cortex.py move phases/subhalo_validation/rectangular_adapt_pl_eff_0.md submitted --run &lt;jobid&gt;   # one run per call; --after &lt;run&gt; chains the next" aria-label="Copy the Claude command">📋</button><p>run it again</p></div>
-<p><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/subhalo_validation/rectangular_adapt_pl_eff_1_outer.md">Subhalo_validation — phase 6: rectangular_adapt on pl_eff_1_outer — the outer-component lens on the RectangularBilinear comparison</a><span class="tags"><span class="pill n">running</span></span><span class="facets"> — subhalo_validation phase 6 · budget 48:00 · 8 review-min · runs 342237_2, 342240_2</span><span class="facets"> — ⚠️ failed runs: 342240_2</span><span class="facets"> — wall 0:00 of 48:00 (0%)</span></p>
-<ul>
-<li><code>subhalo_validation</code> (project row): <code>output/subhalo/detect/rectangular_adapt/pl_eff_1_outer_no_subhalo/</code></li>
-<li><code>results/rectangular_adapt/pl_eff_1_outer_no_subhalo.json</code> — the witness (untracked in git by the human's ruling; laptop only)</li>
-<li><code>wiki/project/results_summary.md</code>, <code>wiki/project/state.md</code></li>
-</ul>
-<div class="task"><button class="copy" data-cmd="cd /mnt/c/Users/Jammy/Science/subhalo_validation &amp;&amp; hpc/sync jobs" aria-label="Copy the Claude command">📋</button><p>where the jobs stand</p></div>
-<div class="task"><button class="copy" data-cmd="The PyAutoCortex phase phases/subhalo_validation/rectangular_adapt_pl_eff_1_outer.md needs running again. Draft the rerun body — what came back, and what changes — for my approval, then file it and relaunch:
-python3 scripts/cortex.py rule phases/subhalo_validation/rectangular_adapt_pl_eff_1_outer.md rerun --body &lt;file&gt;
-python3 scripts/cortex.py move phases/subhalo_validation/rectangular_adapt_pl_eff_1_outer.md ready
-cd /mnt/c/Users/Jammy/Science/subhalo_validation &amp;&amp; hpc/sync submit &lt;script&gt;
-python3 scripts/cortex.py move phases/subhalo_validation/rectangular_adapt_pl_eff_1_outer.md submitted --run &lt;jobid&gt;   # one run per call; --after &lt;run&gt; chains the next" aria-label="Copy the Claude command">📋</button><p>run it again</p></div>
-<p><b>Ready to submit</b></p>
-<p><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/subhalo_validation/delaunay_adapt_split_pl_eff_0.md">Subhalo_validation — phase 2: delaunay_adapt_split on pl_eff_0 — the clumpy-source lens</a><span class="tags"><span class="pill n">ready</span></span><span class="facets"> — subhalo_validation phase 2 · budget 48:00 · 8 review-min · runs 342027_1, 342231_1, 342234_1</span><span class="facets"> — ⚠️ failed runs: 342234_1</span></p>
-<ul>
-<li><code>subhalo_validation</code> (project row): <code>output/subhalo/detect/delaunay_adapt_split/pl_eff_0_no_subhalo/</code></li>
-<li><code>results/delaunay_adapt_split/pl_eff_0_no_subhalo.json</code> — the witness</li>
-<li><code>wiki/project/results_summary.md</code>, <code>wiki/project/state.md</code></li>
-</ul>
-<div class="task"><button class="copy" data-cmd="phases/subhalo_validation/delaunay_adapt_split_pl_eff_0.md
-cd /mnt/c/Users/Jammy/Science/subhalo_validation &amp;&amp; hpc/sync submit &lt;script&gt;
-python3 scripts/cortex.py move phases/subhalo_validation/delaunay_adapt_split_pl_eff_0.md submitted --run &lt;jobid&gt;" aria-label="Copy the Claude command">📋</button><p>submit it</p></div>
-<p><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/subhalo_validation/delaunay_adapt_split_pl_eff_1_outer.md">Subhalo_validation — phase 3: delaunay_adapt_split on pl_eff_1_outer — the outer-component lens, plus the AdaptSplit fix rerun</a><span class="tags"><span class="pill n">ready</span></span><span class="facets"> — subhalo_validation phase 3 · budget 48:00 · 8 review-min · runs 342027_2, 342093_0, 342231_2, 342234_2</span><span class="facets"> — ⚠️ failed runs: 342234_2</span></p>
-<ul>
-<li><code>subhalo_validation</code> (project row): <code>output/subhalo/detect/delaunay_adapt_split/pl_eff_1_outer_no_subhalo/</code></li>
-<li><code>output/subhalo/detect/delaunay_adapt_split/pl_eff_1_outer_no_subhalo_adapt_split_fix/source_pix[1]/085f85ba6970436a1b8b115b6c9b3fbf</code></li>
-<li><code>results/delaunay_adapt_split/pl_eff_1_outer_no_subhalo.json</code> — the witness</li>
-<li><code>results/figures/adapt_split_fix_{regularization,source_plane,residuals}_before_after.jpg</code></li>
-<li><code>wiki/project/2026-08-31-adapt-split-fix-and-rectangular.md</code>, <code>wiki/project/state.md</code></li>
-</ul>
-<div class="task"><button class="copy" data-cmd="phases/subhalo_validation/delaunay_adapt_split_pl_eff_1_outer.md
-cd /mnt/c/Users/Jammy/Science/subhalo_validation &amp;&amp; hpc/sync submit &lt;script&gt;
-python3 scripts/cortex.py move phases/subhalo_validation/delaunay_adapt_split_pl_eff_1_outer.md submitted --run &lt;jobid&gt;" aria-label="Copy the Claude command">📋</button><p>submit it</p></div>
-<p><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md">Subhalo_validation — phase 1: delaunay_adapt_split on pl_sersic_0 — the false-positive null</a><span class="tags"><span class="pill n">ready</span></span><span class="facets"> — subhalo_validation phase 1 · budget 48:00 · 10 review-min · runs 342027_0, 342231_0, 342234_0</span><span class="facets"> — ⚠️ failed runs: 342234_0</span></p>
-<ul>
-<li><code>subhalo_validation</code> (project row): <code>output/subhalo/detect/delaunay_adapt_split/pl_sersic_0_no_subhalo/</code></li>
-<li><code>results/delaunay_adapt_split/pl_sersic_0_no_subhalo.json</code> — the witness</li>
-<li><code>wiki/project/results_summary.md</code> — the scientific commentary and the provenance row</li>
-</ul>
-<div class="task"><button class="copy" data-cmd="phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md
-cd /mnt/c/Users/Jammy/Science/subhalo_validation &amp;&amp; hpc/sync submit &lt;script&gt;
-python3 scripts/cortex.py move phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md submitted --run &lt;jobid&gt;" aria-label="Copy the Claude command">📋</button><p>submit it</p></div>
-<p><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md">Subhalo_validation — phase 4: rectangular_adapt on pl_sersic_0 — the RectangularBilinear comparison</a><span class="tags"><span class="pill n">ready</span></span><span class="facets"> — subhalo_validation phase 4 · budget 48:00 · 15 review-min · runs 342094_0, 342095_0, 342237_0, 342240_0</span><span class="facets"> — ⚠️ failed runs: 342240_0</span></p>
-<ul>
-<li><code>subhalo_validation</code> (project row): <code>output/subhalo/detect/rectangular_adapt/pl_sersic_0_no_subhalo/</code></li>
-<li><code>output/subhalo/detect/rectangular_adapt/pl_sersic_0_no_subhalo/source_lp[1]/3e9ced20d8180a15d972b1874636c5c1</code> — job A</li>
-<li><code>results/rectangular_adapt/pl_sersic_0_no_subhalo.json</code> — the witness (untracked; laptop only)</li>
-<li><code>wiki/project/2026-08-31-adapt-split-fix-and-rectangular.md</code>, <code>wiki/project/results_summary.md</code></li>
-</ul>
-<div class="task"><button class="copy" data-cmd="phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md
-cd /mnt/c/Users/Jammy/Science/subhalo_validation &amp;&amp; hpc/sync submit &lt;script&gt;
-python3 scripts/cortex.py move phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md submitted --run &lt;jobid&gt;" aria-label="Copy the Claude command">📋</button><p>submit it</p></div>
-<p class="muted">8 dormant project(s) with nothing open: <code>concr</code> (none) · <code>cowls_diana</code> (none) · <code>euclid_dr1_prelim</code> (none) · <code>ic50_workspace</code> (planned 1) · <code>pj011646</code> (none) · <code>profiling</code> (none) · <code>slope_hierarchy</code> (planned 2) · <code>subhalo_simulations</code> (none)</p>
+<p class="paths"><b>Local</b> <code>/mnt/c/Users/Jammy/Science/subhalo_validation</code></p>
+<p class="paths"><b>RAL</b> <code>/mnt/ral/jnightin/subhalo_validation</code></p>
+<p class="muted">active · ral partition · phases: ready 4 · running 2</p>
+<div class="task"><button class="copy" data-cmd="cd /mnt/c/Users/Jammy/Science/subhalo_validation &amp;&amp; hpc/sync jobs" aria-label="Copy the Claude command">📋</button><p><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/subhalo_validation/rectangular_adapt_pl_eff_0.md">Subhalo_validation — phase 5: rectangular_adapt on pl_eff_0 — the clumpy-source lens on the RectangularBilinear comparison</a><span class="tags"><span class="pill n">running</span></span><span class="facets"> — subhalo_validation phase 5 · budget 48:00 · 8 review-min · runs 342237_1, 342240_1</span><span class="facets"> — ⚠️ failed runs: 342240_1</span></p></div>
+<details><summary>5 more open phase(s) · plans and issues</summary><ul>
+<li><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/subhalo_validation/rectangular_adapt_pl_eff_1_outer.md">Subhalo_validation — phase 6: rectangular_adapt on pl_eff_1_outer — the outer-component lens on the RectangularBilinear comparison</a> <span class="facets">— running</span></li>
+<li><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md">Subhalo_validation — phase 1: delaunay_adapt_split on pl_sersic_0 — the false-positive null</a> <span class="facets">— ready</span></li>
+<li><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/subhalo_validation/delaunay_adapt_split_pl_eff_0.md">Subhalo_validation — phase 2: delaunay_adapt_split on pl_eff_0 — the clumpy-source lens</a> <span class="facets">— ready</span></li>
+<li><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/subhalo_validation/delaunay_adapt_split_pl_eff_1_outer.md">Subhalo_validation — phase 3: delaunay_adapt_split on pl_eff_1_outer — the outer-component lens, plus the AdaptSplit fix rerun</a> <span class="facets">— ready</span></li>
+<li><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md">Subhalo_validation — phase 4: rectangular_adapt on pl_sersic_0 — the RectangularBilinear comparison</a> <span class="facets">— ready</span></li>
+</ul><p><a href="https://github.com/PyAutoLabs/PyAutoCortex/tree/main/phases/subhalo_validation/">phases/subhalo_validation/</a> · <a href="https://github.com/PyAutoLabs/subhalo_validation/issues">issues</a></p></details>
+<p class="muted">8 project(s) with nothing open: <code>euclid_dr1_prelim</code> (planned · none) · <code>concr</code> (dormant · none) · <code>cowls_diana</code> (dormant · none) · <code>ic50_workspace</code> (dormant · planned 1) · <code>pj011646</code> (dormant · none) · <code>profiling</code> (dormant · none) · <code>slope_hierarchy</code> (dormant · planned 2) · <code>subhalo_simulations</code> (dormant · none)</p>
 <a id="awaiting-ruling"></a><h2>Awaiting ruling <a class="mdsrc" href="https://github.com/PyAutoLabs/PyAutoCortex/tree/main/phases/">markdown version</a></h2><p class="muted">Results are in and nothing is running — the human's verdict is the only thing outstanding. Ordered failures first, then the phases a ruling is required for, then the clean ones.</p>
 <p class="muted">(nothing awaiting a ruling)</p>
 <a id="running--submitted"></a><h2>Running / submitted <a class="mdsrc" href="https://github.com/PyAutoLabs/PyAutoCortex/tree/main/phases/">markdown version</a></h2><p class="muted">On the queue or on the machine. Wall is what the run lines record at the last refresh, against the phase's own budget.</p>
 <div class="task"><button class="copy" data-cmd="cd /mnt/c/Users/Jammy/Science/subhalo_validation &amp;&amp; hpc/sync jobs" aria-label="Copy the Claude command">📋</button><p><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/subhalo_validation/rectangular_adapt_pl_eff_0.md">Subhalo_validation — phase 5: rectangular_adapt on pl_eff_0 — the clumpy-source lens on the RectangularBilinear comparison</a><span class="tags"><span class="pill n">running</span></span><span class="facets"> — subhalo_validation phase 5 · budget 48:00 · 8 review-min · runs 342237_1, 342240_1</span><span class="facets"> — wall 0:00 of 48:00 (0%)</span></p></div>
-<div class="task"><button class="copy" data-cmd="The PyAutoCortex phase phases/subhalo_validation/rectangular_adapt_pl_eff_0.md needs running again. Draft the rerun body — what came back, and what changes — for my approval, then file it and relaunch:
-python3 scripts/cortex.py rule phases/subhalo_validation/rectangular_adapt_pl_eff_0.md rerun --body &lt;file&gt;
-python3 scripts/cortex.py move phases/subhalo_validation/rectangular_adapt_pl_eff_0.md ready
-cd /mnt/c/Users/Jammy/Science/subhalo_validation &amp;&amp; hpc/sync submit &lt;script&gt;
-python3 scripts/cortex.py move phases/subhalo_validation/rectangular_adapt_pl_eff_0.md submitted --run &lt;jobid&gt;   # one run per call; --after &lt;run&gt; chains the next" aria-label="Copy the Claude command">📋</button><p>↳ run it again</p></div>
 <div class="task"><button class="copy" data-cmd="cd /mnt/c/Users/Jammy/Science/subhalo_validation &amp;&amp; hpc/sync jobs" aria-label="Copy the Claude command">📋</button><p><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/subhalo_validation/rectangular_adapt_pl_eff_1_outer.md">Subhalo_validation — phase 6: rectangular_adapt on pl_eff_1_outer — the outer-component lens on the RectangularBilinear comparison</a><span class="tags"><span class="pill n">running</span></span><span class="facets"> — subhalo_validation phase 6 · budget 48:00 · 8 review-min · runs 342237_2, 342240_2</span><span class="facets"> — wall 0:00 of 48:00 (0%)</span></p></div>
-<div class="task"><button class="copy" data-cmd="The PyAutoCortex phase phases/subhalo_validation/rectangular_adapt_pl_eff_1_outer.md needs running again. Draft the rerun body — what came back, and what changes — for my approval, then file it and relaunch:
-python3 scripts/cortex.py rule phases/subhalo_validation/rectangular_adapt_pl_eff_1_outer.md rerun --body &lt;file&gt;
-python3 scripts/cortex.py move phases/subhalo_validation/rectangular_adapt_pl_eff_1_outer.md ready
-cd /mnt/c/Users/Jammy/Science/subhalo_validation &amp;&amp; hpc/sync submit &lt;script&gt;
-python3 scripts/cortex.py move phases/subhalo_validation/rectangular_adapt_pl_eff_1_outer.md submitted --run &lt;jobid&gt;   # one run per call; --after &lt;run&gt; chains the next" aria-label="Copy the Claude command">📋</button><p>↳ run it again</p></div>
 <a id="ready"></a><h2>Ready <a class="mdsrc" href="https://github.com/PyAutoLabs/PyAutoCortex/tree/main/phases/">markdown version</a></h2><p class="muted">Gate cleared, witness registered — everything that could be submitted today.</p>
+<div class="task"><button class="copy" data-cmd="phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md
+cd /mnt/c/Users/Jammy/Science/subhalo_validation &amp;&amp; hpc/sync submit &lt;script&gt;
+python3 scripts/cortex.py move phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md submitted --run &lt;jobid&gt;" aria-label="Copy the Claude command">📋</button><p><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md">Subhalo_validation — phase 1: delaunay_adapt_split on pl_sersic_0 — the false-positive null</a><span class="tags"><span class="pill g">ready</span></span><span class="facets"> — subhalo_validation phase 1 · budget 48:00 · 10 review-min · runs 342027_0, 342231_0, 342234_0</span></p></div>
+<details><summary>3 more ready</summary>
 <div class="task"><button class="copy" data-cmd="phases/subhalo_validation/delaunay_adapt_split_pl_eff_0.md
 cd /mnt/c/Users/Jammy/Science/subhalo_validation &amp;&amp; hpc/sync submit &lt;script&gt;
 python3 scripts/cortex.py move phases/subhalo_validation/delaunay_adapt_split_pl_eff_0.md submitted --run &lt;jobid&gt;" aria-label="Copy the Claude command">📋</button><p><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/subhalo_validation/delaunay_adapt_split_pl_eff_0.md">Subhalo_validation — phase 2: delaunay_adapt_split on pl_eff_0 — the clumpy-source lens</a><span class="tags"><span class="pill g">ready</span></span><span class="facets"> — subhalo_validation phase 2 · budget 48:00 · 8 review-min · runs 342027_1, 342231_1, 342234_1</span></p></div>
 <div class="task"><button class="copy" data-cmd="phases/subhalo_validation/delaunay_adapt_split_pl_eff_1_outer.md
 cd /mnt/c/Users/Jammy/Science/subhalo_validation &amp;&amp; hpc/sync submit &lt;script&gt;
 python3 scripts/cortex.py move phases/subhalo_validation/delaunay_adapt_split_pl_eff_1_outer.md submitted --run &lt;jobid&gt;" aria-label="Copy the Claude command">📋</button><p><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/subhalo_validation/delaunay_adapt_split_pl_eff_1_outer.md">Subhalo_validation — phase 3: delaunay_adapt_split on pl_eff_1_outer — the outer-component lens, plus the AdaptSplit fix rerun</a><span class="tags"><span class="pill g">ready</span></span><span class="facets"> — subhalo_validation phase 3 · budget 48:00 · 8 review-min · runs 342027_2, 342093_0, 342231_2, 342234_2</span></p></div>
-<div class="task"><button class="copy" data-cmd="phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md
-cd /mnt/c/Users/Jammy/Science/subhalo_validation &amp;&amp; hpc/sync submit &lt;script&gt;
-python3 scripts/cortex.py move phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md submitted --run &lt;jobid&gt;" aria-label="Copy the Claude command">📋</button><p><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md">Subhalo_validation — phase 1: delaunay_adapt_split on pl_sersic_0 — the false-positive null</a><span class="tags"><span class="pill g">ready</span></span><span class="facets"> — subhalo_validation phase 1 · budget 48:00 · 10 review-min · runs 342027_0, 342231_0, 342234_0</span></p></div>
 <div class="task"><button class="copy" data-cmd="phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md
 cd /mnt/c/Users/Jammy/Science/subhalo_validation &amp;&amp; hpc/sync submit &lt;script&gt;
 python3 scripts/cortex.py move phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md submitted --run &lt;jobid&gt;" aria-label="Copy the Claude command">📋</button><p><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md">Subhalo_validation — phase 4: rectangular_adapt on pl_sersic_0 — the RectangularBilinear comparison</a><span class="tags"><span class="pill g">ready</span></span><span class="facets"> — subhalo_validation phase 4 · budget 48:00 · 15 review-min · runs 342094_0, 342095_0, 342237_0, 342240_0</span></p></div>
+</details>
 <div class="task"><button class="copy" data-cmd="phases/euclid/dr1_prelim_10_lens_science_run.md
 # project euclid: no `submit` verb in projects.yaml — submit by hand
 python3 scripts/cortex.py move phases/euclid/dr1_prelim_10_lens_science_run.md submitted --run &lt;jobid&gt;" aria-label="Copy the Claude command">📋</button><p><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/euclid/dr1_prelim_10_lens_science_run.md">Euclid — phase 4: DR1 prelim science run — 10 real Euclid lenses in euclid_dr1_prelim on RAL</a><span class="tags"><span class="pill g">ready</span></span><span class="facets"> — euclid phase 4 · budget 48:00 · 25 review-min</span></p></div>
@@ -435,26 +317,6 @@ python3 scripts/cortex.py move phases/euclid/dr1_prelim_10_lens_science_run.md s
 <tr><td><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/rulings/2026/09/R-20260902-05.md">R-20260902-05</a></td><td>rerun</td><td>phases/subhalo_validation/delaunay_adapt_split_pl_eff_0.md</td><td>-</td></tr>
 <tr><td><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/rulings/2026/09/R-20260902-04.md">R-20260902-04</a></td><td>rerun</td><td>phases/subhalo_validation/delaunay_adapt_split_pl_eff_1_outer.md</td><td>-</td></tr>
 </table>
-<a id="epics"></a><h2>Epics <a class="mdsrc" href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/epics.md">markdown version</a></h2><p class="muted">Long-running programmes whose science half lives here; each card links its development half in the Mind.</p>
-<div class="task"><button class="copy" data-cmd="Work out where the Cortex half of the epic euclid-dr1-prep stands from phases/euclid/ and tell me what its next phase is." aria-label="Copy the Claude command">📋</button><p><b>prepare the Euclid DR1 modelling pipeline, then prove it on real DR1 lenses</b><span class="facets"> — Mind half: <code>PyAutoMind/epics.md#euclid-dr1-prep</code></span><span class="facets"> — ledger: <code>phases/euclid/</code></span><span class="facets"> — science half opens at phase 4, gated on the 3a PR and the 3b issue; 5–7 planned behind it</span></p></div>
-<div class="task"><button class="copy" data-cmd="Work out where the Cortex half of the epic gradient-slam-baseline stands from autolens_profiling/results/notes/gradient_slam/LEDGER.md and tell me what its next phase is." aria-label="Copy the Claude command">📋</button><p><b>would a gradient search dropped into a SLaM mass[1] search beat Nautilus?</b><span class="facets"> — Mind half: <code>draft/feature/autolens_profiling/gradient_slam_mass_pix_target.md (dev leg; Cortex phase 21 is gated on its issue autolens_profiling#218)</code></span><span class="facets"> — ledger: <code>autolens_profiling/results/notes/gradient_slam/LEDGER.md</code></span><span class="facets"> — BORN 2026-09-04 from the retired jax-inference-profiling; phase 21 (Nautilus baseline) gated on the dev leg autolens_profiling#218; phase 20 (cost probe) dropped the same day — the epic measures steps, not gradient cost</span></p></div>
-<div class="task"><button class="copy" data-cmd="Work out where the Cortex half of the epic graphical-ep stands from PyAutoMind/draft/research/graphical_ep/ep_campaign.md and tell me what its next phase is." aria-label="Copy the Claude command">📋</button><p><b>expectation propagation as the scalable alternative to graphical joint fits</b><span class="facets"> — Mind half: <code>PyAutoMind/epics.md#graphical-ep</code></span><span class="facets"> — ledger: <code>PyAutoMind/draft/research/graphical_ep/ep_campaign.md</code></span><span class="facets"> — both science phases planned; the projects are dormant and the campaign's</span></p></div>
-<div class="task"><button class="copy" data-cmd="Work out where the Cortex half of the epic cluster-strong-lensing stands from PyAutoMind/draft/feature/autolens/source_cluster_arc.md and tell me what its next phase is." aria-label="Copy the Claude command">📋</button><p><b>the Source &amp; Cluster arc — cluster mass modelling and pixelized source inference</b><span class="facets"> — Mind half: <code>PyAutoMind/epics.md#cluster-strong-lensing</code></span><span class="facets"> — ledger: <code>PyAutoMind/draft/feature/autolens/source_cluster_arc.md</code></span><span class="facets"> — one science phase (arc phase 11), planned behind the arc's phase 10</span></p></div>
-<a id="projects"></a><h2>Projects <a class="mdsrc" href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects.yaml">markdown version</a></h2><p class="muted">The science body map — where each project lives, what syncs it and where its witness lands.</p>
-<table class="map">
-<tr><th>Project</th><th>Status</th><th>Partition</th><th>Sync</th><th>Witness</th></tr>
-<tr><td><b>concr</b></td><td>dormant</td><td>both</td><td><code>hpc/sync</code></td><td><code>results/**/*.json</code></td></tr>
-<tr><td><b>cowls_diana</b></td><td>dormant</td><td>both</td><td><code>hpc/sync</code></td><td><code>results/**/*.json</code></td></tr>
-<tr><td><b>euclid</b></td><td>active</td><td>both</td><td><code>hpc/sync</code></td><td><code>catalogue/**/*.csv</code></td></tr>
-<tr><td><b>euclid_dr1_prelim</b></td><td>planned</td><td>both</td><td><code>hpc/sync</code></td><td><code>results/**/*.json</code></td></tr>
-<tr><td><b>ic50_workspace</b></td><td>dormant</td><td>both</td><td><code>hpc/sync</code></td><td><code>results/**/*.json</code></td></tr>
-<tr><td><b>inference_programme</b></td><td>active</td><td>both</td><td><code>hpc/sync</code></td><td><code>results/searches/**/*.json</code></td></tr>
-<tr><td><b>pj011646</b></td><td>dormant</td><td>both</td><td><code>hpc/sync</code></td><td><code>results/**/*.json</code></td></tr>
-<tr><td><b>profiling</b></td><td>dormant</td><td>both</td><td><code>hpc/sync</code></td><td><code>results/**/*.json</code></td></tr>
-<tr><td><b>slope_hierarchy</b></td><td>dormant</td><td>both</td><td><code>hpc/sync</code></td><td><code>results/**/*.json</code></td></tr>
-<tr><td><b>subhalo_simulations</b></td><td>dormant</td><td>both</td><td><code>hpc/sync</code></td><td><code>results/**/*.json</code></td></tr>
-<tr><td><b>subhalo_validation</b></td><td>active</td><td>ral</td><td><code>hpc/sync</code></td><td><code>results/**/*.json</code></td></tr>
-</table>
 <ul class="boards"><li class="muted" style="padding:.3rem 0">Boards:</li><li><a data-organ="brain" href="https://pyautolabs.github.io/PyAutoBrain/">Brain</a></li><li><a data-organ="mind" href="https://pyautolabs.github.io/PyAutoMind/">Mind</a></li><li><a data-organ="memory" href="https://pyautolabs.github.io/PyAutoMemory/">Memory</a></li><li><a data-organ="heart" href="https://pyautolabs.github.io/PyAutoHeart/">Heart</a></li><li><a data-organ="hands" href="https://pyautolabs.github.io/PyAutoHands/">Hands</a></li><li><a data-organ="organism" href="https://pyautolabs.github.io/PyAutoScientist/">Scientist</a></li></ul>
 <script>async function copyCmd(b){
   const cmd=b.dataset.cmd;
@@ -468,5 +330,6 @@ python3 scripts/cortex.py move phases/euclid/dr1_prelim_10_lens_science_run.md s
 document.addEventListener("click",e=>{
   const b=e.target.closest("button.copy");if(b)copyCmd(b);});
 </script>
+<script>(function(){var e=document.getElementById('checkin');if(!e)return;var t=e.getAttribute('datetime'),d=t?new Date(t):null;if(!d||isNaN(d.getTime())||(Date.now()-d.getTime())/60000>60){e.classList.add('stale');e.textContent+=' \u00b7 stale, paste the check-in';}})();</script>
 </body>
 </html>

@@ -6,7 +6,7 @@ This is the markdown version of the [PyAutoCortex Dashboard](https://pyautolabs.
 
 Every science phase the Cortex is holding, on one page: what is waiting on your verdict, what is running, what could be launched next and what is still gated on development work. The verdict is always yours — this page hands you the command, never the ruling.
 
-> **Last updated 2026-09-04.** This page is generated from `phases/`, `rulings/`, `epics.md` and `projects.yaml`, so it is only as current as they are. `dashboard_refresh.yml` re-renders it on every push to `main`.
+> **Last updated 2026-09-04.** This page is generated from `phases/`, `rulings/` and `projects.yaml`, so it is only as current as they are. `dashboard_refresh.yml` re-renders it on every push to `main`.
 
 | Where | Count |
 |-------|------:|
@@ -16,25 +16,39 @@ Every science phase the Cortex is holding, on one page: what is waiting on your 
 | [Gated](#gated) | 1 |
 | [Recent rulings](#recent-rulings) | 27 |
 
-## By project
+<details><summary>📋 check in since last time</summary>
 
-[markdown version](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects.yaml) — Where every project is: the folders it lives in, every phase of it that is still open, the locations its `## Where to look` names, and the prompt for each thing that phase could become. This is the check-in view — `pyauto-brain cortex checkin` and `census --by-project` print the same tree.
+```
+/cortex — check in on every active science project since the last check-in (2026-09-04T17:18Z): pull each project through its sync CLI, score every live run against its pre-registered witness, move what came back, re-render and push the board, then read me the by-project summary with the prompt each phase needs next.
+```
+
+</details>
+
+**Last check-in:** 2026-09-04T17:18Z
+
+## Summary
+
+One row per active project — the next thing, what it is holding, and when it last ruled.
+
+| Project | Next phase | Awaiting | Running | Ready | Last ruling |
+|---|---|---:|---:|---:|---|
+| euclid | 4 ready | 0 | 0 | 1 | - |
+| inference_programme | 21 gated | 0 | 0 | 0 | 2026-09-04 |
+| subhalo_validation | 5 running | 0 | 2 | 4 | 2026-09-02 |
+
+## Projects
+
+[markdown version](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects.yaml) — The science body map, active first: where each project lives, what it is holding, and the one phase of it to act on next. The plans and the issues are one click away — this page routes to them rather than reprinting them; `census --by-project` and the check-in printout keep the full per-phase tree.
 
 ### euclid
 
-- local `/mnt/c/Users/Jammy/Science/euclid` · RAL `/mnt/ral/jnightin/euclid_strong_lens_modeling_pipeline`
-- phases: planned 3 · ready 1
+**Local** `/mnt/c/Users/Jammy/Science/euclid`
 
-**Ready to submit**
+**RAL** `/mnt/ral/jnightin/euclid_strong_lens_modeling_pipeline`
 
-<a href="phases/euclid/dr1_prelim_10_lens_science_run.md">Euclid — phase 4: DR1 prelim science run — 10 real Euclid lenses in euclid_dr1_prelim on RAL</a> — euclid phase 4 · budget 48:00 · 25 review-min — **ready**
+active · both partition · phases: planned 3 · ready 1
 
-- where to look: `euclid_dr1_prelim` (project row `euclid_dr1_prelim`): the new project tree, once created
-- where to look: `euclid` (project row `euclid`): `catalogue/catalogue/dr1_prelim_grade_ab_catalogue_csvs_20260623/`
-- where to look: `autolens_assistant/skills/euclid_{prepare_data,setup_pipeline,model_lens,hpc_runs}.md`
-- where to look: `euclid_strong_lens_modeling_pipeline`: `catalogue/scripts/`, `hpc/batch_cpu/`
-
-<details><summary>📋 submit it</summary>
+<details><summary>📋 <a href="phases/euclid/dr1_prelim_10_lens_science_run.md">Euclid — phase 4: DR1 prelim science run — 10 real Euclid lenses in euclid_dr1_prelim on RAL</a> — euclid phase 4 · budget 48:00 · 25 review-min — <b>ready</b></summary>
 
 ```
 phases/euclid/dr1_prelim_10_lens_science_run.md
@@ -44,68 +58,27 @@ python3 scripts/cortex.py move phases/euclid/dr1_prelim_10_lens_science_run.md s
 
 </details>
 
-**Planned**
+<details><summary>3 more open phase(s) · plans and issues</summary>
 
-<a href="phases/euclid/resimulate_fitted_lens_simulator.md">Euclid — phase 5: resimulate a fitted Euclid lens, and resimulate the 10 prelim lenses with true magnifications recorded</a> — euclid phase 5 · budget 24:00 · 20 review-min — **planned**
+- [Euclid — phase 5: resimulate a fitted Euclid lens, and resimulate the 10 prelim lenses with true magnifications recorded](phases/euclid/resimulate_fitted_lens_simulator.md) — planned
+- [Euclid — phase 6: do we recover Sersic indices? 10 simulated Euclid lenses vs the real prior-edge pile-up](phases/euclid/sersic_index_recovery.md) — planned
+- [Euclid — phase 7: how robust are magnification estimates? model-match vs mismatch across the 10 Euclid lenses](phases/euclid/magnification_robustness.md) — planned
 
-- where to look: `euclid_strong_lens_modeling_pipeline`: `scripts/simulator.py`, `smoke_tests.txt`
-- where to look: `euclid_dr1_prelim` (project row): the 10 simulated datasets and their truth table
-- where to look: `phases/euclid/dr1_prelim_10_lens_science_run.md` — the fits these resimulations start from
-
-<details><summary>📋 open it</summary>
-
-```
-python3 scripts/cortex.py move phases/euclid/resimulate_fitted_lens_simulator.md ready   # when the `Ready when:` clause in its `## Question` is met
-```
-
-</details>
-
-<a href="phases/euclid/sersic_index_recovery.md">Euclid — phase 6: do we recover Sersic indices? 10 simulated Euclid lenses vs the real prior-edge pile-up</a> — euclid phase 6 · budget 24:00 · 20 review-min — **planned**
-
-- where to look: `euclid` (project row): `catalogue/scripts/plot_lens_sersic_index.py` — already plots this
-- where to look: `euclid_dr1_prelim` (project row): the phase-5 simulated datasets and their truth table
-- where to look: `euclid_strong_lens_modeling_pipeline`: the `sersic_lens_model.py` family used on the real data
-
-<details><summary>📋 open it</summary>
-
-```
-python3 scripts/cortex.py move phases/euclid/sersic_index_recovery.md ready   # when the `Ready when:` clause in its `## Question` is met
-```
-
-</details>
-
-<a href="phases/euclid/magnification_robustness.md">Euclid — phase 7: how robust are magnification estimates? model-match vs mismatch across the 10 Euclid lenses</a> — euclid phase 7 · budget 24:00 · 20 review-min — **planned**
-
-- where to look: `euclid_dr1_prelim` (project row): the phase-5 simulations and their recorded true magnifications
-- where to look: Mind `draft/bug/autoarray/delaunay_area_magnification_audit.md` — the source-code half (6c),
-- where to look: Mind `draft/test/workspaces/mesh_magnification_correctness.md` — the cluster epic's
-
-<details><summary>📋 open it</summary>
-
-```
-python3 scripts/cortex.py move phases/euclid/magnification_robustness.md ready   # when the `Ready when:` clause in its `## Question` is met
-```
+[phases/euclid/](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/phases/euclid/)
 
 </details>
 
 ### inference_programme
 
-- local `/home/jammy/Code/PyAutoLabs/autolens_profiling` · mirror `/mnt/c/Users/Jammy/Science/inference_programme` · RAL `/mnt/ral/jnightin/autolens_profiling`
-- phases: accepted 7 · dropped 11 · gated 1 · planned 4
+**Local** `/home/jammy/Code/PyAutoLabs/autolens_profiling`
 
-**Gated**
+**Mirror** `/mnt/c/Users/Jammy/Science/inference_programme`
 
-<a href="phases/inference_programme/nautilus_mass_pix_baseline.md">Inference_programme — phase 21: the Nautilus bar on mass_pix — f1e8 (refs convention) and f1e5 (like-for-like)</a> — inference_programme phase 21 · budget 4:00 · 15 review-min — **gated**
+**RAL** `/mnt/ral/jnightin/autolens_profiling`
 
-- where to look: `autolens_profiling/results/notes/gradient_slam/LEDGER.md` — the `mass_pix` target definition and the provenance of every fixed value
-- where to look: `autolens_profiling/scripts/imaging/searches/nautilus/mass_pix.py` — the driver (written by the dev leg)
-- where to look: `autolens_profiling/hpc/batch_gpu/` — the two-arm submit script and its `WALL-BASIS` block
-- where to look: `inference_programme` (project row): `output/searches/nautilus/imaging/mass_pix/hst/pos_tauto0.2_f1e8/` and `.../pos_tauto0.2_f1e5/` — the two run trees, each with `positions.info`
-- where to look: `autolens_profiling/results/searches/nautilus/imaging/mass_pix/hst/` — the result rows
-- where to look: `logs/output/` and `logs/error/` on the mirror
-- where to look: `autolens_profiling/results/baselines/InferenceRefs_v1/pixelization_pos_fp64/` — the nearest certified neighbour (12 free parameters vs this cell's 7)
+active · both partition · phases: accepted 7 · dropped 11 · gated 1 · planned 4
 
-<details><summary>📋 its gates</summary>
+<details><summary>📋 <a href="phases/inference_programme/nautilus_mass_pix_baseline.md">Inference_programme — phase 21: the Nautilus bar on mass_pix — f1e8 (refs convention) and f1e5 (like-for-like)</a> — inference_programme phase 21 · budget 4:00 · 15 review-min — <b>gated</b></summary>
 
 ```
 python3 scripts/cortex.py gates   # then, once they have closed: move phases/inference_programme/nautilus_mass_pix_baseline.md ready
@@ -114,91 +87,26 @@ python3 scripts/cortex.py gates   # then, once they have closed: move phases/inf
 
 </details>
 
-**Planned**
+<details><summary>4 more open phase(s) · plans and issues</summary>
 
-<a href="phases/inference_programme/cluster_extended_source_inference.md">Inference_programme — phase 11: cluster extended-source inference — gradient-based fitting building on JAX knowledge</a> — inference_programme phase 11 · budget 24:00 · 25 review-min — **planned**
+- [Inference_programme — phase 11: cluster extended-source inference — gradient-based fitting building on JAX knowledge](phases/inference_programme/cluster_extended_source_inference.md) — planned
+- [Inference_programme — phase 19: sweep the point-source families out of the RAL active output/ tree into output/legacy_point/](phases/inference_programme/legacy_point_output_sweep.md) — planned
+- [Inference_programme — phase 22: MultiStartProdigy on mass_pix — does a gradient search beat Nautilus in a SLaM mass[1] shape?](phases/inference_programme/prodigy_mass_pix.md) — planned
+- [Inference_programme — phase 23: likelihood-term levers on mass_pix — slogdet vs cholesky, relative jitter on reg.Adapt](phases/inference_programme/likelihood_term_levers.md) — planned
 
-- where to look: Mind `draft/feature/autolens/source_cluster_arc.md` — the arc ledger (this is its line 11)
-- where to look: Mind `draft/feature/workspaces/cluster_pixelized_analysisfactor.md` — cluster phase 10, the gate
-- where to look: `inference_programme` (project row): `output/searches/*/cluster/` — the cluster trees the
-
-<details><summary>📋 open it</summary>
-
-```
-python3 scripts/cortex.py move phases/inference_programme/cluster_extended_source_inference.md ready   # when the `Ready when:` clause in its `## Question` is met
-```
-
-</details>
-
-<a href="phases/inference_programme/legacy_point_output_sweep.md">Inference_programme — phase 19: sweep the point-source families out of the RAL active output/ tree into output/legacy_point/</a> — inference_programme phase 19 · budget 2:00 · 5 review-min — **planned**
-
-- where to look: `/mnt/ral/jnightin/autolens_profiling/output/` — the three point-source
-- where to look: `/mnt/c/Users/Jammy/Science/inference_programme/`
-- where to look: `autolens_profiling/results/notes/inference/DECISIONS.md` (2026-09-01 entry —
-- where to look: `autolens_profiling/results/baselines/InferenceRefs_v1/SUBMIT_LIST.md` — the
-- where to look: `rulings/2026/09/R-20260902-01.md`, `rulings/2026/09/R-20260904-01.md`
-
-<details><summary>📋 open it</summary>
-
-```
-python3 scripts/cortex.py move phases/inference_programme/legacy_point_output_sweep.md ready   # when the `Ready when:` clause in its `## Question` is met
-```
-
-</details>
-
-<a href="phases/inference_programme/prodigy_mass_pix.md">Inference_programme — phase 22: MultiStartProdigy on mass_pix — does a gradient search beat Nautilus in a SLaM mass[1] shape?</a> — inference_programme phase 22 · budget 4:00 · 25 review-min — **planned**
-
-- where to look: `autolens_profiling/results/notes/gradient_slam/LEDGER.md` — the question, the inherited MGE Prodigy evidence and the engine-split positions rule
-- where to look: `autolens_profiling/scripts/imaging/searches/multi_start_prodigy_autoconv/mass_pix.py` — the driver (written by the dev leg)
-- where to look: `autolens_profiling/scripts/misc/searches/_samplers.py` — the per-cell `imaging:mass_pix` rows (n_starts 16, batch 4, n_steps 3000)
-- where to look: `autolens_profiling/hpc/batch_gpu/` — the seeds 0–4 array submit and its `WALL-BASIS` block
-- where to look: `inference_programme` (project row): `output/searches/multi_start_prodigy_autoconv/imaging/mass_pix/hst/pos_tauto0.2_f1e5/` — the five run trees, each with `positions.info`
-- where to look: `autolens_profiling/results/searches/multi_start_prodigy_autoconv/imaging/mass_pix/hst/` — the result rows
-- where to look: `logs/output/` and `logs/error/` on the mirror
-- where to look: phase 21 (`nautilus_mass_pix_baseline`) — the bar this is scored against
-
-<details><summary>📋 open it</summary>
-
-```
-python3 scripts/cortex.py move phases/inference_programme/prodigy_mass_pix.md ready   # when the `Ready when:` clause in its `## Question` is met
-```
-
-</details>
-
-<a href="phases/inference_programme/likelihood_term_levers.md">Inference_programme — phase 23: likelihood-term levers on mass_pix — slogdet vs cholesky, relative jitter on reg.Adapt</a> — inference_programme phase 23 · budget 4:00 · 20 review-min — **planned**
-
-- where to look: `autolens_profiling/results/notes/gradient_slam/LEDGER.md` — the phase table and the inherited rules
-- where to look: phase 22 (`prodigy_mass_pix`) — the control this phase is paired against; its ruling decides whether this arms at all
-- where to look: `autolens_profiling#166` — the slogdet-as-PyAutoArray-default reminder this lever folds
-- where to look: `autolens_profiling/results/notes/inference/phase_08_regularization/RESULTS.md` — the retired programme's slogdet A/B, for what was already learned
-- where to look: `PyAutoArray` `constant.py:53` and the `adapt.py` regularization schemes — the absolute `1e-8` lift vs `jitter_relative`
-- where to look: `inference_programme` (project row): `output/searches/multi_start_prodigy_autoconv/imaging/mass_pix/hst/` — the lever arms land beside the phase 22 control
-- where to look: `logs/output/` and `logs/error/` on the mirror
-
-<details><summary>📋 open it</summary>
-
-```
-python3 scripts/cortex.py move phases/inference_programme/likelihood_term_levers.md ready   # when the `Ready when:` clause in its `## Question` is met
-```
+[phases/inference_programme/](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/phases/inference_programme/) · [issues](https://github.com/PyAutoLabs/autolens_profiling/issues)
 
 </details>
 
 ### subhalo_validation
 
-- local `/mnt/c/Users/Jammy/Science/subhalo_validation` · RAL `/mnt/ral/jnightin/subhalo_validation`
-- phases: ready 4 · running 2
+**Local** `/mnt/c/Users/Jammy/Science/subhalo_validation`
 
-**Still out there**
+**RAL** `/mnt/ral/jnightin/subhalo_validation`
 
-<a href="phases/subhalo_validation/rectangular_adapt_pl_eff_0.md">Subhalo_validation — phase 5: rectangular_adapt on pl_eff_0 — the clumpy-source lens on the RectangularBilinear comparison</a> — subhalo_validation phase 5 · budget 48:00 · 8 review-min · runs 342237_1, 342240_1 — **running** — ⚠️ failed runs: 342240_1
+active · ral partition · phases: ready 4 · running 2
 
-- wall 0:00 of 48:00 (0%)
-
-- where to look: `subhalo_validation` (project row): `output/subhalo/detect/rectangular_adapt/pl_eff_0_no_subhalo/`
-- where to look: `results/rectangular_adapt/pl_eff_0_no_subhalo.json` — the witness (untracked in git by the human's ruling; laptop only)
-- where to look: `wiki/project/results_summary.md`, `wiki/project/state.md`
-
-<details><summary>📋 where the jobs stand</summary>
+<details><summary>📋 <a href="phases/subhalo_validation/rectangular_adapt_pl_eff_0.md">Subhalo_validation — phase 5: rectangular_adapt on pl_eff_0 — the clumpy-source lens on the RectangularBilinear comparison</a> — subhalo_validation phase 5 · budget 48:00 · 8 review-min · runs 342237_1, 342240_1 — <b>running</b> — ⚠️ failed runs: 342240_1</summary>
 
 ```
 cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync jobs
@@ -206,118 +114,21 @@ cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync jobs
 
 </details>
 
-<details><summary>📋 run it again</summary>
+<details><summary>5 more open phase(s) · plans and issues</summary>
 
-```
-The PyAutoCortex phase phases/subhalo_validation/rectangular_adapt_pl_eff_0.md needs running again. Draft the rerun body — what came back, and what changes — for my approval, then file it and relaunch:
-python3 scripts/cortex.py rule phases/subhalo_validation/rectangular_adapt_pl_eff_0.md rerun --body <file>
-python3 scripts/cortex.py move phases/subhalo_validation/rectangular_adapt_pl_eff_0.md ready
-cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync submit <script>
-python3 scripts/cortex.py move phases/subhalo_validation/rectangular_adapt_pl_eff_0.md submitted --run <jobid>   # one run per call; --after <run> chains the next
-```
+- [Subhalo_validation — phase 6: rectangular_adapt on pl_eff_1_outer — the outer-component lens on the RectangularBilinear comparison](phases/subhalo_validation/rectangular_adapt_pl_eff_1_outer.md) — running
+- [Subhalo_validation — phase 1: delaunay_adapt_split on pl_sersic_0 — the false-positive null](phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md) — ready
+- [Subhalo_validation — phase 2: delaunay_adapt_split on pl_eff_0 — the clumpy-source lens](phases/subhalo_validation/delaunay_adapt_split_pl_eff_0.md) — ready
+- [Subhalo_validation — phase 3: delaunay_adapt_split on pl_eff_1_outer — the outer-component lens, plus the AdaptSplit fix rerun](phases/subhalo_validation/delaunay_adapt_split_pl_eff_1_outer.md) — ready
+- [Subhalo_validation — phase 4: rectangular_adapt on pl_sersic_0 — the RectangularBilinear comparison](phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md) — ready
 
-</details>
-
-<a href="phases/subhalo_validation/rectangular_adapt_pl_eff_1_outer.md">Subhalo_validation — phase 6: rectangular_adapt on pl_eff_1_outer — the outer-component lens on the RectangularBilinear comparison</a> — subhalo_validation phase 6 · budget 48:00 · 8 review-min · runs 342237_2, 342240_2 — **running** — ⚠️ failed runs: 342240_2
-
-- wall 0:00 of 48:00 (0%)
-
-- where to look: `subhalo_validation` (project row): `output/subhalo/detect/rectangular_adapt/pl_eff_1_outer_no_subhalo/`
-- where to look: `results/rectangular_adapt/pl_eff_1_outer_no_subhalo.json` — the witness (untracked in git by the human's ruling; laptop only)
-- where to look: `wiki/project/results_summary.md`, `wiki/project/state.md`
-
-<details><summary>📋 where the jobs stand</summary>
-
-```
-cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync jobs
-```
+[phases/subhalo_validation/](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/phases/subhalo_validation/) · [issues](https://github.com/PyAutoLabs/subhalo_validation/issues)
 
 </details>
 
-<details><summary>📋 run it again</summary>
+<details><summary>8 project(s) with nothing open</summary>
 
-```
-The PyAutoCortex phase phases/subhalo_validation/rectangular_adapt_pl_eff_1_outer.md needs running again. Draft the rerun body — what came back, and what changes — for my approval, then file it and relaunch:
-python3 scripts/cortex.py rule phases/subhalo_validation/rectangular_adapt_pl_eff_1_outer.md rerun --body <file>
-python3 scripts/cortex.py move phases/subhalo_validation/rectangular_adapt_pl_eff_1_outer.md ready
-cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync submit <script>
-python3 scripts/cortex.py move phases/subhalo_validation/rectangular_adapt_pl_eff_1_outer.md submitted --run <jobid>   # one run per call; --after <run> chains the next
-```
-
-</details>
-
-**Ready to submit**
-
-<a href="phases/subhalo_validation/delaunay_adapt_split_pl_eff_0.md">Subhalo_validation — phase 2: delaunay_adapt_split on pl_eff_0 — the clumpy-source lens</a> — subhalo_validation phase 2 · budget 48:00 · 8 review-min · runs 342027_1, 342231_1, 342234_1 — **ready** — ⚠️ failed runs: 342234_1
-
-- where to look: `subhalo_validation` (project row): `output/subhalo/detect/delaunay_adapt_split/pl_eff_0_no_subhalo/`
-- where to look: `results/delaunay_adapt_split/pl_eff_0_no_subhalo.json` — the witness
-- where to look: `wiki/project/results_summary.md`, `wiki/project/state.md`
-
-<details><summary>📋 submit it</summary>
-
-```
-phases/subhalo_validation/delaunay_adapt_split_pl_eff_0.md
-cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync submit <script>
-python3 scripts/cortex.py move phases/subhalo_validation/delaunay_adapt_split_pl_eff_0.md submitted --run <jobid>
-```
-
-</details>
-
-<a href="phases/subhalo_validation/delaunay_adapt_split_pl_eff_1_outer.md">Subhalo_validation — phase 3: delaunay_adapt_split on pl_eff_1_outer — the outer-component lens, plus the AdaptSplit fix rerun</a> — subhalo_validation phase 3 · budget 48:00 · 8 review-min · runs 342027_2, 342093_0, 342231_2, 342234_2 — **ready** — ⚠️ failed runs: 342234_2
-
-- where to look: `subhalo_validation` (project row): `output/subhalo/detect/delaunay_adapt_split/pl_eff_1_outer_no_subhalo/`
-- where to look: `output/subhalo/detect/delaunay_adapt_split/pl_eff_1_outer_no_subhalo_adapt_split_fix/source_pix[1]/085f85ba6970436a1b8b115b6c9b3fbf`
-- where to look: `results/delaunay_adapt_split/pl_eff_1_outer_no_subhalo.json` — the witness
-- where to look: `results/figures/adapt_split_fix_{regularization,source_plane,residuals}_before_after.jpg`
-- where to look: `wiki/project/2026-08-31-adapt-split-fix-and-rectangular.md`, `wiki/project/state.md`
-
-<details><summary>📋 submit it</summary>
-
-```
-phases/subhalo_validation/delaunay_adapt_split_pl_eff_1_outer.md
-cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync submit <script>
-python3 scripts/cortex.py move phases/subhalo_validation/delaunay_adapt_split_pl_eff_1_outer.md submitted --run <jobid>
-```
-
-</details>
-
-<a href="phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md">Subhalo_validation — phase 1: delaunay_adapt_split on pl_sersic_0 — the false-positive null</a> — subhalo_validation phase 1 · budget 48:00 · 10 review-min · runs 342027_0, 342231_0, 342234_0 — **ready** — ⚠️ failed runs: 342234_0
-
-- where to look: `subhalo_validation` (project row): `output/subhalo/detect/delaunay_adapt_split/pl_sersic_0_no_subhalo/`
-- where to look: `results/delaunay_adapt_split/pl_sersic_0_no_subhalo.json` — the witness
-- where to look: `wiki/project/results_summary.md` — the scientific commentary and the provenance row
-
-<details><summary>📋 submit it</summary>
-
-```
-phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md
-cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync submit <script>
-python3 scripts/cortex.py move phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md submitted --run <jobid>
-```
-
-</details>
-
-<a href="phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md">Subhalo_validation — phase 4: rectangular_adapt on pl_sersic_0 — the RectangularBilinear comparison</a> — subhalo_validation phase 4 · budget 48:00 · 15 review-min · runs 342094_0, 342095_0, 342237_0, 342240_0 — **ready** — ⚠️ failed runs: 342240_0
-
-- where to look: `subhalo_validation` (project row): `output/subhalo/detect/rectangular_adapt/pl_sersic_0_no_subhalo/`
-- where to look: `output/subhalo/detect/rectangular_adapt/pl_sersic_0_no_subhalo/source_lp[1]/3e9ced20d8180a15d972b1874636c5c1` — job A
-- where to look: `results/rectangular_adapt/pl_sersic_0_no_subhalo.json` — the witness (untracked; laptop only)
-- where to look: `wiki/project/2026-08-31-adapt-split-fix-and-rectangular.md`, `wiki/project/results_summary.md`
-
-<details><summary>📋 submit it</summary>
-
-```
-phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md
-cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync submit <script>
-python3 scripts/cortex.py move phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md submitted --run <jobid>
-```
-
-</details>
-
-<details><summary>8 dormant project(s) with nothing open</summary>
-
-`concr` (none) · `cowls_diana` (none) · `euclid_dr1_prelim` (none) · `ic50_workspace` (planned 1) · `pj011646` (none) · `profiling` (none) · `slope_hierarchy` (planned 2) · `subhalo_simulations` (none)
+`euclid_dr1_prelim` (planned · none) · `concr` (dormant · none) · `cowls_diana` (dormant · none) · `ic50_workspace` (dormant · planned 1) · `pj011646` (dormant · none) · `profiling` (dormant · none) · `slope_hierarchy` (dormant · planned 2) · `subhalo_simulations` (dormant · none)
 
 </details>
 
@@ -339,18 +150,6 @@ cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync jobs
 
 </details>
 
-<details><summary>📋 ↳ run it again</summary>
-
-```
-The PyAutoCortex phase phases/subhalo_validation/rectangular_adapt_pl_eff_0.md needs running again. Draft the rerun body — what came back, and what changes — for my approval, then file it and relaunch:
-python3 scripts/cortex.py rule phases/subhalo_validation/rectangular_adapt_pl_eff_0.md rerun --body <file>
-python3 scripts/cortex.py move phases/subhalo_validation/rectangular_adapt_pl_eff_0.md ready
-cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync submit <script>
-python3 scripts/cortex.py move phases/subhalo_validation/rectangular_adapt_pl_eff_0.md submitted --run <jobid>   # one run per call; --after <run> chains the next
-```
-
-</details>
-
 <details><summary>📋 <a href="phases/subhalo_validation/rectangular_adapt_pl_eff_1_outer.md">Subhalo_validation — phase 6: rectangular_adapt on pl_eff_1_outer — the outer-component lens on the RectangularBilinear comparison</a> — subhalo_validation phase 6 · budget 48:00 · 8 review-min · runs 342237_2, 342240_2 — wall 0:00 of 48:00 (0%)</summary>
 
 ```
@@ -359,21 +158,21 @@ cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync jobs
 
 </details>
 
-<details><summary>📋 ↳ run it again</summary>
+## Ready
+
+[markdown version](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/phases/) — Gate cleared, witness registered — everything that could be submitted today.
+
+<details><summary>📋 <a href="phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md">Subhalo_validation — phase 1: delaunay_adapt_split on pl_sersic_0 — the false-positive null</a> — subhalo_validation phase 1 · budget 48:00 · 10 review-min · runs 342027_0, 342231_0, 342234_0</summary>
 
 ```
-The PyAutoCortex phase phases/subhalo_validation/rectangular_adapt_pl_eff_1_outer.md needs running again. Draft the rerun body — what came back, and what changes — for my approval, then file it and relaunch:
-python3 scripts/cortex.py rule phases/subhalo_validation/rectangular_adapt_pl_eff_1_outer.md rerun --body <file>
-python3 scripts/cortex.py move phases/subhalo_validation/rectangular_adapt_pl_eff_1_outer.md ready
+phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md
 cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync submit <script>
-python3 scripts/cortex.py move phases/subhalo_validation/rectangular_adapt_pl_eff_1_outer.md submitted --run <jobid>   # one run per call; --after <run> chains the next
+python3 scripts/cortex.py move phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md submitted --run <jobid>
 ```
 
 </details>
 
-## Ready
-
-[markdown version](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/phases/) — Gate cleared, witness registered — everything that could be submitted today.
+<details><summary>3 more ready</summary>
 
 <details><summary>📋 <a href="phases/subhalo_validation/delaunay_adapt_split_pl_eff_0.md">Subhalo_validation — phase 2: delaunay_adapt_split on pl_eff_0 — the clumpy-source lens</a> — subhalo_validation phase 2 · budget 48:00 · 8 review-min · runs 342027_1, 342231_1, 342234_1</summary>
 
@@ -395,16 +194,6 @@ python3 scripts/cortex.py move phases/subhalo_validation/delaunay_adapt_split_pl
 
 </details>
 
-<details><summary>📋 <a href="phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md">Subhalo_validation — phase 1: delaunay_adapt_split on pl_sersic_0 — the false-positive null</a> — subhalo_validation phase 1 · budget 48:00 · 10 review-min · runs 342027_0, 342231_0, 342234_0</summary>
-
-```
-phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md
-cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync submit <script>
-python3 scripts/cortex.py move phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md submitted --run <jobid>
-```
-
-</details>
-
 <details><summary>📋 <a href="phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md">Subhalo_validation — phase 4: rectangular_adapt on pl_sersic_0 — the RectangularBilinear comparison</a> — subhalo_validation phase 4 · budget 48:00 · 15 review-min · runs 342094_0, 342095_0, 342237_0, 342240_0</summary>
 
 ```
@@ -412,6 +201,8 @@ phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md
 cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync submit <script>
 python3 scripts/cortex.py move phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md submitted --run <jobid>
 ```
+
+</details>
 
 </details>
 
@@ -456,60 +247,6 @@ python3 scripts/cortex.py gates   # then, once they have closed: move phases/inf
 | [R-20260902-06](rulings/2026/09/R-20260902-06.md) | rerun | phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md | - |
 | [R-20260902-05](rulings/2026/09/R-20260902-05.md) | rerun | phases/subhalo_validation/delaunay_adapt_split_pl_eff_0.md | - |
 | [R-20260902-04](rulings/2026/09/R-20260902-04.md) | rerun | phases/subhalo_validation/delaunay_adapt_split_pl_eff_1_outer.md | - |
-
-## Epics
-
-[markdown version](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/epics.md) — Long-running programmes whose science half lives here; each card links its development half in the Mind.
-
-<details><summary>📋 <b>prepare the Euclid DR1 modelling pipeline, then prove it on real DR1 lenses</b> — Mind half: <code>PyAutoMind/epics.md#euclid-dr1-prep</code> — ledger: <code>phases/euclid/</code> — science half opens at phase 4, gated on the 3a PR and the 3b issue; 5–7 planned behind it</summary>
-
-```
-Work out where the Cortex half of the epic euclid-dr1-prep stands from phases/euclid/ and tell me what its next phase is.
-```
-
-</details>
-
-<details><summary>📋 <b>would a gradient search dropped into a SLaM mass[1] search beat Nautilus?</b> — Mind half: <code>draft/feature/autolens_profiling/gradient_slam_mass_pix_target.md (dev leg; Cortex phase 21 is gated on its issue autolens_profiling#218)</code> — ledger: <code>autolens_profiling/results/notes/gradient_slam/LEDGER.md</code> — BORN 2026-09-04 from the retired jax-inference-profiling; phase 21 (Nautilus baseline) gated on the dev leg autolens_profiling#218; phase 20 (cost probe) dropped the same day — the epic measures steps, not gradient cost</summary>
-
-```
-Work out where the Cortex half of the epic gradient-slam-baseline stands from autolens_profiling/results/notes/gradient_slam/LEDGER.md and tell me what its next phase is.
-```
-
-</details>
-
-<details><summary>📋 <b>expectation propagation as the scalable alternative to graphical joint fits</b> — Mind half: <code>PyAutoMind/epics.md#graphical-ep</code> — ledger: <code>PyAutoMind/draft/research/graphical_ep/ep_campaign.md</code> — both science phases planned; the projects are dormant and the campaign's</summary>
-
-```
-Work out where the Cortex half of the epic graphical-ep stands from PyAutoMind/draft/research/graphical_ep/ep_campaign.md and tell me what its next phase is.
-```
-
-</details>
-
-<details><summary>📋 <b>the Source &amp; Cluster arc — cluster mass modelling and pixelized source inference</b> — Mind half: <code>PyAutoMind/epics.md#cluster-strong-lensing</code> — ledger: <code>PyAutoMind/draft/feature/autolens/source_cluster_arc.md</code> — one science phase (arc phase 11), planned behind the arc's phase 10</summary>
-
-```
-Work out where the Cortex half of the epic cluster-strong-lensing stands from PyAutoMind/draft/feature/autolens/source_cluster_arc.md and tell me what its next phase is.
-```
-
-</details>
-
-## Projects
-
-[markdown version](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects.yaml) — The science body map — where each project lives, what syncs it and where its witness lands.
-
-| Project | Status | Partition | Sync | Ledger | Witness |
-|---|---|---|---|---|---|
-| concr | dormant | both | `hpc/sync` | `README.md` | `results/**/*.json` |
-| cowls_diana | dormant | both | `hpc/sync` | `README.md` | `results/**/*.json` |
-| euclid | active | both | `hpc/sync` | `CLAUDE.md` | `catalogue/**/*.csv` |
-| euclid_dr1_prelim | planned | both | `hpc/sync` | `wiki/project/state.md` | `results/**/*.json` |
-| ic50_workspace | dormant | both | `hpc/sync` | `README.md` | `results/**/*.json` |
-| inference_programme | active | both | `hpc/sync` | `results/notes/inference/PROGRAMME.md` | `results/searches/**/*.json` |
-| pj011646 | dormant | both | `hpc/sync` | `README.md` | `results/**/*.json` |
-| profiling | dormant | both | `hpc/sync` | `README.md` | `results/**/*.json` |
-| slope_hierarchy | dormant | both | `hpc/sync` | `README.md` | `results/**/*.json` |
-| subhalo_simulations | dormant | both | `hpc/sync` | `README.md` | `results/**/*.json` |
-| subhalo_validation | active | ral | `hpc/sync` | `wiki/project/state.md` | `results/**/*.json` |
 
 ---
 

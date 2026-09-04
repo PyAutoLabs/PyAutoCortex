@@ -86,7 +86,7 @@ GitHub ref — whatever a human would open.
 | `Runs:` | comma-separated job **stems** | the index of the `## Runs` body; equal to the set of body stems |
 | `Ruling:` | ruling id | the chain head (see "Rulings") |
 | `Review-minutes:` | integer | a seed, not a measurement |
-| `Epic:` | slug | shared with the Mind — the join key across the two dashboards |
+| `Epic:` | slug | OPTIONAL join key to a **Mind** epic; the Cortex keeps no epics file of its own |
 | `Filed:` | `YYYY-MM-DD` | |
 | `Migrated-from:` | source path or ledger anchor | the Mind prompt, review file or project-ledger entry this phase was transcribed from (phase 4 of the birth epic) |
 
@@ -174,7 +174,7 @@ PyAutoCortex/
 ├── LICENSE  .gitignore
 │
 ├── projects.yaml            ← the science body map — CODE, not ledger (read with PyYAML)
-├── epics.md                 ← the Cortex half of each split epic (`- mind-half:`)
+├── checkin.yaml             ← `refreshed: <UTC ISO>` — the last check-in stamp; LEDGER
 ├── dashboard.md             ← GENERATED board — cortex conductor (`dashboard --apply`); LEDGER
 ├── dashboard.html           ← GENERATED board, the Pages index; LEDGER
 │
@@ -409,7 +409,7 @@ deny**:
 | Ledger — merged automatically | Code — always a human |
 |---|---|
 | `phases/**`, `rulings/**`, `batches/**` | `scripts/`, `tests/`, `.github/`, `policy/`, `docs/` |
-| `epics.md` | `projects.yaml`, `README.md`, `AGENTS.md`, `REFERENCE.md`, … |
+| `checkin.yaml` | `projects.yaml`, `README.md`, `AGENTS.md`, `REFERENCE.md`, … |
 | `dashboard.md`, `dashboard.html` (generated) | **`AGENTS.md` / `TEMPLATE.md` inside a ledger dir** |
 | | anything unclassified — a new root file, a new top-level folder |
 | | **any modification or deletion under `rulings/` or `batches/`** (append-only) |
@@ -517,6 +517,23 @@ recorded against its project and the sweep continues. Then it scores every live
 phase (the six legs below), moves `running → pulled → awaiting-ruling`,
 re-renders `dashboard.md` + `dashboard.html`, and prints a summary keyed **by
 project** — the last thing on screen, so a chat sees it first.
+
+### `checkin.yaml` — the last-check-in stamp
+
+One key, one line, committed and pushed with the ledger:
+
+```yaml
+refreshed: 2026-09-04T14:03:00Z
+```
+
+It records the last **check-in**, not the last render: `checkin --apply` (and
+`collect --apply`) writes it from the same stamp it scored against, before the
+pages are rendered, so a doc-only push that re-renders the board cannot fake
+freshness. The board reads it back as "Last check-in"; the HTML twin computes
+the age on the *viewer's* clock and reddens it past sixty minutes, because a
+static page cannot know when it is being read. Absent, the board says "never
+checked in". The file is stable between renders, so `dashboard --check` needs
+no rule for it.
 
 ### The by-project view
 
@@ -667,7 +684,7 @@ for exactly that reason.
 
 | Workflow | Trigger | Writes |
 |---|---|---|
-| `cortex_check.yml` | push/PR on `phases/ rulings/ batches/ projects.yaml epics.md dashboard.* scripts/ tests/` | nothing (`cortex.py check` + pytest) |
+| `cortex_check.yml` | push/PR on `phases/ rulings/ batches/ projects.yaml checkin.yaml dashboard.* scripts/ tests/` | nothing (`cortex.py check` + pytest) |
 | `dashboard_refresh.yml` | push to main + PR on the ledger paths and the two pages, nightly **03:35 UTC**, dispatch | `dashboard.md`, `dashboard.html` on main (3-attempt fetch/reset/render/commit/push); a PR run errors instead of healing |
 | `pages_dashboard.yml` | push to `dashboard.html`, dispatch | nothing in git — publishes `dashboard.html` as the Pages index |
 | `ledger_merge.yml` | push to `claude/**`, dispatch | merges a ledger-only branch into main |
