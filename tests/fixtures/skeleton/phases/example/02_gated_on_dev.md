@@ -6,7 +6,6 @@ State: gated
 Gates: PyAutoArray#431, https://github.com/PyAutoLabs/PyAutoFit/pull/1436
 Witness: three lenses reach log-evidence within 2.0 of the anchor at 0.05 arcsec
 Budget: 6:00
-Lane: local-dev
 Review-minutes: 6
 Epic: example-programme
 Filed: 2026-08-26

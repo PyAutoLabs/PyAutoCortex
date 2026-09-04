@@ -8,7 +8,6 @@ Witness: evidence_increase < 5 in results/rectangular_adapt/pl_eff_0_no_subhalo.
 Budget: 48:00
 Runs: 342237, 342240
 Ruling:
-Lane: local-dev
 Review-minutes: 8
 Epic:
 Filed: 2026-09-02

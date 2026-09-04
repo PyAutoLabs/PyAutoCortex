@@ -8,7 +8,6 @@ Witness: every arm delivers on its own artefacts — positions.info present in t
 Budget: 8:00
 Runs:
 Ruling:
-Lane: local-dev
 Review-minutes: 30
 Epic: jax-inference-profiling
 Filed: 2026-09-02

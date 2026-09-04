@@ -8,7 +8,6 @@ Witness: prose plus figures and tables committed under `paper/` in the slope_hie
 Budget: 8:00
 Runs:
 Ruling:
-Lane: local-dev
 Review-minutes: 20
 Epic: graphical-ep
 Filed: 2026-07-22

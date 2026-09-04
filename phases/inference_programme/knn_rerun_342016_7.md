@@ -8,7 +8,6 @@ Witness: the re-run knn reference row replaces the withdrawn one and its logL de
 Budget: 6:00
 Runs: 342016
 Ruling: R-20260831-03
-Lane: local-dev
 Review-minutes: 15
 Epic: jax-inference-profiling
 Filed: 2026-08-30

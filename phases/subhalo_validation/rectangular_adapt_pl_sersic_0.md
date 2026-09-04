@@ -9,7 +9,6 @@ Witness: evidence_increase < 5 in results/rectangular_adapt/pl_sersic_0_no_subha
 Budget: 48:00
 Runs: 342094, 342095, 342237, 342240
 Ruling: R-20260902-06
-Lane: local-dev
 Review-minutes: 15
 Epic:
 Filed: 2026-08-31

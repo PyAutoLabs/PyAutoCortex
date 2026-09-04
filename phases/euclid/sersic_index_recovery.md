@@ -8,7 +8,6 @@ Witness: 10 simulated fits complete with a recovered-vs-input Sersic index table
 Budget: 24:00
 Runs:
 Ruling:
-Lane: local-dev
 Review-minutes: 20
 Epic: euclid-dr1-prep
 Filed: 2026-08-28

@@ -7,30 +7,31 @@ writes their state and the one thing that checks it. Every rule it enforces is
 written down in REFERENCE.md; the transition table there is `move`'s and the
 chain rules are `rule`'s. Nothing here is not in that file.
 
-Stdlib only, `main(argv)`, no import-time side effects, `--root` on every verb
+PyYAML for `projects.yaml` and otherwise stdlib only, `main(argv)`, no
+import-time side effects, `--root` on every verb
 (default: the repo this script lives in), so every leg runs against a
 `tmp_path` copy of the fixture in tests. The date is injectable (`--today`)
 for the same reason.
 
 Usage:
     python3 scripts/cortex.py check                      # OK or DRIFT (exit 1)
-    python3 scripts/cortex.py gates [--grade [--write]]   # gated phases and their refs
+    python3 scripts/cortex.py gates                       # gated phases and their refs
     python3 scripts/cortex.py rule <phase> <verb> --body <file> [...]
     python3 scripts/cortex.py move <phase> <state> [...]
     python3 scripts/cortex.py new <project> <slug> --phase <n> [...]
 
-Exit codes: 0 = done · 1 = drift, a refused edit, or an unreadable gate · 2 =
-bad arguments.
+Exit codes: 0 = done · 1 = drift or a refused edit · 2 = bad arguments.
 """
 
 from __future__ import annotations
 
 import argparse
-import json
 import re
 import sys
 from datetime import date, datetime, timezone
 from pathlib import Path
+
+import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -43,19 +44,11 @@ PHASE_STATES = (
 )
 TERMINAL_STATES = {"dropped"}
 NON_TERMINAL_STATES = set(PHASE_STATES) - TERMINAL_STATES
-#: `ready..accepted` in the order listed, `rerun` included — the states in
-#: which a gated phase must carry `Gates-cleared:` or `Gate-override:`.
-GATES_SETTLED_STATES = {"ready", "submitted", "running", "pulled",
-                        "awaiting-ruling", "accepted", "rerun"}
 #: `submitted..accepted` (and `rerun`) — the states that need a `Witness:`.
 WITNESS_STATES = {"submitted", "running", "pulled", "awaiting-ruling",
                   "accepted", "rerun"}
 #: reachable only through `rule`, so they need a `Ruling:`.
 RULED_STATES = {"accepted", "rerun", "dropped"}
-#: the states a `gates --grade` run looks at (a reopened gate is reported on
-#: every phase that has left `gated`; only `gated`/`ready` are ever flipped).
-GRADED_STATES = {"gated", "ready", "submitted", "running", "pulled",
-                 "awaiting-ruling", "rerun"}
 
 RUN_STATES = ("submitted", "running", "done", "failed", "timeout", "void",
               "legacy", "legacy_wrong")
@@ -75,16 +68,15 @@ VERB_STATES = {
 VERB_TARGET = {"accept": "accepted", "rerun": "rerun", "drop": "dropped",
                "leave-to-finish": None}
 
-HEALTHS = ("HEALTHY", "SUSPECT", "FAILED", "RUNNING")
-LANE = "local-dev"
-
 # Canonical header key order — `new` writes it and the edit helpers insert a
 # missing key at its slot so a hand-edited file keeps reading the same.
 PHASE_KEYS = (
-    "Project", "Phase", "State", "Gates", "Gates-cleared", "Gate-override",
-    "Reset", "Witness", "Budget", "Runs", "Ruling", "Lane", "Review-minutes",
-    "Epic", "Filed", "Migrated-from",
+    "Project", "Phase", "State", "Gates", "Reset", "Witness", "Budget",
+    "Runs", "Ruling", "Review-minutes", "Epic", "Filed", "Migrated-from",
 )
+#: `Batch:` is optional-historical — the 2026-08/09 rulings cite the batch
+#: record they were filed from; nothing writes new ones (the slot apparatus
+#: was retired 2026-09-03).
 RULING_KEYS = (
     "Project", "Phase", "Runs", "Ruling", "Supersedes", "Batch", "Reviewed-at",
     "Review-minutes-actual", "Follow-ups", "Migrated-from",
@@ -130,27 +122,15 @@ PARTITION_RE = re.compile(r"^[a-z][a-z0-9_-]*$")
 RULING_ID_RE = re.compile(r"^R-(\d{4})(\d{2})(\d{2})-(\d{2})$")
 RULING_FILE_RE = re.compile(r"^rulings/(\d{4})/(\d{2})/(R-\d{8}-\d{2})\.md$")
 PHASE_FILE_RE = re.compile(r"^phases/([a-z][a-z0-9_]*)/([^/]+)\.md$")
+PROJECT_KEY_RE = re.compile(r"^[a-z][a-z0-9_]*$")
 SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9_-]*$")
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 WALL_RE = re.compile(r"^\d+:\d{2}$")
 INT_RE = re.compile(r"^\d+$")
-SLOT_RE = re.compile(r"^\d{4}-\d{2}-\d{2}-[A-Za-z0-9_-]+$")
-PROJECT_KEY_RE = re.compile(r"^([a-z][a-z0-9_]*):\s*$")
-PROJECT_FIELD_RE = re.compile(r"^  ([a-z_]+):(?:\s+(.*?))?\s*$")
 
 #: a light-header line: `Key: value` or a bare `Key:` (empty, or a list follows).
 HEADER_KEY_RE = re.compile(r"^([A-Z][A-Za-z0-9-]*):(?:[ \t]+(.*?))?[ \t]*$")
 HEADER_LINES = 30
-
-#: a batch record's `- key: value` line and its `  - <slug>: …` member line.
-RECORD_KEY_RE = re.compile(r"^- ([a-z][a-z0-9-]*):(?:\s+(.*?))?\s*$")
-MEMBER_RE = re.compile(
-    r"^  - (?P<slug>[^:]+): (?P<path>\S+) — (?P<runs>.+?) — (?P<minutes>\S+) — (?P<state>\S+)$"
-)
-REVIEW_SECTION_RE = re.compile(r"^## (?P<slug>.+?) — (?P<health>[A-Z]+)$")
-REVIEW_KEY_RE = re.compile(r"^- (decision|ruled): (.+?)\s*$")
-#: the `-r<N>` suffix of a slot's later, partial reviews (`<slot>-r2.md`, N ≥ 2).
-REVIEW_PART_RE = re.compile(r"-r(\d+)$")
 
 
 class CortexError(Exception):
@@ -285,88 +265,66 @@ def append_to_section(text: str, name: str, new_lines: "list[str]",
 
 
 # --------------------------------------------------------------------------- #
-# projects.yaml — the restricted subset
+# projects.yaml — PyYAML plus the field validation
 # --------------------------------------------------------------------------- #
-def _strip_comment(line: str) -> str:
-    """Drop a ` #…` comment; a `#` inside a quoted scalar is not a comment."""
-    if line.lstrip().startswith("#"):
-        return ""
-    if '"' in line:
-        first = line.index('"')
-        close = line.find('"', first + 1)
-        if close != -1:
-            tail = line[close + 1:]
-            cut = tail.find(" #")
-            return line[:close + 1] + (tail if cut == -1 else tail[:cut])
-    cut = line.find(" #")
-    return line if cut == -1 else line[:cut]
-
-
-def _scalar(raw: str, where: str, problems: "list[str]") -> str:
-    raw = raw.strip()
-    if raw.startswith('"'):
-        if not (raw.endswith('"') and len(raw) >= 2) or '"' in raw[1:-1]:
-            problems.append(f"{where}: unterminated or nested quotes: {raw}")
-            return raw
-        return raw[1:-1]
-    if any(ch in raw for ch in "#:") or raw != raw.strip() or raw.startswith(("[", "{", "'", "&", "*", "!", "|", ">")):
-        problems.append(f"{where}: scalar needs quoting (contains `#`, `:` or a "
-                        f"YAML indicator): {raw}")
-    return raw
-
-
 def parse_projects(text: str) -> "tuple[dict[str, dict], list[str]]":
-    """Parse the restricted YAML subset into {key: {field: value}}.
+    """Parse projects.yaml into {key: {field: value}} and validate the fields.
 
-    Unknown field, missing field, bad indentation, anything outside the
-    subset → a problem line (the map is still returned). A comment-only file
-    parses to an empty map."""
-    rows: "dict[str, dict]" = {}
+    The document itself is PyYAML's job (`yaml.safe_load`); this validates the
+    shape the Cortex depends on — a mapping of project key → field mapping,
+    the required and optional field names, and each field's value. An empty or
+    comment-only file parses to an empty map."""
     problems: "list[str]" = []
-    current = None
-    for lineno, raw in enumerate(text.split("\n"), 1):
-        line = _strip_comment(raw).rstrip()
-        if not line.strip():
+    try:
+        doc = yaml.safe_load(text)
+    except yaml.YAMLError as e:
+        mark = getattr(e, "problem_mark", None)
+        where = f"projects.yaml:{mark.line + 1}" if mark is not None else "projects.yaml"
+        return {}, [f"{where}: not valid YAML: {getattr(e, 'problem', None) or e}"]
+    if doc is None:
+        return {}, []
+    if not isinstance(doc, dict):
+        return {}, ["projects.yaml: the document is not a mapping of project keys"]
+    rows: "dict[str, dict]" = {}
+    for key, row in doc.items():
+        if not (isinstance(key, str) and PROJECT_KEY_RE.match(key)):
+            problems.append(f"projects.yaml: project key {key!r} must match "
+                            f"{PROJECT_KEY_RE.pattern}")
             continue
-        where = f"projects.yaml:{lineno}"
-        m = PROJECT_KEY_RE.match(line)
-        if m:
-            if current is not None:
-                _finish_row(current, rows[current], problems)
-            current = m.group(1)
-            if current in rows:
-                problems.append(f"{where}: duplicate project key {current}")
-            rows[current] = {}
+        if not isinstance(row, dict):
+            problems.append(f"projects.yaml: {key} is not a mapping of fields")
             continue
-        m = PROJECT_FIELD_RE.match(line)
-        if m and current is not None:
-            field, value = m.group(1), (m.group(2) or "")
-            if field not in PROJECT_FIELDS + PROJECT_OPTIONAL_FIELDS:
-                problems.append(f"{where}: unknown field `{field}` on {current}")
-                continue
-            if field in rows[current]:
-                problems.append(f"{where}: duplicate field `{field}` on {current}")
-                continue
-            if field == "sync_verbs":
-                v = value.strip()
-                if not (v.startswith("[") and v.endswith("]")):
-                    problems.append(f"{where}: sync_verbs must be a flow list `[a, b]`")
-                    continue
-                items = [x.strip() for x in v[1:-1].split(",") if x.strip()]
-                bad = [x for x in items if not re.match(r"^[a-z][a-z0-9_-]*$", x)]
-                if bad or (v[1:-1].strip() and not items):
-                    problems.append(f"{where}: sync_verbs holds a non-bare word: {bad}")
-                rows[current][field] = items
-            else:
-                if not value.strip():
-                    problems.append(f"{where}: `{field}` has no value")
-                rows[current][field] = _scalar(value, where, problems)
-            continue
-        problems.append(f"{where}: outside the subset (a key is `^[a-z][a-z0-9_]*:$` "
-                        f"at column 0, a field is two-space indented): {raw.strip()}")
-    if current is not None:
-        _finish_row(current, rows[current], problems)
+        rows[key] = _project_row(key, row, problems)
     return rows, problems
+
+
+def _project_row(key: str, row: dict, problems: "list[str]") -> dict:
+    """One validated row: unknown/missing fields and bad values are problems."""
+    out: "dict[str, object]" = {}
+    for field, value in row.items():
+        if field not in PROJECT_FIELDS + PROJECT_OPTIONAL_FIELDS:
+            problems.append(f"projects.yaml: unknown field `{field}` on {key}")
+            continue
+        if field == "sync_verbs":
+            if not isinstance(value, list):
+                problems.append(f"projects.yaml: {key}.sync_verbs must be a list `[a, b]`")
+                continue
+            bad = [x for x in value if not (isinstance(x, str) and re.match(r"^[a-z][a-z0-9_-]*$", x))]
+            if bad:
+                problems.append(f"projects.yaml: {key}.sync_verbs holds a non-bare word: {bad}")
+            out[field] = [x for x in value if isinstance(x, str)]
+            continue
+        if value is None:
+            problems.append(f"projects.yaml: {key}.{field} has no value")
+            out[field] = ""
+            continue
+        if not isinstance(value, str):
+            problems.append(f"projects.yaml: {key}.{field} must be a string, not "
+                            f"{type(value).__name__}")
+            value = str(value)
+        out[field] = value
+    _finish_row(key, out, problems)
+    return out
 
 
 def _finish_row(key: str, row: dict, problems: "list[str]") -> None:
@@ -662,20 +620,15 @@ def phase_problems(root: Path, phases: "list[Phase]", projects: "dict[str, dict]
         for token in bad:
             p.append(f"{ph.rel}: Gates: unrecognised ref '{token}' — Repo#N or an "
                      f"issue/PR URL; no owner/Repo#N form")
-        for key in ("Gates-cleared", "Filed"):
-            if f.get(key) and not DATE_RE.match(f[key]):
-                p.append(f"{ph.rel}: {key}: '{f[key]}' is not YYYY-MM-DD")
+        if f.get("Filed") and not DATE_RE.match(f["Filed"]):
+            p.append(f"{ph.rel}: Filed: '{f['Filed']}' is not YYYY-MM-DD")
         if f.get("Budget") and not WALL_RE.match(f["Budget"]):
             p.append(f"{ph.rel}: Budget: '{f['Budget']}' is not H+:MM")
         if f.get("Review-minutes") and not INT_RE.match(f["Review-minutes"]):
             p.append(f"{ph.rel}: Review-minutes: '{f['Review-minutes']}' is not an integer")
-        if f.get("Lane") and f["Lane"] != LANE:
-            p.append(f"{ph.rel}: Lane: '{f['Lane']}' is not {LANE}")
         # the offline invariants on top of the table
         if state == "gated" and not refs:
             p.append(f"{ph.rel}: State: gated with an empty Gates:")
-        if state in GATES_SETTLED_STATES and refs and not (f.get("Gates-cleared") or f.get("Gate-override")):
-            p.append(f"{ph.rel}: State: {state} with Gates: needs Gates-cleared: or Gate-override:")
         if state in WITNESS_STATES and not f.get("Witness"):
             p.append(f"{ph.rel}: State: {state} needs a Witness:")
         ruling_id = f.get("Ruling", "")
@@ -769,128 +722,6 @@ def ruling_problems(root: Path, rulings: "list[Ruling]", phases_by_rel: "dict[st
     return problems
 
 
-def _record_members(text: str) -> "tuple[list[tuple[int, re.Match | None, str]], dict[str, str]]":
-    """([(lineno, member match or None, raw)], {key: value}) of a batch record."""
-    members, keys = [], {}
-    in_members = False
-    for i, raw in enumerate(text.split("\n"), 1):
-        m = RECORD_KEY_RE.match(raw)
-        if m:
-            in_members = m.group(1) == "members"
-            keys.setdefault(m.group(1), (m.group(2) or "").strip())
-            continue
-        if in_members and raw.startswith("  - "):
-            members.append((i, MEMBER_RE.match(_dash(raw)), raw))
-        elif raw.strip() and not raw.startswith("    ") and in_members:
-            in_members = False
-    return members, keys
-
-
-def _record_values(text: str, key: str) -> "list[str]":
-    """Every non-empty value of a repeatable `- <key>:` line, in file order.
-    `review:` repeats — one line per review file a rolling slot collected."""
-    out = []
-    for raw in text.split("\n"):
-        m = RECORD_KEY_RE.match(raw)
-        if m and m.group(1) == key and (m.group(2) or "").strip():
-            out.append(m.group(2).strip())
-    return out
-
-
-def batch_problems(root: Path, phases_by_rel: "dict[str, Phase]") -> "list[str]":
-    problems: "list[str]" = []
-    members_by_slot: "dict[str, set[str]]" = {}
-    for path in batch_records(root):
-        rel = path.relative_to(root).as_posix()
-        slot = path.stem
-        if not SLOT_RE.match(slot):
-            problems.append(f"{rel}: not a slot name (<YYYY-MM-DD>-<slot>.md)")
-        text = path.read_text(encoding="utf-8")
-        members, _ = _record_members(text)
-        slugs: "set[str]" = set()
-        for lineno, m, raw in members:
-            if m is None:
-                problems.append(f"{rel}: line {lineno}: member line does not parse: {raw.strip()}")
-                continue
-            slug, prel = m.group("slug"), m.group("path")
-            slugs.add(slug)
-            ph = phases_by_rel.get(prel)
-            if ph is None:
-                problems.append(f"{rel}: member {slug}: {prel} does not exist")
-            else:
-                if ph.slug != slug:
-                    problems.append(f"{rel}: member slug '{slug}' != phase stem '{ph.slug}'")
-                runs = m.group("runs").strip()
-                stems = set() if runs == "none" else {s.strip() for s in runs.split(",") if s.strip()}
-                extra = stems - {x.stem for x in ph.runs}
-                if extra:
-                    problems.append(f"{rel}: member {slug}: runs {{{', '.join(sorted(extra))}}} not in the phase's runs")
-            if not INT_RE.match(m.group("minutes")):
-                problems.append(f"{rel}: member {slug}: review-minutes '{m.group('minutes')}' is not an integer")
-            if m.group("state") not in PHASE_STATES:
-                problems.append(f"{rel}: member {slug}: state '{m.group('state')}' is not a phase state")
-        members_by_slot[slot] = slugs
-        for review in _record_values(text, "review"):
-            if not (root / review).is_file():
-                problems.append(f"{rel}: review: {review} does not exist")
-    for path in batch_reviews(root):
-        rel = path.relative_to(root).as_posix()
-        stem = path.stem
-        # A rolling slot is ruled more than once: the first review is
-        # `<slot>.md`, every later partial `<slot>-r<N>.md`. They are all the
-        # same slot's review, so they resolve to the one record. A record whose
-        # own name ends `-r<N>` wins over the strip.
-        slot = stem if stem in members_by_slot else REVIEW_PART_RE.sub("", stem)
-        part = REVIEW_PART_RE.search(stem) if slot != stem else None
-        if part and int(part.group(1)) < 2:
-            problems.append(f"{rel}: a partial review is -r2 or later "
-                            f"(the first review of a slot is {slot}.md)")
-        lines = path.read_text(encoding="utf-8").split("\n")
-        title = lines[0] if lines else ""
-        titles = [f"# Batch review {stem}"] + ([f"# Batch review {slot}"] if slot != stem else [])
-        if title not in titles:
-            problems.append(f"{rel}: title must be " + " or ".join(f"`{t}`" for t in titles))
-        if slot not in members_by_slot:
-            problems.append(f"{rel}: no batch record batches/{slot}.md")
-        section = None
-        seen_keys: "dict[str, str]" = {}
-        for i, raw in enumerate(lines, 1):
-            line = _dash(raw)
-            if line.startswith("## "):
-                if section is not None:
-                    _review_section_problems(rel, section, seen_keys, problems)
-                m = REVIEW_SECTION_RE.match(line)
-                if not m:
-                    problems.append(f"{rel}: line {i}: section heading is not `## <slug> — <HEALTH>`: {raw.strip()}")
-                    section, seen_keys = None, {}
-                    continue
-                section, seen_keys = m.group("slug"), {}
-                if m.group("health") not in HEALTHS:
-                    problems.append(f"{rel}: {section}: health '{m.group('health')}' not in {' | '.join(HEALTHS)}")
-                if slot in members_by_slot and section not in members_by_slot[slot]:
-                    problems.append(f"{rel}: section '{section}' names no member of batches/{slot}.md")
-                continue
-            m = REVIEW_KEY_RE.match(line)
-            if m and section is not None:
-                seen_keys.setdefault(m.group(1), m.group(2))
-        if section is not None:
-            _review_section_problems(rel, section, seen_keys, problems)
-    return problems
-
-
-def _review_section_problems(rel: str, section: str, keys: "dict[str, str]", problems: "list[str]") -> None:
-    decision, ruled = keys.get("decision"), keys.get("ruled")
-    if decision is None or ruled is None:
-        problems.append(f"{rel}: {section}: needs `- decision:` and `- ruled:` lines")
-        return
-    if decision not in RULING_VERBS and decision != "(none)":
-        problems.append(f"{rel}: {section}: decision '{decision}' is not a ruling verb or (none)")
-    if ruled not in ("yes", "no"):
-        problems.append(f"{rel}: {section}: ruled '{ruled}' is not yes | no")
-    if ruled == "yes" and decision == "(none)":
-        problems.append(f"{rel}: {section}: ruled: yes needs a verb, not (none)")
-
-
 def check_problems(root: Path) -> "list[str]":
     """Every `check` rule, over the tree at `root`. Hermetic."""
     projects, problems = load_projects(root)
@@ -908,7 +739,6 @@ def check_problems(root: Path) -> "list[str]":
     phases_by_rel = {ph.rel: ph for ph in phases}
     problems.extend(phase_problems(root, phases, projects, by_id, successors))
     problems.extend(ruling_problems(root, rulings, phases_by_rel, by_id, successors))
-    problems.extend(batch_problems(root, phases_by_rel))
     return problems
 
 
@@ -926,166 +756,30 @@ def cmd_check(args) -> int:
 # --------------------------------------------------------------------------- #
 # gates
 # --------------------------------------------------------------------------- #
-GATE_JQ = '{state, state_reason, merged_at: .pull_request.merged_at, is_pr: (.pull_request != null)}'
+def gates_report(root: Path) -> "tuple[list[str], int]":
+    """(report lines, exit code) — every `gated` phase, its refs and their URLs.
 
-
-def _http_gate(owner: str, repo: str, num: str):
-    """One GitHub REST read via stdlib urllib — the gh-free fallback path.
-    Returns the same dict `GATE_JQ` shapes, or an `unreadable: …` string."""
-    import os
-    import urllib.error
-    import urllib.request
-
-    req = urllib.request.Request(
-        f"https://api.github.com/repos/{owner}/{repo}/issues/{num}",
-        headers={"Accept": "application/vnd.github+json", "User-Agent": "pyautocortex"},
-    )
-    token = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
-    if token:
-        req.add_header("Authorization", f"Bearer {token}")
-    try:
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            data = json.load(resp)
-    except urllib.error.HTTPError as e:
-        return f"unreadable: HTTP {e.code}"
-    except Exception as e:  # URLError, timeout, bad JSON — report, don't crash
-        return f"unreadable: {e.__class__.__name__}"
-    pr = data.get("pull_request")
-    return {"state": data.get("state"), "state_reason": data.get("state_reason"),
-            "merged_at": pr.get("merged_at") if isinstance(pr, dict) else None,
-            "is_pr": pr is not None}
-
-
-def fetch_gate_states(urls: "list[str]") -> "dict[str, dict | str]":
-    """{url: {state, state_reason, merged_at, is_pr} | 'unreadable: …'} via
-    `gh api`, falling back to urllib when gh is absent."""
-    import subprocess
-
-    out: "dict[str, dict | str]" = {}
-    gh_missing = False
-    for url in urls:
-        m = re.match(r"https://github\.com/([\w.-]+)/([\w.-]+)/issues/(\d+)$", url)
-        if not m:
-            out[url] = "unreadable: not a canonical issues URL"
-            continue
-        owner, repo, num = m.groups()
-        if not gh_missing:
-            try:
-                r = subprocess.run(
-                    ["gh", "api", f"repos/{owner}/{repo}/issues/{num}", "--jq", GATE_JQ],
-                    capture_output=True, text=True,
-                )
-            except FileNotFoundError:
-                gh_missing = True
-            else:
-                if r.returncode != 0:
-                    tail = (r.stderr.strip().splitlines() or ["error"])[-1]
-                    out[url] = f"unreadable: {tail}"
-                    continue
-                try:
-                    out[url] = json.loads(r.stdout)
-                except ValueError:
-                    out[url] = "unreadable: gh returned no JSON"
-                continue
-        out[url] = _http_gate(owner, repo, num)
-    return out
-
-
-def grade_gate(info) -> "tuple[str, str]":
-    """('cleared' | 'dead' | 'open' | 'unreadable', detail) for one ref."""
-    if not isinstance(info, dict):
-        return "unreadable", str(info)
-    state = info.get("state")
-    if info.get("is_pr"):
-        if info.get("merged_at"):
-            return "cleared", "PR merged"
-        if state == "closed":
-            return "dead", "PR closed without merging"
-        if state == "open":
-            return "open", "PR open"
-        return "unreadable", f"PR state {state!r}"
-    if state == "closed":
-        reason = info.get("state_reason")
-        if reason in (None, "completed"):
-            return "cleared", "issue closed" + (f" ({reason})" if reason else "")
-        return "dead", f"issue closed as {reason}"
-    if state == "open":
-        return "open", "issue open"
-    return "unreadable", f"issue state {state!r}"
-
-
-def gates_report(root: Path, *, grade: bool = False, write: bool = False,
-                 fetch=None, today: "date | None" = None) -> "tuple[list[str], int]":
-    """(report lines, exit code). Offline: every `gated` phase and its refs.
-    `grade`: fetch each ref and give a verdict per phase; `write` flips
-    gated → ready (writing Gates-cleared:) and ready → gated on a reopen."""
+    Read-only and offline: nothing asks GitHub whether a ref has cleared. Gate
+    grading was retired 2026-09-03 — 2 gated refs and 0 flips in its whole
+    life, while schema decision 54 routes sequencing through prose
+    `Ready when:` lines. A gated phase is moved on by a human reading this
+    listing and typing `move <phase> ready`."""
     phases, _ = load_phases(root)
-    today = today or date.today()
-    lines: "list[str]" = []
-    rc = 0
-    wanted = [ph for ph in phases if (ph.state in GRADED_STATES if grade else ph.state == "gated")
-              and gate_refs(ph.get("Gates"))[0]]
+    wanted = [ph for ph in phases
+              if ph.state == "gated" and gate_refs(ph.get("Gates"))[0]]
     if not wanted:
-        lines.append("gates: no gated phase" if not grade else "gates: no phase with gates to grade")
-        return lines, 0
-    states: "dict[str, dict | str]" = {}
-    if grade:
-        fetch = fetch or fetch_gate_states
-        urls = sorted({gate_url(ref) for ph in wanted for ref in gate_refs(ph.get("Gates"))[0]})
-        states = fetch(urls)
-    lines.append(f"gates: {len(wanted)} phase(s)")
+        return ["gates: no gated phase"], 0
+    lines = [f"gates: {len(wanted)} phase(s)"]
     for ph in wanted:
         refs = gate_refs(ph.get("Gates"))[0]
-        if not grade:
-            lines.append(f"  {ph.rel}: {ph.state} — {', '.join(refs)}")
-            continue
-        lines.append(f"  {ph.rel}: {ph.state}")
-        verdicts = []
+        lines.append(f"  {ph.rel}: {ph.state} — {', '.join(refs)}")
         for ref in refs:
-            v, detail = grade_gate(states.get(gate_url(ref), "unreadable: not fetched"))
-            verdicts.append(v)
-            lines.append(f"    {ref} → {v} ({detail})")
-        if "unreadable" in verdicts:
-            rc = 1
-            lines.append("    verdict: unreadable ref — fails closed, nothing flipped")
-            continue
-        if ph.state == "gated":
-            if all(v == "cleared" for v in verdicts):
-                if write:
-                    ph.path.write_text(edit_header(ph.text, {"State": "ready",
-                                                             "Gates-cleared": today.isoformat()}),
-                                       encoding="utf-8")
-                    lines.append(f"    verdict: cleared — gated → ready, Gates-cleared: {today.isoformat()}")
-                else:
-                    lines.append("    verdict: cleared (gates --grade --write flips it to ready)")
-            elif "dead" in verdicts:
-                lines.append("    verdict: dead gate — will never clear; re-gate or move --override")
-            else:
-                lines.append("    verdict: waiting")
-            continue
-        reopened = [ref for ref, v in zip(refs, verdicts) if v == "open"]
-        if not reopened:
-            if "dead" in verdicts:
-                lines.append("    verdict: dead gate (reported; the phase has left gated)")
-            else:
-                lines.append("    verdict: still cleared")
-            continue
-        if ph.state != "ready":
-            lines.append(f"    verdict: reopened {', '.join(reopened)} — reported, never enforced past ready")
-        elif ph.get("Gate-override"):
-            lines.append(f"    verdict: reopened {', '.join(reopened)} — Gate-override: present, kept ready")
-        elif write:
-            ph.path.write_text(edit_header(ph.text, {"State": "gated", "Gates-cleared": None}),
-                               encoding="utf-8")
-            lines.append(f"    verdict: reopened {', '.join(reopened)} — ready → gated")
-        else:
-            lines.append(f"    verdict: reopened {', '.join(reopened)} (gates --grade --write demotes it to gated)")
-    return lines, rc
+            lines.append(f"    {ref} → {gate_url(ref)}")
+    return lines, 0
 
 
 def cmd_gates(args) -> int:
-    lines, rc = gates_report(args.root, grade=args.grade or args.write, write=args.write,
-                             today=_today(args))
+    lines, rc = gates_report(args.root)
     print("\n".join(lines))
     return rc
 
@@ -1194,7 +888,7 @@ def _add_pulled_to(ph: Phase, text: str, pulled_to: "str | None", states: "set[s
 # move
 # --------------------------------------------------------------------------- #
 def move_phase(root: Path, ref: str, to: str, *, run: "str | None" = None,
-               reason: "str | None" = None, override: "str | None" = None,
+               reason: "str | None" = None,
                partial: bool = False, partition: "str | None" = None,
                after: "str | None" = None, resumes: "str | None" = None,
                note: str = "", pulled_to: "str | None" = None,
@@ -1244,13 +938,10 @@ def move_phase(root: Path, ref: str, to: str, *, run: "str | None" = None,
         if refs:
             raise CortexError(f"{ph.rel}: Gates: is non-empty — planned → gated")
     elif edge == ("gated", "ready"):
-        if not override:
-            raise CortexError("gated → ready is `gates --grade --write` when the refs clear, "
-                              "or `move ready --override \"<reason>\"`")
-        updates["Gate-override"] = override
+        pass  # the human read `gates` and judged the refs cleared
     elif edge == ("ready", "gated"):
-        raise CortexError("ready → gated is written by `gates --grade --write` only, "
-                          "when a cleared gate reopened")
+        raise CortexError("ready → gated is a hand edit of the header — re-gating a "
+                          "ready phase is a judgement, not an edge")
     elif edge == ("ready", "submitted"):
         if not ph.get("Witness"):
             raise CortexError(f"{ph.rel}: Witness: is empty — register the witness before submitting")
@@ -1296,7 +987,7 @@ VERB_FOR_STATE = {"accepted": "accept", "rerun": "rerun", "dropped": "drop"}
 
 def cmd_move(args) -> int:
     print(move_phase(args.root, args.phase, args.state, run=args.run, reason=args.reason,
-                     override=args.override, partial=args.partial, partition=args.partition,
+                     partial=args.partial, partition=args.partition,
                      after=args.after, resumes=args.resumes, note=args.note or "",
                      pulled_to=args.pulled_to, today=_today(args)))
     return 0
@@ -1354,10 +1045,10 @@ def _ruling_target(ph: Phase, verb: str, supersedes: "str | None", by_id: "dict[
 
 def rule_phase(root: Path, ref: str, verb: str, body: str, *, supersedes: "str | None" = None,
                batch: "str | None" = None, minutes: "int | None" = None,
-               follow_ups: "tuple[str, ...]" = (), also: "tuple[str, ...]" = (),
+               follow_ups: "tuple[str, ...]" = (),
                today: "date | None" = None, now: "datetime | None" = None) -> "list[str]":
-    """File one ruling per phase (the primary plus every --also), update each
-    phase's `Ruling:` and `State:`; return the ruling paths written.
+    """File the ruling for one phase and update its `Ruling:` and `State:`;
+    return the ruling paths written (a list of one).
     Everything is validated before anything is written."""
     today = today or date.today()
     now = now or datetime.now(timezone.utc)
@@ -1378,16 +1069,8 @@ def rule_phase(root: Path, ref: str, verb: str, body: str, *, supersedes: "str |
     if not body.strip():
         raise CortexError("--body is empty — the human's words, verbatim")
 
-    plan = []
-    seen = set()
-    for i, target_ref in enumerate((ref,) + tuple(also)):
-        ph = _phase_at(root, target_ref)
-        if ph.rel in seen:
-            raise CortexError(f"{ph.rel} named twice")
-        seen.add(ph.rel)
-        sup = supersedes if i == 0 else (ph.get("Ruling") if ph.state == "accepted" else None)
-        new_state = _ruling_target(ph, verb, sup, by_id, successors)
-        plan.append((ph, sup, new_state))
+    ph = _phase_at(root, ref)
+    plan = [(ph, supersedes, _ruling_target(ph, verb, supersedes, by_id, successors))]
 
     taken: "set[str]" = set()
     written = []
@@ -1447,8 +1130,7 @@ def cmd_rule(args) -> int:
         raise CortexError(f"--body {args.body} is not a file")
     paths = rule_phase(args.root, args.phase, args.verb, body_path.read_text(encoding="utf-8"),
                        supersedes=args.supersedes, batch=args.batch, minutes=args.minutes,
-                       follow_ups=tuple(args.follow_up or ()), also=tuple(args.also or ()),
-                       today=_today(args))
+                       follow_ups=tuple(args.follow_up or ()), today=_today(args))
     for p in paths:
         print(f"wrote {p}")
     return 0
@@ -1509,7 +1191,7 @@ def new_phase(root: Path, project: str, slug: str, number: int, *, gates: str = 
         f"Witness: {witness}" if witness else "Witness:",
         f"Budget: {budget}" if budget else "Budget:",
         f"Runs: {', '.join(stems)}" if stems else "Runs:",
-        "Ruling:", f"Lane: {LANE}",
+        "Ruling:",
         f"Review-minutes: {minutes}" if minutes is not None else "Review-minutes:",
         f"Epic: {epic}" if epic else "Epic:", f"Filed: {today.isoformat()}",
     ]
@@ -1564,11 +1246,8 @@ def build_parser() -> argparse.ArgumentParser:
     _common(c)
     c.set_defaults(func=cmd_check)
 
-    g = sub.add_parser("gates", help="list gated phases and their refs; --grade asks GitHub")
-    _common(g, dated=True)
-    g.add_argument("--grade", action="store_true", help="fetch each ref and give a verdict")
-    g.add_argument("--write", action="store_true",
-                   help="flip gated → ready (Gates-cleared:) and ready → gated on a reopen")
+    g = sub.add_parser("gates", help="list every gated phase, its refs and their URLs")
+    _common(g)
     g.set_defaults(func=cmd_gates)
 
     r = sub.add_parser("rule", help="file a ruling and move the phase per the table")
@@ -1581,9 +1260,6 @@ def build_parser() -> argparse.ArgumentParser:
     r.add_argument("--minutes", type=int, help="Review-minutes-actual")
     r.add_argument("--follow-up", action="append", metavar="REF",
                    help="Repo#N or an issue/PR URL; repeatable; the issue exists already")
-    r.add_argument("--also", action="append", metavar="PHASE",
-                   help="fan the same body and batch out to another phase (a REWIND); "
-                        "an accepted --also phase supersedes its own Ruling:")
     r.set_defaults(func=cmd_rule)
 
     m = sub.add_parser("move", help="one edge of the transition table")
@@ -1592,7 +1268,6 @@ def build_parser() -> argparse.ArgumentParser:
     m.add_argument("state", help="the state to move to")
     m.add_argument("--run", metavar="ID", help="SLURM job id (<stem>[_<task>|_[<set>]]) to append")
     m.add_argument("--reason", help="why a submitted | running phase goes back to ready (Reset:)")
-    m.add_argument("--override", metavar="REASON", help="gated → ready without the gates (Gate-override:)")
     m.add_argument("--partial", action="store_true",
                    help="running → pulled with a run still live (needs a leave-to-finish ruling)")
     m.add_argument("--partition", help="the run line's partition (default: the project's row)")

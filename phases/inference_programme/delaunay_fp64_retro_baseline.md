@@ -8,7 +8,6 @@ Witness: the retro-adopted delaunay_fp64 baseline is a physical solution — che
 Budget: 6:00
 Runs: 339071
 Ruling: R-20260901-03
-Lane: local-dev
 Review-minutes: 4
 Epic: jax-inference-profiling
 Filed: 2026-08-24

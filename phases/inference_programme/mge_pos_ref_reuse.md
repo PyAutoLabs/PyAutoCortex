@@ -8,7 +8,6 @@ Witness: the quarantined-but-reusable 340210_9 run is at the same target/config 
 Budget: 6:00
 Runs: 340210
 Ruling: R-20260901-01
-Lane: local-dev
 Review-minutes: 5
 Epic: jax-inference-profiling
 Filed: 2026-08-25

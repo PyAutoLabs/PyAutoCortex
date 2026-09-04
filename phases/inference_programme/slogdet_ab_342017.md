@@ -8,7 +8,6 @@ Witness: the Cholesky and slogdet log-det arms of the same slam_source_pix_nn ce
 Budget: 6:00
 Runs: 342017
 Ruling: R-20260831-05
-Lane: local-dev
 Review-minutes: 12
 Epic: jax-inference-profiling
 Filed: 2026-08-30

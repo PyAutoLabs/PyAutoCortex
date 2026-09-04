@@ -8,7 +8,6 @@ Witness: the Phase 2 scan's twelve legacy runs are health-clean on the current s
 Budget: 10:00
 Runs: 338491, 338492, 338493, 338870, 338871, 338872, 338873, 339067, 339068, 339069, 339070, 339071
 Ruling: R-20260902-08
-Lane: local-dev
 Review-minutes: 12
 Epic: jax-inference-profiling
 Filed: 2026-09-02

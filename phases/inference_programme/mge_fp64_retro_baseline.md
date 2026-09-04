@@ -8,7 +8,6 @@ Witness: the retro-adopted mge_fp64 baseline still stands under the redo standar
 Budget: 6:00
 Runs: 339070
 Ruling: R-20260901-02
-Lane: local-dev
 Review-minutes: 4
 Epic: jax-inference-profiling
 Filed: 2026-08-24

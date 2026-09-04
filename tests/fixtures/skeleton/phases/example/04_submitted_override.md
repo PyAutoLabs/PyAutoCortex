@@ -4,11 +4,9 @@ Project: example
 Phase: 4
 State: submitted
 Gates: PyAutoLens#900
-Gate-override: the fix is verified locally on the branch; not waiting for the merge
 Witness: both bands converge to the same source centre within 0.02 arcsec
 Budget: 6:00
 Runs: 342001, 342010
-Lane: local-dev
 Review-minutes: 6
 Epic: example-programme
 Filed: 2026-08-28

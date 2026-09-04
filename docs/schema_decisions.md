@@ -379,3 +379,25 @@ Choices made in phase 2 — the conductor, the board and the workflows
     had arrived could only rule on the third by editing a ledger file that is
     already someone's evidence. Numbering the sittings keeps each file
     append-only and leaves one record resolving them all.
+
+58. **The review-slot and gate apparatus is retired** (2026-09-03,
+    PyAutoCortex#9, epic `cortex-checkin` phase 1). Gate grading is gone —
+    the daily grading cron, the `--grade` / `--write` legs of `gates`, and the
+    `Gates-cleared:` / `Gate-override:` header keys with the three `check`
+    invariants over them. The plain `Gates:` header, the `gated` state and the
+    read-only `gates` listing stay; a gated phase is moved on by a human
+    reading the listing and typing `move <phase> ready`. Also retired: the
+    batch record and packet schema (`batches/` becomes closed, append-only
+    history and `Batch:` becomes optional-historical), `rule --also`, the
+    `Lane:` header, and the hand-rolled restricted-YAML parser, which
+    `yaml.safe_load` replaces with the field validation kept.
+    Why: measurement, not taste. Gate grading saw 2 gated refs and flipped 0
+    in its lifetime, and decision 54 already routes sequencing through prose
+    `Ready when:` lines. Of the review-slot apparatus: 0 slots were opened by
+    the conductor, 0 rulings came from a packet, 0 partial reviews were
+    filed, and `review-minutes-actual` was never filled — all 22 rulings were
+    reached in a live session. `rule --also` was never used; `Lane:` read
+    `local-dev` on 32 of 32 phases; and the restricted parser's own
+    PyYAML-parity test proved it redundant. What the human actually does is
+    check in on the runs, so the apparatus that modelled them as a reviewer
+    working a scheduled shift is cost with no reader.

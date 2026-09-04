@@ -8,7 +8,6 @@ Witness: the SMC arm's warm-start MALA/HMC rows on MGE reach the Nautilus logZ b
 Budget: 6:00
 Runs: 342018
 Ruling: R-20260831-02
-Lane: local-dev
 Review-minutes: 25
 Epic: jax-inference-profiling
 Filed: 2026-08-30

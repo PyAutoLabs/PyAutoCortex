@@ -8,7 +8,6 @@ Witness: the A100/multi-core and `datacube_img_hetero` GPU rows present in the m
 Budget: 12:00
 Runs:
 Ruling:
-Lane: local-dev
 Review-minutes: 20
 Filed: 2026-07-30
 Migrated-from: PyAutoMind/draft/research/autolens_profiling/multiband_compile_census_completion.md

@@ -8,7 +8,6 @@ Witness: a written feasibility verdict with profiling numbers and a go/no-go for
 Budget: 24:00
 Runs:
 Ruling:
-Lane: local-dev
 Review-minutes: 25
 Epic: cluster-strong-lensing
 Filed: 2026-08-19

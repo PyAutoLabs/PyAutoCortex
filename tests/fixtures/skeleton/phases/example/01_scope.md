@@ -6,7 +6,6 @@ State: planned
 Gates:
 Witness:
 Budget: 4:00
-Lane: local-dev
 Review-minutes: 3
 Epic: example-programme
 Filed: 2026-08-25

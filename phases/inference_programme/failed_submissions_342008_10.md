@@ -8,7 +8,6 @@ Witness: the three submissions produce result rows; they did not — each died i
 Budget: 6:00
 Runs: 342008, 342009, 342010
 Ruling: R-20260901-04
-Lane: local-dev
 Review-minutes: 1
 Epic: jax-inference-profiling
 Filed: 2026-08-29

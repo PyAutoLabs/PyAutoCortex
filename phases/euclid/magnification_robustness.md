@@ -8,7 +8,6 @@ Witness: all five model rungs run on all 10 simulated lenses (or a documented, j
 Budget: 24:00
 Runs:
 Ruling:
-Lane: local-dev
 Review-minutes: 20
 Epic: euclid-dr1-prep
 Filed: 2026-08-28

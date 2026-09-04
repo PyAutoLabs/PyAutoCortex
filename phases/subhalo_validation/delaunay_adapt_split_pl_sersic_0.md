@@ -9,7 +9,6 @@ Witness: evidence_increase < 5 in results/delaunay_adapt_split/pl_sersic_0_no_su
 Budget: 48:00
 Runs: 342027, 342231, 342234
 Ruling: R-20260902-07
-Lane: local-dev
 Review-minutes: 10
 Epic:
 Filed: 2026-08-29

@@ -68,9 +68,9 @@ permissions:
 # leave a branch merged and undeleted.
 #
 # The group is shared by EVERY workflow here that can push to main —
-# dashboard_refresh.yml's self-heal and gates_grade.yml's flips carry the same
-# name — because the race is not between two merges, it is between two writers
-# of the tip. One queue, and each writer sees a settled main.
+# dashboard_refresh.yml's self-heal carries the same name — because the race is
+# not between two merges, it is between two writers of the tip. One queue, and
+# each writer sees a settled main.
 concurrency:
   group: cortex-main-writers
   cancel-in-progress: false
@@ -157,6 +157,11 @@ jobs:
       # header contradicts, a dangling Supersedes:, a run line that does not
       # parse — nothing heals that automatically, and merging it would put the
       # contradiction on main. Also the only check audit mode gets to report.
+      # `cortex.py` reads `projects.yaml` with PyYAML — its one dependency.
+      - name: dependencies
+        if: steps.classify.outputs.verdict == 'ledger'
+        run: python3 -m pip install --quiet pyyaml
+
       - name: Structural drift on the branch (blocking)
         if: steps.classify.outputs.verdict == 'ledger'
         run: python3 scripts/cortex.py check

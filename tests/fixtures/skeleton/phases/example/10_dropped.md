@@ -7,7 +7,6 @@ Witness: mesh-pix log-evidence beats the Delaunay anchor by 5.0
 Budget: 6:00
 Runs: 341950, 341960
 Ruling: R-20260901-05
-Lane: local-dev
 Review-minutes: 4
 Epic: example-programme
 Filed: 2026-08-31

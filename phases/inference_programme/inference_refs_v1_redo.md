@@ -8,7 +8,6 @@ Witness: all 10 array tasks deliver on their own evidence — wall inside the 6:
 Budget: 6:00
 Runs: 342091
 Ruling: R-20260902-01
-Lane: local-dev
 Review-minutes: 20
 Epic: jax-inference-profiling
 Filed: 2026-08-31

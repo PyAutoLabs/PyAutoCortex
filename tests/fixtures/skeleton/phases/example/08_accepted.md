@@ -4,12 +4,10 @@ Project: example
 Phase: 8
 State: accepted
 Gates: PyAutoFit#1400
-Gates-cleared: 2026-08-25
 Witness: anchor theta_E within 0.01 arcsec of the published value on the new sampler
 Budget: 6:00
 Runs: 342050
 Ruling: R-20260901-02
-Lane: local-dev
 Review-minutes: 6
 Epic: example-programme
 Filed: 2026-08-24

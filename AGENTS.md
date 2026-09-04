@@ -65,25 +65,26 @@ human's turn. Full rules in [rulings/AGENTS.md](rulings/AGENTS.md).
 
 - **`projects.yaml`** — the science body map. One row per project. **This is
   code, not ledger**: `sync_cli` and `local_path` are paths a conductor will
-  execute under, so a change to it is always a human's turn. It is written in a
-  restricted YAML subset that `cortex.py` parses with the stdlib (REFERENCE.md
-  "The restricted YAML subset").
+  execute under, so a change to it is always a human's turn. `cortex.py` reads
+  it with PyYAML and validates the fields (REFERENCE.md "projects.yaml").
 - **`phases/<project>/<slug>.md`** — one file per phase, with the Mind's light
   header (`Key: value` lines, no YAML frontmatter) and a `## Runs` body in the
   SLURM run-line grammar. `State:` is one of `planned | gated | ready |
   submitted | running | pulled | awaiting-ruling | accepted | rerun | dropped`.
   `legacy` and `legacy_wrong` are states of a **run**, never of a phase.
 - **`rulings/<YYYY>/<MM>/R-<YYYYMMDD>-<nn>.md`** — the ledger of record.
-- **`batches/`** — the rolling review board: one record per slot, the archived
-  packet page under `packets/`, the human's verbatim review under `reviews/`.
+- **`batches/`** — closed history. Three 2026-08/09 batch records and the
+  human's verbatim reviews under `reviews/`, kept because 13 rulings cite them
+  and append-only for the merge gate: never modified, only added. Nothing
+  writes new ones (the review-slot apparatus was retired 2026-09-03).
 - **`epics.md`** — the Cortex half of every split epic; `- mind-half:` names
   the Mind entry by slug.
 - **`scripts/cortex.py`** — the one lifecycle script (stdlib only):
   - `check` — every structural rule, hermetic; `cortex check: OK` or `DRIFT`
     with one `  - …` line per finding, exit 1.
-  - `gates [--grade [--write]]` — offline: the gated phases and their refs;
-    `--grade` polls GitHub and reports which gates cleared; `--write` flips
-    `gated → ready` (and `ready → gated` on a reopened gate).
+  - `gates` — read-only and offline: every gated phase, its refs and their
+    URLs. Nothing polls GitHub and nothing flips a state; a human reads the
+    listing, opens the refs and types `move <phase> ready`.
   - `rule <phase> <verb> --body <file> …` — assigns the next ruling id, writes
     the ruling file(s), updates the phase's `Ruling:` and `State:`. The only
     door to `accepted`, `rerun`, `dropped` and `leave-to-finish`.
@@ -116,50 +117,41 @@ state table.
 |------|--------------|
 | `census [--json]` | what the Cortex is holding, by state — the one-screen answer |
 | `dashboard --check` \| `--apply` | render `dashboard.md` + `dashboard.html`; `--check` exits **1 on drift**, **2 on bad args**, anything else = the renderer could not run |
-| `gates [--grade] [--apply]` | the gate refs; `--grade` polls GitHub, `--apply` flips `gated → ready` (and `ready → gated` on a reopen) |
-| `plan [--budget N]` | which `ready` phases fit a laptop slot, cheapest first; it hands over a command, never a decision |
-| `collect [--slot S] [--pull] [--refreshed ISO] [--apply]` | score a pulled run's legs into a packet member; `--pull` is opt-in and runs the *project's own* sync CLI |
-
-The batch conductor is the **slot door** over the same two verbs:
-`pyauto-brain batch plan --kind cortex` and `batch collect --kind cortex` drive
-this `plan` and `collect` for one review slot and write `batches/` — the record,
-its `refreshed:` lines and the packet (`batches/AGENTS.md`).
+| `gates` | every gated phase, its refs and their URLs — read-only, offline |
+| `collect [--phase REL] [--pull] [--refreshed ISO] [--apply]` | score what came back; with no `--phase` it scopes to **every** `submitted \| running` phase, and `--pull` runs the *project's own* sync CLI |
 
 **`--apply` here, `--write` there.** The conductor's verbs spell the writing
 flag `--apply` (the Brain's house spelling, as intake does); `scripts/cortex.py`
-spells it `--write`. `cortex gates --grade --apply` is a thin wrapper over
-`cortex.py gates --grade --write` — same edit, two doors.
+spells it `--write`.
 
-**Nothing here submits a job.** `plan` prints the project's own `sync_cli
-submit` line and the `cortex.py move <phase> submitted --run <jobid>` follow-up;
-a human runs both. `collect --pull` is the one leg that shells out, and only to
-the project's own CLI.
+**Nothing here submits a job.** A human runs the project's own `sync_cli
+submit` line and the `cortex.py move <phase> submitted --run <jobid>` follow-up.
+`collect --pull` is the one leg that shells out, and only to the project's own
+CLI.
 
 ### What runs by itself
 
-Four workflows, and only these may write:
+Three workflows, and only these may write:
 
 | Workflow | Trigger | May write |
 |---|---|---|
 | `cortex_check.yml` | push/PR on ledger, scripts, tests, the dashboards | **nothing** — `cortex.py check` + pytest |
 | `dashboard_refresh.yml` | push to main, PR, nightly 03:35 UTC, dispatch | `dashboard.md`, `dashboard.html` (self-heal on main; a PR run errors instead of healing) |
-| `pages_dashboard.yml` | push to `dashboard.html` / `batches/packets/**`, dispatch | nothing in the repo — it publishes to Pages |
-| `gates_grade.yml` | daily 06:47 UTC, dispatch | phase headers — **`State:` and `Gates-cleared:` only**, and only `gated → ready` (or `ready → gated` on a reopened gate) |
+| `pages_dashboard.yml` | push to `dashboard.html`, dispatch | nothing in the repo — it publishes to Pages |
 | `ledger_merge.yml` | push to `claude/**`, dispatch | merges a ledger-only branch to main |
 
-`gates_grade.yml` is **the one scheduled job that mutates the ledger**. It never
-rules, never submits, never edits a run line. An unreadable gate ref fails
-closed: the phase is skipped, whatever else flipped is still committed, and the
-job then goes red so a human sees the ref.
+**No scheduled job mutates the ledger.** A daily gate-grading cron did, until
+gate grading was retired on 2026-09-03 (2 gated refs, 0 flips in its
+lifetime); the only self-healing writer left renders the two generated pages.
 
-All three main-writers share `concurrency: group: cortex-main-writers`, so two
+The main-writers share `concurrency: group: cortex-main-writers`, so two
 bots never race for the tip of main. And because a `GITHUB_TOKEN` push triggers
 no workflow at all, each of them re-dispatches by name what its push should have
 woken (`pages_dashboard.yml` after a heal; `cortex_check.yml` +
 `dashboard_refresh.yml` after a grading commit).
 
 The board is published at **<https://pyautolabs.github.io/PyAutoCortex/>** —
-`dashboard.html` as the index, archived packets under `/packets/`.
+`dashboard.html` as the index.
 
 ## The workspace-paths exception
 
@@ -172,7 +164,7 @@ exception is stated in the file's header and here, and nowhere else — a phase
 file or a ruling points into a project through its `projects.yaml` row, never
 with a bare absolute path of its own.
 
-## The laptop lane — what is out of scope, and why
+## What is out of scope, and why
 
 Quoted verbatim from `PyAutoMind/complete/archive/shelved/batch_science_lane.md`
 so nobody re-derives these:
@@ -195,8 +187,9 @@ so nobody re-derives these:
 >   prompts that they are human-driven and supervised with a judged verdict as the
 >   deliverable — **no transport was ever going to make those unattended.**
 
-Every Cortex phase is therefore `Lane: local-dev`, always; the field exists so
-the batch conductor's lane filter reads one vocabulary across both surfaces.
+Every Cortex phase therefore runs on the laptop. That was once written into
+each phase file as `Lane: local-dev` — 32 of 32 said the same thing, so the
+header was deleted on 2026-09-03 and the fact lives here instead.
 
 ## Hard rules
 
@@ -208,8 +201,8 @@ the batch conductor's lane filter reads one vocabulary across both surfaces.
    or batch change; `ledger_merge.yml` runs it on the trial-merge tree and a
    failing check leaves the branch for a human.
 5. **No hand-written HTML.** `dashboard.html` is rendered by the cortex
-   conductor and packets by the batch conductor; a hand edit is drift that
-   `dashboard_refresh.yml` will overwrite on the next push to `main`.
+   conductor; a hand edit is drift that `dashboard_refresh.yml` will overwrite
+   on the next push to `main`.
 
 <!-- repos_sync:remote:begin -->
 ## Remote sessions (Claude Code on web and mobile)

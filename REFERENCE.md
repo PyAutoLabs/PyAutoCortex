@@ -19,12 +19,10 @@ Project: example
 Phase: 5
 State: running
 Gates: PyAutoArray#431
-Gates-cleared: 2026-08-29
 Witness: nine of ten array tasks write a sane checkpoint.hdf5 within 8:00 wall
 Budget: 8:00
 Runs: 342091, 342102
 Ruling: R-20260901-03
-Lane: local-dev
 Review-minutes: 8
 Epic: example-programme
 Filed: 2026-08-29
@@ -71,14 +69,11 @@ sections are fixed: `## Question`, `## Witness`, `## Where to look`, `## Runs`,
 | `Phase:` | integer | unique per project; revival of a dropped phase is a new number |
 | `State:` | `planned \| gated \| ready \| submitted \| running \| pulled \| awaiting-ruling \| accepted \| rerun \| dropped` | |
 | `Gates:` | comma-separated GitHub refs | `Repo#N` (owner `PyAutoLabs`) or an issue/PR URL; **no `owner/Repo#N`** form |
-| `Gates-cleared:` | `YYYY-MM-DD` | written by `gates --grade --write` when every ref cleared |
-| `Gate-override:` | reason | written by `move --override "<reason>"` |
 | `Reset:` | reason | written by `move ready --reason "<reason>"` when a `submitted \| running` phase goes back to `ready` |
 | `Witness:` | free text | **mandatory before `submitted`** — the pre-registered checkable claim |
 | `Budget:` | `H+:MM` | wall budget per run |
 | `Runs:` | comma-separated job **stems** | the index of the `## Runs` body; equal to the set of body stems |
 | `Ruling:` | ruling id | the chain head (see "Rulings") |
-| `Lane:` | `local-dev` | always |
 | `Review-minutes:` | integer | a seed, not a measurement |
 | `Epic:` | slug | shared with the Mind — the join key across the two dashboards |
 | `Filed:` | `YYYY-MM-DD` | |
@@ -103,11 +98,9 @@ The lookbehind `(?<![\w/])` is what rejects `owner/Repo#N`: the shorthand is
 ## How a phase flows
 
 ```
-  planned ──(Gates: non-empty)──► gated ──(gates --grade --write | move --override)──► ready
-     │                                ▲                                                  │
-     └──────(Gates: empty)────────────┼──────────────────────────────────────────────────┤
-                                      │ (a cleared gate reopened; --write only)          │
-                                      └──────────────────────────────────────────────────┤
+  planned ──(Gates: non-empty)──► gated ──(move ready: the human judged the refs)──► ready
+     │                                                                                   │
+     └──────(Gates: empty)───────────────────────────────────────────────────────────────┤
                                                                                          ▼
   ready ──(Witness: + --run)──► submitted ──► running ──(no live run)──► pulled ──► awaiting-ruling
     ▲                              │              │                                      │
@@ -124,8 +117,8 @@ owns. The full table:
 | from | to | condition |
 |---|---|---|
 | planned | gated / ready | `Gates:` non-empty / empty |
-| gated | ready | `gates --grade --write` (all refs cleared → writes `Gates-cleared:`) or `move --override "<reason>"` (→ writes `Gate-override:`) |
-| ready | gated | `gates --grade --write` only, when a cleared gate reopened; refused if `Gate-override:` present; for `submitted`+ phases a reopened gate is *reported*, never enforced |
+| gated | ready | `move <phase> ready` — a human read `gates`, opened the refs and judged them cleared. No flag, and nothing written but `State:` |
+| ready | gated | not an edge: re-gating a `ready` phase is a judgement, so it is a hand edit of the header |
 | ready | submitted | `Witness:` non-empty AND `--run <id>` supplied |
 | ready | pulled | legacy-born phase: every run line is `legacy\|legacy_wrong` (`new --legacy-run` / `move pulled`); `Witness:` still mandatory; every `legacy` run gets a `pulled_to:` (`--pulled-to`, else its own `where:`); refused when no run is `legacy` (nothing to review — `rule drop`) |
 | submitted / running | same | `--run <id>` appends a wave, a chained job or a checkpoint resubmit (`resumes:`); state unchanged |
@@ -145,9 +138,6 @@ owns. The full table:
 
 Offline invariants `check` enforces on top of the table:
 
-- `State ∈ ready..accepted` AND `Gates:` non-empty ⇒ `Gates-cleared:` or
-  `Gate-override:` present (`ready..accepted` = every state from `ready`
-  through `accepted` in the order listed above, `rerun` included).
 - `State ∈ submitted..accepted` (and `rerun`) ⇒ `Witness:` non-empty.
 - `State ∈ accepted | rerun | dropped` ⇒ `Ruling:` present (those states are
   reachable only through `rule`).
@@ -155,11 +145,10 @@ Offline invariants `check` enforces on top of the table:
   and its head verb is `leave-to-finish` (the `--partial` case).
 - `State = gated` ⇒ `Gates:` non-empty (a gate that does not exist cannot
   clear).
-- A header key outside the table is drift (`Gate-cleared:` must not pass as
-  a silent typo); the five body sections are present; `Lane:`, when present,
-  is `local-dev`; `Phase:` and `Review-minutes:` are integers, `Budget:` is
-  `H+:MM`, `Gates-cleared:` and `Filed:` are `YYYY-MM-DD`. A key with an
-  empty value is read as absent.
+- A header key outside the table is drift (`Gate:` must not pass as a silent
+  typo for `Gates:`); the five body sections are present; `Phase:` and
+  `Review-minutes:` are integers, `Budget:` is `H+:MM` and `Filed:` is
+  `YYYY-MM-DD`. A key with an empty value is read as absent.
 
 ---
 
@@ -173,7 +162,7 @@ PyAutoCortex/
 ├── REFERENCE.md             ← this file (schemas + grammars)
 ├── LICENSE  .gitignore
 │
-├── projects.yaml            ← the science body map — CODE, not ledger (restricted YAML subset)
+├── projects.yaml            ← the science body map — CODE, not ledger (read with PyYAML)
 ├── epics.md                 ← the Cortex half of each split epic (`- mind-half:`)
 ├── dashboard.md             ← GENERATED board — cortex conductor (`dashboard --apply`); LEDGER
 ├── dashboard.html           ← GENERATED board, the Pages index; LEDGER
@@ -181,25 +170,23 @@ PyAutoCortex/
 ├── phases/<project>/<slug>.md          ← one file per phase (LEDGER)
 ├── rulings/AGENTS.md                   ← the append-only rule
 ├── rulings/<YYYY>/<MM>/R-<YYYYMMDD>-<nn>.md   ← the ledger of record (LEDGER, append-only)
-├── batches/AGENTS.md                   ← batch-record schema (rolling board)
-├── batches/<YYYY-MM-DD>-<slot>.md      ← one record per slot (LEDGER)
-├── batches/packets/{AGENTS.md,TEMPLATE.md,<slot>.html}
-├── batches/reviews/{AGENTS.md,<slot>.md,<slot>-r<N>.md}
+├── batches/AGENTS.md                   ← "closed history: never modified, only added"
+├── batches/<YYYY-MM-DD>-<slot>.md      ← the 2026-08/09 records (LEDGER, append-only)
+├── batches/reviews/{AGENTS.md,<slot>.md}   ← the human's verbatim reviews (LEDGER, append-only)
 │
 ├── docs/schema_decisions.md ← every dated choice the epic did not fix
 ├── policy/never_rewrite_history.md  policy/remote_sessions.md   ← copies of the Mind's; spliced into AGENTS.md
 │
-├── scripts/cortex.py        ← check · gates · rule · move · new (stdlib only)
-├── scripts/ledger_merge.py  ← the default-deny ledger classifier (+ append-only on rulings/)
+├── scripts/cortex.py        ← check · gates · rule · move · new (stdlib + PyYAML)
+├── scripts/ledger_merge.py  ← the default-deny ledger classifier (+ append-only on rulings/, batches/)
 ├── tests/test_cortex.py  tests/test_ledger_merge.py
-├── tests/fixtures/skeleton/ ← one project, one phase per state, five rulings, one batch — the witness
+├── tests/fixtures/skeleton/ ← one project, one phase per state, five rulings — the witness
 ├── tests/fixtures/empty/    ← an empty map passes `check`
 │
 ├── .github/workflows/cortex_check.yml       ← check + pytest on push/PR
 ├── .github/workflows/ledger_merge.yml       ← lands ledger-only `claude/**` branches
 ├── .github/workflows/dashboard_refresh.yml  ← renders the board; self-heals main
 ├── .github/workflows/pages_dashboard.yml    ← publishes dashboard.html to Pages
-├── .github/workflows/gates_grade.yml        ← daily gate grading — the one scheduled mutator
 └── .claude/hooks/session-start.sh  .claude/settings.json   ← GENERATED — repos_sync --write
 ```
 
@@ -310,7 +297,7 @@ The human's words, verbatim.
 | `Runs:` | comma-separated stems, or empty | ⊆ the phase's `Runs:` |
 | `Ruling:` | `accept \| rerun \| drop \| leave-to-finish` | the verb |
 | `Supersedes:` | one ruling id | optional; see the chain rules |
-| `Batch:` | `<YYYY-MM-DD>-<slot>` | optional; the join for rulings filed together |
+| `Batch:` | `<YYYY-MM-DD>-<slot>` | optional-**historical**; the 2026-08/09 rulings' join, nothing writes new ones |
 | `Reviewed-at:` | timestamp | |
 | `Review-minutes-actual:` | integer | |
 | `Follow-ups:` | comma-separated GitHub refs | `GATE_REF_RE`; **the issue is created before `rule` runs** |
@@ -318,8 +305,8 @@ The human's words, verbatim.
 
 Body: `## Ruling` — the human's words verbatim; `## Evidence` — pointers.
 
-**One ruling file per phase.** A multi-phase ruling (a REWIND) is N files with
-the same body and one `Batch:`; `rule --also <phase>` fans out.
+**One ruling file per phase.** A multi-phase ruling (a REWIND) is N `rule`
+invocations with the same body — one per phase.
 
 **Chain rules** (`check`):
 
@@ -348,76 +335,42 @@ only outside the Cortex does not exist* — is [rulings/AGENTS.md](rulings/AGENT
 
 ---
 
-## Batches — the rolling board
+## Batches — closed history
 
-One record per slot, `batches/<YYYY-MM-DD>-<slot>.md`, plus the archived
-packet and the human's verbatim review. Full schema and the fields that are
-easy to get wrong: [batches/AGENTS.md](batches/AGENTS.md).
+`batches/<YYYY-MM-DD>-<slot>.md` and the human's verbatim reviews under
+`batches/reviews/` are read-only history: three records from 2026-08/09, cited
+by 13 rulings, kept because *a verdict recorded only outside the Cortex does
+not exist*. They are **append-only** for the merge gate — never modified, only
+added — and `check` no longer has a schema for them: the review-slot apparatus
+that produced them (the packet page, the scored members, the review-minute
+budget, the `-r<N>` sittings) was retired on 2026-09-03, and nothing writes a
+new record.
 
-Member line:
-
-```
-  - <slug>: <phase path> — <runs> — <review-minutes> — <state>
-```
-
-`<slug>` is the phase file's stem; `<runs>` is comma-separated stems or
-`none`; `<state>` is the phase state at the last refresh. `check` verifies
-the path exists, the slug matches its stem, the runs ⊆ the phase's `Runs:`,
-the review-minutes are an integer and the state is legal; every `review:`
-field must resolve — the key repeats, one line per review file. A review
-file's title is `# Batch review <slot>` for its own filename, its batch record
-`batches/<slot>.md` exists, and every section names a member of it. A rolling
-slot's later sittings are `batches/reviews/<slot>-r<N>.md` (N ≥ 2); they
-resolve to the same record, may be titled for the file or for the slot, and
-are checked identically.
-
-**One review grammar** (`batches/reviews/<slot>.md`, `…-<slot>-r<N>.md`):
-
-```markdown
-# Batch review <YYYY-MM-DD>-<slot>
-
-- packet: batches/packets/<YYYY-MM-DD>-<slot>.html
-- reviewed-at: <free text>
-- review-minutes-actual: <integer or (not given)>
-
-### Follow-ups accepted
-- <accepted follow-up, one per line>
-
-## <slug> — <HEALTH>
-- decision: accept|rerun|drop|leave-to-finish|(none)
-- ruled: yes|no
-
-<note verbatim, or (no note)>
-```
-
-`Follow-ups accepted` is optional and is `###`, not `##`, because `check`
-requires every `##` to name a member of the slot's batch record.
-
-`<HEALTH>` ∈ `HEALTHY | SUSPECT | FAILED | RUNNING`. `(none)` with
-`ruled: no` is a member the human left untouched — listed, never silently
-dropped. `ruled: yes` requires a verb; a verb with `ruled: no` is a leaning the
-human did not tick. The four verbs are the whole vocabulary;
-the Mind's `merge | tweak | reject | defer` is the dev surface's and does not
-appear here.
+A ruling's `Batch:` field is therefore **optional-historical**: where present
+it must still name an existing `batches/<slot>.md`, and nothing writes a new
+one.
 
 ---
 
-## The restricted YAML subset (`projects.yaml`)
+## `projects.yaml`
 
-Real YAML, parsed with the stdlib by a ~40-line line loop. The subset:
+Ordinary YAML, read with `yaml.safe_load` (PyYAML is `cortex.py`'s one
+dependency; the hand-rolled restricted-subset parser it replaced was retired
+on 2026-09-03, its own parity test having proved it equivalent). The document
+is a mapping of project key → field mapping:
 
-```
-<key>:                        # column 0, ^[a-z][a-z0-9_]*$
-  <field>: <scalar>           # exactly two spaces; fixed field set, unknown field = error
-  sync_verbs: [pull, push]    # flow list of bare words — the only list
+```yaml
+<key>:                        # ^[a-z][a-z0-9_]*$
+  <field>: <scalar>           # fixed field set, unknown field = error
+  sync_verbs: [pull, push]    # a list of bare words
   note: "free text"           # the one optional field
 ```
 
-- Scalars are bare unless they contain `#`, `:` or edge spaces, then
-  `"..."` with no escapes.
-- Comments on their own line or after ` #`. Blank lines anywhere.
-- No block lists, no nesting beyond the two levels, no anchors, no `---`, no
-  quoted keys.
+What `check` validates is the **fields**, not the syntax: the document is a
+mapping of rows, every key matches the key grammar, every field is in the set
+below, `sync_verbs` is a list of bare words, and each value passes the rules
+listed here. A document PyYAML cannot read is reported as one problem.
+
 - Fields (required): `remote` (`owner/repo` | `none` — PyAutoLabs for active
   projects; a personal remote is recorded as a fact with a `note:`),
   `local_path` (absolute laptop path — the Cortex-only exception to the
@@ -448,14 +401,13 @@ deny**:
 | `epics.md` | `projects.yaml`, `README.md`, `AGENTS.md`, `REFERENCE.md`, … |
 | `dashboard.md`, `dashboard.html` (generated) | **`AGENTS.md` / `TEMPLATE.md` inside a ledger dir** |
 | | anything unclassified — a new root file, a new top-level folder |
-| | **any modification or deletion under `rulings/`** (append-only) |
+| | **any modification or deletion under `rulings/` or `batches/`** (append-only) |
 
 Three exceptions inside the ledger dirs. Two are the Mind's: a **dot-path**
 anywhere, and a file pytest would **collect** (`conftest.py`, `test_*.py`,
 `*_test.py`). The third is the Cortex's own **doctrine carve-out** —
-`rulings/AGENTS.md`, `batches/AGENTS.md`, `batches/packets/AGENTS.md`,
-`batches/packets/TEMPLATE.md`, `batches/reviews/AGENTS.md` are ledger by
-location but instructional by content: they say what an entry may be and what
+`rulings/AGENTS.md`, `batches/AGENTS.md` and `batches/reviews/AGENTS.md` are
+ledger by location but instructional by content: they say what an entry may be and what
 every future entry is stamped from, so a change to one is a change to
 behaviour. Auto-merging a rewrite of `rulings/AGENTS.md` would let a branch
 edit the rule that governs its own merge.
@@ -466,7 +418,10 @@ that moves a phase re-renders them in the same push, and
 
 And a fourth Cortex rule on *kind* rather than path: `ledger_merge.py`
 classifies via `git diff --name-status`, and an `M`, `D` or `R` entry under
-`rulings/**` is code.
+`rulings/**` or `batches/**` is code. `rulings/` because a ruling is
+superseded, never edited; `batches/` since 2026-09-03, when the review-slot
+apparatus was retired and its records became history — never modified, only
+added.
 
 The blocking check is `python3 scripts/cortex.py check` run on the **trial-merge
 tree** — after `git merge --no-ff`, before `git push` — which is what catches
@@ -487,38 +442,27 @@ Stdlib only; `main(argv)`; no import-time side effects; every verb takes
 `--root <dir>` (default: the repo root the script lives in). Every leg of
 `check` takes `root: Path`, so tests run it against a `tmp_path` copy.
 
-- **`check`** — every rule in this file: phase headers and states, the gates
-  invariant, the witness invariant, run lines, ruling ids and chains, the
-  verb↔state agreement, batch member lines and review files, every project
-  named by a phase path is a `projects.yaml` key, the `projects.yaml` subset
-  itself. Hermetic (no network, no git). Output in `lifecycle.py`'s shape —
+- **`check`** — every rule in this file: phase headers and states, the witness
+  invariant, run lines, ruling ids and chains, the verb↔state agreement, every
+  project named by a phase path is a `projects.yaml` key, and `projects.yaml`'s
+  own fields. Hermetic (no network, no git). Output in `lifecycle.py`'s shape —
   `cortex check: OK` or `cortex check: DRIFT` followed by one `  - …` line per
   finding; exit 1 on drift.
-- **`gates [--grade [--write]]`** — offline: list every `gated` phase and its
-  refs. `--grade`: per ref,
-  `gh api repos/<o>/<r>/issues/<n> --jq '{state, state_reason, merged_at: .pull_request.merged_at, is_pr: (.pull_request != null)}'`
-  with a stdlib `urllib` fallback (User-Agent `pyautocortex`) when `gh` is
-  absent. **Cleared** = PR ⇒ `merged_at != null` (closed-unmerged is a dead
-  gate, reported); issue ⇒ `state == closed` and `state_reason ∈ {completed,
-  null}` (`not_planned` / `duplicate` are dead gates); anything unreadable
-  fails closed (reported, nothing flipped, exit 1). `--grade` reports only;
-  `--write` flips `gated → ready` (writing `Gates-cleared:`) and
-  `ready → gated` when a cleared gate reopened (removing the stale
-  `Gates-cleared:`; refused when `Gate-override:` is present; for
-  `submitted`+ phases a reopened gate is reported, never enforced). The
-  fetch is injectable (`gates_report(root, fetch=…)`) so the grading is
-  tested offline.
+- **`gates`** — read-only and offline: every `gated` phase, its refs and the
+  URL each ref resolves to (`GATE_REF_RE` → `gate_url`). Nothing polls GitHub
+  and nothing flips a state. Grading was retired on 2026-09-03 — in its whole
+  life it saw 2 gated refs and flipped 0, while schema decision 54 routes
+  sequencing through prose `Ready when:` lines. A human reads the listing,
+  opens the refs and types `move <phase> ready`.
 - **`rule <phase> <verb> --body <file> [--supersedes <id>] [--batch <slot>]
-  [--minutes n] [--follow-up <ref>]... [--also <phase>]...`** — assigns the
-  next id for today, writes the ruling file(s) (one per phase; `--also` fans
-  out with the same body and batch), updates the phase's `Ruling:` and
-  `State:` per the table (and appends `<id> — <verb>` to the phase's
+  [--minutes n] [--follow-up <ref>]...`** — assigns the next id for today,
+  writes the ruling file, updates the phase's `Ruling:` and `State:` per the
+  table (and appends `<id> — <verb>` to the phase's
   `## Ruling`); the ruling's `Runs:` is the phase's, its `## Evidence` is the
   phase's `## Where to look`; refuses to touch an existing ruling; refuses a
   verb the table does not allow from the phase's state; validates everything
-  for every phase before writing anything. An `--also` phase in `accepted`
-  supersedes its own `Ruling:` (the REWIND is N accepted phases).
-- **`move <phase> <state> [--run <id>] [--reason ..] [--override ..]
+  before writing anything.
+- **`move <phase> <state> [--run <id>] [--reason ..]
   [--partial] [--pulled-to <path>] [--partition ..] [--after <run>]
   [--resumes <run>] [--note ..]`** — the table; refuses every ruling edge
   with a message naming `rule`. `--run` on `submitted`/`running` appends a
@@ -543,16 +487,18 @@ Stdlib only; `main(argv)`; no import-time side effects; every verb takes
 
 ## Driving the Cortex — the conductor and the workflows
 
-The Cortex is state plus `cortex.py`. The reasoning over it — the board, the
-slot, the daily grading — is the Brain's **cortex conductor**:
+The Cortex is state plus `cortex.py`. The reasoning over it — the board and the
+check-in — is the Brain's **cortex conductor**:
 
 ```bash
 pyauto-brain cortex census [--json]                  # what is held, by state
 pyauto-brain cortex dashboard --check | --apply      # render the two pages
-pyauto-brain cortex gates [--grade] [--apply]        # poll the refs; flip what cleared
-pyauto-brain cortex plan [--budget N] [--lane ..]    # which ready phases fit a slot
-pyauto-brain cortex collect [--slot S] [--pull] [--refreshed ISO] [--apply] [--out F]
+pyauto-brain cortex gates                            # the gated phases and their refs
+pyauto-brain cortex collect [--phase REL] [--pull] [--refreshed ISO] [--apply] [--out F]
 ```
+
+`collect` with no `--phase` scopes to **every** phase in `submitted | running`
+— that is the check-in: pull what came back, score it, move it on.
 
 With no Brain install, or from a workflow:
 
@@ -565,9 +511,8 @@ verb. (`--cortex . dashboard --check` exits 2.) The root is resolved
 `--cortex` → `$PYAUTO_CORTEX` → `PyAutoCortex` beside the Brain checkout.
 
 **Two spellings of the same flag.** The conductor writes with `--apply` (the
-Brain's house spelling); `scripts/cortex.py` writes with `--write`. `cortex
-gates --grade --apply` is a thin wrapper over `cortex.py gates --grade
---write`; the edit is `cortex.py`'s either way.
+Brain's house spelling); `scripts/cortex.py` writes with `--write`. Every edit
+to a phase is `cortex.py`'s either way.
 
 **The `--check` exit-code contract** (`dashboard_refresh.yml` depends on it):
 
@@ -588,26 +533,21 @@ for exactly that reason.
 |---|---|---|
 | `cortex_check.yml` | push/PR on `phases/ rulings/ batches/ projects.yaml epics.md dashboard.* scripts/ tests/` | nothing (`cortex.py check` + pytest) |
 | `dashboard_refresh.yml` | push to main + PR on the ledger paths and the two pages, nightly **03:35 UTC**, dispatch | `dashboard.md`, `dashboard.html` on main (3-attempt fetch/reset/render/commit/push); a PR run errors instead of healing |
-| `pages_dashboard.yml` | push to `dashboard.html` / `batches/packets/**`, dispatch | nothing in git — publishes `dashboard.html` as the Pages index and `batches/packets/*.html` under `/packets/` |
-| `gates_grade.yml` | daily **06:47 UTC**, dispatch | phase headers, `State:` + `Gates-cleared:` only, and only `gated → ready` / `ready → gated` |
+| `pages_dashboard.yml` | push to `dashboard.html`, dispatch | nothing in git — publishes `dashboard.html` as the Pages index |
 | `ledger_merge.yml` | push to `claude/**`, dispatch | merges a ledger-only branch into main |
 
-`gates_grade.yml` is the **one scheduled job that mutates the ledger**. It
-grades with `cortex.py gates --grade --write`, commits `phases` with an explicit
-pathspec, and an unreadable ref (deleted issue, rate limit, private repo) fails
-closed: that phase is skipped, whatever else flipped is still committed and
-pushed, and the job then exits non-zero so the run is red.
+**No scheduled job mutates the ledger.** A daily gate-grading cron did until
+2026-09-03; retiring gate grading retired it with no replacement.
 
 Every workflow that can push to main shares `concurrency: group:
-cortex-main-writers, cancel-in-progress: false` — `dashboard_refresh.yml`,
-`gates_grade.yml`, `ledger_merge.yml` — so two bot writers never race for the
-tip. `pages_dashboard.yml` keeps its own `group: pages`.
+cortex-main-writers, cancel-in-progress: false` — `dashboard_refresh.yml` and
+`ledger_merge.yml` — so two bot writers never race for the tip.
+`pages_dashboard.yml` keeps its own `group: pages`.
 
 A push made with `GITHUB_TOKEN` triggers **no** workflow, so each writer
 re-dispatches by name what its push should have woken: `dashboard_refresh.yml`
 asks for `pages_dashboard.yml` (on both paths — fresh *and* healed; folding the
-fresh one away is the bug that stranded the Mind's published board),
-`gates_grade.yml` asks for `cortex_check.yml` and `dashboard_refresh.yml`, and
+fresh one away is the bug that stranded the Mind's published board), and
 `ledger_merge.yml` asks for `cortex_check.yml`.
 
 The board is published at **<https://pyautolabs.github.io/PyAutoCortex/>**.

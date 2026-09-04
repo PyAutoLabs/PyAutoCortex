@@ -9,7 +9,6 @@ Witness: evidence_increase < 5 in results/delaunay_adapt_split/pl_eff_1_outer_no
 Budget: 48:00
 Runs: 342027, 342093, 342231, 342234
 Ruling: R-20260902-04
-Lane: local-dev
 Review-minutes: 8
 Epic:
 Filed: 2026-08-29

@@ -49,9 +49,9 @@ import sys
 from pathlib import Path
 
 # Directories holding nothing but the run-and-ruling ledger: phase files,
-# rulings of record, batch records and reviews. Their whole contents are
-# ledger (subject to the EXCLUDED_NAMES guard below, and to the append-only
-# leg for rulings/ in classify_entries).
+# rulings of record, and the batch records and reviews kept as history. Their
+# whole contents are ledger (subject to the EXCLUDED_NAMES guard below, and to
+# the append-only leg for rulings/ and batches/ in classify_entries).
 LEDGER_DIRS = ("phases/", "rulings/", "batches/")
 
 # Root files that are ledger state. Deliberately NOT here: README.md,
@@ -72,12 +72,11 @@ LEDGER_FILES = ("epics.md", "dashboard.md", "dashboard.html")
 #
 # EXECUTABLE BY COLLECTION: a file pytest would *collect* runs in CI from
 # anywhere in the tree, so it is code wherever it sits — a `test_*.py` dropped
-# beside a batch packet included.
+# beside a batch record included.
 #
 # INSTRUCTIONAL BY CONTENT: `AGENTS.md` and `TEMPLATE.md` under a ledger dir
-# (`rulings/AGENTS.md`, `batches/AGENTS.md`, `batches/packets/AGENTS.md`,
-# `batches/packets/TEMPLATE.md`, `batches/reviews/AGENTS.md`) are not entries in
-# the ledger — they are the doctrine that says what an entry may be, and the
+# (`rulings/AGENTS.md`, `batches/AGENTS.md`, `batches/reviews/AGENTS.md`) are
+# not entries in the ledger — they are the doctrine that says what an entry may be, and the
 # template every future entry is stamped from. They are read by agents as
 # instructions, so a change to one is a change to behaviour: it needs a human,
 # exactly as `scripts/` does. Auto-merging a rewrite of `rulings/AGENTS.md`
@@ -117,9 +116,12 @@ def classify(paths):
     return ledger, blocked
 
 
-# The one dir where a change's KIND matters, not only its path: the ledger of
-# record is append-only, so only an added file under it is ledger.
-APPEND_ONLY_DIRS = ("rulings/",)
+# The dirs where a change's KIND matters, not only its path: the ledger of
+# record is append-only, so only an added file under one is ledger.
+# `batches/` joined `rulings/` on 2026-09-03, when the review-slot apparatus
+# was retired: the batch records and the human's verbatim reviews stay as
+# history — never modified, only added — and 13 rulings cite them.
+APPEND_ONLY_DIRS = ("rulings/", "batches/")
 
 
 def is_append_only_violation(status: str, path: str) -> bool:
@@ -134,8 +136,9 @@ def classify_entries(entries):
     """Split `(status, path)` entries into (ledger, blocked) paths.
 
     A path is blocked if it is not ledger material, or if it is a non-`A`
-    entry under `rulings/` (an edited, deleted or renamed ruling). A rename
-    entry carries both paths; the old one counts as a deletion."""
+    entry under an append-only dir (`rulings/`, `batches/` — an edited,
+    deleted or renamed ruling, batch record or review). A rename entry
+    carries both paths; the old one counts as a deletion."""
     ledger, blocked, seen = [], [], set()
     for status, path in entries:
         path = path.strip()
