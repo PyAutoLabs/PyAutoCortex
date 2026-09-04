@@ -14,7 +14,7 @@ Every science phase the Cortex is holding, on one page: what is waiting on your 
 | [Running / submitted](#running--submitted) | 2 |
 | [Ready](#ready) | 5 |
 | [Gated](#gated) | 1 |
-| [Recent rulings](#recent-rulings) | 25 |
+| [Recent rulings](#recent-rulings) | 26 |
 
 ## By project
 
@@ -91,24 +91,24 @@ python3 scripts/cortex.py move phases/euclid/magnification_robustness.md ready  
 ### inference_programme
 
 - local `/home/jammy/Code/PyAutoLabs/autolens_profiling` · mirror `/mnt/c/Users/Jammy/Science/inference_programme` · RAL `/mnt/ral/jnightin/autolens_profiling`
-- phases: accepted 7 · dropped 9 · gated 1 · planned 6
+- phases: accepted 7 · dropped 10 · gated 1 · planned 5
 
 **Gated**
 
-<a href="phases/inference_programme/mass_pix_gradient_cost_probe.md">Inference_programme — phase 20: mass_pix gradient cost probe — forward vs value_and_grad on the A100, strict FD on all 7 params</a> — inference_programme phase 20 · budget 1:00 · 10 review-min — **gated**
+<a href="phases/inference_programme/nautilus_mass_pix_baseline.md">Inference_programme — phase 21: the Nautilus bar on mass_pix — f1e8 (refs convention) and f1e5 (like-for-like)</a> — inference_programme phase 21 · budget 4:00 · 15 review-min — **gated**
 
-- where to look: `autolens_profiling/results/notes/gradient_slam/LEDGER.md` — the epic's ledger: the question, the inherited evidence and the exact `mass_pix` fixed values
-- where to look: `PyAutoMind/draft/feature/autolens_profiling/gradient_slam_mass_pix_target.md` — the development leg this phase waits on
-- where to look: `autolens_profiling/scripts/misc/searches/probe_mass_pix_gradient.py` — the probe script (written by the dev leg)
-- where to look: `autolens_profiling/hpc/batch_gpu/` — the P1 submit script and its `WALL-BASIS` block
-- where to look: `inference_programme` (project row): `output/searches/probe/imaging/mass_pix/hst/` — the probe run tree, and `logs/output/` + `logs/error/` on the mirror
-- where to look: `autolens_workspace_developer#117` and `searches_minimal/pix_prodigy_findings.md` — the CPU 17× anomaly this probe re-measures
-- where to look: `autolens_workspace_test/scripts/imaging/jax_grad/pixelization.py` — the FD-certification pattern
+- where to look: `autolens_profiling/results/notes/gradient_slam/LEDGER.md` — the `mass_pix` target definition and the provenance of every fixed value
+- where to look: `autolens_profiling/scripts/imaging/searches/nautilus/mass_pix.py` — the driver (written by the dev leg)
+- where to look: `autolens_profiling/hpc/batch_gpu/` — the two-arm submit script and its `WALL-BASIS` block
+- where to look: `inference_programme` (project row): `output/searches/nautilus/imaging/mass_pix/hst/pos_tauto0.2_f1e8/` and `.../pos_tauto0.2_f1e5/` — the two run trees, each with `positions.info`
+- where to look: `autolens_profiling/results/searches/nautilus/imaging/mass_pix/hst/` — the result rows
+- where to look: `logs/output/` and `logs/error/` on the mirror
+- where to look: `autolens_profiling/results/baselines/InferenceRefs_v1/pixelization_pos_fp64/` — the nearest certified neighbour (12 free parameters vs this cell's 7)
 
 <details><summary>📋 its gates</summary>
 
 ```
-python3 scripts/cortex.py gates   # then, once they have closed: move phases/inference_programme/mass_pix_gradient_cost_probe.md ready
+python3 scripts/cortex.py gates   # then, once they have closed: move phases/inference_programme/nautilus_mass_pix_baseline.md ready
 # gates: autolens_profiling#218
 ```
 
@@ -154,24 +154,6 @@ python3 scripts/cortex.py move phases/inference_programme/multiband_compile_cens
 
 ```
 python3 scripts/cortex.py move phases/inference_programme/legacy_point_output_sweep.md ready   # when the `Ready when:` clause in its `## Question` is met
-```
-
-</details>
-
-<a href="phases/inference_programme/nautilus_mass_pix_baseline.md">Inference_programme — phase 21: the Nautilus bar on mass_pix — f1e8 (refs convention) and f1e5 (like-for-like)</a> — inference_programme phase 21 · budget 4:00 · 15 review-min — **planned**
-
-- where to look: `autolens_profiling/results/notes/gradient_slam/LEDGER.md` — the `mass_pix` target definition and the provenance of every fixed value
-- where to look: `autolens_profiling/scripts/imaging/searches/nautilus/mass_pix.py` — the driver (written by the dev leg)
-- where to look: `autolens_profiling/hpc/batch_gpu/` — the two-arm submit script and its `WALL-BASIS` block
-- where to look: `inference_programme` (project row): `output/searches/nautilus/imaging/mass_pix/hst/pos_tauto0.2_f1e8/` and `.../pos_tauto0.2_f1e5/` — the two run trees, each with `positions.info`
-- where to look: `autolens_profiling/results/searches/nautilus/imaging/mass_pix/hst/` — the result rows
-- where to look: `logs/output/` and `logs/error/` on the mirror
-- where to look: `autolens_profiling/results/baselines/InferenceRefs_v1/pixelization_pos_fp64/` — the nearest certified neighbour (12 free parameters vs this cell's 7)
-
-<details><summary>📋 open it</summary>
-
-```
-python3 scripts/cortex.py move phases/inference_programme/nautilus_mass_pix_baseline.md ready   # when the `Ready when:` clause in its `## Question` is met
 ```
 
 </details>
@@ -459,10 +441,10 @@ python3 scripts/cortex.py move phases/euclid/dr1_prelim_10_lens_science_run.md s
 
 [markdown version](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/phases/) — Waiting on development work. Open the references; when they have all closed, `cortex.py move <phase> ready`.
 
-<details><summary>📋 <a href="phases/inference_programme/mass_pix_gradient_cost_probe.md">Inference_programme — phase 20: mass_pix gradient cost probe — forward vs value_and_grad on the A100, strict FD on all 7 params</a> — inference_programme phase 20 · budget 1:00 · 10 review-min — autolens_profiling#218</summary>
+<details><summary>📋 <a href="phases/inference_programme/nautilus_mass_pix_baseline.md">Inference_programme — phase 21: the Nautilus bar on mass_pix — f1e8 (refs convention) and f1e5 (like-for-like)</a> — inference_programme phase 21 · budget 4:00 · 15 review-min — autolens_profiling#218</summary>
 
 ```
-python3 scripts/cortex.py gates   # then, once they have closed: move phases/inference_programme/mass_pix_gradient_cost_probe.md ready
+python3 scripts/cortex.py gates   # then, once they have closed: move phases/inference_programme/nautilus_mass_pix_baseline.md ready
 # gates: autolens_profiling#218
 ```
 
@@ -474,6 +456,7 @@ python3 scripts/cortex.py gates   # then, once they have closed: move phases/inf
 
 | Ruling | Verb | Phase | Batch |
 |---|---|---|---|
+| [R-20260904-04](rulings/2026/09/R-20260904-04.md) | drop | phases/inference_programme/mass_pix_gradient_cost_probe.md | - |
 | [R-20260904-03](rulings/2026/09/R-20260904-03.md) | drop | phases/inference_programme/cluster_gradient_search_benchmark.md | - |
 | [R-20260904-02](rulings/2026/09/R-20260904-02.md) | drop | phases/inference_programme/phase5_mesh_gradient_positions_on.md | - |
 | [R-20260904-01](rulings/2026/09/R-20260904-01.md) | accept | phases/inference_programme/refs_v1_positions_on_completion.md | - |
@@ -485,7 +468,6 @@ python3 scripts/cortex.py gates   # then, once they have closed: move phases/inf
 | [R-20260902-05](rulings/2026/09/R-20260902-05.md) | rerun | phases/subhalo_validation/delaunay_adapt_split_pl_eff_0.md | - |
 | [R-20260902-04](rulings/2026/09/R-20260902-04.md) | rerun | phases/subhalo_validation/delaunay_adapt_split_pl_eff_1_outer.md | - |
 | [R-20260902-03](rulings/2026/09/R-20260902-03.md) (superseded) | accept | phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md | - |
-| [R-20260902-02](rulings/2026/09/R-20260902-02.md) (superseded) | accept | phases/subhalo_validation/delaunay_adapt_split_pl_eff_0.md | - |
 
 ## Epics
 
@@ -499,7 +481,7 @@ Work out where the Cortex half of the epic euclid-dr1-prep stands from phases/eu
 
 </details>
 
-<details><summary>📋 <b>would a gradient search dropped into a SLaM mass[1] search beat Nautilus?</b> — Mind half: <code>draft/feature/autolens_profiling/gradient_slam_mass_pix_target.md (dev leg, phase 1 gate)</code> — ledger: <code>autolens_profiling/results/notes/gradient_slam/LEDGER.md</code> — BORN 2026-09-04 from the retired jax-inference-profiling; phase 1 gated on the dev leg</summary>
+<details><summary>📋 <b>would a gradient search dropped into a SLaM mass[1] search beat Nautilus?</b> — Mind half: <code>draft/feature/autolens_profiling/gradient_slam_mass_pix_target.md (dev leg, phase 1 gate)</code> — ledger: <code>autolens_profiling/results/notes/gradient_slam/LEDGER.md</code> — BORN 2026-09-04 from the retired jax-inference-profiling; phase 21 (Nautilus baseline) gated on the dev leg autolens_profiling#218; phase 20 (cost probe) dropped the same day — the epic measures steps, not gradient cost</summary>
 
 ```
 Work out where the Cortex half of the epic gradient-slam-baseline stands from autolens_profiling/results/notes/gradient_slam/LEDGER.md and tell me what its next phase is.

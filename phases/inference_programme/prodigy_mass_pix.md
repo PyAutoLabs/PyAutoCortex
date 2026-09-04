@@ -34,9 +34,14 @@ What would make this negative and still informative: lanes that NaN, lanes that
 pin, or a p_hit that collapses while the wall advantage holds. All three are
 counted and reported rather than absorbed, and any of them arms phase 23.
 
-**Ready when:** phase 21 rules (its `f1e5` arm is the bar), and phase 20's ruling
-did not find the 17× CPU gradient anomaly reproducing on the A100 — if it did,
-the Mind bug it raised is fixed first.
+**Ready when:** phase 21 rules — its `f1e5` arm is the bar, and its own Nautilus
+wall is the measured basis this phase's submit script inherits. Phase 21 is the
+first science phase of the epic: phase 20, the gradient cost probe, was dropped
+on 2026-09-04 (R-20260904-04) because the epic measures the number of inference
+steps, not the cost of a gradient; the cost probe is now an ordinary
+autolens_profiling prompt in the Mind
+(`draft/feature/autolens_profiling/gradient_cost_probe.md`) and gates nothing
+here.
 
 ## Witness
 

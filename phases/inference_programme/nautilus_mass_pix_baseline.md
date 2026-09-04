@@ -2,8 +2,8 @@
 
 Project: inference_programme
 Phase: 21
-State: planned
-Gates:
+State: gated
+Gates: autolens_profiling#218
 Witness: both Nautilus arms deliver on their own artefacts — a `.completed` marker and a `positions.info` file in each run dir; `.err` free of Tracebacks; `.out` ends "Finished." with zero "Fit Already Completed"; a result row per arm carrying a `target_id` that recomputes from `_targets.py`; no overflow signature (no finite `log_l` above the Fitness ceiling); each arm physical — `einstein_radius` recovered at 1.60 ± 0.02 with `|ell_comps| < 1`; and max logL, log evidence, likelihood evals and sampler wall recorded for both arms
 Budget: 4:00
 Runs:
@@ -36,9 +36,28 @@ all instances at the certified `slam_source_pix_pos_fp64` maximum likelihood
 (R-20260902-01, run identifier `4323a2ffcb3e50a71f229e46032d9e95`). Free = 7
 parameters, Isothermal (5) + ExternalShear (2).
 
-**Ready when:** phase 20 rules, and its measured cost has been written into this
-phase's submit script as the `WALL-BASIS` block (the wall basis is measured on
-this cell, never transferred).
+**This is the first science phase of the epic.** Phase 20 — the `mass_pix`
+gradient cost probe — was dropped on 2026-09-04 (R-20260904-04): the epic asks
+whether gradients reduce the *number* of inference steps, not what a gradient
+costs, and the cost probe is now an ordinary autolens_profiling prompt in the
+Mind (`draft/feature/autolens_profiling/gradient_cost_probe.md`). The science
+phases start here.
+
+**Ready when:** the development leg has landed —
+`PyAutoMind/draft/feature/autolens_profiling/gradient_slam_mass_pix_target.md`
+(the `mass_pix` target in `_setup.py` / `_targets.py`, the per-cell sampler rows,
+the drivers and the submit scripts). That prompt was filed 2026-09-04 with its
+issue opened at the same moment as this phase's gate ref —
+**autolens_profiling#218** (Cortex schema decision 55: a `Gates:` line holds
+GitHub refs only, so a Cortex-spawned dev prompt gets its issue at filing).
+Reuse that issue in `/start_dev`; never open a second. When its PR merges,
+`move` this phase to `ready`. Nothing here submits before then.
+
+Because nothing has ever been measured on this cell, this phase's `WALL-BASIS`
+block states a conservative first-run budget with the basis given as "first run
+on this cell, no prior measurement"; it is this phase's own Nautilus wall that
+becomes the measured basis phase 22 inherits (the wall basis is measured on the
+cell itself, never transferred).
 
 ## Witness
 

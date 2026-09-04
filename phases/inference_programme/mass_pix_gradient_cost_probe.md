@@ -2,12 +2,12 @@
 
 Project: inference_programme
 Phase: 20
-State: gated
+State: dropped
 Gates: autolens_profiling#218
 Witness: one A100 job on the `imaging/mass_pix/hst` cell writes a probe artifact carrying: the forward likelihood cost in ms/eval, the `value_and_grad` cost in ms/eval and their ratio; the jit compile time for each; and a strict finite-difference check of the analytic gradient on all 7 free parameters (Isothermal 5 + ExternalShear 2) that PASSES on every one of them — every FD/analytic pair agreeing to the probe's declared tolerance, no parameter skipped, no NaN or non-finite entry in either gradient; `.err` free of Tracebacks and `.out` ending "Finished."
 Budget: 1:00
 Runs:
-Ruling:
+Ruling: R-20260904-04
 Review-minutes: 10
 Epic: gradient-slam-baseline
 Filed: 2026-09-04
@@ -68,4 +68,4 @@ one A100 job on the `imaging/mass_pix/hst` cell writes a probe artifact carrying
 
 ## Ruling
 
-(none)
+R-20260904-04 — drop
