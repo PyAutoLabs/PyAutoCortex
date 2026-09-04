@@ -11,8 +11,8 @@ Every science phase the Cortex is holding, on one page: what is waiting on your 
 | Where | Count |
 |-------|------:|
 | [Awaiting ruling](#awaiting-ruling) | 0 |
-| [Running / submitted](#running--submitted) | 2 |
-| [Ready](#ready) | 5 |
+| [Running / submitted](#running--submitted) | 3 |
+| [Ready](#ready) | 4 |
 | [Gated](#gated) | 1 |
 | [Recent rulings](#recent-rulings) | 27 |
 
@@ -34,7 +34,7 @@ One row per active project — the next thing, what it is holding, and when it l
 |---|---|---:|---:|---:|---|
 | euclid | 4 ready | 0 | 0 | 1 | - |
 | inference_programme | 21 gated | 0 | 0 | 0 | 2026-09-04 |
-| subhalo_validation | 5 running | 0 | 2 | 4 | 2026-09-02 |
+| subhalo_validation | 1 running | 0 | 3 | 3 | 2026-09-02 |
 
 #### Nothing open
 
@@ -173,9 +173,9 @@ python3 scripts/cortex.py gates   # then, once they have closed: move phases/inf
 
 **RAL** `/mnt/ral/jnightin/subhalo_validation`
 
-active · ral partition · phases: ready 4 · running 2
+active · ral partition · phases: ready 3 · running 3
 
-<details><summary>📋 <a href="phases/subhalo_validation/rectangular_adapt_pl_eff_0.md">Subhalo_validation — phase 5: rectangular_adapt on pl_eff_0 — the clumpy-source lens on the RectangularBilinear comparison</a> — subhalo_validation phase 5 · budget 48:00 · 8 review-min · runs 342237_1, 342240_1 — <b>running</b> — ⚠️ failed runs: 342240_1</summary>
+<details><summary>📋 <a href="phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md">Subhalo_validation — phase 1: delaunay_adapt_split on pl_sersic_0 — the false-positive null</a> — subhalo_validation phase 1 · budget 48:00 · 10 review-min · runs 342027_0, 342231_0, 342234_0, 342273_0 — <b>running</b> — ⚠️ failed runs: 342234_0</summary>
 
 ```
 cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync jobs
@@ -185,8 +185,8 @@ cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync jobs
 
 <details><summary>5 more open phase(s) · plans and issues</summary>
 
+- [Subhalo_validation — phase 5: rectangular_adapt on pl_eff_0 — the clumpy-source lens on the RectangularBilinear comparison](phases/subhalo_validation/rectangular_adapt_pl_eff_0.md) — running
 - [Subhalo_validation — phase 6: rectangular_adapt on pl_eff_1_outer — the outer-component lens on the RectangularBilinear comparison](phases/subhalo_validation/rectangular_adapt_pl_eff_1_outer.md) — running
-- [Subhalo_validation — phase 1: delaunay_adapt_split on pl_sersic_0 — the false-positive null](phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md) — ready
 - [Subhalo_validation — phase 2: delaunay_adapt_split on pl_eff_0 — the clumpy-source lens](phases/subhalo_validation/delaunay_adapt_split_pl_eff_0.md) — ready
 - [Subhalo_validation — phase 3: delaunay_adapt_split on pl_eff_1_outer — the outer-component lens, plus the AdaptSplit fix rerun](phases/subhalo_validation/delaunay_adapt_split_pl_eff_1_outer.md) — ready
 - [Subhalo_validation — phase 4: rectangular_adapt on pl_sersic_0 — the RectangularBilinear comparison](phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md) — ready
@@ -204,6 +204,14 @@ cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync jobs
 ## Running / submitted
 
 [markdown version](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/phases/) — On the queue or on the machine. Wall is what the run lines record at the last refresh, against the phase's own budget.
+
+<details><summary>📋 <a href="phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md">Subhalo_validation — phase 1: delaunay_adapt_split on pl_sersic_0 — the false-positive null</a> — subhalo_validation phase 1 · budget 48:00 · 10 review-min · runs 342027_0, 342231_0, 342234_0, 342273_0 — wall 34:08 of 48:00 (71%)</summary>
+
+```
+cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync jobs
+```
+
+</details>
 
 <details><summary>📋 <a href="phases/subhalo_validation/rectangular_adapt_pl_eff_0.md">Subhalo_validation — phase 5: rectangular_adapt on pl_eff_0 — the clumpy-source lens on the RectangularBilinear comparison</a> — subhalo_validation phase 5 · budget 48:00 · 8 review-min · runs 342237_1, 342240_1 — wall 0:00 of 48:00 (0%)</summary>
 
@@ -225,18 +233,6 @@ cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync jobs
 
 [markdown version](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/phases/) — Gate cleared, witness registered — everything that could be submitted today.
 
-<details><summary>📋 <a href="phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md">Subhalo_validation — phase 1: delaunay_adapt_split on pl_sersic_0 — the false-positive null</a> — subhalo_validation phase 1 · budget 48:00 · 10 review-min · runs 342027_0, 342231_0, 342234_0</summary>
-
-```
-phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md
-cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync submit <script>
-python3 scripts/cortex.py move phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md submitted --run <jobid>
-```
-
-</details>
-
-<details><summary>3 more ready</summary>
-
 <details><summary>📋 <a href="phases/subhalo_validation/delaunay_adapt_split_pl_eff_0.md">Subhalo_validation — phase 2: delaunay_adapt_split on pl_eff_0 — the clumpy-source lens</a> — subhalo_validation phase 2 · budget 48:00 · 8 review-min · runs 342027_1, 342231_1, 342234_1</summary>
 
 ```
@@ -246,6 +242,8 @@ python3 scripts/cortex.py move phases/subhalo_validation/delaunay_adapt_split_pl
 ```
 
 </details>
+
+<details><summary>2 more ready</summary>
 
 <details><summary>📋 <a href="phases/subhalo_validation/delaunay_adapt_split_pl_eff_1_outer.md">Subhalo_validation — phase 3: delaunay_adapt_split on pl_eff_1_outer — the outer-component lens, plus the AdaptSplit fix rerun</a> — subhalo_validation phase 3 · budget 48:00 · 8 review-min · runs 342027_2, 342093_0, 342231_2, 342234_2</summary>
 
