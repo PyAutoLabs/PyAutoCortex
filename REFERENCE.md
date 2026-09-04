@@ -61,6 +61,17 @@ No YAML frontmatter. The body
 sections are fixed: `## Question`, `## Witness`, `## Where to look`, `## Runs`,
 `## Ruling`.
 
+**`## Where to look` is rendered, not just parsed.** Its `- ` bullets are the
+answer to *which folder do I open* — the dashboard's `## By project` view and
+`pyauto-brain cortex checkin` print them verbatim under the phase, and
+`collect` resolves the ones that are absolute paths inside the project's roots
+to the artefacts it scores. `new` seeds the section with the placeholder
+`- (the output path, once there is one)`, which is honest on a `planned` phase
+and a hole on any other, so **`check` requires a phase whose `State:` is past
+`planned` to carry at least one bullet that is not that placeholder**. A
+bullet is free text: a path, a project-row-relative location, a Mind prompt, a
+GitHub ref — whatever a human would open.
+
 ### Phase header keys
 
 | Key | Value | Notes |
@@ -443,9 +454,9 @@ Stdlib only; `main(argv)`; no import-time side effects; every verb takes
 `check` takes `root: Path`, so tests run it against a `tmp_path` copy.
 
 - **`check`** — every rule in this file: phase headers and states, the witness
-  invariant, run lines, ruling ids and chains, the verb↔state agreement, every
-  project named by a phase path is a `projects.yaml` key, and `projects.yaml`'s
-  own fields. Hermetic (no network, no git). Output in `lifecycle.py`'s shape —
+  invariant, `## Where to look` naming somewhere past `planned`, run lines,
+  ruling ids and chains, the verb↔state agreement, every project named by a
+  phase path is a `projects.yaml` key, and `projects.yaml`'s own fields. Hermetic (no network, no git). Output in `lifecycle.py`'s shape —
   `cortex check: OK` or `cortex check: DRIFT` followed by one `  - …` line per
   finding; exit 1 on drift.
 - **`gates`** — read-only and offline: every `gated` phase, its refs and the
@@ -507,6 +518,66 @@ phase (the six legs below), moves `running → pulled → awaiting-ruling`,
 re-renders `dashboard.md` + `dashboard.html`, and prints a summary keyed **by
 project** — the last thing on screen, so a chat sees it first.
 
+### The by-project view
+
+The summary is a tree, and it is the same tree in three places: the
+`## By project` section of `dashboard.md` / `dashboard.html`, the text
+`pyauto-brain cortex census --by-project` prints from the checkout alone, and
+the closing summary of a real `checkin` (which is the only one of the three
+carrying pull results and six-leg health). One builder, three renderings — a
+prompt added to a state appears in all of them.
+
+Per project: the three folders it lives in (`local_path`, `mirror` when it has
+one, `ral_root`), what came of its pull, its phase counts by state, then every
+phase that is still **open** — awaiting a ruling, still out there, ready to
+submit, gated, planned — each with its state and health, its `## Where to look`
+bullets verbatim, and a copy chip per prompt its state carries. `accepted`,
+`rerun` and `dropped` phases are history and appear only in the counts. A
+project gets a block when its `projects.yaml` row is `status: active`, or when
+it still holds an open phase; every other project folds into one line.
+
+On the board `## By project` is the **first** section, above the state lists:
+those are cross-project, so every row has to be read to find out whose it is,
+while this one answers "where is everything" a screen per project. The counts
+table sits above it and keeps the urgency sections one tap away; the counts
+strip itself is unchanged (the Brain board reads it).
+
+### The five starting prompts
+
+Every phase row hands the reader a command rather than a decision. Which
+prompts a phase carries is its **state**, and nothing else:
+
+| Prompt | States | What it says |
+|---|---|---|
+| rule on it | `pulled`, `awaiting-ruling` | read the witness and the pulled evidence, draft the ruling body, `rule <phase> <verb> --body <file>` |
+| the results are good — accept and open phase N+1 | `pulled`, `awaiting-ruling` | `rule <phase> accept --body <file>`, then open the next phase (below) |
+| run it again | `pulled`, `awaiting-ruling`, `running` | `rule <phase> rerun --body <file>`, `move <phase> ready`, the project's own submit, `move <phase> submitted --run <jobid>` |
+| where the jobs stand | `submitted`, `running` | the project's own `<sync_cli> jobs` |
+| submit it | `ready` | the phase, the project's own submit verb, `move <phase> submitted --run <jobid>` |
+
+(`gated` and `planned` phases carry the one-line `gates` / `move … ready`
+command they always had.)
+
+**Accept and open phase N+1** is two commands in one prompt because they are
+one decision: an accept that opens nothing leaves the programme where it was.
+Its second half prefills from the tree — when the project already holds a
+phase numbered N+1 in `planned` or `gated`, the prompt opens *that* phase
+(`move … ready` + the launch) rather than writing a second one beside it;
+when N+1 is taken by a phase that has already run, it says so and offers the
+lowest free number instead. The `new` line carries the phase's own `Epic:` and
+spells out the title rule: **`new` writes `# <Project> — phase N: ` in front
+of `--title` itself**, so `--title` takes the tail alone.
+
+**Run it again** is a ruling first: `rerun` is the only verb that puts a phase
+back on the board, so the verdict on what came back is what makes the next
+submission a rerun rather than a repeat. Its `move … submitted --run` line
+carries the reminder that it is one run per call (`--after <run>` chains the
+next).
+
+The payloads are short on purpose. They are pasted into a fresh chat, not run
+as scripts: every one of them ends in a human's own reading, and the `<file>`,
+`<script>`, `<slug>` and `<jobid>` placeholders are where that reading lands.
+
 ### `.cortex/pull.json` — the pull manifest
 
 After a successful pull the door writes the manifest at the top of that
@@ -556,6 +627,7 @@ check-in — is the Brain's **cortex conductor**:
 ```bash
 pyauto-brain cortex checkin [--dry-run|--apply] [--push|--no-push] [--project KEY] [--skip-pull] [--refreshed ISO]
 pyauto-brain cortex census [--json]                  # what is held, by state
+pyauto-brain cortex census --by-project              # ... by project: folders, open phases, prompts
 pyauto-brain cortex dashboard --check | --apply      # render the two pages
 pyauto-brain cortex gates                            # the gated phases and their refs
 pyauto-brain cortex collect [--phase REL] [--pull] [--refreshed ISO] [--apply] [--out F]

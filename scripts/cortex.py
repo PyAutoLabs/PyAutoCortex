@@ -56,6 +56,14 @@ LIVE_RUN_STATES = {"submitted", "running"}
 LEGACY_RUN_STATES = {"legacy", "legacy_wrong"}
 RESET_RUN_STATES = {"failed", "timeout", "void"}
 
+#: What `new` writes into `## Where to look` before a phase has an output
+#: path. It is honest on a `planned` phase and a hole on any other, because
+#: the section is now rendered as the "which folder do I open" answer on the
+#: dashboard's `## By project` view and in `pyauto-brain cortex checkin`.
+WHERE_PLACEHOLDER = "(the output path, once there is one)"
+#: The one state that may still be carrying the placeholder.
+WHERE_EXEMPT_STATES = {"planned"}
+
 RULING_VERBS = ("accept", "rerun", "drop", "leave-to-finish")
 #: the head verb ↔ phase state agreement `check` enforces.
 VERB_STATES = {
@@ -650,6 +658,15 @@ def phase_problems(root: Path, phases: "list[Phase]", projects: "dict[str, dict]
                 verb = head.get("Ruling")
                 if state and verb in VERB_STATES and state not in VERB_STATES[verb]:
                     p.append(f"{ph.rel}: Ruling: {ruling_id} verb '{verb}' does not fit State: {state}")
+        # `## Where to look` is rendered, not just parsed: the by-project view
+        # prints these bullets verbatim as the folders to open, and `collect`
+        # resolves them to the artefacts it scores. A phase that has left
+        # `planned` with only the template placeholder names nowhere.
+        if state and state not in WHERE_EXEMPT_STATES:
+            if not [b for b in _where_to_look(ph) if WHERE_PLACEHOLDER not in b]:
+                p.append(f"{ph.rel}: ## Where to look names nowhere — a phase "
+                         f"past planned needs at least one bullet that is not "
+                         f"'{WHERE_PLACEHOLDER}'")
         if state == "pulled" and any(r.state in LIVE_RUN_STATES for r in ph.runs):
             if head is None or head.get("Ruling") != "leave-to-finish":
                 p.append(f"{ph.rel}: State: pulled with a live run needs a leave-to-finish ruling head (--partial)")
@@ -1204,7 +1221,12 @@ def new_phase(root: Path, project: str, slug: str, number: int, *, gates: str = 
         *header, "",
         "## Question", "", "(the question this phase answers)", "",
         "## Witness", "", witness or "(not yet registered — a planned phase may leave this empty)", "",
-        "## Where to look", "", "- (the output path, once there is one)", "",
+        # A legacy-born phase already knows where to look — `--where` is the
+        # quarantine path its runs landed in, and it is required for one — so
+        # the section names it rather than the placeholder `check` refuses on
+        # anything past `planned`.
+        "## Where to look", "",
+        f"- `{where}`" if where else f"- {WHERE_PLACEHOLDER}", "",
         "## Runs", "",
     ]
     if run_lines:
