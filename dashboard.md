@@ -14,7 +14,7 @@ Every science phase the Cortex is holding, on one page: what is waiting on your 
 | [Running / submitted](#running--submitted) | 2 |
 | [Ready](#ready) | 5 |
 | [Gated](#gated) | 1 |
-| [Recent rulings](#recent-rulings) | 26 |
+| [Recent rulings](#recent-rulings) | 27 |
 
 ## By project
 
@@ -91,7 +91,7 @@ python3 scripts/cortex.py move phases/euclid/magnification_robustness.md ready  
 ### inference_programme
 
 - local `/home/jammy/Code/PyAutoLabs/autolens_profiling` · mirror `/mnt/c/Users/Jammy/Science/inference_programme` · RAL `/mnt/ral/jnightin/autolens_profiling`
-- phases: accepted 7 · dropped 10 · gated 1 · planned 5
+- phases: accepted 7 · dropped 11 · gated 1 · planned 4
 
 **Gated**
 
@@ -130,25 +130,13 @@ python3 scripts/cortex.py move phases/inference_programme/cluster_extended_sourc
 
 </details>
 
-<a href="phases/inference_programme/multiband_compile_census_completion.md">Inference_programme — phase 18: multi-band compile census completion — A100/multi-core + hetero GPU rows</a> — inference_programme phase 18 · budget 12:00 · 20 review-min — **planned**
+<a href="phases/inference_programme/legacy_point_output_sweep.md">Inference_programme — phase 19: sweep the point-source families out of the RAL active output/ tree into output/legacy_point/</a> — inference_programme phase 19 · budget 2:00 · 5 review-min — **planned**
 
-- where to look: `autolens_profiling/results/notes/multiband_pyloop_productized.md`
-- where to look: `autolens_profiling/scripts/misc/jax_compile/README.md` (multi-band section)
-- where to look: `/mnt/ral/jnightin/pixgrad_logs/census_gpu.sbatch`
-
-<details><summary>📋 open it</summary>
-
-```
-python3 scripts/cortex.py move phases/inference_programme/multiband_compile_census_completion.md ready   # when the `Ready when:` clause in its `## Question` is met
-```
-
-</details>
-
-<a href="phases/inference_programme/legacy_point_output_sweep.md">Inference_programme — phase 19: sweep the RAL active output/ tree into output/legacy_point/</a> — inference_programme phase 19 · budget 2:00 · 5 review-min — **planned**
-
-- where to look: `/mnt/ral/jnightin/autolens_profiling/output/`
+- where to look: `/mnt/ral/jnightin/autolens_profiling/output/` — the three point-source
 - where to look: `/mnt/c/Users/Jammy/Science/inference_programme/`
-- where to look: `autolens_profiling/results/notes/inference/DECISIONS.md` (2026-09-01 entry)
+- where to look: `autolens_profiling/results/notes/inference/DECISIONS.md` (2026-09-01 entry —
+- where to look: `autolens_profiling/results/baselines/InferenceRefs_v1/SUBMIT_LIST.md` — the
+- where to look: `rulings/2026/09/R-20260902-01.md`, `rulings/2026/09/R-20260904-01.md`
 
 <details><summary>📋 open it</summary>
 
@@ -456,6 +444,7 @@ python3 scripts/cortex.py gates   # then, once they have closed: move phases/inf
 
 | Ruling | Verb | Phase | Batch |
 |---|---|---|---|
+| [R-20260904-05](rulings/2026/09/R-20260904-05.md) | drop | phases/inference_programme/multiband_compile_census_completion.md | - |
 | [R-20260904-04](rulings/2026/09/R-20260904-04.md) | drop | phases/inference_programme/mass_pix_gradient_cost_probe.md | - |
 | [R-20260904-03](rulings/2026/09/R-20260904-03.md) | drop | phases/inference_programme/cluster_gradient_search_benchmark.md | - |
 | [R-20260904-02](rulings/2026/09/R-20260904-02.md) | drop | phases/inference_programme/phase5_mesh_gradient_positions_on.md | - |
@@ -467,7 +456,6 @@ python3 scripts/cortex.py gates   # then, once they have closed: move phases/inf
 | [R-20260902-06](rulings/2026/09/R-20260902-06.md) | rerun | phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md | - |
 | [R-20260902-05](rulings/2026/09/R-20260902-05.md) | rerun | phases/subhalo_validation/delaunay_adapt_split_pl_eff_0.md | - |
 | [R-20260902-04](rulings/2026/09/R-20260902-04.md) | rerun | phases/subhalo_validation/delaunay_adapt_split_pl_eff_1_outer.md | - |
-| [R-20260902-03](rulings/2026/09/R-20260902-03.md) (superseded) | accept | phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md | - |
 
 ## Epics
 
@@ -481,7 +469,7 @@ Work out where the Cortex half of the epic euclid-dr1-prep stands from phases/eu
 
 </details>
 
-<details><summary>📋 <b>would a gradient search dropped into a SLaM mass[1] search beat Nautilus?</b> — Mind half: <code>draft/feature/autolens_profiling/gradient_slam_mass_pix_target.md (dev leg, phase 1 gate)</code> — ledger: <code>autolens_profiling/results/notes/gradient_slam/LEDGER.md</code> — BORN 2026-09-04 from the retired jax-inference-profiling; phase 21 (Nautilus baseline) gated on the dev leg autolens_profiling#218; phase 20 (cost probe) dropped the same day — the epic measures steps, not gradient cost</summary>
+<details><summary>📋 <b>would a gradient search dropped into a SLaM mass[1] search beat Nautilus?</b> — Mind half: <code>draft/feature/autolens_profiling/gradient_slam_mass_pix_target.md (dev leg; Cortex phase 21 is gated on its issue autolens_profiling#218)</code> — ledger: <code>autolens_profiling/results/notes/gradient_slam/LEDGER.md</code> — BORN 2026-09-04 from the retired jax-inference-profiling; phase 21 (Nautilus baseline) gated on the dev leg autolens_profiling#218; phase 20 (cost probe) dropped the same day — the epic measures steps, not gradient cost</summary>
 
 ```
 Work out where the Cortex half of the epic gradient-slam-baseline stands from autolens_profiling/results/notes/gradient_slam/LEDGER.md and tell me what its next phase is.

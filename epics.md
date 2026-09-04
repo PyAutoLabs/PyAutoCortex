@@ -49,7 +49,7 @@ This file is ledger: it auto-merges (`scripts/ledger_merge.py`).
 ## gradient-slam-baseline
 - title: would a gradient search dropped into a SLaM mass[1] search beat Nautilus?
 - ledger: autolens_profiling/results/notes/gradient_slam/LEDGER.md
-- mind-half: draft/feature/autolens_profiling/gradient_slam_mass_pix_target.md (dev leg, phase 1 gate)
+- mind-half: draft/feature/autolens_profiling/gradient_slam_mass_pix_target.md (dev leg; Cortex phase 21 is gated on its issue autolens_profiling#218)
 - status: BORN 2026-09-04 from the retired jax-inference-profiling; phase 21 (Nautilus baseline) gated on the dev leg autolens_profiling#218; phase 20 (cost probe) dropped the same day — the epic measures steps, not gradient cost
 
 ## graphical-ep

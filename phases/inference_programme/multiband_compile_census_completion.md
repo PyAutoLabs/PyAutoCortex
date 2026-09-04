@@ -2,12 +2,12 @@
 
 Project: inference_programme
 Phase: 18
-State: planned
+State: dropped
 Gates:
 Witness: the A100/multi-core and `datacube_img_hetero` GPU rows present in the multi-band census results, each with its backend verified from the results path rather than the SLURM partition, plus a written verdict on the two remaining secondary levers in `scripts/misc/jax_compile/README.md`
 Budget: 12:00
 Runs:
-Ruling:
+Ruling: R-20260904-05
 Review-minutes: 20
 Filed: 2026-07-30
 Migrated-from: PyAutoMind/draft/research/autolens_profiling/multiband_compile_census_completion.md
@@ -55,3 +55,5 @@ and the secondary-lever verdict written into
 ## Runs
 
 ## Ruling
+
+R-20260904-05 — drop
