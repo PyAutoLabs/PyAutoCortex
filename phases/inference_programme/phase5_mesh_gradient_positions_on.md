@@ -2,12 +2,12 @@
 
 Project: inference_programme
 Phase: 16
-State: planned
+State: dropped
 Gates:
 Witness: every arm delivers on its own artefacts — positions.info present in the run dir; .err free of Tracebacks; .out ends "Finished." with a .completed marker and zero "Fit Already Completed"; result row carries version 2026.8.17.1 and a target_id that recomputes from _targets.py; no overflow signature (no finite log_l above the 1e20 Fitness ceiling, no shell_log_l blow-up). Scoring: a cell's arm HITS when at least one lane's best point lands within 2 nats (the Phase-1 tolerance) of that cell's positions-on Nautilus reference maxLL — delaunay_pos 31,338.43, delaunay_nn_pos 31,351.39, slam_source_pix_pos 31,547.24, slam_source_pix_nn_pos 31,405.63, and pixelization_pos / knn_pos / delaunay_matern_pos at whatever phase 12 (RAL 342241) is ruled to; a lane best point with |e| >= 1 is non-physical and is never counted as a hit. Control: the one-cell Nautilus tauto0.2 f1e5 arm reproduces that cell's f1e8 reference logZ to within 0.1 nats (positions inert on the posterior at 1e5 as well as at 1e8). No legacy_wrong number is a bar.
 Budget: 8:00
 Runs:
-Ruling:
+Ruling: R-20260904-02
 Review-minutes: 30
 Epic: jax-inference-profiling
 Filed: 2026-09-02
@@ -173,4 +173,4 @@ every arm delivers on its own artefacts — positions.info present in the run di
 
 ## Ruling
 
-(none)
+R-20260904-02 — drop

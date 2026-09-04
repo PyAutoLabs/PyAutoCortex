@@ -2,12 +2,12 @@
 
 Project: inference_programme
 Phase: 12
-State: awaiting-ruling
+State: accepted
 Gates:
 Witness: all 3 array tasks deliver on their own evidence — wall inside the 6:00 budget, a positions.info file in the run dir, a result row carrying version 2026.8.17.1 and a target_id that recomputes from _targets.py, .err free of Tracebacks, .out ending "Finished." with a .completed marker, zero "Fit Already Completed", no overflow signature; each row's maxLL lands within the 29,800–31,600 band of the accepted positions-on rows rather than 500+ nats below it
 Budget: 6:00
 Runs: 342241
-Ruling:
+Ruling: R-20260904-01
 Review-minutes: 15
 Epic: jax-inference-profiling
 Filed: 2026-09-02
@@ -48,4 +48,4 @@ all 3 array tasks deliver on their own evidence — wall inside the 6:00 budget,
 
 ## Ruling
 
-(none)
+R-20260904-01 — accept

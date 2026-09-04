@@ -2,12 +2,12 @@
 
 Project: inference_programme
 Phase: 17
-State: planned
+State: dropped
 Gates:
 Witness: a cluster point-source sweep whose `results/searches/…` JSONs carry, per arm, best logL against the truth-instance logL, per-parameter recovery, wall time and evals/steps — the same truth-anchored shape as the 2026-07-31 galaxy-scale rows
 Budget: 24:00
 Runs:
-Ruling:
+Ruling: R-20260904-03
 Review-minutes: 20
 Filed: 2026-07-31
 Migrated-from: PyAutoMind/draft/research/autolens_profiling/cluster_gradient_search_benchmark.md
@@ -65,3 +65,5 @@ galaxy-scale rows above, so the two tiers are directly comparable.
 ## Runs
 
 ## Ruling
+
+R-20260904-03 — drop

@@ -46,23 +46,11 @@ This file is ledger: it auto-merges (`scripts/ledger_merge.py`).
   gates 6 and 7 — as intra-Cortex sequencing (decision 54) those waits are `Ready
   when:` lines in each phase's `## Question`, not `Gates:` refs.
 
-## jax-inference-profiling
-- title: profile and certify the JAX inference stack — samplers, meshes, reference baselines
-- ledger: autolens_profiling/results/notes/inference/PROGRAMME.md
-- mind-half: none — the Mind entry was retired 2026-09-03 (mind-post-cortex phase 2); the
-  whole programme lives here, and its slices ship as autolens_profiling issues/PRs
-- status: Phase 1 RULED 2026-09-02 (R-20260902-01, accept scoped to the four positions-on rows) and closed out; certified InferenceRefs_v1 set = 6 baselines (mge_fp64, mge_pos_fp64, delaunay_nn_pos, slam_source_pix_pos, slam_source_pix_nn_pos, delaunay_pos); Step 2 filed 2026-09-02 as phase 12 (RAL 342241, tasks 11–13, positions-on refs for pixelization / knn / delaunay_matern; submitted); Step 3 ruled 2026-09-02 — phases 13/14/15 accepted (R-20260902-08/09/10), Gates A, B pt 1, B pt 2 re-called on the legacy MGE evidence (Gate A's Delaunay leg struck); next: rule phase 12 when pulled, then Phase 5 positions-on (penalty factor to be decided — 1e5 recommended per Gate B pt 2)
-- notes: The whole epic's science half lives here. The 2026-08-31 REWIND quarantined
-  every mesh / pixelization result to `output/legacy_wrong/` and every MGE result to
-  `output/legacy/` (reusable pending batch review), made gates A, B pt 1 and B pt 2
-  provisional, and restarted the programme at Phase 1. Ten of the eleven phases here
-  are legacy-born (decision 56); the eleventh, `cluster_extended_source_inference`,
-  belongs to `cluster-strong-lensing` and sits in this project directory because that
-  is where its runs would land. R-20260901-03 binds the redo: a mesh row produced
-  without a `PositionsLH` positions penalty is not a citable reference.
-  R-20260902-01 generalises it (human rule, 2026-09-02): a mesh run without a
-  `positions.info` file is unreliable and cannot be used; `pos_tauto0.2_f1e8` is the
-  confirmed physical configuration for mesh sources.
+## gradient-slam-baseline
+- title: would a gradient search dropped into a SLaM mass[1] search beat Nautilus?
+- ledger: autolens_profiling/results/notes/gradient_slam/LEDGER.md
+- mind-half: draft/feature/autolens_profiling/gradient_slam_mass_pix_target.md (dev leg, phase 1 gate)
+- status: BORN 2026-09-04 from the retired jax-inference-profiling; phase 1 gated on the dev leg
 
 ## graphical-ep
 - title: expectation propagation as the scalable alternative to graphical joint fits
