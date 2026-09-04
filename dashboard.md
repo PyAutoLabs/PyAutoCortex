@@ -23,22 +23,23 @@ Every science phase the Cortex is holding, on one page: what is waiting on your 
 ### euclid
 
 - local `/mnt/c/Users/Jammy/Science/euclid` · RAL `/mnt/ral/jnightin/euclid_strong_lens_modeling_pipeline`
-- phases: gated 1 · planned 3
+- phases: planned 3 · ready 1
 
-**Gated**
+**Ready to submit**
 
-<a href="phases/euclid/dr1_prelim_10_lens_science_run.md">Euclid — phase 4: DR1 prelim science run — 10 real Euclid lenses in euclid_dr1_prelim on RAL</a> — euclid phase 4 · budget 48:00 · 25 review-min — **gated**
+<a href="phases/euclid/dr1_prelim_10_lens_science_run.md">Euclid — phase 4: DR1 prelim science run — 10 real Euclid lenses in euclid_dr1_prelim on RAL</a> — euclid phase 4 · budget 48:00 · 25 review-min — **ready**
 
 - where to look: `euclid_dr1_prelim` (project row `euclid_dr1_prelim`): the new project tree, once created
 - where to look: `euclid` (project row `euclid`): `catalogue/catalogue/dr1_prelim_grade_ab_catalogue_csvs_20260623/`
 - where to look: `autolens_assistant/skills/euclid_{prepare_data,setup_pipeline,model_lens,hpc_runs}.md`
 - where to look: `euclid_strong_lens_modeling_pipeline`: `catalogue/scripts/`, `hpc/batch_cpu/`
 
-<details><summary>📋 its gates</summary>
+<details><summary>📋 submit it</summary>
 
 ```
-python3 scripts/cortex.py gates   # then, once they have closed: move phases/euclid/dr1_prelim_10_lens_science_run.md ready
-# gates: euclid_strong_lens_modeling_pipeline#48, euclid_strong_lens_modeling_pipeline#49
+phases/euclid/dr1_prelim_10_lens_science_run.md
+# project euclid: no `submit` verb in projects.yaml — submit by hand
+python3 scripts/cortex.py move phases/euclid/dr1_prelim_10_lens_science_run.md submitted --run <jobid>
 ```
 
 </details>

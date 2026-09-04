@@ -228,17 +228,18 @@ a.go:hover{opacity:.9;text-decoration:none}
 <p class="muted mdsrc"><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/dashboard.md">markdown version</a> · <a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/README.md">GitHub Page</a></p>
 <a id="by-project"></a><h2>By project <a class="mdsrc" href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects.yaml">markdown version</a></h2><p class="muted">Where every project is: the folders it lives in, every phase of it that is still open, the locations its <code>## Where to look</code> names, and the prompt for each thing that phase could become. This is the check-in view — <code>pyauto-brain cortex checkin</code> and <code>census --by-project</code> print the same tree.</p>
 <h3>euclid</h3>
-<p class="muted">local <code>/mnt/c/Users/Jammy/Science/euclid</code> · RAL <code>/mnt/ral/jnightin/euclid_strong_lens_modeling_pipeline</code> — phases: gated 1 · planned 3</p>
-<p><b>Gated</b></p>
-<p><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/euclid/dr1_prelim_10_lens_science_run.md">Euclid — phase 4: DR1 prelim science run — 10 real Euclid lenses in euclid_dr1_prelim on RAL</a><span class="tags"><span class="pill n">gated</span></span><span class="facets"> — euclid phase 4 · budget 48:00 · 25 review-min</span></p>
+<p class="muted">local <code>/mnt/c/Users/Jammy/Science/euclid</code> · RAL <code>/mnt/ral/jnightin/euclid_strong_lens_modeling_pipeline</code> — phases: planned 3 · ready 1</p>
+<p><b>Ready to submit</b></p>
+<p><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/euclid/dr1_prelim_10_lens_science_run.md">Euclid — phase 4: DR1 prelim science run — 10 real Euclid lenses in euclid_dr1_prelim on RAL</a><span class="tags"><span class="pill n">ready</span></span><span class="facets"> — euclid phase 4 · budget 48:00 · 25 review-min</span></p>
 <ul>
 <li><code>euclid_dr1_prelim</code> (project row <code>euclid_dr1_prelim</code>): the new project tree, once created</li>
 <li><code>euclid</code> (project row <code>euclid</code>): <code>catalogue/catalogue/dr1_prelim_grade_ab_catalogue_csvs_20260623/</code></li>
 <li><code>autolens_assistant/skills/euclid_{prepare_data,setup_pipeline,model_lens,hpc_runs}.md</code></li>
 <li><code>euclid_strong_lens_modeling_pipeline</code>: <code>catalogue/scripts/</code>, <code>hpc/batch_cpu/</code></li>
 </ul>
-<div class="task"><button class="copy" data-cmd="python3 scripts/cortex.py gates   # then, once they have closed: move phases/euclid/dr1_prelim_10_lens_science_run.md ready
-# gates: euclid_strong_lens_modeling_pipeline#48, euclid_strong_lens_modeling_pipeline#49" aria-label="Copy the Claude command">📋</button><p>its gates</p></div>
+<div class="task"><button class="copy" data-cmd="phases/euclid/dr1_prelim_10_lens_science_run.md
+# project euclid: no `submit` verb in projects.yaml — submit by hand
+python3 scripts/cortex.py move phases/euclid/dr1_prelim_10_lens_science_run.md submitted --run &lt;jobid&gt;" aria-label="Copy the Claude command">📋</button><p>submit it</p></div>
 <p><b>Planned</b></p>
 <p><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/euclid/resimulate_fitted_lens_simulator.md">Euclid — phase 5: resimulate a fitted Euclid lens, and resimulate the 10 prelim lenses with true magnifications recorded</a><span class="tags"><span class="pill n">planned</span></span><span class="facets"> — euclid phase 5 · budget 24:00 · 20 review-min</span></p>
 <ul>
