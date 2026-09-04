@@ -77,8 +77,11 @@ human's turn. Full rules in [rulings/AGENTS.md](rulings/AGENTS.md).
   human's verbatim reviews under `reviews/`, kept because 13 rulings cite them
   and append-only for the merge gate: never modified, only added. Nothing
   writes new ones (the review-slot apparatus was retired 2026-09-03).
-- **`epics.md`** — the Cortex half of every split epic; `- mind-half:` names
-  the Mind entry by slug.
+- **`checkin.yaml`** — one key, `refreshed: <UTC ISO 8601>`: when the science
+  state was last actually checked in, written by `pyauto-brain cortex checkin
+  --apply` and read back by the board. It means *last check-in*, never last
+  render, so a doc-only push cannot fake freshness; the HTML board reddens it
+  on the reader's own clock once it is more than an hour old.
 - **`scripts/cortex.py`** — the one lifecycle script (stdlib only):
   - `check` — every structural rule, hermetic; `cortex check: OK` or `DRIFT`
     with one `  - …` line per finding, exit 1.
@@ -97,7 +100,7 @@ human's turn. Full rules in [rulings/AGENTS.md](rulings/AGENTS.md).
   (see "Driving the Cortex" below). They are ledger for the merge gate.
 - **`scripts/ledger_merge.py`** — the default-deny classifier behind
   `.github/workflows/ledger_merge.yml`: a `claude/**` push whose whole diff is
-  ledger (`phases/`, `rulings/`, `batches/`, `epics.md`, the two generated
+  ledger (`phases/`, `rulings/`, `batches/`, `checkin.yaml`, the two generated
   dashboards) lands on `main` by itself; anything else waits for a human — and
   that "anything else" includes an `AGENTS.md` or `TEMPLATE.md` *inside* a
   ledger dir, which is doctrine, not an entry. `python3

@@ -15,7 +15,7 @@ name: Cortex Ledger Merge
 # pushed it ever comes back.
 #
 # WHAT IT WILL AND WILL NOT MERGE. Only a branch whose whole diff is *ledger*:
-# `phases/`, `rulings/`, `batches/`, `epics.md`. The line is drawn by
+# `phases/`, `rulings/`, `batches/`, `checkin.yaml`. The line is drawn by
 # scripts/ledger_merge.py — a script, so it is testable and a session can
 # predict the verdict — and it is DEFAULT DENY: anything under `scripts/`,
 # `tests/`, `.github/`, `policy/`, `docs/`, `projects.yaml`, the prose pages,
