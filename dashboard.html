@@ -226,8 +226,8 @@ a.go:hover{opacity:.9;text-decoration:none}
 <ul class="stats"><li><b>0</b><span>Awaiting ruling</span></li><li><b>2</b><span>Running / submitted</span></li><li><b>5</b><span>Ready</span></li><li><b>1</b><span>Gated</span></li><li><b>27</b><span>Recent rulings</span></li></ul>
 <div class="fresh"><p class="muted">Last updated 2026-09-04.</p></div>
 <p class="muted mdsrc"><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/dashboard.md">markdown version</a> · <a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/README.md">GitHub Page</a></p>
-<div class="task"><button class="copy" data-cmd="/cortex — check in on every active science project since the last check-in (2026-09-04T17:18Z): pull each project through its sync CLI, score every live run against its pre-registered witness, move what came back, re-render and push the board, then read me the by-project summary with the prompt each phase needs next." aria-label="Copy the Claude command">📋</button><p>check in since last time</p></div>
-<div class="checkin" id="checkin-box"><span class="mark" id="checkin-mark"></span><div><span class="label">Last check-in</span><time id="checkin" datetime="2026-09-04T17:18Z">2026-09-04T17:18Z</time><span class="note" id="checkin-note"></span></div></div>
+<div class="task"><button class="copy" data-cmd="/cortex — check in on every active science project since the last check-in (2026-09-04T21:36Z): pull each project through its sync CLI, score every live run against its pre-registered witness, move what came back, re-render and push the board, then read me the by-project summary with the prompt each phase needs next." aria-label="Copy the Claude command">📋</button><p>check in since last time</p></div>
+<div class="checkin" id="checkin-box"><span class="mark" id="checkin-mark"></span><div><span class="label">Last check-in</span><time id="checkin" datetime="2026-09-04T21:36Z">2026-09-04T21:36Z</time><span class="note" id="checkin-note"></span></div></div>
 <a id="summary"></a><h2>Summary</h2>
 <p class="muted">One row per active project — the next thing, what it is holding, and when it last ruled.</p>
 <table class="map">
@@ -238,15 +238,15 @@ a.go:hover{opacity:.9;text-decoration:none}
 </table>
 <h3>Nothing open</h3>
 <table class="map">
-<tr><th>Project</th><th>Status</th><th>Phases</th></tr>
-<tr><td>euclid_dr1_prelim</td><td>planned</td><td>none</td></tr>
-<tr><td>concr</td><td>dormant</td><td>none</td></tr>
-<tr><td>cowls_diana</td><td>dormant</td><td>none</td></tr>
-<tr><td>ic50_workspace</td><td>dormant</td><td>planned 1</td></tr>
-<tr><td>pj011646</td><td>dormant</td><td>none</td></tr>
-<tr><td>profiling</td><td>dormant</td><td>none</td></tr>
-<tr><td>slope_hierarchy</td><td>dormant</td><td>planned 2</td></tr>
-<tr><td>subhalo_simulations</td><td>dormant</td><td>none</td></tr>
+<tr><th>Project</th><th>Status</th><th>Phases</th><th>Retire</th></tr>
+<tr><td>euclid_dr1_prelim</td><td>planned</td><td>none</td><td></td></tr>
+<tr><td>concr</td><td>dormant</td><td>none</td><td><button class="copy text" data-cmd="/cortex — retire the science project concr: confirm it is holding nothing live, then in PyAutoCortex run `python3 scripts/cortex.py retire concr --why &quot;&lt;one line on why&gt;&quot;`, `python3 scripts/cortex.py check`, `pyauto-brain cortex dashboard --apply`, and push the ledger. The row, its phases and its rulings all stay — only the status and the note change." aria-label="Copy the retire prompt">📋 retire</button></td></tr>
+<tr><td>cowls_diana</td><td>dormant</td><td>none</td><td><button class="copy text" data-cmd="/cortex — retire the science project cowls_diana: confirm it is holding nothing live, then in PyAutoCortex run `python3 scripts/cortex.py retire cowls_diana --why &quot;&lt;one line on why&gt;&quot;`, `python3 scripts/cortex.py check`, `pyauto-brain cortex dashboard --apply`, and push the ledger. The row, its phases and its rulings all stay — only the status and the note change." aria-label="Copy the retire prompt">📋 retire</button></td></tr>
+<tr><td>ic50_workspace</td><td>dormant</td><td>planned 1</td><td><button class="copy text" data-cmd="/cortex — retire the science project ic50_workspace: confirm it is holding nothing live, then in PyAutoCortex run `python3 scripts/cortex.py retire ic50_workspace --why &quot;&lt;one line on why&gt;&quot;`, `python3 scripts/cortex.py check`, `pyauto-brain cortex dashboard --apply`, and push the ledger. The row, its phases and its rulings all stay — only the status and the note change." aria-label="Copy the retire prompt">📋 retire</button></td></tr>
+<tr><td>pj011646</td><td>dormant</td><td>none</td><td><button class="copy text" data-cmd="/cortex — retire the science project pj011646: confirm it is holding nothing live, then in PyAutoCortex run `python3 scripts/cortex.py retire pj011646 --why &quot;&lt;one line on why&gt;&quot;`, `python3 scripts/cortex.py check`, `pyauto-brain cortex dashboard --apply`, and push the ledger. The row, its phases and its rulings all stay — only the status and the note change." aria-label="Copy the retire prompt">📋 retire</button></td></tr>
+<tr><td>profiling</td><td>dormant</td><td>none</td><td><button class="copy text" data-cmd="/cortex — retire the science project profiling: confirm it is holding nothing live, then in PyAutoCortex run `python3 scripts/cortex.py retire profiling --why &quot;&lt;one line on why&gt;&quot;`, `python3 scripts/cortex.py check`, `pyauto-brain cortex dashboard --apply`, and push the ledger. The row, its phases and its rulings all stay — only the status and the note change." aria-label="Copy the retire prompt">📋 retire</button></td></tr>
+<tr><td>slope_hierarchy</td><td>dormant</td><td>planned 2</td><td><button class="copy text" data-cmd="/cortex — retire the science project slope_hierarchy: confirm it is holding nothing live, then in PyAutoCortex run `python3 scripts/cortex.py retire slope_hierarchy --why &quot;&lt;one line on why&gt;&quot;`, `python3 scripts/cortex.py check`, `pyauto-brain cortex dashboard --apply`, and push the ledger. The row, its phases and its rulings all stay — only the status and the note change." aria-label="Copy the retire prompt">📋 retire</button></td></tr>
+<tr><td>subhalo_simulations</td><td>dormant</td><td>none</td><td><button class="copy text" data-cmd="/cortex — retire the science project subhalo_simulations: confirm it is holding nothing live, then in PyAutoCortex run `python3 scripts/cortex.py retire subhalo_simulations --why &quot;&lt;one line on why&gt;&quot;`, `python3 scripts/cortex.py check`, `pyauto-brain cortex dashboard --apply`, and push the ledger. The row, its phases and its rulings all stay — only the status and the note change." aria-label="Copy the retire prompt">📋 retire</button></td></tr>
 </table>
 <a id="projects"></a><h2>Projects <a class="mdsrc" href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects.yaml">markdown version</a></h2>
 <section class="project">
