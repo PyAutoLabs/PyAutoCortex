@@ -6,7 +6,7 @@ This is the markdown version of the [PyAutoCortex Dashboard](https://pyautolabs.
 
 Every science phase the Cortex is holding, on one page: what is waiting on your verdict, what is running, what could be launched next and what is still gated on development work. The verdict is always yours — this page hands you the command, never the ruling.
 
-> **Last updated 2026-09-04.** This page is generated from `phases/`, `rulings/` and `projects.yaml`, so it is only as current as they are. `dashboard_refresh.yml` re-renders it on every push to `main`.
+> **Last updated 2026-09-04.**
 
 | Where | Count |
 |-------|------:|
@@ -24,7 +24,7 @@ Every science phase the Cortex is holding, on one page: what is waiting on your 
 
 </details>
 
-**Last check-in:** 2026-09-04T17:18Z
+### Last check-in: 2026-09-04T17:18Z
 
 ## Summary
 
@@ -36,9 +36,22 @@ One row per active project — the next thing, what it is holding, and when it l
 | inference_programme | 21 gated | 0 | 0 | 0 | 2026-09-04 |
 | subhalo_validation | 5 running | 0 | 2 | 4 | 2026-09-02 |
 
+#### Nothing open
+
+| Project | Status | Phases |
+|---|---|---|
+| euclid_dr1_prelim | planned | none |
+| concr | dormant | none |
+| cowls_diana | dormant | none |
+| ic50_workspace | dormant | planned 1 |
+| pj011646 | dormant | none |
+| profiling | dormant | none |
+| slope_hierarchy | dormant | planned 2 |
+| subhalo_simulations | dormant | none |
+
 ## Projects
 
-[markdown version](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects.yaml) — The science body map, active first: where each project lives, what it is holding, and the one phase of it to act on next. The plans and the issues are one click away — this page routes to them rather than reprinting them; `census --by-project` and the check-in printout keep the full per-phase tree.
+[markdown version](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects.yaml)
 
 ### euclid
 
@@ -123,12 +136,6 @@ cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync jobs
 - [Subhalo_validation — phase 4: rectangular_adapt on pl_sersic_0 — the RectangularBilinear comparison](phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md) — ready
 
 [phases/subhalo_validation/](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/phases/subhalo_validation/) · [issues](https://github.com/PyAutoLabs/subhalo_validation/issues)
-
-</details>
-
-<details><summary>8 project(s) with nothing open</summary>
-
-`euclid_dr1_prelim` (planned · none) · `concr` (dormant · none) · `cowls_diana` (dormant · none) · `ic50_workspace` (dormant · planned 1) · `pj011646` (dormant · none) · `profiling` (dormant · none) · `slope_hierarchy` (dormant · planned 2) · `subhalo_simulations` (dormant · none)
 
 </details>
 
