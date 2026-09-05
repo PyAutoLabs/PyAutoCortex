@@ -133,8 +133,11 @@ state table.
 flag `--apply` (the Brain's house spelling, as intake does); `scripts/cortex.py`
 spells it `--write`.
 
-**Nothing here submits a job.** A human runs the project's own `sync_cli
-submit` line and the `cortex.py move <phase> submitted --run <jobid>` follow-up.
+**Nothing here submits a job by itself.** A submission is made only on the
+human's ask — by the human, or by the agent in the session — with the project's
+own `sync_cli submit` line, followed at once by `cortex.py move <phase>
+submitted --run <jobid>` (ruled 2026-09-05; before that the human typed the
+submit).
 `checkin` and `collect --pull` are the only legs that shell out, and only to
 the project's own CLI — the conductor adds no SSH of its own. Each project
 `checkin` pulls gets a `<pull root>/.cortex/pull.json` manifest
