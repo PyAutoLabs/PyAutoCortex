@@ -58,6 +58,17 @@ The catalogue product set is the reference tile's: `lens_mass.csv`, `lens_sersic
 - `autolens_assistant/skills/euclid_{prepare_data,setup_pipeline,model_lens,hpc_runs}.md`
 - `euclid_strong_lens_modeling_pipeline`: `catalogue/scripts/`, `hpc/batch_cpu/`
 
+## Notes
+
+- 2026-09-05 — **`vis_pix` magnification column.** The archived `initial_lens_model/vis_pix`
+  results (and the 20260623 reference this witness compares against) carry
+  `magnification = 0.0` as a sentinel: the library latent was 0/0 for any pixelized source
+  (PyAutoLens#726). PyAutoLens PR #727 (merged) and #728 (correction: per-data-pixel
+  convention) fix it; euclid PR #51 adds the test. Until the reference is re-derived under
+  the fixed library, the numerics witness must exclude the `vis_pix` magnification column,
+  and any comparison of it is against a sentinel, not a measurement. Mind ledger:
+  `PyAutoMind/draft/feature/euclid/euclid_dr1_prep_epic.md` item 8.
+
 ## Runs
 
 ## Ruling
