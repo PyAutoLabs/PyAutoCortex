@@ -1,6 +1,6 @@
 # Rulings — the ledger of record
 
-`rulings/<YYYY>/<MM>/R-<YYYYMMDD>-<nn>.md`, one file per verdict per phase.
+`rulings/<YYYY>/<MM>/R-<YYYYMMDD>-<nn>.md`, one file per verdict per task.
 This folder is canonical: **a verdict recorded only outside the Cortex does
 not exist.** A project's own ledger (`DECISIONS.md`, `state.md`,
 `RESULTS.md`) is scientific commentary — evidence, reasoning, consequences —
@@ -16,13 +16,13 @@ them was never written at all.
    under `rulings/**` as code, which leaves the branch for a human; there is
    no auto-merge path for an edited ruling.
 2. **Supersede, never edit.** A wrong ruling gets a new ruling with
-   `Supersedes: <old id>` — same project, same phase, later id. The new one
-   becomes the phase's `Ruling:`. Chains, not trees: supersede the current
+   `Supersedes: <old id>` — same project, same task, later id. The new one
+   becomes the task's `Ruling:`. Chains, not trees: supersede the current
    head, never a ruling that already has a successor.
 3. **`cortex.py rule` writes them.** It assigns the id, refuses to touch an
-   existing file, updates the phase's `Ruling:` and `State:` in the same
-   change. Write one by hand only to migrate history (phase 4), and run
-   `cortex.py check` before pushing.
+   existing file, updates the task's `Ruling:` and `State:` in the same
+   change. Write one by hand only to migrate history (phase 4 of the birth
+   epic), and run `cortex.py check` before pushing.
 4. **The human's words, verbatim.** `## Ruling` is what they said; `##
    Evidence` is where to look. Paraphrase belongs in the project ledger.
 
@@ -35,12 +35,12 @@ summary>`). Two branches that both assign `-03` on the same day collide on the
 trial-merge check in `ledger_merge.yml`, which is the point of running it
 there.
 
-## One file per phase
+## One file per task
 
-A ruling names exactly one phase (`Phase: phases/<project>/<slug>.md`). A
-verdict spanning several phases — a REWIND — is N files with the same
-`## Ruling` body, one per phase, joined by one `Batch:` slot; `cortex.py rule
---also <phase>` fans them out. `Batch:` is also how rulings filed from one
+A ruling names exactly one task (`Task: tasks/<project>/<slug>.md`). A
+verdict spanning several tasks — a REWIND — is N files with the same
+`## Ruling` body, one per task, joined by one `Batch:` slot; `cortex.py rule
+--also <task>` fans them out. `Batch:` is also how rulings filed from one
 review slot are found together.
 
 The header keys and the chain rules `check` enforces are in

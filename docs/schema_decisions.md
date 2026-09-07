@@ -401,3 +401,28 @@ Choices made in phase 2 — the conductor, the board and the workflows
     PyYAML-parity test proved it redundant. What the human actually does is
     check in on the runs, so the apparatus that modelled them as a reviewer
     working a scheduled shift is cost with no reader.
+
+59. **Tasks, not phases: `phases/` → `tasks/`, the number is deleted, a
+    ten-word `Summary:` is required** (2026-09-07, PyAutoCortex#20). The tree
+    is `tasks/<project>/<slug>.md`; the `Phase: N` header is gone outright,
+    with no deprecated shadow — `check` names it as a retired key rather than
+    letting it pass as a generic unknown one. A task's identity is its
+    **slug**, already unique per project by the path. Titles are
+    `# <Project> — <title>`; ruling titles `# <R-id> — <verb> <project>
+    <slug>`; a ruling's head field is `Task:` pointing at the `tasks/…` path;
+    "revival of a dropped task is a new number" becomes "a new slug";
+    `new <project> <slug>` loses `--phase` and gains a required `--summary`.
+    Every task carries `Summary:` directly after `Project:` — at most ten
+    words, the **question** the task answers, not its method and not its run
+    ids — and `check` enforces presence and the cap.
+    Why: science is a set of unordered ideas, run in whatever order results
+    and priorities dictate; "phase" implies a sequence that does not exist,
+    and the number carried nothing the slug did not already carry — no
+    ordering was ever read off it, and a dropped task's revival needed a
+    fresh number for no reason. The `Summary:` is the other half of the same
+    decision: the board lists every open task of a project on one line each,
+    so each task needs one line that is readable at a glance, and the
+    rendered title ("Inference_programme — phase 11: cluster extended-source
+    inference — gradient-based fitting building on JAX knowledge") was not
+    it. Mind **epics** keep their numbered phases: development work really is
+    sequential, and `Epic:` on a task file is unchanged.

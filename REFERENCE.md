@@ -7,16 +7,16 @@ resolve here, one link from [AGENTS.md](AGENTS.md).
 
 ---
 
-## What a phase looks like
+## What a task looks like
 
-Here is a phase file — `phases/example/05_running_array.md` from the test
+Here is a task file — `tasks/example/05_running_array.md` from the test
 fixture — of a project whose GPU array is most of the way through:
 
 ````markdown
-# Example — phase 5: the nine-lens array
+# Example — the nine-lens array
 
 Project: example
-Phase: 5
+Summary: Does Delaunay reach the same theta_E basin on ten lenses
 State: running
 Gates: PyAutoArray#431
 Witness: nine of ten array tasks write a sane checkpoint.hdf5 within 8:00 wall
@@ -33,16 +33,16 @@ Does the Delaunay pipeline reach the same theta_E basin on all ten lenses?
 
 ## Witness
 
-`output/phase_05/*/checkpoint.hdf5` present for nine lenses, `.err` clean.
+`output/task_05/*/checkpoint.hdf5` present for nine lenses, `.err` clean.
 
 ## Where to look
 
-- `/mnt/c/Users/Jammy/Science/example/output/phase_05/`
+- `/mnt/c/Users/Jammy/Science/example/output/task_05/`
 
 ## Runs
 
 - 342091_[0-8,10]: done — gpu — submitted 2026-08-30 — wall 6:12
-    pulled_to: /mnt/c/Users/Jammy/Science/example/output/phase_05
+    pulled_to: /mnt/c/Users/Jammy/Science/example/output/task_05
 - 342091_9: failed — gpu — submitted 2026-08-30 — wall 0:00 — OOM before the first step
 - 342102: running — gpu — submitted 2026-09-01 — wall 0:00 — task 9 resubmitted alone
     after: 342091_9
@@ -63,24 +63,28 @@ sections are fixed: `## Question`, `## Witness`, `## Where to look`, `## Runs`,
 
 **`## Where to look` is rendered, not just parsed.** Its `- ` bullets are the
 answer to *which folder do I open* — the dashboard's `## By project` view and
-`pyauto-brain cortex checkin` print them verbatim under the phase, and
+`pyauto-brain cortex checkin` print them verbatim under the task, and
 `collect` resolves the ones that are absolute paths inside the project's roots
 to the artefacts it scores. `new` seeds the section with the placeholder
-`- (the output path, once there is one)`, which is honest on a `planned` phase
-and a hole on any other, so **`check` requires a phase whose `State:` is past
+`- (the output path, once there is one)`, which is honest on a `planned` task
+and a hole on any other, so **`check` requires a task whose `State:` is past
 `planned` to carry at least one bullet that is not that placeholder**. A
 bullet is free text: a path, a project-row-relative location, a Mind prompt, a
 GitHub ref — whatever a human would open.
 
-### Phase header keys
+A task has **no number**. Its identity is its **slug** — the file name, unique
+per project by the path itself — because a science project is a set of ideas
+run in whatever order the results dictate, not a sequence (decision, 2026-09-07).
+
+### Task header keys
 
 | Key | Value | Notes |
 |---|---|---|
 | `Project:` | project key | must equal the directory name **and** a `projects.yaml` key |
-| `Phase:` | integer | unique per project; revival of a dropped phase is a new number |
+| `Summary:` | at most ten words | **required** — the QUESTION the task answers, not its method or its run ids; the board's one line per task. No project name, no number |
 | `State:` | `planned \| gated \| ready \| submitted \| running \| pulled \| awaiting-ruling \| accepted \| rerun \| dropped` | |
 | `Gates:` | comma-separated GitHub refs | `Repo#N` (owner `PyAutoLabs`) or an issue/PR URL; **no `owner/Repo#N`** form |
-| `Reset:` | reason | written by `move ready --reason "<reason>"` when a `submitted \| running` phase goes back to `ready` |
+| `Reset:` | reason | written by `move ready --reason "<reason>"` when a `submitted \| running` task goes back to `ready` |
 | `Witness:` | free text | **mandatory before `submitted`** — the pre-registered checkable claim |
 | `Budget:` | `H+:MM` | wall budget per run |
 | `Runs:` | comma-separated job **stems** | the index of the `## Runs` body; equal to the set of body stems |
@@ -88,7 +92,7 @@ GitHub ref — whatever a human would open.
 | `Review-minutes:` | integer | a seed, not a measurement |
 | `Epic:` | slug | OPTIONAL join key to a **Mind** epic; the Cortex keeps no epics file of its own |
 | `Filed:` | `YYYY-MM-DD` | |
-| `Migrated-from:` | source path or ledger anchor | the Mind prompt, review file or project-ledger entry this phase was transcribed from (phase 4 of the birth epic) |
+| `Migrated-from:` | source path or ledger anchor | the Mind prompt, review file or project-ledger entry this task was transcribed from (phase 4 of the birth epic) |
 
 Gate refs are matched by `GATE_REF_RE`, copied verbatim from
 `PyAutoMind/scripts/lifecycle.py`:
@@ -106,7 +110,7 @@ The lookbehind `(?<![\w/])` is what rejects `owner/Repo#N`: the shorthand is
 
 ---
 
-## How a phase flows
+## How a task flows
 
 ```
   planned ──(Gates: non-empty)──► gated ──(move ready: the human judged the refs)──► ready
@@ -128,21 +132,21 @@ owns. The full table:
 | from | to | condition |
 |---|---|---|
 | planned | gated / ready | `Gates:` non-empty / empty |
-| gated | ready | `move <phase> ready` — a human read `gates`, opened the refs and judged them cleared. No flag, and nothing written but `State:` |
-| ready | gated | not an edge: re-gating a `ready` phase is a judgement, so it is a hand edit of the header |
+| gated | ready | `move <task> ready` — a human read `gates`, opened the refs and judged them cleared. No flag, and nothing written but `State:` |
+| ready | gated | not an edge: re-gating a `ready` task is a judgement, so it is a hand edit of the header |
 | ready | submitted | `Witness:` non-empty AND `--run <id>` supplied |
-| ready | pulled | legacy-born phase: every run line is `legacy\|legacy_wrong` (`new --legacy-run` / `move pulled`); `Witness:` still mandatory; every `legacy` run gets a `pulled_to:` (`--pulled-to`, else its own `where:`); refused when no run is `legacy` (nothing to review — `rule drop`) |
+| ready | pulled | legacy-born task: every run line is `legacy\|legacy_wrong` (`new --legacy-run` / `move pulled`); `Witness:` still mandatory; every `legacy` run gets a `pulled_to:` (`--pulled-to`, else its own `where:`); refused when no run is `legacy` (nothing to review — `rule drop`) |
 | submitted / running | same | `--run <id>` appends a wave, a chained job or a checkpoint resubmit (`resumes:`); state unchanged |
 | submitted | running | — |
 | submitted / running | ready | no run line in `submitted\|running` AND ≥1 `failed\|timeout\|void`; `--reason` required (→ writes `Reset:`) |
 | running | pulled | no run line live; or `--partial` (a partial array), which `check` expects closed by a `leave-to-finish` ruling; `--pulled-to <path>` writes `pulled_to:` on every `done` run lacking one, and the move is refused when no `done` run would carry one |
-| pulled | awaiting-ruling | — (the phase joins the rolling board) |
+| pulled | awaiting-ruling | — (the task joins the rolling board) |
 | awaiting-ruling | accepted / rerun / dropped | **`rule` only** |
 | running / pulled / awaiting-ruling | same | `rule leave-to-finish` (state unchanged) |
 | accepted | rerun / dropped | `rule --supersedes <current Ruling:>` only (the REWIND case) |
 | rerun | ready | — (the witness may be re-registered; run history is kept) |
 | any non-terminal | dropped | `rule drop` only |
-| dropped | — | terminal (revival = a new phase number) |
+| dropped | — | terminal (revival = a new slug) |
 
 `accepted` is **not** terminal: a later ruling may supersede the acceptance
 (2026-08-31's REWIND superseded accepted gates). `dropped` is.
@@ -157,9 +161,11 @@ Offline invariants `check` enforces on top of the table:
 - `State = gated` ⇒ `Gates:` non-empty (a gate that does not exist cannot
   clear).
 - A header key outside the table is drift (`Gate:` must not pass as a silent
-  typo for `Gates:`); the five body sections are present; `Phase:` and
-  `Review-minutes:` are integers, `Budget:` is `H+:MM` and `Filed:` is
-  `YYYY-MM-DD`. A key with an empty value is read as absent.
+  typo for `Gates:`); the five body sections are present; `Summary:` is
+  present, non-empty and at most ten words; `Review-minutes:` is an integer,
+  `Budget:` is `H+:MM` and `Filed:` is `YYYY-MM-DD`. A key with an empty value
+  is read as absent. `Phase:` is named as a **retired** key rather than passing
+  as a generic unknown one — the number went on 2026-09-07.
 
 ---
 
@@ -178,7 +184,7 @@ PyAutoCortex/
 ├── dashboard.md             ← GENERATED board — cortex conductor (`dashboard --apply`); LEDGER
 ├── dashboard.html           ← GENERATED board, the Pages index; LEDGER
 │
-├── phases/<project>/<slug>.md          ← one file per phase (LEDGER)
+├── tasks/<project>/<slug>.md          ← one file per task (LEDGER)
 ├── rulings/AGENTS.md                   ← the append-only rule
 ├── rulings/<YYYY>/<MM>/R-<YYYYMMDD>-<nn>.md   ← the ledger of record (LEDGER, append-only)
 ├── batches/AGENTS.md                   ← "closed history: never modified, only added"
@@ -191,7 +197,7 @@ PyAutoCortex/
 ├── scripts/cortex.py        ← check · gates · rule · move · new · retire (stdlib + PyYAML)
 ├── scripts/ledger_merge.py  ← the default-deny ledger classifier (+ append-only on rulings/, batches/)
 ├── tests/test_cortex.py  tests/test_ledger_merge.py
-├── tests/fixtures/skeleton/ ← one project, one phase per state, five rulings — the witness
+├── tests/fixtures/skeleton/ ← one project, one task per state, five rulings — the witness
 ├── tests/fixtures/empty/    ← an empty map passes `check`
 │
 ├── .github/workflows/cortex_check.yml       ← check + pytest on push/PR
@@ -223,7 +229,7 @@ structured facts on **indented continuation lines**, never in the note.
 - `<run-state>` ∈ `submitted | running | done | failed | timeout | void |
   legacy | legacy_wrong`. `void` = cancelled or never produced a step.
   `legacy` / `legacy_wrong` = quarantine (reusable / not) — **a run state,
-  never a phase state**.
+  never a task state**.
 - `<partition>` — the SLURM partition the job went to, a bare word
   (`^[a-z][a-z0-9_-]*$`, e.g. `gpu`). The project's `partition:` row says
   which it may use.
@@ -259,15 +265,15 @@ RUN_CONT_RE = re.compile(
 
 - every non-blank line under `## Runs` matches `RUN_LINE_RE` or `RUN_CONT_RE`;
   a continuation line follows a run line;
-- task sets on one stem are **disjoint within a phase** (job ids are unique
-  per phase, not globally — one array may feed two phases);
-- the `Runs:` header equals the set of body stems (both empty when the phase
+- task sets on one stem are **disjoint within a task** (job ids are unique
+  per task, not globally — one array may feed two tasks);
+- the `Runs:` header equals the set of body stems (both empty when the task
   has no runs);
 - `State: pulled` ⇒ at least one `done | legacy` run carries `pulled_to:`;
 - a `legacy | legacy_wrong` run carries `where:`;
 - an `after:` / `resumes:` target is the identifier (the text before the
   colon — `342091`, `342091_9` or `342091_[0-8,10]`) of another run line of
-  the **same phase**;
+  the **same task**;
 - a `ruled:` value resolves to a ruling file.
 
 ---
@@ -277,13 +283,14 @@ RUN_CONT_RE = re.compile(
 `rulings/<YYYY>/<MM>/R-<YYYYMMDD>-<nn>.md`. The id is `R-YYYYMMDD-nn` — a
 two-digit per-day sequence, global across projects; `rule` assigns it; the
 filename equals the id and so does the title line (`# <id>` or
-`# <id> — <one-line summary>`).
+`# <id> — <one-line summary>`); `rule` generates
+`# <id> — <verb> <project> <slug>`.
 
 ````markdown
-# R-20260901-02 — re-accept phase 8 with the corrected evidence pointer
+# R-20260901-02 — re-accept example 08_accepted with the corrected evidence pointer
 
 Project: example
-Phase: phases/example/08_accepted.md
+Task: tasks/example/08_accepted.md
 Runs: 342050
 Ruling: accept
 Supersedes: R-20260901-01
@@ -304,8 +311,8 @@ The human's words, verbatim.
 | Key | Value | Notes |
 |---|---|---|
 | `Project:` | project key | |
-| `Phase:` | one phase path | repo-relative, `phases/<project>/<slug>.md` |
-| `Runs:` | comma-separated stems, or empty | ⊆ the phase's `Runs:` |
+| `Task:` | one task path | repo-relative, `tasks/<project>/<slug>.md` |
+| `Runs:` | comma-separated stems, or empty | ⊆ the task's `Runs:` |
 | `Ruling:` | `accept \| rerun \| drop \| leave-to-finish` | the verb |
 | `Supersedes:` | one ruling id | optional; see the chain rules |
 | `Batch:` | `<YYYY-MM-DD>-<slot>` | optional-**historical**; the 2026-08/09 rulings' join, nothing writes new ones |
@@ -316,8 +323,8 @@ The human's words, verbatim.
 
 Body: `## Ruling` — the human's words verbatim; `## Evidence` — pointers.
 
-**One ruling file per phase.** A multi-phase ruling (a REWIND) is N `rule`
-invocations with the same body — one per phase.
+**One ruling file per task.** A multi-task ruling (a REWIND) is N `rule`
+invocations with the same body — one per task.
 
 **Chain rules** (`check`):
 
@@ -325,19 +332,19 @@ invocations with the same body — one per phase.
   the file's `<YYYY>/<MM>` directory; the body has `## Ruling` and
   `## Evidence`;
 - `Supersedes:` resolves to an existing ruling, is not the ruling itself, is
-  lexically smaller (earlier), and names the same project **and** phase;
+  lexically smaller (earlier), and names the same project **and** task;
 - **at most one successor per ruling** — a chain, not a tree: supersede the
   head;
-- the phase's `Ruling:` is a chain head (no ruling supersedes it) whose
-  `Phase:` is that phase;
-- the head's verb matches the phase's state: `accept ⇒ accepted`,
+- the task's `Ruling:` is a chain head (no ruling supersedes it) whose
+  `Task:` is that task;
+- the head's verb matches the task's state: `accept ⇒ accepted`,
   `drop ⇒ dropped`, `rerun ⇒ rerun | ready | submitted | running | pulled |
-  awaiting-ruling` (the phase has moved on), `leave-to-finish ⇒ any
+  awaiting-ruling` (the task has moved on), `leave-to-finish ⇒ any
   non-terminal state`;
-- the ruling's `Runs:` ⊆ the phase's runs;
+- the ruling's `Runs:` ⊆ the task's runs;
 - `Batch:`, when present, names an existing `batches/<slot>.md`.
 
-A phase may hold rulings that are not chained to each other — a
+A task may hold rulings that are not chained to each other — a
 `leave-to-finish` followed by an `accept` is two chains of one. `Supersedes:`
 is for replacing a verdict, not for sequencing.
 
@@ -396,11 +403,11 @@ listed here. A document PyYAML cannot read is reported as one problem.
   the one verb that writes this file: it flips the row's `status:` to
   `retired` and rewrites (or appends) its `note:` as
   `"retired <today>: <why>"`. The **row stays** — it is the only record of
-  where that project's data lives — and no phase or ruling is touched;
+  where that project's data lives — and no task or ruling is touched;
   `rulings/` is append-only and a change of status is not a rewrite of
-  history. It refuses while the project holds a phase in any state
+  history. It refuses while the project holds a task in any state
   outside `accepted | rerun | dropped | planned`, naming each one, so the
-  live questions are ruled or dropped first; `planned` phases are unasked
+  live questions are ruled or dropped first; `planned` tasks are unasked
   questions and may stay. The edit is exactly those two lines — every
   other byte of the file is preserved — and the result is re-parsed
   before it is kept, the original bytes restored if it does not read
@@ -422,7 +429,7 @@ deny**:
 
 | Ledger — merged automatically | Code — always a human |
 |---|---|
-| `phases/**`, `rulings/**`, `batches/**` | `scripts/`, `tests/`, `.github/`, `policy/`, `docs/` |
+| `tasks/**`, `rulings/**`, `batches/**` | `scripts/`, `tests/`, `.github/`, `policy/`, `docs/` |
 | `checkin.yaml` | `projects.yaml`, `README.md`, `AGENTS.md`, `REFERENCE.md`, … |
 | `dashboard.md`, `dashboard.html` (generated) | **`AGENTS.md` / `TEMPLATE.md` inside a ledger dir** |
 | | anything unclassified — a new root file, a new top-level folder |
@@ -438,7 +445,7 @@ behaviour. Auto-merging a rewrite of `rulings/AGENTS.md` would let a branch
 edit the rule that governs its own merge.
 
 Pulling the other way, the two **generated** board pages are ledger: a branch
-that moves a phase re-renders them in the same push, and
+that moves a task re-renders them in the same push, and
 `dashboard_refresh.yml`'s self-heal commit has to land without a human.
 
 And a fourth Cortex rule on *kind* rather than path: `ledger_merge.py`
@@ -467,27 +474,27 @@ Stdlib only; `main(argv)`; no import-time side effects; every verb takes
 `--root <dir>` (default: the repo root the script lives in). Every leg of
 `check` takes `root: Path`, so tests run it against a `tmp_path` copy.
 
-- **`check`** — every rule in this file: phase headers and states, the witness
+- **`check`** — every rule in this file: task headers and states, the witness
   invariant, `## Where to look` naming somewhere past `planned`, run lines,
   ruling ids and chains, the verb↔state agreement, every project named by a
-  phase path is a `projects.yaml` key, and `projects.yaml`'s own fields. Hermetic (no network, no git). Output in `lifecycle.py`'s shape —
+  task path is a `projects.yaml` key, and `projects.yaml`'s own fields. Hermetic (no network, no git). Output in `lifecycle.py`'s shape —
   `cortex check: OK` or `cortex check: DRIFT` followed by one `  - …` line per
   finding; exit 1 on drift.
-- **`gates`** — read-only and offline: every `gated` phase, its refs and the
+- **`gates`** — read-only and offline: every `gated` task, its refs and the
   URL each ref resolves to (`GATE_REF_RE` → `gate_url`). Nothing polls GitHub
   and nothing flips a state. Grading was retired on 2026-09-03 — in its whole
   life it saw 2 gated refs and flipped 0, while schema decision 54 routes
   sequencing through prose `Ready when:` lines. A human reads the listing,
-  opens the refs and types `move <phase> ready`.
-- **`rule <phase> <verb> --body <file> [--supersedes <id>] [--batch <slot>]
+  opens the refs and types `move <task> ready`.
+- **`rule <task> <verb> --body <file> [--supersedes <id>] [--batch <slot>]
   [--minutes n] [--follow-up <ref>]...`** — assigns the next id for today,
-  writes the ruling file, updates the phase's `Ruling:` and `State:` per the
-  table (and appends `<id> — <verb>` to the phase's
-  `## Ruling`); the ruling's `Runs:` is the phase's, its `## Evidence` is the
-  phase's `## Where to look`; refuses to touch an existing ruling; refuses a
-  verb the table does not allow from the phase's state; validates everything
+  writes the ruling file, updates the task's `Ruling:` and `State:` per the
+  table (and appends `<id> — <verb>` to the task's
+  `## Ruling`); the ruling's `Runs:` is the task's, its `## Evidence` is the
+  task's `## Where to look`; refuses to touch an existing ruling; refuses a
+  verb the table does not allow from the task's state; validates everything
   before writing anything.
-- **`move <phase> <state> [--run <id>] [--reason ..]
+- **`move <task> <state> [--run <id>] [--reason ..]
   [--partial] [--pulled-to <path>] [--partition ..] [--after <run>]
   [--resumes <run>] [--note ..]`** — the table; refuses every ruling edge
   with a message naming `rule`. `--run` on `submitted`/`running` appends a
@@ -497,23 +504,24 @@ Stdlib only; `main(argv)`; no import-time side effects; every verb takes
   partition is the project's `partition:` row unless that is `both`, when
   `--partition` is required. Every edit is an in-place header edit or an
   appended run line; every other byte of the file is preserved.
-- **`new <project> <slug> --phase <n> [--gates ..] [--epic ..]
+- **`new <project> <slug> --summary "<≤10 words>" [--gates ..] [--epic ..]
   [--legacy-run <id>]... [--legacy-wrong <id>]... [--where <path>]
   [--partition ..] [--witness ..] [--budget ..] [--minutes n] [--title ..]`**
-  — writes `phases/<project>/<slug>.md` from the template in `planned` (or
+  — writes `tasks/<project>/<slug>.md` from the template in `planned` (or
   `ready` when `--legacy-run` / `--legacy-wrong` is given and every run is
   legacy); each legacy run line is written with today's date, `wall 0:00`
   and the note `pre-Cortex run, migrated` — the human corrects the date and
   wall by hand — and `--where` (required) as its `where:`; a legacy-born
-  phase refuses `--gates`. Refuses a duplicate phase number, an existing
-  file or an unknown project.
+  task refuses `--gates`. `--summary` is required and held to the same ten
+  words `check` holds it to. Refuses an existing file (the slug is the
+  identity — there is nothing else to collide on) or an unknown project.
 - **`retire <project> --why "<one line>"`** — the only verb that writes
   `projects.yaml`: `status: retired` plus a `note:` reading
   `"retired <today>: <why>"`, two lines edited in place and every other
   byte preserved. Refuses an unknown key, an already-retired row, and any
-  project still holding a phase outside `accepted | rerun | dropped |
-  planned` (the message names each `<phase> — <state>`). The row, its
-  phases and its rulings all stay; see `projects.yaml` above.
+  project still holding a task outside `accepted | rerun | dropped |
+  planned` (the message names each `<task> — <state>`). The row, its
+  tasks and its rulings all stay; see `projects.yaml` above.
 
 ---
 
@@ -531,11 +539,11 @@ pyauto-brain cortex checkin --apply --skip-pull   # re-score what is already her
 ```
 
 It sweeps every `status: active` row of `projects.yaml`, plus any project that
-owns a phase in `submitted | running`, and runs **that project's own**
+owns a task in `submitted | running`, and runs **that project's own**
 `<local_path>/<sync_cli> pull` — the verb all seven implement. Nothing else
 reaches a cluster; the conductor adds no SSH. A pull that exits non-zero is
 recorded against its project and the sweep continues. Then it scores every live
-phase (the six legs below), moves `running → pulled → awaiting-ruling`,
+task (the six legs below), moves `running → pulled → awaiting-ruling`,
 re-renders `dashboard.md` + `dashboard.html`, and prints a summary keyed **by
 project** — the last thing on screen, so a chat sees it first.
 
@@ -566,13 +574,13 @@ carrying pull results and six-leg health). One builder, three renderings — a
 prompt added to a state appears in all of them.
 
 Per project: the three folders it lives in (`local_path`, `mirror` when it has
-one, `ral_root`), what came of its pull, its phase counts by state, then every
-phase that is still **open** — awaiting a ruling, still out there, ready to
+one, `ral_root`), what came of its pull, its task counts by state, then every
+task that is still **open** — awaiting a ruling, still out there, ready to
 submit, gated, planned — each with its state and health, its `## Where to look`
 bullets verbatim, and a copy chip per prompt its state carries. `accepted`,
-`rerun` and `dropped` phases are history and appear only in the counts. A
+`rerun` and `dropped` tasks are history and appear only in the counts. A
 project gets a block when its `projects.yaml` row is `status: active`, or when
-it still holds an open phase; every other project folds into one line.
+it still holds an open task; every other project folds into one line.
 
 On the board `## By project` is the **first** section, above the state lists:
 those are cross-project, so every row has to be read to find out whose it is,
@@ -582,31 +590,31 @@ strip itself is unchanged (the Brain board reads it).
 
 ### The five starting prompts
 
-Every phase row hands the reader a command rather than a decision. Which
-prompts a phase carries is its **state**, and nothing else:
+Every task row hands the reader a command rather than a decision. Which
+prompts a task carries is its **state**, and nothing else:
 
 | Prompt | States | What it says |
 |---|---|---|
-| rule on it | `pulled`, `awaiting-ruling` | read the witness and the pulled evidence, draft the ruling body, `rule <phase> <verb> --body <file>` |
-| the results are good — accept and open phase N+1 | `pulled`, `awaiting-ruling` | `rule <phase> accept --body <file>`, then open the next phase (below) |
-| run it again | `pulled`, `awaiting-ruling`, `running` | `rule <phase> rerun --body <file>`, `move <phase> ready`, the project's own submit, `move <phase> submitted --run <jobid>` |
+| rule on it | `pulled`, `awaiting-ruling` | read the witness and the pulled evidence, draft the ruling body, `rule <task> <verb> --body <file>` |
+| the results are good — accept and open the next task | `pulled`, `awaiting-ruling` | `rule <task> accept --body <file>`, then open the next task (below) |
+| run it again | `pulled`, `awaiting-ruling`, `running` | `rule <task> rerun --body <file>`, `move <task> ready`, the project's own submit, `move <task> submitted --run <jobid>` |
 | where the jobs stand | `submitted`, `running` | the project's own `<sync_cli> jobs` |
-| submit it | `ready` | the phase, the project's own submit verb, `move <phase> submitted --run <jobid>` |
+| submit it | `ready` | the task, the project's own submit verb, `move <task> submitted --run <jobid>` |
 
-(`gated` and `planned` phases carry the one-line `gates` / `move … ready`
+(`gated` and `planned` tasks carry the one-line `gates` / `move … ready`
 command they always had.)
 
-**Accept and open phase N+1** is two commands in one prompt because they are
-one decision: an accept that opens nothing leaves the programme where it was.
-Its second half prefills from the tree — when the project already holds a
-phase numbered N+1 in `planned` or `gated`, the prompt opens *that* phase
-(`move … ready` + the launch) rather than writing a second one beside it;
-when N+1 is taken by a phase that has already run, it says so and offers the
-lowest free number instead. The `new` line carries the phase's own `Epic:` and
-spells out the title rule: **`new` writes `# <Project> — phase N: ` in front
-of `--title` itself**, so `--title` takes the tail alone.
+**Accept and open the next task** is two commands in one prompt because they
+are one decision: an accept that opens nothing leaves the programme where it
+was. With the number gone there is no "N+1" to prefill — the tasks a project
+holds are unordered ideas, so the second half offers the project's `planned`
+and `gated` tasks to open (`move … ready` + the launch) and otherwise a `new`
+line for a task the human names with a slug and a `Summary:`. The `new` line
+carries the task's own `Epic:` and spells out the title rule: **`new` writes
+`# <Project> — ` in front of `--title` itself**, so `--title` takes the tail
+alone.
 
-**Run it again** is a ruling first: `rerun` is the only verb that puts a phase
+**Run it again** is a ruling first: `rerun` is the only verb that puts a task
 back on the board, so the verdict on what came back is what makes the next
 submission a rerun rather than a repeat. Its `move … submitted --run` line
 carries the reminder that it is one run per call (`--after <run>` chains the
@@ -628,7 +636,7 @@ the same file `collect`'s checkpoint leg reads:
 | `pulled_at` | the check-in | UTC `YYYY-MM-DDTHH:MMZ` of the pull that just finished |
 | `cmd` | the check-in | the pull as a human would type it (`cd <local_path> && <sync_cli> pull`) |
 | `rc` | the check-in | that pull's exit code — `0`, or the manifest is not written |
-| `phases_live` | the check-in | the phase paths that were `submitted \| running` when it ran |
+| `tasks_live` | the check-in | the task paths that were `submitted \| running` when it ran |
 | `schema` | a project's own CLI | `1` where the CLI writes the richer shape; absent = the older `runs`-only one |
 | `checkpoints` | a project's own CLI | `{"<run dir, relative to the pull root>": {"bytes": N, "mtime": ISO}}` |
 | `runs` | a project's own CLI | `{"<jobid|jobid_task>": {"checkpoint_bytes": N, "checkpoint_mtime": ISO}}` |
@@ -648,7 +656,7 @@ The manifests live **outside** this repository, in the science trees, so
 
 `--push` is allowed only when **`gh auth status` succeeds** *and* **this
 checkout is clean on `main`** — checked before anything is written, since
-"clean" stops being true the moment the phases move. That is the cloud/laptop
+"clean" stops being true the moment the tasks move. That is the cloud/laptop
 split and it is also the default: a laptop pushes without asking, a cloud
 session cannot and says so. The push cuts `claude/checkin-<YYYY-MM-DD>` from a
 fresh `origin/main`, commits the changed paths explicitly and pushes;
@@ -665,14 +673,14 @@ check-in — is the Brain's **cortex conductor**:
 ```bash
 pyauto-brain cortex checkin [--dry-run|--apply] [--push|--no-push] [--project KEY] [--skip-pull] [--refreshed ISO]
 pyauto-brain cortex census [--json]                  # what is held, by state
-pyauto-brain cortex census --by-project              # ... by project: folders, open phases, prompts
+pyauto-brain cortex census --by-project              # ... by project: folders, open tasks, prompts
 pyauto-brain cortex dashboard --check | --apply      # render the two pages
-pyauto-brain cortex gates                            # the gated phases and their refs
-pyauto-brain cortex collect [--phase REL] [--pull] [--refreshed ISO] [--apply] [--out F]
+pyauto-brain cortex gates                            # the gated tasks and their refs
+pyauto-brain cortex collect [--task REL] [--pull] [--refreshed ISO] [--apply] [--out F]
 ```
 
-`checkin` composes the others (above). `collect` with no `--phase` scopes to
-**every** phase in `submitted | running` — the scorer on its own.
+`checkin` composes the others (above). `collect` with no `--task` scopes to
+**every** task in `submitted | running` — the scorer on its own.
 
 With no Brain install, or from a workflow:
 
@@ -686,7 +694,7 @@ verb. (`--cortex . dashboard --check` exits 2.) The root is resolved
 
 **Two spellings of the same flag.** The conductor writes with `--apply` (the
 Brain's house spelling); `scripts/cortex.py` writes with `--write`. Every edit
-to a phase is `cortex.py`'s either way.
+to a task is `cortex.py`'s either way.
 
 **The `--check` exit-code contract** (`dashboard_refresh.yml` depends on it):
 
@@ -705,7 +713,7 @@ for exactly that reason.
 
 | Workflow | Trigger | Writes |
 |---|---|---|
-| `cortex_check.yml` | push/PR on `phases/ rulings/ batches/ projects.yaml checkin.yaml dashboard.* scripts/ tests/` | nothing (`cortex.py check` + pytest) |
+| `cortex_check.yml` | push/PR on `tasks/ rulings/ batches/ projects.yaml checkin.yaml dashboard.* scripts/ tests/` | nothing (`cortex.py check` + pytest) |
 | `dashboard_refresh.yml` | push to main + PR on the ledger paths and the two pages, nightly **03:35 UTC**, dispatch | `dashboard.md`, `dashboard.html` on main (3-attempt fetch/reset/render/commit/push); a PR run errors instead of healing |
 | `pages_dashboard.yml` | push to `dashboard.html`, dispatch | nothing in git — publishes `dashboard.html` as the Pages index |
 | `ledger_merge.yml` | push to `claude/**`, dispatch | merges a ledger-only branch into main |

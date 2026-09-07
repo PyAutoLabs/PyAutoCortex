@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """cortex.py — the Cortex's lifecycle script: check · gates · rule · move · new · retire.
 
-The run-and-ruling registry (project → phase → runs → rulings) is a tree of
+The run-and-ruling registry (project → task → runs → rulings) is a tree of
 markdown files with light headers, and this script is the one thing that
 writes their state and the one thing that checks it. Every rule it enforces is
 written down in REFERENCE.md; the transition table there is `move`'s and the
@@ -15,10 +15,10 @@ for the same reason.
 
 Usage:
     python3 scripts/cortex.py check                      # OK or DRIFT (exit 1)
-    python3 scripts/cortex.py gates                       # gated phases and their refs
-    python3 scripts/cortex.py rule <phase> <verb> --body <file> [...]
-    python3 scripts/cortex.py move <phase> <state> [...]
-    python3 scripts/cortex.py new <project> <slug> --phase <n> [...]
+    python3 scripts/cortex.py gates                       # gated tasks and their refs
+    python3 scripts/cortex.py rule <task> <verb> --body <file> [...]
+    python3 scripts/cortex.py move <task> <state> [...]
+    python3 scripts/cortex.py new <project> <slug> --summary "<≤10 words>" [...]
     python3 scripts/cortex.py retire <project> --why "<one line>"   # a project's row
 
 Exit codes: 0 = done · 1 = drift or a refused edit · 2 = bad arguments.
@@ -39,12 +39,12 @@ ROOT = Path(__file__).resolve().parents[1]
 # --------------------------------------------------------------------------- #
 # vocabulary (REFERENCE.md)
 # --------------------------------------------------------------------------- #
-PHASE_STATES = (
+TASK_STATES = (
     "planned", "gated", "ready", "submitted", "running", "pulled",
     "awaiting-ruling", "accepted", "rerun", "dropped",
 )
 TERMINAL_STATES = {"dropped"}
-NON_TERMINAL_STATES = set(PHASE_STATES) - TERMINAL_STATES
+NON_TERMINAL_STATES = set(TASK_STATES) - TERMINAL_STATES
 #: `submitted..accepted` (and `rerun`) — the states that need a `Witness:`.
 WITNESS_STATES = {"submitted", "running", "pulled", "awaiting-ruling",
                   "accepted", "rerun"}
@@ -57,8 +57,8 @@ LIVE_RUN_STATES = {"submitted", "running"}
 LEGACY_RUN_STATES = {"legacy", "legacy_wrong"}
 RESET_RUN_STATES = {"failed", "timeout", "void"}
 
-#: What `new` writes into `## Where to look` before a phase has an output
-#: path. It is honest on a `planned` phase and a hole on any other, because
+#: What `new` writes into `## Where to look` before a task has an output
+#: path. It is honest on a `planned` task and a hole on any other, because
 #: the section is now rendered as the "which folder do I open" answer on the
 #: dashboard's `## By project` view and in `pyauto-brain cortex checkin`.
 WHERE_PLACEHOLDER = "(the output path, once there is one)"
@@ -66,31 +66,41 @@ WHERE_PLACEHOLDER = "(the output path, once there is one)"
 WHERE_EXEMPT_STATES = {"planned"}
 
 RULING_VERBS = ("accept", "rerun", "drop", "leave-to-finish")
-#: the head verb ↔ phase state agreement `check` enforces.
+#: the head verb ↔ task state agreement `check` enforces.
 VERB_STATES = {
     "accept": {"accepted"},
     "drop": {"dropped"},
     "rerun": {"rerun", "ready", "submitted", "running", "pulled", "awaiting-ruling"},
     "leave-to-finish": NON_TERMINAL_STATES,
 }
-#: `rule` writes the phase into this state (None = unchanged).
+#: `rule` writes the task into this state (None = unchanged).
 VERB_TARGET = {"accept": "accepted", "rerun": "rerun", "drop": "dropped",
                "leave-to-finish": None}
 
 # Canonical header key order — `new` writes it and the edit helpers insert a
 # missing key at its slot so a hand-edited file keeps reading the same.
-PHASE_KEYS = (
-    "Project", "Phase", "State", "Gates", "Reset", "Witness", "Budget",
+TASK_KEYS = (
+    "Project", "Summary", "State", "Gates", "Reset", "Witness", "Budget",
     "Runs", "Ruling", "Review-minutes", "Epic", "Filed", "Migrated-from",
 )
+#: `Summary:` is the board's line: the QUESTION the task answers, in at most
+#: ten words. It is required on every task file and `check` enforces both.
+SUMMARY_MAX_WORDS = 10
+#: Header keys that were retired, and what to say instead of the generic
+#: `unknown header key`. `Phase:` died on 2026-09-07: science is unordered
+#: ideas, the slug is the identity, the number carried nothing.
+DEAD_KEYS = {
+    "Phase": "Phase: is a retired header — a task is identified by its slug, "
+             "not a number (delete the line; `Task:` on a ruling names the path)",
+}
 #: `Batch:` is optional-historical — the 2026-08/09 rulings cite the batch
 #: record they were filed from; nothing writes new ones (the slot apparatus
 #: was retired 2026-09-03).
 RULING_KEYS = (
-    "Project", "Phase", "Runs", "Ruling", "Supersedes", "Batch", "Reviewed-at",
+    "Project", "Task", "Runs", "Ruling", "Supersedes", "Batch", "Reviewed-at",
     "Review-minutes-actual", "Follow-ups", "Migrated-from",
 )
-PHASE_SECTIONS = ("Question", "Witness", "Where to look", "Runs", "Ruling")
+TASK_SECTIONS = ("Question", "Witness", "Where to look", "Runs", "Ruling")
 RULING_SECTIONS = ("Ruling", "Evidence")
 
 PROJECT_FIELDS = ("remote", "local_path", "ral_root", "mirror", "sync_cli",
@@ -130,7 +140,7 @@ PARTITION_RE = re.compile(r"^[a-z][a-z0-9_-]*$")
 
 RULING_ID_RE = re.compile(r"^R-(\d{4})(\d{2})(\d{2})-(\d{2})$")
 RULING_FILE_RE = re.compile(r"^rulings/(\d{4})/(\d{2})/(R-\d{8}-\d{2})\.md$")
-PHASE_FILE_RE = re.compile(r"^phases/([a-z][a-z0-9_]*)/([^/]+)\.md$")
+TASK_FILE_RE = re.compile(r"^tasks/([a-z][a-z0-9_]*)/([^/]+)\.md$")
 PROJECT_KEY_RE = re.compile(r"^[a-z][a-z0-9_]*$")
 SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9_-]*$")
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
@@ -197,7 +207,7 @@ def parse_header(text: str) -> "tuple[str | None, dict[str, str]]":
     return title, fields
 
 
-def edit_header(text: str, updates: "dict[str, str | None]", order=PHASE_KEYS) -> str:
+def edit_header(text: str, updates: "dict[str, str | None]", order=TASK_KEYS) -> str:
     """Return `text` with header keys set (value) or removed (None), in place.
 
     Every other byte is preserved: a present key has only its value replaced;
@@ -475,7 +485,7 @@ def run_problems(runs: "list[Run]", header_runs: str, state: str,
         for key in ("after", "resumes"):
             target = r.cont.get(key)
             if target is not None and (target not in idents or target == r.ident):
-                problems.append(f"run {r.ident} {key}: {target} names no other run of this phase")
+                problems.append(f"run {r.ident} {key}: {target} names no other run of this task")
         ruled = r.cont.get("ruled")
         if ruled is not None and ruled not in ruling_ids:
             problems.append(f"run {r.ident} ruled: {ruled} does not resolve to a ruling file")
@@ -507,7 +517,7 @@ def gate_url(ref: str) -> str:
 # --------------------------------------------------------------------------- #
 # the tree
 # --------------------------------------------------------------------------- #
-class Phase:
+class Task:
     def __init__(self, root: Path, path: Path):
         self.path = path
         self.rel = path.relative_to(root).as_posix()
@@ -541,15 +551,15 @@ def _md_files(d: Path):
     return sorted(p for p in d.rglob("*.md")) if d.is_dir() else []
 
 
-def load_phases(root: Path) -> "tuple[list[Phase], list[str]]":
-    phases, problems = [], []
-    for p in _md_files(root / "phases"):
+def load_tasks(root: Path) -> "tuple[list[Task], list[str]]":
+    tasks, problems = [], []
+    for p in _md_files(root / "tasks"):
         rel = p.relative_to(root).as_posix()
-        if not PHASE_FILE_RE.match(rel):
-            problems.append(f"{rel}: not a phase path (phases/<project>/<slug>.md)")
+        if not TASK_FILE_RE.match(rel):
+            problems.append(f"{rel}: not a task path (tasks/<project>/<slug>.md)")
             continue
-        phases.append(Phase(root, p))
-    return phases, problems
+        tasks.append(Task(root, p))
+    return tasks, problems
 
 
 def load_rulings(root: Path) -> "tuple[list[Ruling], list[str]]":
@@ -592,92 +602,92 @@ def batch_reviews(root: Path) -> "list[Path]":
 # --------------------------------------------------------------------------- #
 # check
 # --------------------------------------------------------------------------- #
-def phase_problems(root: Path, phases: "list[Phase]", projects: "dict[str, dict]",
-                   rulings: "dict[str, Ruling]", successors: "dict[str, list[str]]") -> "list[str]":
+def task_problems(root: Path, tasks: "list[Task]", projects: "dict[str, dict]",
+                  rulings: "dict[str, Ruling]", successors: "dict[str, list[str]]") -> "list[str]":
     problems: "list[str]" = []
-    numbers: "dict[tuple[str, str], str]" = {}
-    for ph in phases:
-        f = ph.fields
-        p = [f"{ph.rel}: {msg}" for msg in ph.run_parse_problems]
-        if ph.title is None:
-            p.append(f"{ph.rel}: line 1 is not `# <title>`")
-        for key in ("Project", "Phase", "State"):
+    for tk in tasks:
+        f = tk.fields
+        p = [f"{tk.rel}: {msg}" for msg in tk.run_parse_problems]
+        if tk.title is None:
+            p.append(f"{tk.rel}: line 1 is not `# <title>`")
+        for key in ("Project", "Summary", "State"):
             if not f.get(key):
-                p.append(f"{ph.rel}: missing header key {key}:")
+                p.append(f"{tk.rel}: missing header key {key}:")
         for key in f:
-            if key not in PHASE_KEYS:
-                p.append(f"{ph.rel}: unknown header key {key}:")
-        for name in PHASE_SECTIONS:
-            if name not in sections(ph.text):
-                p.append(f"{ph.rel}: missing section ## {name}")
+            if key in DEAD_KEYS:
+                p.append(f"{tk.rel}: {DEAD_KEYS[key]}")
+            elif key not in TASK_KEYS:
+                p.append(f"{tk.rel}: unknown header key {key}:")
+        summary = f.get("Summary", "")
+        if summary:
+            words = summary.split()
+            if len(words) > SUMMARY_MAX_WORDS:
+                p.append(f"{tk.rel}: Summary: {len(words)} words — at most "
+                         f"{SUMMARY_MAX_WORDS} (the question the task answers)")
+        for name in TASK_SECTIONS:
+            if name not in sections(tk.text):
+                p.append(f"{tk.rel}: missing section ## {name}")
         project = f.get("Project", "")
-        if project and project != ph.project_dir:
-            p.append(f"{ph.rel}: Project: {project} is not the directory name {ph.project_dir}")
+        if project and project != tk.project_dir:
+            p.append(f"{tk.rel}: Project: {project} is not the directory name {tk.project_dir}")
         if project and project not in projects:
-            p.append(f"{ph.rel}: Project: {project} is not a projects.yaml key")
-        number = f.get("Phase", "")
-        if number and not INT_RE.match(number):
-            p.append(f"{ph.rel}: Phase: '{number}' is not an integer")
-        elif number:
-            prior = numbers.setdefault((ph.project_dir, number), ph.rel)
-            if prior != ph.rel:
-                p.append(f"{ph.rel}: duplicate Phase: {number} (also {prior})")
+            p.append(f"{tk.rel}: Project: {project} is not a projects.yaml key")
         state = f.get("State", "")
-        if state and state not in PHASE_STATES:
-            p.append(f"{ph.rel}: State: '{state}' is not a phase state")
+        if state and state not in TASK_STATES:
+            p.append(f"{tk.rel}: State: '{state}' is not a task state")
         refs, bad = gate_refs(f.get("Gates", ""))
         for token in bad:
-            p.append(f"{ph.rel}: Gates: unrecognised ref '{token}' — Repo#N or an "
+            p.append(f"{tk.rel}: Gates: unrecognised ref '{token}' — Repo#N or an "
                      f"issue/PR URL; no owner/Repo#N form")
         if f.get("Filed") and not DATE_RE.match(f["Filed"]):
-            p.append(f"{ph.rel}: Filed: '{f['Filed']}' is not YYYY-MM-DD")
+            p.append(f"{tk.rel}: Filed: '{f['Filed']}' is not YYYY-MM-DD")
         if f.get("Budget") and not WALL_RE.match(f["Budget"]):
-            p.append(f"{ph.rel}: Budget: '{f['Budget']}' is not H+:MM")
+            p.append(f"{tk.rel}: Budget: '{f['Budget']}' is not H+:MM")
         if f.get("Review-minutes") and not INT_RE.match(f["Review-minutes"]):
-            p.append(f"{ph.rel}: Review-minutes: '{f['Review-minutes']}' is not an integer")
+            p.append(f"{tk.rel}: Review-minutes: '{f['Review-minutes']}' is not an integer")
         # the offline invariants on top of the table
         if state == "gated" and not refs:
-            p.append(f"{ph.rel}: State: gated with an empty Gates:")
+            p.append(f"{tk.rel}: State: gated with an empty Gates:")
         if state in WITNESS_STATES and not f.get("Witness"):
-            p.append(f"{ph.rel}: State: {state} needs a Witness:")
+            p.append(f"{tk.rel}: State: {state} needs a Witness:")
         ruling_id = f.get("Ruling", "")
         if state in RULED_STATES and not ruling_id:
-            p.append(f"{ph.rel}: State: {state} needs a Ruling: (reachable only through rule)")
+            p.append(f"{tk.rel}: State: {state} needs a Ruling: (reachable only through rule)")
         head = None
         if ruling_id:
             if not RULING_ID_RE.match(ruling_id):
-                p.append(f"{ph.rel}: Ruling: '{ruling_id}' is not a ruling id")
+                p.append(f"{tk.rel}: Ruling: '{ruling_id}' is not a ruling id")
             elif ruling_id not in rulings:
-                p.append(f"{ph.rel}: Ruling: {ruling_id} does not resolve to a ruling file")
+                p.append(f"{tk.rel}: Ruling: {ruling_id} does not resolve to a ruling file")
             else:
                 head = rulings[ruling_id]
                 if successors.get(ruling_id):
-                    p.append(f"{ph.rel}: Ruling: {ruling_id} is not a chain head "
+                    p.append(f"{tk.rel}: Ruling: {ruling_id} is not a chain head "
                              f"(superseded by {', '.join(successors[ruling_id])})")
-                if head.get("Phase") != ph.rel:
-                    p.append(f"{ph.rel}: Ruling: {ruling_id} names {head.get('Phase') or '(nothing)'}, not this phase")
+                if head.get("Task") != tk.rel:
+                    p.append(f"{tk.rel}: Ruling: {ruling_id} names {head.get('Task') or '(nothing)'}, not this task")
                 verb = head.get("Ruling")
                 if state and verb in VERB_STATES and state not in VERB_STATES[verb]:
-                    p.append(f"{ph.rel}: Ruling: {ruling_id} verb '{verb}' does not fit State: {state}")
+                    p.append(f"{tk.rel}: Ruling: {ruling_id} verb '{verb}' does not fit State: {state}")
         # `## Where to look` is rendered, not just parsed: the by-project view
         # prints these bullets verbatim as the folders to open, and `collect`
-        # resolves them to the artefacts it scores. A phase that has left
+        # resolves them to the artefacts it scores. A task that has left
         # `planned` with only the template placeholder names nowhere.
         if state and state not in WHERE_EXEMPT_STATES:
-            if not [b for b in _where_to_look(ph) if WHERE_PLACEHOLDER not in b]:
-                p.append(f"{ph.rel}: ## Where to look names nowhere — a phase "
+            if not [b for b in _where_to_look(tk) if WHERE_PLACEHOLDER not in b]:
+                p.append(f"{tk.rel}: ## Where to look names nowhere — a task "
                          f"past planned needs at least one bullet that is not "
                          f"'{WHERE_PLACEHOLDER}'")
-        if state == "pulled" and any(r.state in LIVE_RUN_STATES for r in ph.runs):
+        if state == "pulled" and any(r.state in LIVE_RUN_STATES for r in tk.runs):
             if head is None or head.get("Ruling") != "leave-to-finish":
-                p.append(f"{ph.rel}: State: pulled with a live run needs a leave-to-finish ruling head (--partial)")
-        p.extend(f"{ph.rel}: {msg}" for msg in
-                 run_problems(ph.runs, f.get("Runs", ""), state, set(rulings)))
+                p.append(f"{tk.rel}: State: pulled with a live run needs a leave-to-finish ruling head (--partial)")
+        p.extend(f"{tk.rel}: {msg}" for msg in
+                 run_problems(tk.runs, f.get("Runs", ""), state, set(rulings)))
         problems.extend(p)
     return problems
 
 
-def ruling_problems(root: Path, rulings: "list[Ruling]", phases_by_rel: "dict[str, Phase]",
+def ruling_problems(root: Path, rulings: "list[Ruling]", tasks_by_rel: "dict[str, Task]",
                     by_id: "dict[str, Ruling]", successors: "dict[str, list[str]]") -> "list[str]":
     problems: "list[str]" = []
     seen: "dict[str, str]" = {}
@@ -688,11 +698,13 @@ def ruling_problems(root: Path, rulings: "list[Ruling]", phases_by_rel: "dict[st
             p.append(f"{r.rel}: duplicate ruling id {r.id} (also {prior})")
         if r.title is None or not (r.title == r.id or r.title.startswith(f"{r.id} — ")):
             p.append(f"{r.rel}: title must be `# {r.id}` or `# {r.id} — <summary>`")
-        for key in ("Project", "Phase", "Ruling"):
+        for key in ("Project", "Task", "Ruling"):
             if not r.get(key):
                 p.append(f"{r.rel}: missing header key {key}:")
         for key in r.fields:
-            if key not in RULING_KEYS:
+            if key in DEAD_KEYS:
+                p.append(f"{r.rel}: {DEAD_KEYS[key]}")
+            elif key not in RULING_KEYS:
                 p.append(f"{r.rel}: unknown header key {key}:")
         for name in RULING_SECTIONS:
             if name not in sections(r.text):
@@ -700,17 +712,17 @@ def ruling_problems(root: Path, rulings: "list[Ruling]", phases_by_rel: "dict[st
         verb = r.get("Ruling")
         if verb and verb not in RULING_VERBS:
             p.append(f"{r.rel}: Ruling: '{verb}' is not a ruling verb")
-        phase_rel = r.get("Phase")
-        ph = phases_by_rel.get(phase_rel)
-        if phase_rel and ph is None:
-            p.append(f"{r.rel}: Phase: {phase_rel} does not resolve to a phase file")
-        if ph is not None and r.get("Project") and ph.get("Project") != r.get("Project"):
-            p.append(f"{r.rel}: Phase: {phase_rel} is not a phase of Project: {r.get('Project')}")
-        if ph is not None:
+        task_rel = r.get("Task")
+        tk = tasks_by_rel.get(task_rel)
+        if task_rel and tk is None:
+            p.append(f"{r.rel}: Task: {task_rel} does not resolve to a task file")
+        if tk is not None and r.get("Project") and tk.get("Project") != r.get("Project"):
+            p.append(f"{r.rel}: Task: {task_rel} is not a task of Project: {r.get('Project')}")
+        if tk is not None:
             stems = {s.strip() for s in r.get("Runs").split(",") if s.strip()}
-            phase_stems = {x.stem for x in ph.runs}
-            if not stems <= phase_stems:
-                p.append(f"{r.rel}: Runs: {{{', '.join(sorted(stems - phase_stems))}}} not in the phase's runs")
+            task_stems = {x.stem for x in tk.runs}
+            if not stems <= task_stems:
+                p.append(f"{r.rel}: Runs: {{{', '.join(sorted(stems - task_stems))}}} not in the task's runs")
         sup = r.get("Supersedes")
         if sup:
             if sup == r.id:
@@ -721,8 +733,8 @@ def ruling_problems(root: Path, rulings: "list[Ruling]", phases_by_rel: "dict[st
                 old = by_id[sup]
                 if not sup < r.id:
                     p.append(f"{r.rel}: Supersedes: {sup} is not earlier than {r.id}")
-                if (old.get("Project"), old.get("Phase")) != (r.get("Project"), r.get("Phase")):
-                    p.append(f"{r.rel}: Supersedes: {sup} names a different project/phase")
+                if (old.get("Project"), old.get("Task")) != (r.get("Project"), r.get("Task")):
+                    p.append(f"{r.rel}: Supersedes: {sup} names a different project/task")
         if len(successors.get(r.id, [])) > 1:
             p.append(f"{r.rel}: has {len(successors[r.id])} successors "
                      f"({', '.join(successors[r.id])}) — a chain, not a tree")
@@ -743,7 +755,7 @@ def ruling_problems(root: Path, rulings: "list[Ruling]", phases_by_rel: "dict[st
 def check_problems(root: Path) -> "list[str]":
     """Every `check` rule, over the tree at `root`. Hermetic."""
     projects, problems = load_projects(root)
-    phases, stray = load_phases(root)
+    tasks, stray = load_tasks(root)
     problems.extend(stray)
     rulings, stray = load_rulings(root)
     problems.extend(stray)
@@ -754,9 +766,9 @@ def check_problems(root: Path) -> "list[str]":
     for r in rulings:
         if r.get("Supersedes"):
             successors.setdefault(r.get("Supersedes"), []).append(r.id)
-    phases_by_rel = {ph.rel: ph for ph in phases}
-    problems.extend(phase_problems(root, phases, projects, by_id, successors))
-    problems.extend(ruling_problems(root, rulings, phases_by_rel, by_id, successors))
+    tasks_by_rel = {tk.rel: tk for tk in tasks}
+    problems.extend(task_problems(root, tasks, projects, by_id, successors))
+    problems.extend(ruling_problems(root, rulings, tasks_by_rel, by_id, successors))
     return problems
 
 
@@ -775,22 +787,22 @@ def cmd_check(args) -> int:
 # gates
 # --------------------------------------------------------------------------- #
 def gates_report(root: Path) -> "tuple[list[str], int]":
-    """(report lines, exit code) — every `gated` phase, its refs and their URLs.
+    """(report lines, exit code) — every `gated` task, its refs and their URLs.
 
     Read-only and offline: nothing asks GitHub whether a ref has cleared. Gate
     grading was retired 2026-09-03 — 2 gated refs and 0 flips in its whole
     life, while schema decision 54 routes sequencing through prose
-    `Ready when:` lines. A gated phase is moved on by a human reading this
-    listing and typing `move <phase> ready`."""
-    phases, _ = load_phases(root)
-    wanted = [ph for ph in phases
-              if ph.state == "gated" and gate_refs(ph.get("Gates"))[0]]
+    `Ready when:` lines. A gated task is moved on by a human reading this
+    listing and typing `move <task> ready`."""
+    tasks, _ = load_tasks(root)
+    wanted = [tk for tk in tasks
+              if tk.state == "gated" and gate_refs(tk.get("Gates"))[0]]
     if not wanted:
-        return ["gates: no gated phase"], 0
-    lines = [f"gates: {len(wanted)} phase(s)"]
-    for ph in wanted:
-        refs = gate_refs(ph.get("Gates"))[0]
-        lines.append(f"  {ph.rel}: {ph.state} — {', '.join(refs)}")
+        return ["gates: no gated task"], 0
+    lines = [f"gates: {len(wanted)} task(s)"]
+    for tk in wanted:
+        refs = gate_refs(tk.get("Gates"))[0]
+        lines.append(f"  {tk.rel}: {tk.state} — {', '.join(refs)}")
         for ref in refs:
             lines.append(f"    {ref} → {gate_url(ref)}")
     return lines, 0
@@ -814,21 +826,21 @@ def _today(args) -> date:
     return date.today()
 
 
-def _phase_at(root: Path, ref: str) -> Phase:
-    """The phase file `ref` names — repo-relative, or a path under root."""
+def _task_at(root: Path, ref: str) -> Task:
+    """The task file `ref` names — repo-relative, or a path under root."""
     p = Path(ref)
     path = p if p.is_absolute() else root / p
     if not path.is_file():
-        raise CortexError(f"no phase file at {ref}")
+        raise CortexError(f"no task file at {ref}")
     try:
         path = path.resolve()
         path.relative_to(root.resolve())
     except ValueError:
         raise CortexError(f"{ref} is outside {root}")
     rel_path = root.resolve() / path.relative_to(root.resolve())
-    if not PHASE_FILE_RE.match(path.relative_to(root.resolve()).as_posix()):
-        raise CortexError(f"{ref} is not phases/<project>/<slug>.md")
-    return Phase(root.resolve(), rel_path)
+    if not TASK_FILE_RE.match(path.relative_to(root.resolve()).as_posix()):
+        raise CortexError(f"{ref} is not tasks/<project>/<slug>.md")
+    return Task(root.resolve(), rel_path)
 
 
 def _partition_for(root: Path, project: str, given: "str | None") -> str:
@@ -852,36 +864,36 @@ def _run_line(ident: str, state: str, partition: str, day: date, wall: str = "0:
     return f"{line} — {note}" if note else line
 
 
-def _append_run(ph: Phase, ident: str, state: str, partition: str, day: date, *,
+def _append_run(tk: Task, ident: str, state: str, partition: str, day: date, *,
                 note: str = "", cont: "dict[str, str] | None" = None) -> str:
-    """Phase text with one run line (and its continuations) appended to
+    """Task text with one run line (and its continuations) appended to
     `## Runs` and the `Runs:` header re-derived from the body."""
     if not RUN_IDENT_RE.match(ident):
         raise CortexError(f"--run '{ident}' is not <stem>[_<task>|_[<set>]]")
     probe = Run(RUN_LINE_RE.match(_run_line(ident, state, partition, day)), 0)
-    for r in ph.runs:
+    for r in tk.runs:
         if r.stem == probe.stem and _overlaps(r.task_set(), probe.task_set()):
-            raise CortexError(f"run {ident} overlaps {r.ident} already on this phase")
-    idents = {r.ident for r in ph.runs}
+            raise CortexError(f"run {ident} overlaps {r.ident} already on this task")
+    idents = {r.ident for r in tk.runs}
     for key, value in (cont or {}).items():
         if key in ("after", "resumes") and value not in idents:
-            raise CortexError(f"{key}: {value} names no run of this phase")
+            raise CortexError(f"{key}: {value} names no run of this task")
     new_lines = [_run_line(ident, state, partition, day, note=note)]
     new_lines += [f"    {k}: {v}" for k, v in (cont or {}).items()]
-    text = append_to_section(ph.text, "Runs", new_lines)
+    text = append_to_section(tk.text, "Runs", new_lines)
     stems = []
-    for r in ph.runs + [probe]:
+    for r in tk.runs + [probe]:
         if r.stem not in stems:
             stems.append(r.stem)
     return edit_header(text, {"Runs": ", ".join(stems)})
 
 
-def _add_pulled_to(ph: Phase, text: str, pulled_to: "str | None", states: "set[str]") -> str:
+def _add_pulled_to(tk: Task, text: str, pulled_to: "str | None", states: "set[str]") -> str:
     """Give every run in `states` a `pulled_to:` it lacks — `pulled_to` if
     given, else the run's own `where:` (a legacy run's quarantine path is
     where its results already are). Refuse when no run would carry one, so
     `move pulled` never writes a state `check` rejects."""
-    targets = [r for r in ph.runs if r.state in states]
+    targets = [r for r in tk.runs if r.state in states]
     if not targets:
         raise CortexError(f"no {' | '.join(sorted(states))} run to pull — nothing to review "
                           "(rule drop, or fix the run lines)")
@@ -905,32 +917,32 @@ def _add_pulled_to(ph: Phase, text: str, pulled_to: "str | None", states: "set[s
 # --------------------------------------------------------------------------- #
 # move
 # --------------------------------------------------------------------------- #
-def move_phase(root: Path, ref: str, to: str, *, run: "str | None" = None,
-               reason: "str | None" = None,
-               partial: bool = False, partition: "str | None" = None,
-               after: "str | None" = None, resumes: "str | None" = None,
-               note: str = "", pulled_to: "str | None" = None,
-               today: "date | None" = None) -> str:
+def move_task(root: Path, ref: str, to: str, *, run: "str | None" = None,
+              reason: "str | None" = None,
+              partial: bool = False, partition: "str | None" = None,
+              after: "str | None" = None, resumes: "str | None" = None,
+              note: str = "", pulled_to: "str | None" = None,
+              today: "date | None" = None) -> str:
     """Apply one edge of the transition table; return a one-line summary."""
     today = today or date.today()
-    ph = _phase_at(root, ref)
-    cur = ph.state
-    if cur not in PHASE_STATES:
-        raise CortexError(f"{ph.rel} has State: '{cur}', which is not a phase state")
-    if to not in PHASE_STATES:
-        raise CortexError(f"'{to}' is not a phase state ({' | '.join(PHASE_STATES)})")
+    tk = _task_at(root, ref)
+    cur = tk.state
+    if cur not in TASK_STATES:
+        raise CortexError(f"{tk.rel} has State: '{cur}', which is not a task state")
+    if to not in TASK_STATES:
+        raise CortexError(f"'{to}' is not a task state ({' | '.join(TASK_STATES)})")
     if cur == "dropped":
-        raise CortexError(f"{ph.rel} is dropped — terminal; revival is a new phase number")
+        raise CortexError(f"{tk.rel} is dropped — terminal; revival is a new slug")
     if to == "dropped":
-        raise CortexError("dropped is a ruling edge: `cortex.py rule <phase> drop`")
+        raise CortexError("dropped is a ruling edge: `cortex.py rule <task> drop`")
     if to in ("accepted", "rerun"):
-        raise CortexError(f"{to} is a ruling edge: `cortex.py rule <phase> {VERB_FOR_STATE[to]}`"
+        raise CortexError(f"{to} is a ruling edge: `cortex.py rule <task> {VERB_FOR_STATE[to]}`"
                           + (" --supersedes <Ruling:>" if cur == "accepted" else ""))
-    refs, bad = gate_refs(ph.get("Gates"))
+    refs, bad = gate_refs(tk.get("Gates"))
     if bad:
-        raise CortexError(f"{ph.rel}: Gates: unrecognised ref '{bad[0]}' — fix it first")
+        raise CortexError(f"{tk.rel}: Gates: unrecognised ref '{bad[0]}' — fix it first")
     updates: "dict[str, str | None]" = {}
-    text = ph.text
+    text = tk.text
     cont = {}
     if after:
         cont["after"] = after
@@ -939,75 +951,75 @@ def move_phase(root: Path, ref: str, to: str, *, run: "str | None" = None,
 
     if cur == to:
         if cur in ("submitted", "running") and run:
-            part = _partition_for(root, ph.project_dir, partition)
-            text = _append_run(ph, run, "submitted", part, today, note=note, cont=cont)
-            ph.path.write_text(text, encoding="utf-8")
-            return f"{ph.rel}: {cur} — appended run {run}"
-        raise CortexError(f"{ph.rel} is already {cur}"
+            part = _partition_for(root, tk.project_dir, partition)
+            text = _append_run(tk, run, "submitted", part, today, note=note, cont=cont)
+            tk.path.write_text(text, encoding="utf-8")
+            return f"{tk.rel}: {cur} — appended run {run}"
+        raise CortexError(f"{tk.rel} is already {cur}"
                           + ("" if cur in ("submitted", "running") else
-                             "; --run is for submitted | running phases"))
+                             "; --run is for submitted | running tasks"))
     edge = (cur, to)
     if run and edge not in (("ready", "submitted"), ("submitted", "running")):
-        raise CortexError("--run applies to ready → submitted and to a submitted | running phase")
+        raise CortexError("--run applies to ready → submitted and to a submitted | running task")
     if edge == ("planned", "gated"):
         if not refs:
-            raise CortexError(f"{ph.rel}: Gates: is empty — planned → ready")
+            raise CortexError(f"{tk.rel}: Gates: is empty — planned → ready")
     elif edge == ("planned", "ready"):
         if refs:
-            raise CortexError(f"{ph.rel}: Gates: is non-empty — planned → gated")
+            raise CortexError(f"{tk.rel}: Gates: is non-empty — planned → gated")
     elif edge == ("gated", "ready"):
         pass  # the human read `gates` and judged the refs cleared
     elif edge == ("ready", "gated"):
         raise CortexError("ready → gated is a hand edit of the header — re-gating a "
-                          "ready phase is a judgement, not an edge")
+                          "ready task is a judgement, not an edge")
     elif edge == ("ready", "submitted"):
-        if not ph.get("Witness"):
-            raise CortexError(f"{ph.rel}: Witness: is empty — register the witness before submitting")
+        if not tk.get("Witness"):
+            raise CortexError(f"{tk.rel}: Witness: is empty — register the witness before submitting")
         if not run:
             raise CortexError("ready → submitted needs --run <id>")
-        part = _partition_for(root, ph.project_dir, partition)
-        text = _append_run(ph, run, "submitted", part, today, note=note, cont=cont)
+        part = _partition_for(root, tk.project_dir, partition)
+        text = _append_run(tk, run, "submitted", part, today, note=note, cont=cont)
     elif edge == ("ready", "pulled"):
-        if not ph.runs or not all(r.state in LEGACY_RUN_STATES for r in ph.runs):
-            raise CortexError("ready → pulled is for a legacy-born phase: every run line "
+        if not tk.runs or not all(r.state in LEGACY_RUN_STATES for r in tk.runs):
+            raise CortexError("ready → pulled is for a legacy-born task: every run line "
                               "legacy | legacy_wrong")
-        if not ph.get("Witness"):
-            raise CortexError(f"{ph.rel}: Witness: is empty — still mandatory for a legacy-born phase")
-        text = _add_pulled_to(ph, text, pulled_to, {"legacy"})
+        if not tk.get("Witness"):
+            raise CortexError(f"{tk.rel}: Witness: is empty — still mandatory for a legacy-born task")
+        text = _add_pulled_to(tk, text, pulled_to, {"legacy"})
     elif edge == ("submitted", "running"):
         if run:
-            part = _partition_for(root, ph.project_dir, partition)
-            text = _append_run(ph, run, "submitted", part, today, note=note, cont=cont)
+            part = _partition_for(root, tk.project_dir, partition)
+            text = _append_run(tk, run, "submitted", part, today, note=note, cont=cont)
     elif edge in (("submitted", "ready"), ("running", "ready")):
-        if any(r.state in LIVE_RUN_STATES for r in ph.runs):
-            raise CortexError(f"{ph.rel}: a run is still submitted | running")
-        if not any(r.state in RESET_RUN_STATES for r in ph.runs):
-            raise CortexError(f"{ph.rel}: no failed | timeout | void run to reset from")
+        if any(r.state in LIVE_RUN_STATES for r in tk.runs):
+            raise CortexError(f"{tk.rel}: a run is still submitted | running")
+        if not any(r.state in RESET_RUN_STATES for r in tk.runs):
+            raise CortexError(f"{tk.rel}: no failed | timeout | void run to reset from")
         if not reason:
             raise CortexError(f"{cur} → ready needs --reason")
         updates["Reset"] = reason
     elif edge == ("running", "pulled"):
-        if any(r.state in LIVE_RUN_STATES for r in ph.runs) and not partial:
-            raise CortexError(f"{ph.rel}: a run is still submitted | running — "
+        if any(r.state in LIVE_RUN_STATES for r in tk.runs) and not partial:
+            raise CortexError(f"{tk.rel}: a run is still submitted | running — "
                               "--partial for a partial array (then rule leave-to-finish)")
-        text = _add_pulled_to(ph, text, pulled_to, {"done"})
+        text = _add_pulled_to(tk, text, pulled_to, {"done"})
     elif edge in (("pulled", "awaiting-ruling"), ("rerun", "ready")):
         pass
     else:
         raise CortexError(f"no edge {cur} → {to} in the transition table")
     updates["State"] = to
-    ph.path.write_text(edit_header(text, updates), encoding="utf-8")
-    return f"{ph.rel}: {cur} → {to}"
+    tk.path.write_text(edit_header(text, updates), encoding="utf-8")
+    return f"{tk.rel}: {cur} → {to}"
 
 
 VERB_FOR_STATE = {"accepted": "accept", "rerun": "rerun", "dropped": "drop"}
 
 
 def cmd_move(args) -> int:
-    print(move_phase(args.root, args.phase, args.state, run=args.run, reason=args.reason,
-                     partial=args.partial, partition=args.partition,
-                     after=args.after, resumes=args.resumes, note=args.note or "",
-                     pulled_to=args.pulled_to, today=_today(args)))
+    print(move_task(args.root, args.task, args.state, run=args.run, reason=args.reason,
+                    partial=args.partial, partition=args.partition,
+                    after=args.after, resumes=args.resumes, note=args.note or "",
+                    pulled_to=args.pulled_to, today=_today(args)))
     return 0
 
 
@@ -1020,7 +1032,7 @@ def retire_project(root: Path, key: str, why: str, today: date) -> str:
 
     Three things it deliberately does not do. It does not **delete the row**:
     that row is the only record of where the project's data lives, and a
-    retired project still has to be findable. It does not touch a **phase** or
+    retired project still has to be findable. It does not touch a **task** or
     a **ruling**: `rulings/` is append-only and history is not rewritten by a
     change of status. And it does not retire over **live work** — every state
     outside `RULED_STATES` and `planned` is an unfinished question, so the
@@ -1046,10 +1058,10 @@ def retire_project(root: Path, key: str, why: str, today: date) -> str:
         raise CortexError(f"{key} is not a projects.yaml key")
     if projects[key].get("status") == "retired":
         raise CortexError(f"{key} is already retired")
-    phases, _ = load_phases(root)
-    live = [f"{ph.rel} — {ph.state}" for ph in phases
-            if ph.project_dir == key
-            and ph.state not in RULED_STATES | {"planned"}]
+    tasks, _ = load_tasks(root)
+    live = [f"{tk.rel} — {tk.state}" for tk in tasks
+            if tk.project_dir == key
+            and tk.state not in RULED_STATES | {"planned"}]
     if live:
         raise CortexError(f"{key} still has live work — rule or drop it "
                           f"first: {', '.join(live)}")
@@ -1107,28 +1119,28 @@ def next_ruling_id(root: Path, day: date, taken: "set[str] | None" = None) -> st
     raise CortexError(f"99 rulings already filed on {day.isoformat()}")
 
 
-def _ruling_target(ph: Phase, verb: str, supersedes: "str | None", by_id: "dict[str, Ruling]",
+def _ruling_target(tk: Task, verb: str, supersedes: "str | None", by_id: "dict[str, Ruling]",
                    successors: "dict[str, list[str]]") -> "str | None":
-    """The phase state `verb` writes, or raise if the table forbids it."""
-    state = ph.state
+    """The task state `verb` writes, or raise if the table forbids it."""
+    state = tk.state
     if verb not in RULING_VERBS:
         raise CortexError(f"'{verb}' is not a ruling verb ({' | '.join(RULING_VERBS)})")
     if state == "dropped":
-        raise CortexError(f"{ph.rel} is dropped — terminal")
+        raise CortexError(f"{tk.rel} is dropped — terminal")
     if supersedes:
         if supersedes not in by_id:
             raise CortexError(f"--supersedes {supersedes} does not resolve to a ruling file")
         old = by_id[supersedes]
-        if old.get("Phase") != ph.rel:
-            raise CortexError(f"--supersedes {supersedes} rules on {old.get('Phase')}, not {ph.rel}")
+        if old.get("Task") != tk.rel:
+            raise CortexError(f"--supersedes {supersedes} rules on {old.get('Task')}, not {tk.rel}")
         if successors.get(supersedes):
             raise CortexError(f"{supersedes} already has a successor "
                               f"({successors[supersedes][0]}) — supersede the head")
     if state == "accepted":
         if verb not in ("rerun", "drop"):
-            raise CortexError(f"accepted takes only rerun | drop, with --supersedes {ph.get('Ruling')}")
-        if supersedes != ph.get("Ruling"):
-            raise CortexError(f"accepted → {VERB_TARGET[verb]} needs --supersedes {ph.get('Ruling')} "
+            raise CortexError(f"accepted takes only rerun | drop, with --supersedes {tk.get('Ruling')}")
+        if supersedes != tk.get("Ruling"):
+            raise CortexError(f"accepted → {VERB_TARGET[verb]} needs --supersedes {tk.get('Ruling')} "
                               "(the REWIND case)")
         return VERB_TARGET[verb]
     if verb == "leave-to-finish":
@@ -1144,11 +1156,11 @@ def _ruling_target(ph: Phase, verb: str, supersedes: "str | None", by_id: "dict[
                       f"(the table: awaiting-ruling → {VERB_TARGET[verb]})")
 
 
-def rule_phase(root: Path, ref: str, verb: str, body: str, *, supersedes: "str | None" = None,
-               batch: "str | None" = None, minutes: "int | None" = None,
-               follow_ups: "tuple[str, ...]" = (),
-               today: "date | None" = None, now: "datetime | None" = None) -> "list[str]":
-    """File the ruling for one phase and update its `Ruling:` and `State:`;
+def rule_task(root: Path, ref: str, verb: str, body: str, *, supersedes: "str | None" = None,
+              batch: "str | None" = None, minutes: "int | None" = None,
+              follow_ups: "tuple[str, ...]" = (),
+              today: "date | None" = None, now: "datetime | None" = None) -> "list[str]":
+    """File the ruling for one task and update its `Ruling:` and `State:`;
     return the ruling paths written (a list of one).
     Everything is validated before anything is written."""
     today = today or date.today()
@@ -1170,12 +1182,12 @@ def rule_phase(root: Path, ref: str, verb: str, body: str, *, supersedes: "str |
     if not body.strip():
         raise CortexError("--body is empty — the human's words, verbatim")
 
-    ph = _phase_at(root, ref)
-    plan = [(ph, supersedes, _ruling_target(ph, verb, supersedes, by_id, successors))]
+    tk = _task_at(root, ref)
+    plan = [(tk, supersedes, _ruling_target(tk, verb, supersedes, by_id, successors))]
 
     taken: "set[str]" = set()
     written = []
-    for ph, sup, new_state in plan:
+    for tk, sup, new_state in plan:
         rid = next_ruling_id(root, today, taken)
         taken.add(rid)
         if sup and not sup < rid:
@@ -1183,14 +1195,14 @@ def rule_phase(root: Path, ref: str, verb: str, body: str, *, supersedes: "str |
         path = root / "rulings" / rid[2:6] / rid[6:8] / f"{rid}.md"
         if path.exists():
             raise CortexError(f"refusing to touch an existing ruling: {path.relative_to(root)}")
-        plan_item = (ph, sup, new_state, rid, path)
+        plan_item = (tk, sup, new_state, rid, path)
         written.append(plan_item)
 
     stamp = f"{today.isoformat()}T{now.strftime('%H:%M')}Z"
     out = []
-    for ph, sup, new_state, rid, path in written:
-        header = [f"Project: {ph.get('Project')}", f"Phase: {ph.rel}",
-                  f"Runs: {ph.get('Runs')}" if ph.get("Runs") else "Runs:",
+    for tk, sup, new_state, rid, path in written:
+        header = [f"Project: {tk.get('Project')}", f"Task: {tk.rel}",
+                  f"Runs: {tk.get('Runs')}" if tk.get("Runs") else "Runs:",
                   f"Ruling: {verb}"]
         if sup:
             header.append(f"Supersedes: {sup}")
@@ -1201,8 +1213,8 @@ def rule_phase(root: Path, ref: str, verb: str, body: str, *, supersedes: "str |
             header.append(f"Review-minutes-actual: {minutes}")
         if follow_ups:
             header.append(f"Follow-ups: {', '.join(follow_ups)}")
-        evidence = _where_to_look(ph) or ["- (none given)"]
-        text = "\n".join([f"# {rid} — {verb} {ph.get('Project')} phase {ph.get('Phase')}", ""]
+        evidence = _where_to_look(tk) or ["- (none given)"]
+        text = "\n".join([f"# {rid} — {verb} {tk.get('Project')} {tk.slug}", ""]
                          + header + ["", "## Ruling", "", body, "", "## Evidence", ""]
                          + evidence) + "\n"
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -1211,17 +1223,17 @@ def rule_phase(root: Path, ref: str, verb: str, body: str, *, supersedes: "str |
         if new_state:
             updates["State"] = new_state
         line = f"{rid} — {verb}" + (f" (supersedes {sup})" if sup else "")
-        ptext = append_to_section(ph.text, "Ruling", [line], replace_placeholder="(none)")
-        ph.path.write_text(edit_header(ptext, updates), encoding="utf-8")
+        ptext = append_to_section(tk.text, "Ruling", [line], replace_placeholder="(none)")
+        tk.path.write_text(edit_header(ptext, updates), encoding="utf-8")
         out.append(path.relative_to(root).as_posix())
     return out
 
 
-def _where_to_look(ph: Phase) -> "list[str]":
-    span = sections(ph.text).get("Where to look")
+def _where_to_look(tk: Task) -> "list[str]":
+    span = sections(tk.text).get("Where to look")
     if span is None:
         return []
-    lines = ph.text.split("\n")[span[0]:span[1]]
+    lines = tk.text.split("\n")[span[0]:span[1]]
     return [ln for ln in lines if ln.startswith("- ") and ln.strip() != "-"]
 
 
@@ -1229,9 +1241,9 @@ def cmd_rule(args) -> int:
     body_path = Path(args.body)
     if not body_path.is_file():
         raise CortexError(f"--body {args.body} is not a file")
-    paths = rule_phase(args.root, args.phase, args.verb, body_path.read_text(encoding="utf-8"),
-                       supersedes=args.supersedes, batch=args.batch, minutes=args.minutes,
-                       follow_ups=tuple(args.follow_up or ()), today=_today(args))
+    paths = rule_task(args.root, args.task, args.verb, body_path.read_text(encoding="utf-8"),
+                      supersedes=args.supersedes, batch=args.batch, minutes=args.minutes,
+                      follow_ups=tuple(args.follow_up or ()), today=_today(args))
     for p in paths:
         print(f"wrote {p}")
     return 0
@@ -1240,13 +1252,13 @@ def cmd_rule(args) -> int:
 # --------------------------------------------------------------------------- #
 # new
 # --------------------------------------------------------------------------- #
-def new_phase(root: Path, project: str, slug: str, number: int, *, gates: str = "",
-              epic: str = "", legacy_runs: "tuple[str, ...]" = (),
-              legacy_wrong: "tuple[str, ...]" = (), where: "str | None" = None,
-              partition: "str | None" = None, witness: str = "", budget: str = "",
-              minutes: "int | None" = None, title: "str | None" = None,
-              today: "date | None" = None) -> str:
-    """Write phases/<project>/<slug>.md from the template; return its rel path."""
+def new_task(root: Path, project: str, slug: str, summary: str, *, gates: str = "",
+             epic: str = "", legacy_runs: "tuple[str, ...]" = (),
+             legacy_wrong: "tuple[str, ...]" = (), where: "str | None" = None,
+             partition: "str | None" = None, witness: str = "", budget: str = "",
+             minutes: "int | None" = None, title: "str | None" = None,
+             today: "date | None" = None) -> str:
+    """Write tasks/<project>/<slug>.md from the template; return its rel path."""
     today = today or date.today()
     projects, problems = load_projects(root)
     if project not in projects:
@@ -1254,22 +1266,24 @@ def new_phase(root: Path, project: str, slug: str, number: int, *, gates: str = 
                           + (f" ({problems[0]})" if problems else ""))
     if not SLUG_RE.match(slug):
         raise CortexError(f"slug '{slug}' must match {SLUG_RE.pattern}")
-    if number < 1:
-        raise CortexError("--phase must be a positive integer")
-    path = root / "phases" / project / f"{slug}.md"
+    summary = " ".join((summary or "").split())
+    if not summary:
+        raise CortexError("--summary must say what the task asks, in one line")
+    if len(summary.split()) > SUMMARY_MAX_WORDS:
+        raise CortexError(f"--summary is {len(summary.split())} words — at most "
+                          f"{SUMMARY_MAX_WORDS} (the question the task answers)")
+    # The slug IS the identity: the path is unique per project, so there is
+    # nothing else to collide on.
+    path = root / "tasks" / project / f"{slug}.md"
     if path.exists():
         raise CortexError(f"{path.relative_to(root).as_posix()} already exists")
-    for existing in sorted((root / "phases" / project).glob("*.md")) if (root / "phases" / project).is_dir() else []:
-        _, fields = parse_header(existing.read_text(encoding="utf-8"))
-        if fields.get("Phase") == str(number):
-            raise CortexError(f"phase {number} already exists: {existing.relative_to(root).as_posix()}")
     _, bad = gate_refs(gates)
     if bad:
         raise CortexError(f"--gates '{bad[0]}' is not Repo#N or an issue/PR URL (no owner/Repo#N form)")
     legacy = [(r, "legacy") for r in legacy_runs] + [(r, "legacy_wrong") for r in legacy_wrong]
     if legacy:
         if gates.strip():
-            raise CortexError("a legacy-born phase cannot be gated — its runs already happened")
+            raise CortexError("a legacy-born task cannot be gated — its runs already happened")
         if not where:
             raise CortexError("--legacy-run needs --where <quarantine path> (check requires where:)")
         for ident, _ in legacy:
@@ -1287,7 +1301,7 @@ def new_phase(root: Path, project: str, slug: str, number: int, *, gates: str = 
     words = slug.replace("_", " ").replace("-", " ")
     title = title or words
     header = [
-        f"Project: {project}", f"Phase: {number}", f"State: {state}",
+        f"Project: {project}", f"Summary: {summary}", f"State: {state}",
         f"Gates: {gates.strip()}" if gates.strip() else "Gates:",
         f"Witness: {witness}" if witness else "Witness:",
         f"Budget: {budget}" if budget else "Budget:",
@@ -1301,11 +1315,11 @@ def new_phase(root: Path, project: str, slug: str, number: int, *, gates: str = 
         run_lines.append(_run_line(ident, rstate, part, today, note="pre-Cortex run, migrated"))
         run_lines.append(f"    where: {where}")
     body = [
-        f"# {project.capitalize()} — phase {number}: {title}", "",
+        f"# {project.capitalize()} — {title}", "",
         *header, "",
-        "## Question", "", "(the question this phase answers)", "",
-        "## Witness", "", witness or "(not yet registered — a planned phase may leave this empty)", "",
-        # A legacy-born phase already knows where to look — `--where` is the
+        "## Question", "", "(the question this task answers)", "",
+        "## Witness", "", witness or "(not yet registered — a planned task may leave this empty)", "",
+        # A legacy-born task already knows where to look — `--where` is the
         # quarantine path its runs landed in, and it is required for one — so
         # the section names it rather than the placeholder `check` refuses on
         # anything past `planned`.
@@ -1322,12 +1336,12 @@ def new_phase(root: Path, project: str, slug: str, number: int, *, gates: str = 
 
 
 def cmd_new(args) -> int:
-    rel = new_phase(args.root, args.project, args.slug, args.phase, gates=args.gates or "",
-                    epic=args.epic or "", legacy_runs=tuple(args.legacy_run or ()),
-                    legacy_wrong=tuple(args.legacy_wrong or ()), where=args.where,
-                    partition=args.partition, witness=args.witness or "",
-                    budget=args.budget or "", minutes=args.minutes, title=args.title,
-                    today=_today(args))
+    rel = new_task(args.root, args.project, args.slug, args.summary, gates=args.gates or "",
+                   epic=args.epic or "", legacy_runs=tuple(args.legacy_run or ()),
+                   legacy_wrong=tuple(args.legacy_wrong or ()), where=args.where,
+                   partition=args.partition, witness=args.witness or "",
+                   budget=args.budget or "", minutes=args.minutes, title=args.title,
+                   today=_today(args))
     print(f"wrote {rel}")
     return 0
 
@@ -1352,13 +1366,13 @@ def build_parser() -> argparse.ArgumentParser:
     _common(c)
     c.set_defaults(func=cmd_check)
 
-    g = sub.add_parser("gates", help="list every gated phase, its refs and their URLs")
+    g = sub.add_parser("gates", help="list every gated task, its refs and their URLs")
     _common(g)
     g.set_defaults(func=cmd_gates)
 
-    r = sub.add_parser("rule", help="file a ruling and move the phase per the table")
+    r = sub.add_parser("rule", help="file a ruling and move the task per the table")
     _common(r, dated=True)
-    r.add_argument("phase", help="phases/<project>/<slug>.md")
+    r.add_argument("task", help="tasks/<project>/<slug>.md")
     r.add_argument("verb", choices=RULING_VERBS)
     r.add_argument("--body", required=True, help="file holding the human's words, verbatim")
     r.add_argument("--supersedes", help="the ruling id this one replaces (the chain head)")
@@ -1370,10 +1384,10 @@ def build_parser() -> argparse.ArgumentParser:
 
     m = sub.add_parser("move", help="one edge of the transition table")
     _common(m, dated=True)
-    m.add_argument("phase", help="phases/<project>/<slug>.md")
+    m.add_argument("task", help="tasks/<project>/<slug>.md")
     m.add_argument("state", help="the state to move to")
     m.add_argument("--run", metavar="ID", help="SLURM job id (<stem>[_<task>|_[<set>]]) to append")
-    m.add_argument("--reason", help="why a submitted | running phase goes back to ready (Reset:)")
+    m.add_argument("--reason", help="why a submitted | running task goes back to ready (Reset:)")
     m.add_argument("--partial", action="store_true",
                    help="running → pulled with a run still live (needs a leave-to-finish ruling)")
     m.add_argument("--partition", help="the run line's partition (default: the project's row)")
@@ -1385,11 +1399,12 @@ def build_parser() -> argparse.ArgumentParser:
                         "run lacking one (default for a legacy run: its where:)")
     m.set_defaults(func=cmd_move)
 
-    n = sub.add_parser("new", help="write phases/<project>/<slug>.md from the template")
+    n = sub.add_parser("new", help="write tasks/<project>/<slug>.md from the template")
     _common(n, dated=True)
     n.add_argument("project")
     n.add_argument("slug")
-    n.add_argument("--phase", type=int, required=True, help="the phase number (unique per project)")
+    n.add_argument("--summary", required=True,
+                   help=f"the question the task answers, at most {SUMMARY_MAX_WORDS} words")
     n.add_argument("--gates", help="comma-separated Repo#N or issue/PR URLs")
     n.add_argument("--epic", help="the epic slug shared with the Mind")
     n.add_argument("--legacy-run", action="append", metavar="ID", help="a pre-Cortex run, reusable")
@@ -1399,7 +1414,7 @@ def build_parser() -> argparse.ArgumentParser:
     n.add_argument("--witness", help="the pre-registered checkable claim")
     n.add_argument("--budget", help="wall budget per run, H+:MM")
     n.add_argument("--minutes", type=int, help="Review-minutes seed")
-    n.add_argument("--title", help="the title after `phase <n>:` (default: the slug's words)")
+    n.add_argument("--title", help="the title after `# <Project> — ` (default: the slug's words)")
     n.set_defaults(func=cmd_new)
 
     t = sub.add_parser("retire", help="flip a project's row to status: retired")

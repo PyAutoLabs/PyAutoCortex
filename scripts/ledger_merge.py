@@ -3,11 +3,11 @@
 
 WHY THIS EXISTS. The Cortex's own work strands exactly as the Mind's does. A
 branch-scoped session (the phone, claude.ai/code, any `claude/**` flow) pushes
-a phase move, a ruling, a batch record to a feature branch and nothing moves
+a task move, a ruling, a batch record to a feature branch and nothing moves
 it: no workflow looks at a `claude/**` push. The branch sits there until a
 human writes an explicit "merge this" prompt.
 
-Almost all of what strands is *ledger*: a phase file under `phases/`, a ruling
+Almost all of what strands is *ledger*: a task file under `tasks/`, a ruling
 under `rulings/`, a batch record or review under `batches/`, a check-in stamp.
 It is the organism's own bookkeeping, it is template-shaped, its drift check
 (`cortex.py check`) is already automated, and a human reviewing it adds
@@ -48,11 +48,11 @@ import subprocess
 import sys
 from pathlib import Path
 
-# Directories holding nothing but the run-and-ruling ledger: phase files,
+# Directories holding nothing but the run-and-ruling ledger: task files,
 # rulings of record, and the batch records and reviews kept as history. Their
 # whole contents are ledger (subject to the EXCLUDED_NAMES guard below, and to
 # the append-only leg for rulings/ and batches/ in classify_entries).
-LEDGER_DIRS = ("phases/", "rulings/", "batches/")
+LEDGER_DIRS = ("tasks/", "rulings/", "batches/")
 
 # Root files that are ledger state. Deliberately NOT here: README.md,
 # AGENTS.md, CLAUDE.md, REFERENCE.md — prose a human reads, changed rarely
@@ -62,7 +62,7 @@ LEDGER_DIRS = ("phases/", "rulings/", "batches/")
 #
 # `dashboard.md` / `dashboard.html` join it as GENERATED ledger: the cortex
 # conductor renders them from the registry, `dashboard_refresh.yml` self-heals
-# them on main, and a branch that moves a phase re-renders them in the same
+# them on main, and a branch that moves a task re-renders them in the same
 # push. If they were code, every ordinary ledger branch would stop for a human
 # on two files nobody wrote by hand. `checkin.yaml` is the same kind of thing:
 # one machine-written stamp, pushed by the check-in that earned it.

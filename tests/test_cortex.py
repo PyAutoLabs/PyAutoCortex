@@ -3,7 +3,7 @@
 Two things these tests deliberately do, matching the Mind's `test_lifecycle_check.py`:
 
 1. **The fixture is the witness.** `tests/fixtures/skeleton/` holds one project,
-   one phase per state, five rulings (one chain of two), one batch record and
+   one task per state, five rulings (one chain of two), one batch record and
    one review; `tests/fixtures/empty/` is an empty map. Both must pass `check`
    unchanged, and every writing verb runs on a `copytree` of the skeleton.
 2. **Prove each leg FAILS.** Every `check` rule in REFERENCE.md is driven with
@@ -29,7 +29,7 @@ SKELETON = REPO / "tests" / "fixtures" / "skeleton"
 EMPTY = REPO / "tests" / "fixtures" / "empty"
 TODAY = "2026-09-02"
 
-P = {n: f"phases/example/{n}.md" for n in (
+P = {n: f"tasks/example/{n}.md" for n in (
     "01_scope", "02_gated_on_dev", "03_ready_cleared", "04_submitted_override",
     "05_running_array", "06_pulled", "07_awaiting_ruling", "08_accepted",
     "09_rerun", "10_dropped")}
@@ -111,7 +111,7 @@ def test_check_reports_drift_in_lifecycle_shape(tmp_path):
     assert result.returncode == 1
     lines = result.stdout.splitlines()
     assert lines[0] == "cortex check: DRIFT"
-    assert lines[1].startswith("  - phases/example/03_ready_cleared.md: ")
+    assert lines[1].startswith("  - tasks/example/03_ready_cleared.md: ")
 
 
 def test_no_import_time_side_effects_and_root_on_every_verb():
@@ -126,12 +126,12 @@ def test_no_import_time_side_effects_and_root_on_every_verb():
 # --------------------------------------------------------------------------- #
 def test_header_first_occurrence_wins_block_ends_at_blank_line_list_keys():
     text = ("# Title\n\nProject: one\nProject: two\nGates:\n- A#1\n- B#2\nState: ready\n\n"
-            "Phase: 99\n")
+            "Task: 99\n")
     title, fields = cortex.parse_header(text)
     assert title == "Title"
     assert fields["Project"] == "one"
     assert fields["Gates"] == "A#1, B#2"
-    assert "Phase" not in fields  # after the blank line — body, not header
+    assert "Task" not in fields  # after the blank line — body, not header
 
 
 def test_header_beyond_30_lines_is_body():
@@ -189,9 +189,9 @@ def test_comment_only_projects_yaml_parses_to_an_empty_map():
 
 
 def test_the_live_body_map_parses_clean():
-    """The seeded map (phase 3) is the real witness for the field validation:
+    """The seeded map (task 3) is the real witness for the field validation:
     it is the only file that exercises `note` and a 17-verb list. It stopped
-    exercising `planned` on 2026-09-07, when euclid_dr1_prelim's phase 4
+    exercising `planned` on 2026-09-07, when euclid_dr1_prelim's task 4
     launched and its row flipped to `active` — the last `planned` row in the
     live map. `planned` as a legal status is covered on the fixture by
     `test_planned_and_retired_are_legal_statuses`."""
@@ -288,27 +288,27 @@ _QUIET = {"01_scope", "08_accepted", "09_rerun", "10_dropped"}
 
 
 def _quiesce(root: Path, project: str = "example") -> "list[str]":
-    """Leave `project` holding only ruled and planned phases — dropping the
-    rulings that named the phases removed, so `check` stays clean."""
+    """Leave `project` holding only ruled and planned tasks — dropping the
+    rulings that named the tasks removed, so `check` stays clean."""
     gone = []
-    for p in sorted((root / "phases" / project).glob("*.md")):
+    for p in sorted((root / "tasks" / project).glob("*.md")):
         if p.stem not in _QUIET:
             gone.append(p.relative_to(root).as_posix())
             p.unlink()
     for r in sorted((root / "rulings").rglob("*.md")):
-        if any(f"Phase: {g}" in r.read_text() for g in gone):
+        if any(f"Task: {g}" in r.read_text() for g in gone):
             r.unlink()
     assert _problems(root) == [], _problems(root)
     return gone
 
 
 def test_retire_flips_the_status_and_stamps_the_note(tmp_path):
-    """Two lines change and nothing else — the row, its phases and its
+    """Two lines change and nothing else — the row, its tasks and its
     rulings all stay, and `check` is clean afterwards."""
     root = _copy(tmp_path)
     _quiesce(root)
     before = (root / "projects.yaml").read_text().split("\n")
-    phases_before = sorted(p.name for p in (root / "phases" / "example").glob("*.md"))
+    tasks_before = sorted(p.name for p in (root / "tasks" / "example").glob("*.md"))
     assert cortex.retire_project(root, "example", "the question was answered",
                                  date(2026, 9, 4)) == "retired example"
     after = (root / "projects.yaml").read_text().split("\n")
@@ -318,8 +318,8 @@ def test_retire_flips_the_status_and_stamps_the_note(tmp_path):
     # carries no `note:`, so the note is an appended line.
     assert [ln for ln in after if not ln.startswith(("  status:", "  note:"))] == \
         [ln for ln in before if not ln.startswith("  status:")]
-    assert sorted(p.name for p in (root / "phases" / "example").glob("*.md")) == \
-        phases_before
+    assert sorted(p.name for p in (root / "tasks" / "example").glob("*.md")) == \
+        tasks_before
     assert _problems(root) == []
     rows, problems = cortex.parse_projects((root / "projects.yaml").read_text())
     assert problems == [] and rows["example"]["status"] == "retired"
@@ -340,7 +340,7 @@ def test_retire_rewrites_an_existing_note_in_place(tmp_path):
     assert _problems(root) == []
 
 
-def test_retire_refuses_while_a_phase_is_still_live(tmp_path):
+def test_retire_refuses_while_a_task_is_still_live(tmp_path):
     """Every state outside `accepted | rerun | dropped | planned` is an
     unfinished question, and the refusal names each one."""
     root = _copy(tmp_path)
@@ -351,10 +351,10 @@ def test_retire_refuses_while_a_phase_is_still_live(tmp_path):
     assert "still has live work" in message
     for name in ("02_gated_on_dev", "03_ready_cleared", "04_submitted_override",
                  "05_running_array", "06_pulled", "07_awaiting_ruling"):
-        assert f"phases/example/{name}.md — " in message
+        assert f"tasks/example/{name}.md — " in message
     # planned and the ruled states are not named — they are allowed to stay
     for name in ("01_scope", "08_accepted", "09_rerun", "10_dropped"):
-        assert f"phases/example/{name}.md" not in message
+        assert f"tasks/example/{name}.md" not in message
     assert (root / "projects.yaml").read_text() == before
 
 
@@ -394,20 +394,50 @@ def test_retire_round_trips_through_the_cli(tmp_path):
 
 
 # --------------------------------------------------------------------------- #
-# check — phases
+# check — tasks
 # --------------------------------------------------------------------------- #
-def test_duplicate_phase_number(tmp_path):
+def test_summary_is_required(tmp_path):
+    """`Summary:` is the board's line: a task without one is drift, and so is
+    a task whose `Summary:` is present but empty."""
     root = _copy(tmp_path)
-    _edit(root, P["02_gated_on_dev"], "Phase: 2\n", "Phase: 1\n")
-    _assert_drift(root, "02_gated_on_dev.md: duplicate Phase: 1 (also phases/example/01_scope.md)")
+    _edit(root, P["02_gated_on_dev"],
+          "Summary: Does the pixel-scale sweep change the preferred model\n", "")
+    _assert_drift(root, "02_gated_on_dev.md: missing header key Summary:")
+    root = _copy(tmp_path / "b")
+    _edit(root, P["02_gated_on_dev"],
+          "Summary: Does the pixel-scale sweep change the preferred model\n", "Summary:\n")
+    _assert_drift(root, "02_gated_on_dev.md: missing header key Summary:")
+
+
+def test_summary_is_capped_at_ten_words(tmp_path):
+    """Ten words is the cap the board is readable at; eleven is drift."""
+    root = _copy(tmp_path)
+    ten = " ".join(f"w{i}" for i in range(10))
+    _edit(root, P["02_gated_on_dev"],
+          "Summary: Does the pixel-scale sweep change the preferred model\n",
+          f"Summary: {ten}\n")
+    assert _problems(root) == []
+    _edit(root, P["02_gated_on_dev"], f"Summary: {ten}\n", f"Summary: {ten} w10\n")
+    _assert_drift(root, "02_gated_on_dev.md: Summary: 11 words — at most 10")
+
+
+def test_phase_header_is_dead(tmp_path):
+    """The number went on 2026-09-07: `Phase:` is named as retired rather than
+    passing as a generic unknown key, on a task file and on a ruling alike."""
+    root = _copy(tmp_path)
+    _edit(root, P["01_scope"], "State: planned\n", "Phase: 1\nState: planned\n")
+    _edit(root, R + "R-20260901-05.md", "Task: tasks/example/10_dropped.md\n",
+          "Phase: tasks/example/10_dropped.md\nTask: tasks/example/10_dropped.md\n")
+    _assert_drift(root, "01_scope.md: Phase: is a retired header",
+                  "R-20260901-05.md: Phase: is a retired header")
 
 
 def test_unknown_project(tmp_path):
     root = _copy(tmp_path)
-    shutil.move(root / "phases" / "example", root / "phases" / "other")
-    for p in (root / "phases" / "other").glob("*.md"):
+    shutil.move(root / "tasks" / "example", root / "tasks" / "other")
+    for p in (root / "tasks" / "other").glob("*.md"):
         p.write_text(p.read_text().replace("Project: example", "Project: other"))
-    _assert_drift(root, "phases/other/01_scope.md: Project: other is not a projects.yaml key")
+    _assert_drift(root, "tasks/other/01_scope.md: Project: other is not a projects.yaml key")
 
 
 def test_directory_must_equal_project(tmp_path):
@@ -420,7 +450,7 @@ def test_directory_must_equal_project(tmp_path):
 def test_where_to_look_must_name_somewhere_past_planned(tmp_path):
     """The section is rendered, not just parsed — the dashboard's
     `## By project` view and `checkin` print these bullets verbatim as the
-    folders to open. A phase that has left `planned` carrying only the
+    folders to open. A task that has left `planned` carrying only the
     template placeholder names nowhere."""
     root = _copy(tmp_path)
     holder = f"- {cortex.WHERE_PLACEHOLDER}\n"
@@ -429,16 +459,17 @@ def test_where_to_look_must_name_somewhere_past_planned(tmp_path):
           holder)
     assert _problems(root) == []
     _edit(root, P["07_awaiting_ruling"],
-          "- `/mnt/c/Users/Jammy/Science/example/output/phase_07/`\n", holder)
+          "- `/mnt/c/Users/Jammy/Science/example/output/task_07/`\n", holder)
     _assert_drift(root, "07_awaiting_ruling.md: ## Where to look names nowhere")
 
 
-def test_a_new_phase_ships_the_placeholder_and_no_other_bullet(tmp_path):
-    """`new` writes `planned`, so the phase it writes passes `check` — and
+def test_a_new_task_ships_the_placeholder_and_no_other_bullet(tmp_path):
+    """`new` writes `planned`, so the task it writes passes `check` — and
     the placeholder it writes is the exact string the rule exempts."""
     root = _copy(tmp_path)
-    _run("new", "example", "11_fresh", "--phase", "11", "--today", TODAY, root=root)
-    text = (root / "phases/example/11_fresh.md").read_text()
+    _run("new", "example", "11_fresh", "--summary", "Does the fresh idea hold",
+         "--today", TODAY, root=root)
+    text = (root / "tasks/example/11_fresh.md").read_text()
     assert f"- {cortex.WHERE_PLACEHOLDER}" in text
     assert _problems(root) == []
 
@@ -447,11 +478,11 @@ def test_illegal_state_unknown_key_and_missing_section(tmp_path):
     root = _copy(tmp_path)
     _edit(root, P["01_scope"], "State: planned\n", "State: queued\nGate-cleared: x\n")
     _edit(root, P["01_scope"], "## Where to look", "## Where")
-    _assert_drift(root, "State: 'queued' is not a phase state", "unknown header key Gate-cleared:",
+    _assert_drift(root, "State: 'queued' is not a task state", "unknown header key Gate-cleared:",
                   "missing section ## Where to look")
 
 
-def test_migrated_from_is_legal_on_a_phase_and_a_ruling(tmp_path):
+def test_migrated_from_is_legal_on_a_task_and_a_ruling(tmp_path):
     """Decision 53: the provenance key joins both key tables; everything else
     outside them is still drift."""
     root = _copy(tmp_path)
@@ -488,7 +519,7 @@ def test_witness_invariant(tmp_path, rel):
     _assert_drift(root, f"{rel}: State: {_fields(root, rel)['State']} needs a Witness:")
 
 
-def test_planned_phase_may_leave_the_witness_empty():
+def test_planned_task_may_leave_the_witness_empty():
     assert _fields(SKELETON, P["01_scope"])["Witness"] == ""
     assert _problems(SKELETON) == []
 
@@ -520,8 +551,8 @@ def test_bare_stem_overlaps_every_task_of_that_stem(tmp_path):
     _assert_drift(root, "run 342091_[0-8,10] overlaps 342091 on stem 342091")
 
 
-def test_one_array_may_feed_two_phases():
-    """Job ids are unique per phase, not globally: 342120 sits in phases 6 and 7."""
+def test_one_array_may_feed_two_tasks():
+    """Job ids are unique per task, not globally: 342120 sits in tasks 6 and 7."""
     assert _fields(SKELETON, P["06_pulled"])["Runs"] == "342120"
     assert "342120" in _fields(SKELETON, P["07_awaiting_ruling"])["Runs"]
     assert _problems(SKELETON) == []
@@ -538,21 +569,21 @@ def test_run_line_that_does_not_parse_and_stray_continuation(tmp_path):
 
 def test_pulled_needs_a_pulled_to(tmp_path):
     root = _copy(tmp_path)
-    _edit(root, P["06_pulled"], "    pulled_to: /mnt/c/Users/Jammy/Science/example/output/phase_06\n", "")
+    _edit(root, P["06_pulled"], "    pulled_to: /mnt/c/Users/Jammy/Science/example/output/task_06\n", "")
     _assert_drift(root, "06_pulled.md: State: pulled needs at least one done | legacy run with pulled_to:")
 
 
 def test_legacy_needs_where(tmp_path):
     root = _copy(tmp_path)
-    _edit(root, P["10_dropped"], "    where: /mnt/c/Users/Jammy/Science/example/output/legacy_wrong/phase_10\n", "")
+    _edit(root, P["10_dropped"], "    where: /mnt/c/Users/Jammy/Science/example/output/legacy_wrong/task_10\n", "")
     _assert_drift(root, "10_dropped.md: run 341950_[0-3] is legacy_wrong without where:")
 
 
-def test_after_and_resumes_name_a_run_of_the_same_phase(tmp_path):
+def test_after_and_resumes_name_a_run_of_the_same_task(tmp_path):
     root = _copy(tmp_path)
     _edit(root, P["05_running_array"], "    after: 342091_9", "    after: 342091")
     _edit(root, P["07_awaiting_ruling"], "    resumes: 342110", "    resumes: 342120_[5-9]")
-    _assert_drift(root, "05_running_array.md: run 342102 after: 342091 names no other run of this phase",
+    _assert_drift(root, "05_running_array.md: run 342102 after: 342091 names no other run of this task",
                   "07_awaiting_ruling.md: run 342120_[5-9] resumes: 342120_[5-9] names no other run")
 
 
@@ -570,10 +601,10 @@ def test_pulled_with_a_live_run_needs_leave_to_finish(tmp_path):
     _assert_drift(root, "05_running_array.md: State: pulled with a live run needs a leave-to-finish ruling head")
 
 
-def test_stray_file_under_phases(tmp_path):
+def test_stray_file_under_tasks(tmp_path):
     root = _copy(tmp_path)
-    (root / "phases" / "notes.md").write_text("# stray\n")
-    _assert_drift(root, "phases/notes.md: not a phase path")
+    (root / "tasks" / "notes.md").write_text("# stray\n")
+    _assert_drift(root, "tasks/notes.md: not a task path")
 
 
 # --------------------------------------------------------------------------- #
@@ -594,11 +625,11 @@ def test_self_supersedes(tmp_path):
     _assert_drift(root, "R-20260901-02.md: Supersedes: itself")
 
 
-def test_supersedes_must_be_earlier_and_same_phase(tmp_path):
+def test_supersedes_must_be_earlier_and_same_task(tmp_path):
     root = _copy(tmp_path)
     _edit(root, R + "R-20260901-01.md", "Ruling: accept\n", "Ruling: accept\nSupersedes: R-20260901-03\n")
     _assert_drift(root, "R-20260901-01.md: Supersedes: R-20260901-03 is not earlier than R-20260901-01",
-                  "R-20260901-01.md: Supersedes: R-20260901-03 names a different project/phase")
+                  "R-20260901-01.md: Supersedes: R-20260901-03 names a different project/task")
 
 
 def test_duplicate_successor_is_a_tree_not_a_chain(tmp_path):
@@ -608,16 +639,16 @@ def test_duplicate_successor_is_a_tree_not_a_chain(tmp_path):
     _assert_drift(root, "R-20260901-01.md: has 2 successors (R-20260901-02, R-20260901-03) — a chain, not a tree")
 
 
-def test_superseded_ruling_as_phase_head(tmp_path):
+def test_superseded_ruling_as_task_head(tmp_path):
     root = _copy(tmp_path)
     _edit(root, P["08_accepted"], "Ruling: R-20260901-02\n", "Ruling: R-20260901-01\n")
     _assert_drift(root, "08_accepted.md: Ruling: R-20260901-01 is not a chain head (superseded by R-20260901-02)")
 
 
-def test_phase_ruling_must_name_that_phase(tmp_path):
+def test_task_ruling_must_name_that_task(tmp_path):
     root = _copy(tmp_path)
     _edit(root, P["09_rerun"], "Ruling: R-20260901-04\n", "Ruling: R-20260901-05\n")
-    _assert_drift(root, "09_rerun.md: Ruling: R-20260901-05 names phases/example/10_dropped.md, not this phase",
+    _assert_drift(root, "09_rerun.md: Ruling: R-20260901-05 names tasks/example/10_dropped.md, not this task",
                   "09_rerun.md: Ruling: R-20260901-05 verb 'drop' does not fit State: rerun")
 
 
@@ -639,16 +670,16 @@ def test_ruling_id_filename_title_and_directory(tmp_path):
                   "rulings/2026/stray.md: not a ruling path")
 
 
-def test_ruling_runs_subset_phase_path_verb_and_batch(tmp_path):
+def test_ruling_runs_subset_task_path_verb_and_batch(tmp_path):
     root = _copy(tmp_path)
     _edit(root, R + "R-20260901-03.md", "Runs: 342091, 342102\n", "Runs: 342091, 342999\n")
     _edit(root, R + "R-20260901-03.md", "Batch: 2026-09-01-pm\n", "Batch: 2026-09-01-am\n")
     _edit(root, R + "R-20260901-04.md", "Ruling: rerun\n", "Ruling: redo\n")
-    _edit(root, R + "R-20260901-05.md", "Phase: phases/example/10_dropped.md\n", "Phase: phases/example/11.md\n")
-    _assert_drift(root, "R-20260901-03.md: Runs: {342999} not in the phase's runs",
+    _edit(root, R + "R-20260901-05.md", "Task: tasks/example/10_dropped.md\n", "Task: tasks/example/11.md\n")
+    _assert_drift(root, "R-20260901-03.md: Runs: {342999} not in the task's runs",
                   "R-20260901-03.md: Batch: 2026-09-01-am names no batches/2026-09-01-am.md",
                   "R-20260901-04.md: Ruling: 'redo' is not a ruling verb",
-                  "R-20260901-05.md: Phase: phases/example/11.md does not resolve to a phase file")
+                  "R-20260901-05.md: Task: tasks/example/11.md does not resolve to a task file")
 
 
 def test_ruling_follow_up_uses_the_gate_grammar(tmp_path):
@@ -657,7 +688,7 @@ def test_ruling_follow_up_uses_the_gate_grammar(tmp_path):
     _assert_drift(root, "R-20260901-02.md: Follow-ups: unrecognised ref 'PyAutoLabs/PyAutoLens#901'")
 
 
-def test_two_chains_of_one_on_a_phase_are_fine(tmp_path):
+def test_two_chains_of_one_on_a_task_are_fine(tmp_path):
     """leave-to-finish then accept need not chain; Supersedes: replaces, never sequences."""
     root = _copy(tmp_path)
     _move(root, P["05_running_array"], "pulled", "--partial")
@@ -678,7 +709,7 @@ def test_planned_to_gated_or_ready_by_gates(tmp_path):
     r = _move(root, P["01_scope"], "gated")
     assert r.returncode == 1 and "Gates: is empty — planned → ready" in r.stderr
     r = _move(root, P["01_scope"], "ready")
-    assert r.returncode == 0 and r.stdout.strip() == "phases/example/01_scope.md: planned → ready"
+    assert r.returncode == 0 and r.stdout.strip() == "tasks/example/01_scope.md: planned → ready"
     assert _fields(root, P["01_scope"])["State"] == "ready"
     _edit(root, P["01_scope"], "State: ready\nGates:\n", "State: planned\nGates: PyAutoLens#1\n")
     r = _move(root, P["01_scope"], "ready")
@@ -689,7 +720,7 @@ def test_planned_to_gated_or_ready_by_gates(tmp_path):
 
 def test_gated_to_ready_is_a_plain_move(tmp_path):
     """Gate grading is retired: the human reads `gates`, judges the refs and
-    moves the phase. No flag, and nothing written but `State:`."""
+    moves the task. No flag, and nothing written but `State:`."""
     root = _copy(tmp_path)
     before = (root / P["02_gated_on_dev"]).read_text()
     r = _move(root, P["02_gated_on_dev"], "ready")
@@ -748,7 +779,7 @@ def test_run_self_loop_refuses_overlap_and_dangling_after(tmp_path):
     r = _move(root, P["05_running_array"], "running", "--run", "342091_[9-10]")
     assert r.returncode == 1 and "overlaps" in r.stderr
     r = _move(root, P["05_running_array"], "running", "--run", "342200", "--after", "999")
-    assert r.returncode == 1 and "names no run of this phase" in r.stderr
+    assert r.returncode == 1 and "names no run of this task" in r.stderr
     r = _move(root, P["03_ready_cleared"], "ready", "--run", "1")
     assert r.returncode == 1 and "already ready" in r.stderr
 
@@ -766,7 +797,7 @@ def test_submitted_to_running_and_back_to_ready(tmp_path):
     f = _fields(root, P["04_submitted_override"])
     assert f["State"] == "ready" and f["Reset"] == "both waves died on node failure"
     assert _problems(root) == []
-    # a phase whose runs all succeeded has nothing to reset from
+    # a task whose runs all succeeded has nothing to reset from
     _edit(root, P["03_ready_cleared"], "State: ready\n", "State: running\n")
     _edit(root, P["03_ready_cleared"], "## Runs\n\n", "## Runs\n\n- 1: done — gpu — submitted 2026-09-01 — wall 1:00\n")
     _edit(root, P["03_ready_cleared"], "Runs:\n", "Runs: 1\n") if "Runs:" in (root / P["03_ready_cleared"]).read_text() \
@@ -793,10 +824,10 @@ def test_running_to_pulled_writes_pulled_to(tmp_path):
     _edit(root, P["04_submitted_override"], "- 342010: submitted", "- 342010: done")
     r = _move(root, P["04_submitted_override"], "pulled")
     assert r.returncode == 1 and "--pulled-to" in r.stderr
-    r = _move(root, P["04_submitted_override"], "pulled", "--pulled-to", "/mnt/c/out/phase_04")
+    r = _move(root, P["04_submitted_override"], "pulled", "--pulled-to", "/mnt/c/out/task_04")
     assert r.returncode == 0, r.stderr
     text = (root / P["04_submitted_override"]).read_text()
-    assert "- 342010: done — gpu — submitted 2026-09-01 — wall 0:00\n    pulled_to: /mnt/c/out/phase_04\n" in text
+    assert "- 342010: done — gpu — submitted 2026-09-01 — wall 0:00\n    pulled_to: /mnt/c/out/task_04\n" in text
     assert "- 342001: failed — gpu — submitted 2026-08-31 — wall 0:00 — node failure before the first step\n- 342010" in text
     assert _problems(root) == []
 
@@ -823,16 +854,16 @@ def test_legacy_born_ready_to_pulled(tmp_path):
 
 
 @pytest.mark.parametrize("rel,to,needle", [
-    (P["07_awaiting_ruling"], "accepted", "rule <phase> accept"),
-    (P["07_awaiting_ruling"], "rerun", "rule <phase> rerun"),
-    (P["07_awaiting_ruling"], "dropped", "rule <phase> drop"),
-    (P["01_scope"], "dropped", "rule <phase> drop"),
+    (P["07_awaiting_ruling"], "accepted", "rule <task> accept"),
+    (P["07_awaiting_ruling"], "rerun", "rule <task> rerun"),
+    (P["07_awaiting_ruling"], "dropped", "rule <task> drop"),
+    (P["01_scope"], "dropped", "rule <task> drop"),
     (P["08_accepted"], "rerun", "--supersedes"),
     (P["10_dropped"], "ready", "terminal"),
     (P["04_submitted_override"], "pulled", "no edge submitted → pulled"),
     (P["03_ready_cleared"], "running", "no edge ready → running"),
     (P["06_pulled"], "ready", "no edge pulled → ready"),
-    (P["01_scope"], "flying", "not a phase state"),
+    (P["01_scope"], "flying", "not a task state"),
 ])
 def test_refused_edges(tmp_path, rel, to, needle):
     root = _copy(tmp_path)
@@ -850,7 +881,7 @@ def _rule(root, rel, verb, body, *extra, today=TODAY):
     return _run("rule", rel, verb, "--body", str(body), "--today", today, *extra, root=root)
 
 
-def test_rule_assigns_ids_in_sequence_and_moves_the_phase(tmp_path):
+def test_rule_assigns_ids_in_sequence_and_moves_the_task(tmp_path):
     root = _copy(tmp_path)
     body = _body(tmp_path)
     r = _rule(root, P["07_awaiting_ruling"], "accept", body, "--batch", "2026-09-01-pm",
@@ -858,12 +889,12 @@ def test_rule_assigns_ids_in_sequence_and_moves_the_phase(tmp_path):
     assert r.returncode == 0, r.stderr
     assert r.stdout.strip() == "wrote rulings/2026/09/R-20260902-01.md"
     rf = _fields(root, "rulings/2026/09/R-20260902-01.md")
-    assert rf["Phase"] == P["07_awaiting_ruling"] and rf["Ruling"] == "accept"
+    assert rf["Task"] == P["07_awaiting_ruling"] and rf["Ruling"] == "accept"
     assert rf["Runs"] == "342110, 342120" and rf["Batch"] == "2026-09-01-pm"
     assert rf["Review-minutes-actual"] == "4" and rf["Follow-ups"] == "PyAutoLens#902"
     assert rf["Reviewed-at"].startswith("2026-09-02T")
     text = (root / "rulings/2026/09/R-20260902-01.md").read_text()
-    assert text.startswith("# R-20260902-01 — accept example phase 7\n")
+    assert text.startswith("# R-20260902-01 — accept example 07_awaiting_ruling\n")
     assert "## Ruling\n\nAccept. The human's words, verbatim.\n\n## Evidence\n\n- " in text
     pf = _fields(root, P["07_awaiting_ruling"])
     assert pf["State"] == "accepted" and pf["Ruling"] == "R-20260902-01"
@@ -954,83 +985,106 @@ def test_rule_validates_batch_follow_up_and_body(tmp_path):
 # --------------------------------------------------------------------------- #
 # gates
 # --------------------------------------------------------------------------- #
-def test_gates_offline_lists_gated_phases():
+def test_gates_offline_lists_gated_tasks():
     r = _run("gates", root=SKELETON)
     assert r.returncode == 0
     assert r.stdout.splitlines() == [
-        "gates: 1 phase(s)",
-        "  phases/example/02_gated_on_dev.md: gated — PyAutoArray#431, "
+        "gates: 1 task(s)",
+        "  tasks/example/02_gated_on_dev.md: gated — PyAutoArray#431, "
         "https://github.com/PyAutoLabs/PyAutoFit/pull/1436",
         "    PyAutoArray#431 → https://github.com/PyAutoLabs/PyAutoArray/issues/431",
         "    https://github.com/PyAutoLabs/PyAutoFit/pull/1436 → "
         "https://github.com/PyAutoLabs/PyAutoFit/issues/1436",
     ]
     r = _run("gates", root=EMPTY)
-    assert r.returncode == 0 and r.stdout.strip() == "gates: no gated phase"
+    assert r.returncode == 0 and r.stdout.strip() == "gates: no gated task"
 
 
 # --------------------------------------------------------------------------- #
 # new
 # --------------------------------------------------------------------------- #
-def test_new_writes_a_parseable_phase(tmp_path):
+def test_new_writes_a_parseable_task(tmp_path):
     root = _copy(tmp_path)
-    r = _run("new", "example", "11_next", "--phase", "11", "--gates", "PyAutoLens#1, https://github.com/o/r/pull/2",
+    r = _run("new", "example", "11_next", "--summary", "Does the next idea hold up",
+             "--gates", "PyAutoLens#1, https://github.com/o/r/pull/2",
              "--epic", "example-programme", "--budget", "6:00", "--minutes", "5", "--witness", "a claim",
              "--today", TODAY, root=root)
     assert r.returncode == 0, r.stderr
-    assert r.stdout.strip() == "wrote phases/example/11_next.md"
-    text = (root / "phases/example/11_next.md").read_text()
-    assert text.startswith("# Example — phase 11: 11 next\n\nProject: example\nPhase: 11\nState: planned\n")
-    f = _fields(root, "phases/example/11_next.md")
+    assert r.stdout.strip() == "wrote tasks/example/11_next.md"
+    text = (root / "tasks/example/11_next.md").read_text()
+    assert text.startswith("# Example — 11 next\n\nProject: example\n"
+                           "Summary: Does the next idea hold up\nState: planned\n")
+    f = _fields(root, "tasks/example/11_next.md")
+    assert f["Summary"] == "Does the next idea hold up" and "Phase" not in f
     assert f["Gates"] == "PyAutoLens#1, https://github.com/o/r/pull/2" and "Lane" not in f
     assert f["Filed"] == TODAY and f["Budget"] == "6:00" and f["Review-minutes"] == "5"
-    for name in cortex.PHASE_SECTIONS:
+    for name in cortex.TASK_SECTIONS:
         assert f"\n## {name}\n" in text
     assert _problems(root) == []
-    assert _move(root, "phases/example/11_next.md", "gated").returncode == 0
+    assert _move(root, "tasks/example/11_next.md", "gated").returncode == 0
 
 
 def test_new_refuses_duplicates_and_unknown_projects(tmp_path):
+    """The slug is the identity: the only collision left is the path itself.
+    A second task alongside `03_ready_cleared` is fine — it just needs its own
+    slug — while re-using that slug is refused."""
     root = _copy(tmp_path)
-    r = _run("new", "example", "03_again", "--phase", "3", root=root)
-    assert r.returncode == 1 and "phase 3 already exists: phases/example/03_ready_cleared.md" in r.stderr
-    r = _run("new", "example", "03_ready_cleared", "--phase", "11", root=root)
+    s = ("--summary", "Does the anchor refit reproduce the published value")
+    r = _run("new", "example", "03_again", *s, "--today", TODAY, root=root)
+    assert r.returncode == 0, r.stderr
+    assert _problems(root) == []
+    r = _run("new", "example", "03_ready_cleared", *s, root=root)
     assert r.returncode == 1 and "already exists" in r.stderr
-    r = _run("new", "nobody", "x", "--phase", "1", root=root)
+    r = _run("new", "nobody", "x", *s, root=root)
     assert r.returncode == 1 and "not a projects.yaml key" in r.stderr
-    r = _run("new", "example", "x", "--phase", "11", "--gates", "PyAutoLabs/PyAutoLens#1", root=root)
+    r = _run("new", "example", "x", *s, "--gates", "PyAutoLabs/PyAutoLens#1", root=root)
     assert r.returncode == 1 and "no owner/Repo#N form" in r.stderr
-    assert not (root / "phases/example/x.md").exists()
+    assert not (root / "tasks/example/x.md").exists()
 
 
-def test_new_legacy_born_phase_is_ready_and_pullable(tmp_path):
+def test_new_requires_a_summary_within_the_cap(tmp_path):
+    """`new` refuses what `check` would reject, before writing anything."""
     root = _copy(tmp_path)
-    r = _run("new", "example", "12_legacy", "--phase", "12", "--legacy-run", "300000",
+    r = _run("new", "example", "11_next", root=root)
+    assert r.returncode == 2 and "--summary" in r.stderr
+    r = _run("new", "example", "11_next", "--summary", "   ", root=root)
+    assert r.returncode == 1 and "--summary must say what the task asks" in r.stderr
+    eleven = " ".join(f"w{i}" for i in range(11))
+    r = _run("new", "example", "11_next", "--summary", eleven, root=root)
+    assert r.returncode == 1 and "--summary is 11 words — at most 10" in r.stderr
+    assert not (root / "tasks/example/11_next.md").exists()
+
+
+def test_new_legacy_born_task_is_ready_and_pullable(tmp_path):
+    root = _copy(tmp_path)
+    r = _run("new", "example", "12_legacy", "--summary", "Is the quarantined run reusable",
+             "--legacy-run", "300000",
              "--legacy-wrong", "300001_[0-3]", "--today", TODAY, root=root)
     assert r.returncode == 1 and "--where" in r.stderr
-    r = _run("new", "example", "12_legacy", "--phase", "12", "--legacy-run", "300000",
+    r = _run("new", "example", "12_legacy", "--summary", "Is the quarantined run reusable",
+             "--legacy-run", "300000",
              "--legacy-wrong", "300001_[0-3]", "--where", "/mnt/q", "--witness", "w", "--today", TODAY, root=root)
     assert r.returncode == 0, r.stderr
-    f = _fields(root, "phases/example/12_legacy.md")
+    f = _fields(root, "tasks/example/12_legacy.md")
     assert f["State"] == "ready" and f["Runs"] == "300000, 300001"
-    text = (root / "phases/example/12_legacy.md").read_text()
+    text = (root / "tasks/example/12_legacy.md").read_text()
     assert "- 300000: legacy — gpu — submitted 2026-09-02 — wall 0:00 — pre-Cortex run, migrated\n    where: /mnt/q\n" in text
     assert "- 300001_[0-3]: legacy_wrong — gpu" in text
     assert _problems(root) == []
-    assert _move(root, "phases/example/12_legacy.md", "pulled").returncode == 0
-    text = (root / "phases/example/12_legacy.md").read_text()
+    assert _move(root, "tasks/example/12_legacy.md", "pulled").returncode == 0
+    text = (root / "tasks/example/12_legacy.md").read_text()
     # the reusable run gets pulled_to: (its where:), the wrong one does not
     assert "    where: /mnt/q\n    pulled_to: /mnt/q\n- 300001_[0-3]: legacy_wrong" in text
     assert text.count("pulled_to:") == 1
     assert _problems(root) == []
     # legacy_wrong-only: nothing to pull — rule drop is the door
-    r = _run("new", "example", "14", "--phase", "14", "--legacy-wrong", "2", "--where", "/q",
-             "--witness", "w", root=root)
+    r = _run("new", "example", "14", "--summary", "Is the wrong-stack run reusable",
+             "--legacy-wrong", "2", "--where", "/q", "--witness", "w", root=root)
     assert r.returncode == 0, r.stderr
-    r = _move(root, "phases/example/14.md", "pulled")
+    r = _move(root, "tasks/example/14.md", "pulled")
     assert r.returncode == 1 and "no legacy run to pull" in r.stderr
-    r = _run("new", "example", "13", "--phase", "13", "--legacy-run", "1", "--where", "/q",
-             "--gates", "PyAutoLens#1", root=root)
+    r = _run("new", "example", "13", "--summary", "Is the gated legacy run reusable",
+             "--legacy-run", "1", "--where", "/q", "--gates", "PyAutoLens#1", root=root)
     assert r.returncode == 1 and "cannot be gated" in r.stderr
 
 
