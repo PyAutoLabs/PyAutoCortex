@@ -2,12 +2,12 @@
 
 Project: inference_programme
 Summary: Are likelihood terms behind gradient search failure on mass_pix
-State: planned
+State: dropped
 Gates:
 Witness: each lever arm runs the same `mass_pix` gradient configuration as phase 22 and delivers on its own artefacts — `.completed`, `positions.info`, `.err` free of Tracebacks, `.out` ending "Finished.", a result row whose `target_id` recomputes from `_targets.py`; and each arm reports, against the phase 22 control it is paired with, the change in NaN-lane count, the change in p_hit against phase 21's `f1e5` max logL, and the change in wall — so that a lever is judged on whether it removes the failure phase 22 measured, not on whether it changes a number
 Budget: 4:00
 Runs:
-Ruling:
+Ruling: R-20260907-04
 Review-minutes: 20
 Epic: gradient-slam-baseline
 Filed: 2026-09-04
@@ -56,4 +56,4 @@ each lever arm runs the same `mass_pix` gradient configuration as phase 22 and d
 
 ## Ruling
 
-(none)
+R-20260907-04 — drop

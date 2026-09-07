@@ -52,8 +52,8 @@ inference_programme:
   ledger: results/notes/inference/PROGRAMME.md
   witness_file: results/searches/**/*.json
   partition: both
-  status: active
-  note: "DECISIONS.md is commentary; pull-only CLI — RAL is a git checkout; gpu-1 excluded"
+  status: retired
+  note: "retired 2026-09-07: restarting from scratch: the project setup was unsatisfactory and it informed how the Cortex manages projects; RAL outputs stashed at /mnt/ral/jnightin/inference_programme_retired_2026-09-07"
 
 subhalo_validation:
   remote: PyAutoLabs/subhalo_validation

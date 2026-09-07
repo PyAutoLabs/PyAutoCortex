@@ -2,12 +2,12 @@
 
 Project: inference_programme
 Summary: Does a gradient search beat Nautilus on mass_pix
-State: planned
+State: dropped
 Gates:
 Witness: five `MultiStartProdigy` autoconv seeds (0–4) on the `mass_pix` cell at `pos_tauto0.2_f1e5` each deliver on their own artefacts — `.completed`, `positions.info`, `.err` free of Tracebacks, `.out` ending "Finished.", a result row whose `target_id` recomputes from `_targets.py`, no overflow signature; a seed HITS when its best log-posterior lands within 2 nats of phase 21's `pos_tauto0.2_f1e5` max logL AND its best point is physical (`|ell_comps| < 1`, `einstein_radius` 1.60 ± 0.02); p_hit over the five seeds is reported with its Wilson-95 lower bound, and the per-seed wall is reported against phase 21's sampler wall on the same arm; a lane that ends NaN or pinned is counted and reported, never silently dropped
 Budget: 4:00
 Runs:
-Ruling:
+Ruling: R-20260907-03
 Review-minutes: 25
 Epic: gradient-slam-baseline
 Filed: 2026-09-04
@@ -62,4 +62,4 @@ five `MultiStartProdigy` autoconv seeds (0–4) on the `mass_pix` cell at `pos_t
 
 ## Ruling
 
-(none)
+R-20260907-03 — drop
