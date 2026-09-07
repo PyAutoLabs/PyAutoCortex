@@ -6,7 +6,7 @@ State: submitted
 Gates: euclid_strong_lens_modeling_pipeline#48, euclid_strong_lens_modeling_pipeline#49
 Witness: 10 lenses fitted end to end on RAL from the pipeline repo alone, with a complete catalogue folder (latents present) whose numerics match the 20260623 reference within the tolerance stated before the run
 Budget: 48:00
-Runs: 342301
+Runs: 342301, 342314
 Ruling:
 Review-minutes: 25
 Epic: euclid-dr1-prep
@@ -93,9 +93,26 @@ The catalogue product set is the reference tile's: `lens_mass.csv`, `lens_sersic
   `PYAUTO_HPC_BASE` exported in-script because `hpc/sync submit` carries none). `config/`
   is exactly as committed — the configuration the 2026-09-03 RAL acceptance run used.
 
+- 2026-09-07 — **task 3 resubmitted; the other nine run on under the pre-fix code.**
+  `342301_3` (`Tile102007903RA0668831429074DECNEG0648901814905`) died at 03:52 when the first
+  quick update built the max-likelihood instance from a source MGE `ell_comps` of magnitude
+  1.009 — outside the unit disk, so `ModelParameterException`. Two merged fixes answer it:
+  PyAutoFit `f6a991504` (PR #1568) makes the quick update tolerate an invalid instance, and
+  pipeline `d78468b` (PR #53) bounds the source MGE `ell_comps` to [-0.7, 0.7] per component
+  so the corner of the unit box is unreachable. Only PyAutoFit was pulled on RAL
+  (`cdda28b5f` → `f6a991504`); PyAutoArray `e36a5af4`, PyAutoGalaxy `6d216c15`, PyAutoLens
+  `146a3d725` and PyAutoNerves `fc9c474` were deliberately left alone so the nine live tasks'
+  `vis_pix` stage — a fresh interpreter — picks up no unrelated library change mid-run. The
+  nine were 1:20 in and were not cancelled, so this phase's evidence is provenance-split:
+  `342301_[0-9]` minus task 3 under the pre-fix code, `342314_3` under the fix. That
+  PyAutoFit fast-forward also carried two unrelated commits (`86cc1e182` deferring
+  `scipy.special`, `e27eb8cbb` a recursion-walk skip), which the nine tasks' `vis_pix`
+  interpreters will therefore also see.
+
 ## Runs
 
 - 342301_[0-9]: submitted — ral — submitted 2026-09-07 — wall 0:00 — vis_lp (JAX on CPU) then vis_pix (numba+pool) in one two-stage chain, 10 lenses, two-stage CPU route from the pipeline repo alone; sort key and dataset list in ## Notes
+- 342314_3: submitted — ral — submitted 2026-09-07 — wall 0:00 — task 3 (Tile102007903RA0668831429074DECNEG0648901814905) resubmitted under the ell_comps fix — PyAutoFit f6a991504 (#1568) + pipeline d78468b (#53); 342301_3 failed 03:52 on ell_comps magnitude 1.009 at the first quick update; the other nine 342301 tasks continue under the pre-fix code (RAL PyAutoFit was cdda28b5f; PyAutoArray e36a5af4 / PyAutoGalaxy 6d216c15 / PyAutoLens 146a3d725 / PyAutoNerves fc9c474 left untouched)
 
 ## Ruling
 
