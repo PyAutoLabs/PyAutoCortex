@@ -91,8 +91,8 @@ euclid_dr1_prelim:
   ledger: wiki/project/state.md
   witness_file: results/**/*.json
   partition: both
-  status: planned
-  note: "created by euclid-dr1-prep phase 4 (a Cortex phase after migration); every path is the planned one; flips to active when phase 4 launches and the local folder exists"
+  status: active
+  note: "created by euclid-dr1-prep phase 4 (a Cortex phase after migration); every path is the planned one; active 2026-09-07: phase 4 launched (jobs 342301_[0-9])"
 
 # --------------------------------------------------------------------------- #
 # dormant — git repos only. The non-git trees (subhalo, euclid_group, z_*) are

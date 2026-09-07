@@ -11,8 +11,8 @@ Every science phase the Cortex is holding, on one page: what is waiting on your 
 | Where | Count |
 |-------|------:|
 | [Awaiting ruling](#awaiting-ruling) | 1 |
-| [Running / submitted](#running--submitted) | 4 |
-| [Ready](#ready) | 2 |
+| [Running / submitted](#running--submitted) | 5 |
+| [Ready](#ready) | 1 |
 | [Gated](#gated) | 1 |
 | [Recent rulings](#recent-rulings) | 27 |
 
@@ -32,6 +32,7 @@ One row per active project — the next thing, what it is holding, and when it l
 
 | Project | Next phase | Awaiting | Running | Ready | Last ruling |
 |---|---|---:|---:|---:|---|
+| euclid_dr1_prelim | 4 submitted | 0 | 1 | 0 | - |
 | inference_programme | 21 gated | 0 | 0 | 0 | 2026-09-04 |
 | subhalo_validation | 1 awaiting-ruling | 1 | 4 | 1 | 2026-09-02 |
 
@@ -116,6 +117,22 @@ One row per active project — the next thing, what it is holding, and when it l
 
 [markdown version](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects.yaml)
 
+### euclid_dr1_prelim
+
+**Local** `/mnt/c/Users/Jammy/Science/euclid_dr1_prelim`
+
+**RAL** `/mnt/ral/jnightin/euclid_dr1_prelim`
+
+active · both partition · phases: submitted 1
+
+<details><summary>📋 <a href="phases/euclid_dr1_prelim/dr1_prelim_10_lens_science_run.md">Euclid_dr1_prelim — phase 4: DR1 prelim science run — 10 real Euclid lenses in euclid_dr1_prelim on RAL</a> — euclid_dr1_prelim phase 4 · budget 48:00 · 25 review-min · runs 342301_[0-9] — <b>submitted</b></summary>
+
+```
+Report where the runs of the PyAutoCortex phase phases/euclid_dr1_prelim/dr1_prelim_10_lens_science_run.md (342301_[0-9]) stand.
+```
+
+</details>
+
 ### inference_programme
 
 **Local** `/home/jammy/Code/PyAutoLabs/autolens_profiling`
@@ -199,24 +216,6 @@ python3 scripts/cortex.py move phases/subhalo_validation/delaunay_adapt_split_pl
 
 </details>
 
-### euclid_dr1_prelim
-
-**Local** `/mnt/c/Users/Jammy/Science/euclid_dr1_prelim`
-
-**RAL** `/mnt/ral/jnightin/euclid_dr1_prelim`
-
-planned · both partition · phases: ready 1
-
-<details><summary>📋 <a href="phases/euclid_dr1_prelim/dr1_prelim_10_lens_science_run.md">Euclid_dr1_prelim — phase 4: DR1 prelim science run — 10 real Euclid lenses in euclid_dr1_prelim on RAL</a> — euclid_dr1_prelim phase 4 · budget 48:00 · 25 review-min — <b>ready</b></summary>
-
-```
-phases/euclid_dr1_prelim/dr1_prelim_10_lens_science_run.md
-# project euclid_dr1_prelim: no `submit` verb in projects.yaml — submit by hand
-python3 scripts/cortex.py move phases/euclid_dr1_prelim/dr1_prelim_10_lens_science_run.md submitted --run <jobid>
-```
-
-</details>
-
 ## Awaiting ruling
 
 [markdown version](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/phases/) — Results are in and nothing is running — the human's verdict is the only thing outstanding. Ordered failures first, then the phases a ruling is required for, then the clean ones.
@@ -257,6 +256,14 @@ python3 scripts/cortex.py move phases/subhalo_validation/delaunay_adapt_split_pl
 ## Running / submitted
 
 [markdown version](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/phases/) — On the queue or on the machine. Wall is what the run lines record at the last refresh, against the phase's own budget.
+
+<details><summary>📋 <a href="phases/euclid_dr1_prelim/dr1_prelim_10_lens_science_run.md">Euclid_dr1_prelim — phase 4: DR1 prelim science run — 10 real Euclid lenses in euclid_dr1_prelim on RAL</a> — euclid_dr1_prelim phase 4 · budget 48:00 · 25 review-min · runs 342301_[0-9] — wall 0:00 of 48:00 (0%)</summary>
+
+```
+Report where the runs of the PyAutoCortex phase phases/euclid_dr1_prelim/dr1_prelim_10_lens_science_run.md (342301_[0-9]) stand.
+```
+
+</details>
 
 <details><summary>📋 <a href="phases/subhalo_validation/delaunay_adapt_split_pl_eff_0.md">Subhalo_validation — phase 2: delaunay_adapt_split on pl_eff_0 — the clumpy-source lens</a> — subhalo_validation phase 2 · budget 48:00 · 8 review-min · runs 342027_1, 342231_1, 342234_1, 342299_1 — wall 45:10 of 48:00 (94%)</summary>
 
@@ -300,16 +307,6 @@ cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync jobs
 phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md
 cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync submit <script>
 python3 scripts/cortex.py move phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md submitted --run <jobid>
-```
-
-</details>
-
-<details><summary>📋 <a href="phases/euclid_dr1_prelim/dr1_prelim_10_lens_science_run.md">Euclid_dr1_prelim — phase 4: DR1 prelim science run — 10 real Euclid lenses in euclid_dr1_prelim on RAL</a> — euclid_dr1_prelim phase 4 · budget 48:00 · 25 review-min</summary>
-
-```
-phases/euclid_dr1_prelim/dr1_prelim_10_lens_science_run.md
-# project euclid_dr1_prelim: no `submit` verb in projects.yaml — submit by hand
-python3 scripts/cortex.py move phases/euclid_dr1_prelim/dr1_prelim_10_lens_science_run.md submitted --run <jobid>
 ```
 
 </details>
