@@ -2,13 +2,13 @@
 
 Project: subhalo_validation
 Phase: 1
-State: awaiting-ruling
+State: accepted
 Gates:
 Reset: job B (342234 / 342240) cancelled 2026-09-02 after 12 min at the human's request: the chain waits for the numba likelihood speed-ups in progress; source_lp[1] (job A) is complete and kept; the partial source_pix[1] outputs were removed on RAL
 Witness: evidence_increase < 5 in results/delaunay_adapt_split/pl_sersic_0_no_subhalo.json (test_mode false)
 Budget: 48:00
 Runs: 342027, 342231, 342234, 342273
-Ruling: R-20260902-07
+Ruling: R-20260907-01
 Review-minutes: 10
 Epic:
 Filed: 2026-08-29
@@ -63,3 +63,4 @@ Measured stage costs (the reason subhalo[2] was later switched off): `source_lp[
 
 R-20260831-06 — accept
 R-20260902-07 — rerun (supersedes R-20260831-06)
+R-20260907-01 — accept

@@ -10,11 +10,11 @@ Every science phase the Cortex is holding, on one page: what is waiting on your 
 
 | Where | Count |
 |-------|------:|
-| [Awaiting ruling](#awaiting-ruling) | 1 |
-| [Running / submitted](#running--submitted) | 5 |
-| [Ready](#ready) | 1 |
+| [Awaiting ruling](#awaiting-ruling) | 0 |
+| [Running / submitted](#running--submitted) | 6 |
+| [Ready](#ready) | 0 |
 | [Gated](#gated) | 1 |
-| [Recent rulings](#recent-rulings) | 27 |
+| [Recent rulings](#recent-rulings) | 28 |
 
 <details><summary>📋 check in since last time</summary>
 
@@ -34,7 +34,7 @@ One row per active project — the next thing, what it is holding, and when it l
 |---|---|---:|---:|---:|---|
 | euclid_dr1_prelim | 4 submitted | 0 | 1 | 0 | - |
 | inference_programme | 21 gated | 0 | 0 | 0 | 2026-09-04 |
-| subhalo_validation | 1 awaiting-ruling | 1 | 4 | 1 | 2026-09-02 |
+| subhalo_validation | 2 submitted | 0 | 5 | 0 | 2026-09-07 |
 
 #### Nothing open
 
@@ -169,48 +169,22 @@ python3 scripts/cortex.py gates   # then, once they have closed: move phases/inf
 
 **RAL** `/mnt/ral/jnightin/subhalo_validation`
 
-active · ral partition · phases: awaiting-ruling 1 · ready 1 · running 2 · submitted 2
+active · ral partition · phases: accepted 1 · running 2 · submitted 3
 
-<details><summary>📋 <a href="phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md">Subhalo_validation — phase 1: delaunay_adapt_split on pl_sersic_0 — the false-positive null</a> — subhalo_validation phase 1 · budget 48:00 · 10 review-min · runs 342027_0, 342231_0, 342234_0, 342273_0 — <b>awaiting-ruling</b> — ⚠️ failed runs: 342234_0</summary>
-
-```
-Review the PyAutoCortex phase phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md and help me rule on it: read its `## Witness` and the pulled evidence under its `## Where to look`, score the witness, then draft the ruling body for my approval and run `python3 scripts/cortex.py rule phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md <accept|rerun|drop|leave-to-finish> --body <file>`.
-```
-
-</details>
-
-<details><summary>📋 ↳ the results are good — accept and open phase 2</summary>
+<details><summary>📋 <a href="phases/subhalo_validation/delaunay_adapt_split_pl_eff_0.md">Subhalo_validation — phase 2: delaunay_adapt_split on pl_eff_0 — the clumpy-source lens</a> — subhalo_validation phase 2 · budget 48:00 · 8 review-min · runs 342027_1, 342231_1, 342234_1, 342299_1 — <b>submitted</b> — ⚠️ failed runs: 342234_1</summary>
 
 ```
-The results for the PyAutoCortex phase phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md are good. Read its `## Witness` and the evidence under its `## Where to look`, draft the accept body for my approval, then file it and open the next phase:
-python3 scripts/cortex.py rule phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md accept --body <file>
-# phase 2 is taken (phases/subhalo_validation/delaunay_adapt_split_pl_eff_0.md, submitted) — the next free number is 7:
-python3 scripts/cortex.py new subhalo_validation <slug> --phase 7 --title "<the tail only — `new` writes '<Project> — phase 7: ' itself>"
-python3 scripts/cortex.py move phases/subhalo_validation/<slug>.md ready
-cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync submit <script>
+cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync jobs
 ```
 
 </details>
 
-<details><summary>📋 ↳ run it again</summary>
+<details><summary>4 more open phase(s) · plans and issues</summary>
 
-```
-The PyAutoCortex phase phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md needs running again. Draft the rerun body — what came back, and what changes — for my approval, then file it and relaunch:
-python3 scripts/cortex.py rule phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md rerun --body <file>
-python3 scripts/cortex.py move phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md ready
-cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync submit <script>
-python3 scripts/cortex.py move phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md submitted --run <jobid>   # one run per call; --after <run> chains the next
-```
-
-</details>
-
-<details><summary>5 more open phase(s) · plans and issues</summary>
-
-- [Subhalo_validation — phase 2: delaunay_adapt_split on pl_eff_0 — the clumpy-source lens](phases/subhalo_validation/delaunay_adapt_split_pl_eff_0.md) — submitted
 - [Subhalo_validation — phase 3: delaunay_adapt_split on pl_eff_1_outer — the outer-component lens, plus the AdaptSplit fix rerun](phases/subhalo_validation/delaunay_adapt_split_pl_eff_1_outer.md) — submitted
+- [Subhalo_validation — phase 4: rectangular_adapt on pl_sersic_0 — the RectangularBilinear comparison](phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md) — submitted
 - [Subhalo_validation — phase 5: rectangular_adapt on pl_eff_0 — the clumpy-source lens on the RectangularBilinear comparison](phases/subhalo_validation/rectangular_adapt_pl_eff_0.md) — running
 - [Subhalo_validation — phase 6: rectangular_adapt on pl_eff_1_outer — the outer-component lens on the RectangularBilinear comparison](phases/subhalo_validation/rectangular_adapt_pl_eff_1_outer.md) — running
-- [Subhalo_validation — phase 4: rectangular_adapt on pl_sersic_0 — the RectangularBilinear comparison](phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md) — ready
 
 [phases/subhalo_validation/](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/phases/subhalo_validation/) · [issues](https://github.com/PyAutoLabs/subhalo_validation/issues)
 
@@ -220,38 +194,7 @@ python3 scripts/cortex.py move phases/subhalo_validation/delaunay_adapt_split_pl
 
 [markdown version](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/phases/) — Results are in and nothing is running — the human's verdict is the only thing outstanding. Ordered failures first, then the phases a ruling is required for, then the clean ones.
 
-<details><summary>📋 <a href="phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md">Subhalo_validation — phase 1: delaunay_adapt_split on pl_sersic_0 — the false-positive null</a> — subhalo_validation phase 1 · budget 48:00 · 10 review-min · runs 342027_0, 342231_0, 342234_0, 342273_0 — ⚠️ failed runs: 342234_0</summary>
-
-```
-Review the PyAutoCortex phase phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md and help me rule on it: read its `## Witness` and the pulled evidence under its `## Where to look`, score the witness, then draft the ruling body for my approval and run `python3 scripts/cortex.py rule phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md <accept|rerun|drop|leave-to-finish> --body <file>`.
-```
-
-</details>
-
-<details><summary>📋 ↳ the results are good — accept and open phase 2</summary>
-
-```
-The results for the PyAutoCortex phase phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md are good. Read its `## Witness` and the evidence under its `## Where to look`, draft the accept body for my approval, then file it and open the next phase:
-python3 scripts/cortex.py rule phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md accept --body <file>
-# phase 2 is taken (phases/subhalo_validation/delaunay_adapt_split_pl_eff_0.md, submitted) — the next free number is 7:
-python3 scripts/cortex.py new subhalo_validation <slug> --phase 7 --title "<the tail only — `new` writes '<Project> — phase 7: ' itself>"
-python3 scripts/cortex.py move phases/subhalo_validation/<slug>.md ready
-cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync submit <script>
-```
-
-</details>
-
-<details><summary>📋 ↳ run it again</summary>
-
-```
-The PyAutoCortex phase phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md needs running again. Draft the rerun body — what came back, and what changes — for my approval, then file it and relaunch:
-python3 scripts/cortex.py rule phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md rerun --body <file>
-python3 scripts/cortex.py move phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md ready
-cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync submit <script>
-python3 scripts/cortex.py move phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md submitted --run <jobid>   # one run per call; --after <run> chains the next
-```
-
-</details>
+- _(nothing awaiting a ruling)_
 
 ## Running / submitted
 
@@ -281,7 +224,7 @@ cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync jobs
 
 </details>
 
-<details><summary>📋 <a href="phases/subhalo_validation/rectangular_adapt_pl_eff_0.md">Subhalo_validation — phase 5: rectangular_adapt on pl_eff_0 — the clumpy-source lens on the RectangularBilinear comparison</a> — subhalo_validation phase 5 · budget 48:00 · 8 review-min · runs 342237_1, 342240_1 — wall 1:52 of 48:00 (4%)</summary>
+<details><summary>📋 <a href="phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md">Subhalo_validation — phase 4: rectangular_adapt on pl_sersic_0 — the RectangularBilinear comparison</a> — subhalo_validation phase 4 · budget 48:00 · 15 review-min · runs 342094_0, 342095_0, 342237_0, 342240_0, 342311_0 — wall 18:01 of 48:00 (38%)</summary>
 
 ```
 cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync jobs
@@ -289,7 +232,15 @@ cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync jobs
 
 </details>
 
-<details><summary>📋 <a href="phases/subhalo_validation/rectangular_adapt_pl_eff_1_outer.md">Subhalo_validation — phase 6: rectangular_adapt on pl_eff_1_outer — the outer-component lens on the RectangularBilinear comparison</a> — subhalo_validation phase 6 · budget 48:00 · 8 review-min · runs 342237_2, 342240_2 — wall 1:52 of 48:00 (4%)</summary>
+<details><summary>📋 <a href="phases/subhalo_validation/rectangular_adapt_pl_eff_0.md">Subhalo_validation — phase 5: rectangular_adapt on pl_eff_0 — the clumpy-source lens on the RectangularBilinear comparison</a> — subhalo_validation phase 5 · budget 48:00 · 8 review-min · runs 342237_1, 342240_1, 342311_1 — wall 1:52 of 48:00 (4%)</summary>
+
+```
+cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync jobs
+```
+
+</details>
+
+<details><summary>📋 <a href="phases/subhalo_validation/rectangular_adapt_pl_eff_1_outer.md">Subhalo_validation — phase 6: rectangular_adapt on pl_eff_1_outer — the outer-component lens on the RectangularBilinear comparison</a> — subhalo_validation phase 6 · budget 48:00 · 8 review-min · runs 342237_2, 342240_2, 342311_2 — wall 1:52 of 48:00 (4%)</summary>
 
 ```
 cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync jobs
@@ -301,15 +252,7 @@ cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync jobs
 
 [markdown version](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/phases/) — Gate cleared, witness registered — everything that could be submitted today.
 
-<details><summary>📋 <a href="phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md">Subhalo_validation — phase 4: rectangular_adapt on pl_sersic_0 — the RectangularBilinear comparison</a> — subhalo_validation phase 4 · budget 48:00 · 15 review-min · runs 342094_0, 342095_0, 342237_0, 342240_0</summary>
-
-```
-phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md
-cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync submit <script>
-python3 scripts/cortex.py move phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md submitted --run <jobid>
-```
-
-</details>
+- _(nothing ready to launch)_
 
 ## Gated
 
@@ -330,6 +273,7 @@ python3 scripts/cortex.py gates   # then, once they have closed: move phases/inf
 
 | Ruling | Verb | Phase | Batch |
 |---|---|---|---|
+| [R-20260907-01](rulings/2026/09/R-20260907-01.md) | accept | phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md | - |
 | [R-20260904-05](rulings/2026/09/R-20260904-05.md) | drop | phases/inference_programme/multiband_compile_census_completion.md | - |
 | [R-20260904-04](rulings/2026/09/R-20260904-04.md) | drop | phases/inference_programme/mass_pix_gradient_cost_probe.md | - |
 | [R-20260904-03](rulings/2026/09/R-20260904-03.md) | drop | phases/inference_programme/cluster_gradient_search_benchmark.md | - |
@@ -341,7 +285,6 @@ python3 scripts/cortex.py gates   # then, once they have closed: move phases/inf
 | [R-20260902-07](rulings/2026/09/R-20260902-07.md) | rerun | phases/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md | - |
 | [R-20260902-06](rulings/2026/09/R-20260902-06.md) | rerun | phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md | - |
 | [R-20260902-05](rulings/2026/09/R-20260902-05.md) | rerun | phases/subhalo_validation/delaunay_adapt_split_pl_eff_0.md | - |
-| [R-20260902-04](rulings/2026/09/R-20260902-04.md) | rerun | phases/subhalo_validation/delaunay_adapt_split_pl_eff_1_outer.md | - |
 
 ---
 

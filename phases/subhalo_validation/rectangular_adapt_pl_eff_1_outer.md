@@ -6,7 +6,7 @@ State: running
 Gates:
 Witness: evidence_increase < 5 in results/rectangular_adapt/pl_eff_1_outer_no_subhalo.json (test_mode false; grid-derived, subhalo_stage subhalo[1])
 Budget: 48:00
-Runs: 342237, 342240
+Runs: 342237, 342240, 342311
 Ruling:
 Review-minutes: 8
 Epic:
@@ -35,6 +35,7 @@ evidence_increase < 5 in results/rectangular_adapt/pl_eff_1_outer_no_subhalo.jso
 - 342237_2: done — ral — submitted 2026-09-02 — wall 1:52 — job A, source_lp[1] on JAX
 - 342240_2: void — ral — submitted 2026-09-02 — wall 0:00 — job B, cancelled 2026-09-02 while pending afterok, to wait for the numba likelihood speed-ups
     after: 342237_2
+- 342311_2: submitted — ral — submitted 2026-09-07 — wall 0:00 — job B, numba chain (8c / 96gb / 48 h) at the standard 1250-pixel mesh under PIPELINE=rectangular_adapt; reloads job A 342237_2; the 09-07 ask: submit the rectangular runs too
 
 ## Ruling
 
