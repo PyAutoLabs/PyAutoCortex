@@ -125,10 +125,10 @@ One row per active project — the next thing, what it is holding, and when it l
 
 active · both partition · phases: submitted 1
 
-<details><summary>📋 <a href="phases/euclid_dr1_prelim/dr1_prelim_10_lens_science_run.md">Euclid_dr1_prelim — phase 4: DR1 prelim science run — 10 real Euclid lenses in euclid_dr1_prelim on RAL</a> — euclid_dr1_prelim phase 4 · budget 48:00 · 25 review-min · runs 342301_[0-9] — <b>submitted</b></summary>
+<details><summary>📋 <a href="phases/euclid_dr1_prelim/dr1_prelim_10_lens_science_run.md">Euclid_dr1_prelim — phase 4: DR1 prelim science run — 10 real Euclid lenses in euclid_dr1_prelim on RAL</a> — euclid_dr1_prelim phase 4 · budget 48:00 · 25 review-min · runs 342301_[0-9], 342314_3 — <b>submitted</b></summary>
 
 ```
-Report where the runs of the PyAutoCortex phase phases/euclid_dr1_prelim/dr1_prelim_10_lens_science_run.md (342301_[0-9]) stand.
+Report where the runs of the PyAutoCortex phase phases/euclid_dr1_prelim/dr1_prelim_10_lens_science_run.md (342301_[0-9], 342314_3) stand.
 ```
 
 </details>
@@ -200,10 +200,10 @@ cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync jobs
 
 [markdown version](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/phases/) — On the queue or on the machine. Wall is what the run lines record at the last refresh, against the phase's own budget.
 
-<details><summary>📋 <a href="phases/euclid_dr1_prelim/dr1_prelim_10_lens_science_run.md">Euclid_dr1_prelim — phase 4: DR1 prelim science run — 10 real Euclid lenses in euclid_dr1_prelim on RAL</a> — euclid_dr1_prelim phase 4 · budget 48:00 · 25 review-min · runs 342301_[0-9] — wall 0:00 of 48:00 (0%)</summary>
+<details><summary>📋 <a href="phases/euclid_dr1_prelim/dr1_prelim_10_lens_science_run.md">Euclid_dr1_prelim — phase 4: DR1 prelim science run — 10 real Euclid lenses in euclid_dr1_prelim on RAL</a> — euclid_dr1_prelim phase 4 · budget 48:00 · 25 review-min · runs 342301_[0-9], 342314_3 — wall 0:00 of 48:00 (0%)</summary>
 
 ```
-Report where the runs of the PyAutoCortex phase phases/euclid_dr1_prelim/dr1_prelim_10_lens_science_run.md (342301_[0-9]) stand.
+Report where the runs of the PyAutoCortex phase phases/euclid_dr1_prelim/dr1_prelim_10_lens_science_run.md (342301_[0-9], 342314_3) stand.
 ```
 
 </details>
