@@ -9,6 +9,7 @@ example:
   sync_cli: hpc/sync
   sync_verbs: [pull, submit, jobs, tail]
   ledger: wiki/project/state.md
+  assistant: none
   witness_file: output/**/checkpoint.hdf5
   partition: gpu
   status: active

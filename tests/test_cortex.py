@@ -203,6 +203,8 @@ def test_the_live_body_map_parses_clean():
     assert rows["euclid_dr1_prelim"]["status"] == "active"
     assert rows["euclid"]["remote"] == "none"
     assert "PyAutoLabs remote" in rows["euclid"]["note"]
+    assert rows["subhalo_validation"]["assistant"] == "autolens_assistant"
+    assert rows["inference_programme"]["assistant"] == "none"
 
 
 def test_a_block_list_and_a_quoted_scalar_are_ordinary_yaml(tmp_path):
@@ -277,6 +279,29 @@ def test_note_is_optional_but_never_empty_and_the_field_set_still_closes(tmp_pat
     _edit(root, "projects.yaml", '  note: "a fact: with a colon # and a hash"\n',
           "  note:\n")
     _assert_drift(root, "example.note is empty")
+
+
+def test_assistant_is_required_and_names_a_bare_workspace_directory(tmp_path):
+    """`assistant` is required like every field but `note`. Its value is
+    exactly `none` or a bare workspace-relative directory name — the Cortex
+    names the assistant, it never reads it, so no path and no stat."""
+    root = _copy(tmp_path)
+    assert _problems(root) == [], "the fixture carries `assistant: none`"
+    _edit(root, "projects.yaml", "  assistant: none\n",
+          "  assistant: autolens_assistant\n")
+    assert _problems(root) == []
+    rows, problems = cortex.parse_projects((root / "projects.yaml").read_text())
+    assert problems == [] and rows["example"]["assistant"] == "autolens_assistant"
+    _edit(root, "projects.yaml", "  assistant: autolens_assistant\n",
+          "  assistant:\n")
+    _assert_drift(root, "example.assistant is empty")
+    _edit(root, "projects.yaml", "  assistant:\n", "")
+    _assert_drift(root, "example is missing assistant")
+    for bad in ("../autolens_assistant", "/home/jammy/Code/PyAutoLabs/autolens_assistant"):
+        root = _copy(tmp_path / bad.replace("/", "_"))
+        _edit(root, "projects.yaml", "  assistant: none\n", f"  assistant: {bad}\n")
+        _assert_drift(root, "example.assistant must be 'none' or a bare "
+                            "workspace-relative directory name")
 
 
 # --------------------------------------------------------------------------- #

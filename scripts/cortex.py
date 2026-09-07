@@ -104,7 +104,8 @@ TASK_SECTIONS = ("Question", "Witness", "Where to look", "Runs", "Ruling")
 RULING_SECTIONS = ("Ruling", "Evidence")
 
 PROJECT_FIELDS = ("remote", "local_path", "ral_root", "mirror", "sync_cli",
-                  "sync_verbs", "ledger", "witness_file", "partition", "status")
+                  "sync_verbs", "ledger", "assistant", "witness_file", "partition",
+                  "status")
 #: the one optional field — free text about the row (why a remote is `none`,
 #: what a verb does). A row may omit it; an empty `note:` is still drift, and
 #: any field outside these two tuples is still an error.
@@ -367,6 +368,10 @@ def _finish_row(key: str, row: dict, problems: "list[str]") -> None:
             problems.append(f"projects.yaml: {key}.{f} must be an absolute path")
     if row.get("mirror") and row["mirror"] != "none" and not row["mirror"].startswith("/"):
         problems.append(f"projects.yaml: {key}.mirror must be an absolute path or none")
+    assistant = row.get("assistant")
+    if assistant and assistant != "none" and not re.match(r"^[A-Za-z0-9_.-]+$", assistant):
+        problems.append(f"projects.yaml: {key}.assistant must be 'none' or a bare "
+                        f"workspace-relative directory name (got {assistant!r})")
 
 
 def load_projects(root: Path) -> "tuple[dict[str, dict], list[str]]":
