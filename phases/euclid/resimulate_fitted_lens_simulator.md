@@ -55,7 +55,7 @@ Acceptance, verbatim from the Mind prompt:
 
 - `euclid_strong_lens_modeling_pipeline`: `scripts/simulator.py`, `smoke_tests.txt`
 - `euclid_dr1_prelim` (project row): the 10 simulated datasets and their truth table
-- `phases/euclid/dr1_prelim_10_lens_science_run.md` — the fits these resimulations start from
+- `phases/euclid_dr1_prelim/dr1_prelim_10_lens_science_run.md` — the fits these resimulations start from
 
 ## Runs
 

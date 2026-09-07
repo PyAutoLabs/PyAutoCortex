@@ -1,6 +1,6 @@
-# Euclid — phase 4: DR1 prelim science run — 10 real Euclid lenses in euclid_dr1_prelim on RAL
+# Euclid_dr1_prelim — phase 4: DR1 prelim science run — 10 real Euclid lenses in euclid_dr1_prelim on RAL
 
-Project: euclid
+Project: euclid_dr1_prelim
 Phase: 4
 State: ready
 Gates: euclid_strong_lens_modeling_pipeline#48, euclid_strong_lens_modeling_pipeline#49
@@ -57,6 +57,8 @@ The catalogue product set is the reference tile's: `lens_mass.csv`, `lens_sersic
   — the numerical comparison reference for the same 10 lenses
 - `autolens_assistant/skills/euclid_{prepare_data,setup_pipeline,model_lens,hpc_runs}.md`
 - `euclid_strong_lens_modeling_pipeline`: `catalogue/scripts/`, `hpc/batch_cpu/`
+- re-homed from `phases/euclid/` on 2026-09-07 — the `euclid` row went dormant, superseded by
+  `euclid_dr1_prelim`, which this phase births
 
 ## Notes
 

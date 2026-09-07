@@ -232,16 +232,15 @@ a.go:hover{opacity:.9;text-decoration:none}
 <p class="muted">One row per active project — the next thing, what it is holding, and when it last ruled.</p>
 <table class="map">
 <tr><th>Project</th><th>Next phase</th><th>Awaiting</th><th>Running</th><th>Ready</th><th>Last ruling</th></tr>
-<tr><td><b>euclid</b></td><td>4 ready</td><td>0</td><td>0</td><td>1</td><td>-</td></tr>
 <tr><td><b>inference_programme</b></td><td>21 gated</td><td>0</td><td>0</td><td>0</td><td>2026-09-04</td></tr>
 <tr><td><b>subhalo_validation</b></td><td>1 running</td><td>0</td><td>3</td><td>3</td><td>2026-09-02</td></tr>
 </table>
 <h3>Nothing open</h3>
 <table class="map">
 <tr><th>Project</th><th>Status</th><th>Phases</th><th>Retire</th></tr>
-<tr><td>euclid_dr1_prelim</td><td>planned</td><td>none</td><td></td></tr>
 <tr><td>concr</td><td>dormant</td><td>none</td><td><button class="copy text" data-cmd="/cortex — retire the science project concr: confirm it is holding nothing live, then in PyAutoCortex run `python3 scripts/cortex.py retire concr --why &quot;&lt;one line on why&gt;&quot;`, `python3 scripts/cortex.py check`, `pyauto-brain cortex dashboard --apply`, and push the ledger. The row, its phases and its rulings all stay — only the status and the note change." aria-label="Copy the retire prompt">📋 retire</button></td></tr>
 <tr><td>cowls_diana</td><td>dormant</td><td>none</td><td><button class="copy text" data-cmd="/cortex — retire the science project cowls_diana: confirm it is holding nothing live, then in PyAutoCortex run `python3 scripts/cortex.py retire cowls_diana --why &quot;&lt;one line on why&gt;&quot;`, `python3 scripts/cortex.py check`, `pyauto-brain cortex dashboard --apply`, and push the ledger. The row, its phases and its rulings all stay — only the status and the note change." aria-label="Copy the retire prompt">📋 retire</button></td></tr>
+<tr><td>euclid</td><td>dormant</td><td>planned 3</td><td><button class="copy text" data-cmd="/cortex — retire the science project euclid: confirm it is holding nothing live, then in PyAutoCortex run `python3 scripts/cortex.py retire euclid --why &quot;&lt;one line on why&gt;&quot;`, `python3 scripts/cortex.py check`, `pyauto-brain cortex dashboard --apply`, and push the ledger. The row, its phases and its rulings all stay — only the status and the note change." aria-label="Copy the retire prompt">📋 retire</button></td></tr>
 <tr><td>ic50_workspace</td><td>dormant</td><td>planned 1</td><td><button class="copy text" data-cmd="/cortex — retire the science project ic50_workspace: confirm it is holding nothing live, then in PyAutoCortex run `python3 scripts/cortex.py retire ic50_workspace --why &quot;&lt;one line on why&gt;&quot;`, `python3 scripts/cortex.py check`, `pyauto-brain cortex dashboard --apply`, and push the ledger. The row, its phases and its rulings all stay — only the status and the note change." aria-label="Copy the retire prompt">📋 retire</button></td></tr>
 <tr><td>pj011646</td><td>dormant</td><td>none</td><td><button class="copy text" data-cmd="/cortex — retire the science project pj011646: confirm it is holding nothing live, then in PyAutoCortex run `python3 scripts/cortex.py retire pj011646 --why &quot;&lt;one line on why&gt;&quot;`, `python3 scripts/cortex.py check`, `pyauto-brain cortex dashboard --apply`, and push the ledger. The row, its phases and its rulings all stay — only the status and the note change." aria-label="Copy the retire prompt">📋 retire</button></td></tr>
 <tr><td>profiling</td><td>dormant</td><td>none</td><td><button class="copy text" data-cmd="/cortex — retire the science project profiling: confirm it is holding nothing live, then in PyAutoCortex run `python3 scripts/cortex.py retire profiling --why &quot;&lt;one line on why&gt;&quot;`, `python3 scripts/cortex.py check`, `pyauto-brain cortex dashboard --apply`, and push the ledger. The row, its phases and its rulings all stay — only the status and the note change." aria-label="Copy the retire prompt">📋 retire</button></td></tr>
@@ -249,20 +248,6 @@ a.go:hover{opacity:.9;text-decoration:none}
 <tr><td>subhalo_simulations</td><td>dormant</td><td>none</td><td><button class="copy text" data-cmd="/cortex — retire the science project subhalo_simulations: confirm it is holding nothing live, then in PyAutoCortex run `python3 scripts/cortex.py retire subhalo_simulations --why &quot;&lt;one line on why&gt;&quot;`, `python3 scripts/cortex.py check`, `pyauto-brain cortex dashboard --apply`, and push the ledger. The row, its phases and its rulings all stay — only the status and the note change." aria-label="Copy the retire prompt">📋 retire</button></td></tr>
 </table>
 <a id="projects"></a><h2>Projects <a class="mdsrc" href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects.yaml">markdown version</a></h2>
-<section class="project">
-<h3>euclid</h3>
-<p class="paths"><b>Local</b> <code>/mnt/c/Users/Jammy/Science/euclid</code></p>
-<p class="paths"><b>RAL</b> <code>/mnt/ral/jnightin/euclid_strong_lens_modeling_pipeline</code></p>
-<p class="muted">active · both partition · phases: planned 3 · ready 1</p>
-<div class="task"><button class="copy" data-cmd="phases/euclid/dr1_prelim_10_lens_science_run.md
-# project euclid: no `submit` verb in projects.yaml — submit by hand
-python3 scripts/cortex.py move phases/euclid/dr1_prelim_10_lens_science_run.md submitted --run &lt;jobid&gt;" aria-label="Copy the Claude command">📋</button><p><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/euclid/dr1_prelim_10_lens_science_run.md">Euclid — phase 4: DR1 prelim science run — 10 real Euclid lenses in euclid_dr1_prelim on RAL</a><span class="tags"><span class="pill n">ready</span></span><span class="facets"> — euclid phase 4 · budget 48:00 · 25 review-min</span></p></div>
-<details><summary>3 more open phase(s) · plans and issues</summary><ul>
-<li><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/euclid/resimulate_fitted_lens_simulator.md">Euclid — phase 5: resimulate a fitted Euclid lens, and resimulate the 10 prelim lenses with true magnifications recorded</a> <span class="facets">— planned</span></li>
-<li><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/euclid/sersic_index_recovery.md">Euclid — phase 6: do we recover Sersic indices? 10 simulated Euclid lenses vs the real prior-edge pile-up</a> <span class="facets">— planned</span></li>
-<li><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/euclid/magnification_robustness.md">Euclid — phase 7: how robust are magnification estimates? model-match vs mismatch across the 10 Euclid lenses</a> <span class="facets">— planned</span></li>
-</ul><p><a href="https://github.com/PyAutoLabs/PyAutoCortex/tree/main/phases/euclid/">phases/euclid/</a></p></details>
-</section>
 <section class="project">
 <h3>inference_programme</h3>
 <p class="paths"><b>Local</b> <code>/home/jammy/Code/PyAutoLabs/autolens_profiling</code></p>
@@ -292,6 +277,15 @@ python3 scripts/cortex.py move phases/euclid/dr1_prelim_10_lens_science_run.md s
 <li><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md">Subhalo_validation — phase 4: rectangular_adapt on pl_sersic_0 — the RectangularBilinear comparison</a> <span class="facets">— ready</span></li>
 </ul><p><a href="https://github.com/PyAutoLabs/PyAutoCortex/tree/main/phases/subhalo_validation/">phases/subhalo_validation/</a> · <a href="https://github.com/PyAutoLabs/subhalo_validation/issues">issues</a></p></details>
 </section>
+<section class="project">
+<h3>euclid_dr1_prelim</h3>
+<p class="paths"><b>Local</b> <code>/mnt/c/Users/Jammy/Science/euclid_dr1_prelim</code></p>
+<p class="paths"><b>RAL</b> <code>/mnt/ral/jnightin/euclid_dr1_prelim</code></p>
+<p class="muted">planned · both partition · phases: ready 1</p>
+<div class="task"><button class="copy" data-cmd="phases/euclid_dr1_prelim/dr1_prelim_10_lens_science_run.md
+# project euclid_dr1_prelim: no `submit` verb in projects.yaml — submit by hand
+python3 scripts/cortex.py move phases/euclid_dr1_prelim/dr1_prelim_10_lens_science_run.md submitted --run &lt;jobid&gt;" aria-label="Copy the Claude command">📋</button><p><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/euclid_dr1_prelim/dr1_prelim_10_lens_science_run.md">Euclid_dr1_prelim — phase 4: DR1 prelim science run — 10 real Euclid lenses in euclid_dr1_prelim on RAL</a><span class="tags"><span class="pill n">ready</span></span><span class="facets"> — euclid_dr1_prelim phase 4 · budget 48:00 · 25 review-min</span></p></div>
+</section>
 <a id="awaiting-ruling"></a><h2>Awaiting ruling <a class="mdsrc" href="https://github.com/PyAutoLabs/PyAutoCortex/tree/main/phases/">markdown version</a></h2><p class="muted">Results are in and nothing is running — the human's verdict is the only thing outstanding. Ordered failures first, then the phases a ruling is required for, then the clean ones.</p>
 <p class="muted">(nothing awaiting a ruling)</p>
 <a id="running--submitted"></a><h2>Running / submitted <a class="mdsrc" href="https://github.com/PyAutoLabs/PyAutoCortex/tree/main/phases/">markdown version</a></h2><p class="muted">On the queue or on the machine. Wall is what the run lines record at the last refresh, against the phase's own budget.</p>
@@ -310,9 +304,9 @@ python3 scripts/cortex.py move phases/subhalo_validation/delaunay_adapt_split_pl
 cd /mnt/c/Users/Jammy/Science/subhalo_validation &amp;&amp; hpc/sync submit &lt;script&gt;
 python3 scripts/cortex.py move phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md submitted --run &lt;jobid&gt;" aria-label="Copy the Claude command">📋</button><p><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md">Subhalo_validation — phase 4: rectangular_adapt on pl_sersic_0 — the RectangularBilinear comparison</a><span class="tags"><span class="pill g">ready</span></span><span class="facets"> — subhalo_validation phase 4 · budget 48:00 · 15 review-min · runs 342094_0, 342095_0, 342237_0, 342240_0</span></p></div>
 </details>
-<div class="task"><button class="copy" data-cmd="phases/euclid/dr1_prelim_10_lens_science_run.md
-# project euclid: no `submit` verb in projects.yaml — submit by hand
-python3 scripts/cortex.py move phases/euclid/dr1_prelim_10_lens_science_run.md submitted --run &lt;jobid&gt;" aria-label="Copy the Claude command">📋</button><p><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/euclid/dr1_prelim_10_lens_science_run.md">Euclid — phase 4: DR1 prelim science run — 10 real Euclid lenses in euclid_dr1_prelim on RAL</a><span class="tags"><span class="pill g">ready</span></span><span class="facets"> — euclid phase 4 · budget 48:00 · 25 review-min</span></p></div>
+<div class="task"><button class="copy" data-cmd="phases/euclid_dr1_prelim/dr1_prelim_10_lens_science_run.md
+# project euclid_dr1_prelim: no `submit` verb in projects.yaml — submit by hand
+python3 scripts/cortex.py move phases/euclid_dr1_prelim/dr1_prelim_10_lens_science_run.md submitted --run &lt;jobid&gt;" aria-label="Copy the Claude command">📋</button><p><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/euclid_dr1_prelim/dr1_prelim_10_lens_science_run.md">Euclid_dr1_prelim — phase 4: DR1 prelim science run — 10 real Euclid lenses in euclid_dr1_prelim on RAL</a><span class="tags"><span class="pill g">ready</span></span><span class="facets"> — euclid_dr1_prelim phase 4 · budget 48:00 · 25 review-min</span></p></div>
 <a id="gated"></a><h2>Gated <a class="mdsrc" href="https://github.com/PyAutoLabs/PyAutoCortex/tree/main/phases/">markdown version</a></h2><p class="muted">Waiting on development work. Open the references; when they have all closed, <code>cortex.py move <phase> ready</code>.</p>
 <div class="task"><button class="copy" data-cmd="python3 scripts/cortex.py gates   # then, once they have closed: move phases/inference_programme/nautilus_mass_pix_baseline.md ready
 # gates: autolens_profiling#218" aria-label="Copy the Claude command">📋</button><p><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/phases/inference_programme/nautilus_mass_pix_baseline.md">Inference_programme — phase 21: the Nautilus bar on mass_pix — f1e8 (refs convention) and f1e5 (like-for-like)</a><span class="tags"><span class="pill y">autolens_profiling#218</span></span><span class="facets"> — inference_programme phase 21 · budget 4:00 · 15 review-min</span></p></div>
