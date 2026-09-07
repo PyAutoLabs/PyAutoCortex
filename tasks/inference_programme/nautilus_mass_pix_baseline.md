@@ -2,12 +2,12 @@
 
 Project: inference_programme
 Summary: What Nautilus achieves on mass_pix at f1e8 and f1e5
-State: gated
+State: dropped
 Gates: autolens_profiling#218
 Witness: both Nautilus arms deliver on their own artefacts — a `.completed` marker and a `positions.info` file in each run dir; `.err` free of Tracebacks; `.out` ends "Finished." with zero "Fit Already Completed"; a result row per arm carrying a `target_id` that recomputes from `_targets.py`; no overflow signature (no finite `log_l` above the Fitness ceiling); each arm physical — `einstein_radius` recovered at 1.60 ± 0.02 with `|ell_comps| < 1`; and max logL, log evidence, likelihood evals and sampler wall recorded for both arms
 Budget: 4:00
 Runs:
-Ruling:
+Ruling: R-20260907-02
 Review-minutes: 15
 Epic: gradient-slam-baseline
 Filed: 2026-09-04
@@ -77,4 +77,4 @@ both Nautilus arms deliver on their own artefacts — a `.completed` marker and 
 
 ## Ruling
 
-(none)
+R-20260907-02 — drop

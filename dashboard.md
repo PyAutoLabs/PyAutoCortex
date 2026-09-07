@@ -11,7 +11,7 @@ Every science task the Cortex is holding, on one page: one line each under the p
 | Where | Count |
 |-------|------:|
 | [Awaiting ruling](#awaiting-ruling) | 0 |
-| [Recent rulings](#recent-rulings) | 28 |
+| [Recent rulings](#recent-rulings) | 33 |
 
 <details><summary>📋 check in since last time</summary>
 
@@ -30,7 +30,6 @@ One row per active project — the next thing, what it is holding, and when it l
 | Project | Next task | Awaiting | Running | Last ruling |
 |---|---|---:|---:|---|
 | euclid_dr1_prelim | Ten real DR1 lenses fitted from the pipeline repo alone | 0 | 1 | - |
-| inference_programme | What Nautilus achieves on mass_pix at f1e8 and f1e5 | 0 | 0 | 2026-09-04 |
 | subhalo_validation | Does rectangular_adapt false-detect a subhalo on the clumpy source | 0 | 5 | 2026-09-07 |
 
 #### Nothing open
@@ -110,6 +109,12 @@ One row per active project — the next thing, what it is holding, and when it l
 
 </details>
 
+<details><summary>1 retired</summary>
+
+- inference_programme — retired 2026-09-07: restarting from scratch: the project setup was unsatisfactory and it informed how the Cortex manages projects; RAL outputs stashed at /mnt/ral/jnightin/inference_programme_retired_2026-09-07
+
+</details>
+
 ## Projects
 
 [markdown version](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects.yaml)
@@ -131,59 +136,6 @@ Report where the runs of the PyAutoCortex task tasks/euclid_dr1_prelim/dr1_preli
 </details>
 
 [tasks/euclid_dr1_prelim/](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/tasks/euclid_dr1_prelim/)
-
-### inference_programme
-
-**Local** `/home/jammy/Code/PyAutoLabs/autolens_profiling`
-
-**Mirror** `/mnt/c/Users/Jammy/Science/inference_programme`
-
-**RAL** `/mnt/ral/jnightin/autolens_profiling`
-
-active · both partition · tasks: accepted 7 · dropped 11 · gated 1 · planned 4
-
-<details><summary>📋 <a href="tasks/inference_programme/nautilus_mass_pix_baseline.md">What Nautilus achieves on mass_pix at f1e8 and f1e5</a> — <b>gated</b> — autolens_profiling#218</summary>
-
-```
-python3 scripts/cortex.py gates   # then, once they have closed: move tasks/inference_programme/nautilus_mass_pix_baseline.md ready
-# gates: autolens_profiling#218
-```
-
-</details>
-
-<details><summary>📋 <a href="tasks/inference_programme/cluster_extended_source_inference.md">Cluster extended source inference testing gradient based fitting</a> — <b>planned</b></summary>
-
-```
-python3 scripts/cortex.py move tasks/inference_programme/cluster_extended_source_inference.md ready   # when the `Ready when:` clause in its `## Question` is met
-```
-
-</details>
-
-<details><summary>📋 <a href="tasks/inference_programme/legacy_point_output_sweep.md">Can spent point-source families be swept out of active output</a> — <b>planned</b></summary>
-
-```
-python3 scripts/cortex.py move tasks/inference_programme/legacy_point_output_sweep.md ready   # when the `Ready when:` clause in its `## Question` is met
-```
-
-</details>
-
-<details><summary>📋 <a href="tasks/inference_programme/likelihood_term_levers.md">Are likelihood terms behind gradient search failure on mass_pix</a> — <b>planned</b></summary>
-
-```
-python3 scripts/cortex.py move tasks/inference_programme/likelihood_term_levers.md ready   # when the `Ready when:` clause in its `## Question` is met
-```
-
-</details>
-
-<details><summary>📋 <a href="tasks/inference_programme/prodigy_mass_pix.md">Does a gradient search beat Nautilus on mass_pix</a> — <b>planned</b></summary>
-
-```
-python3 scripts/cortex.py move tasks/inference_programme/prodigy_mass_pix.md ready   # when the `Ready when:` clause in its `## Question` is met
-```
-
-</details>
-
-[tasks/inference_programme/](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/tasks/inference_programme/) · [issues](https://github.com/PyAutoLabs/autolens_profiling/issues)
 
 ### subhalo_validation
 
@@ -247,6 +199,11 @@ cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync jobs
 
 | Ruling | Verb | Task | Batch |
 |---|---|---|---|
+| [R-20260907-06](rulings/2026/09/R-20260907-06.md) | drop | tasks/inference_programme/legacy_point_output_sweep.md | - |
+| [R-20260907-05](rulings/2026/09/R-20260907-05.md) | drop | tasks/inference_programme/cluster_extended_source_inference.md | - |
+| [R-20260907-04](rulings/2026/09/R-20260907-04.md) | drop | tasks/inference_programme/likelihood_term_levers.md | - |
+| [R-20260907-03](rulings/2026/09/R-20260907-03.md) | drop | tasks/inference_programme/prodigy_mass_pix.md | - |
+| [R-20260907-02](rulings/2026/09/R-20260907-02.md) | drop | tasks/inference_programme/nautilus_mass_pix_baseline.md | - |
 | [R-20260907-01](rulings/2026/09/R-20260907-01.md) | accept | tasks/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md | - |
 | [R-20260904-05](rulings/2026/09/R-20260904-05.md) | drop | tasks/inference_programme/multiband_compile_census_completion.md | - |
 | [R-20260904-04](rulings/2026/09/R-20260904-04.md) | drop | tasks/inference_programme/mass_pix_gradient_cost_probe.md | - |
@@ -254,11 +211,6 @@ cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync jobs
 | [R-20260904-02](rulings/2026/09/R-20260904-02.md) | drop | tasks/inference_programme/phase5_mesh_gradient_positions_on.md | - |
 | [R-20260904-01](rulings/2026/09/R-20260904-01.md) | accept | tasks/inference_programme/refs_v1_positions_on_completion.md | - |
 | [R-20260902-10](rulings/2026/09/R-20260902-10.md) | accept | tasks/inference_programme/phase4_positions_gate_b2_reuse.md | 2026-09-02-pm |
-| [R-20260902-09](rulings/2026/09/R-20260902-09.md) | accept | tasks/inference_programme/phase3_prodigy_reliability_gate_b1_reuse.md | 2026-09-02-pm |
-| [R-20260902-08](rulings/2026/09/R-20260902-08.md) | accept | tasks/inference_programme/phase2_nss_mainline_gate_a_reuse.md | 2026-09-02-pm |
-| [R-20260902-07](rulings/2026/09/R-20260902-07.md) | rerun | tasks/subhalo_validation/delaunay_adapt_split_pl_sersic_0.md | - |
-| [R-20260902-06](rulings/2026/09/R-20260902-06.md) | rerun | tasks/subhalo_validation/rectangular_adapt_pl_sersic_0.md | - |
-| [R-20260902-05](rulings/2026/09/R-20260902-05.md) | rerun | tasks/subhalo_validation/delaunay_adapt_split_pl_eff_0.md | - |
 
 ---
 

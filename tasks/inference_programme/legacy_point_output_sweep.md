@@ -2,12 +2,12 @@
 
 Project: inference_programme
 Summary: Can spent point-source families be swept out of active output
-State: planned
+State: dropped
 Gates: autolens_profiling#205
 Witness: `output/legacy_point/` exists on RAL and on the laptop mirror holding all three point-source families (`image_plane`/`source_plane` fits, `Cluster`, `point_source`) with their directory structure preserved; the active `output/` tree no longer contains them; the certified `InferenceRefs_v1` mesh rows (R-20260902-01, R-20260904-01) are STILL PRESENT in the active tree and were not moved; a spot check finds any moved run under its new path; nothing deleted; a dated one-line note appended beside the ledger
 Budget: 2:00
 Runs:
-Ruling:
+Ruling: R-20260907-06
 Review-minutes: 5
 Filed: 2026-09-01
 Migrated-from: PyAutoMind/draft/maintenance/autolens_profiling/legacy_point_output_sweep.md
@@ -113,3 +113,5 @@ actually cite.
 ## Runs
 
 ## Ruling
+
+R-20260907-06 — drop

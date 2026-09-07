@@ -2,12 +2,12 @@
 
 Project: inference_programme
 Summary: Cluster extended source inference testing gradient based fitting
-State: planned
+State: dropped
 Gates:
 Witness: a written feasibility verdict with profiling numbers and a go/no-go for a follow-up implementation prompt — not shipped inference machinery
 Budget: 24:00
 Runs:
-Ruling:
+Ruling: R-20260907-05
 Review-minutes: 25
 Epic: cluster-strong-lensing
 Filed: 2026-08-19
@@ -49,4 +49,4 @@ implementation prompt — not shipped inference machinery.
 
 ## Ruling
 
-(none)
+R-20260907-05 — drop
