@@ -2,7 +2,7 @@
 
 Project: subhalo_validation
 Phase: 1
-State: running
+State: awaiting-ruling
 Gates:
 Reset: job B (342234 / 342240) cancelled 2026-09-02 after 12 min at the human's request: the chain waits for the numba likelihood speed-ups in progress; source_lp[1] (job A) is complete and kept; the partial source_pix[1] outputs were removed on RAL
 Witness: evidence_increase < 5 in results/delaunay_adapt_split/pl_sersic_0_no_subhalo.json (test_mode false)
@@ -53,9 +53,11 @@ Measured stage costs (the reason subhalo[2] was later switched off): `source_lp[
     where: output/subhalo/detect/delaunay_adapt_split/pl_sersic_0_no_subhalo/
     pulled_to: output/subhalo/detect/delaunay_adapt_split/pl_sersic_0_no_subhalo/
 - 342231_0: done — ral — submitted 2026-09-02 — wall 0:02 — job A, source_lp[1] on JAX; rerun with the S/N-3 adapt-image cap and fixed over-sampling (R-20260902-04..07)
+    pulled_to: output/subhalo/detect/delaunay_adapt_split/pl_sersic_0_no_subhalo/
 - 342234_0: void — ral — submitted 2026-09-02 — wall 0:12 — job B, cancelled 2026-09-02 at 12 min inside source_pix[1] to wait for the numba likelihood speed-ups; partial source_pix[1] output removed on RAL
     after: 342231_0
-- 342273_0: submitted — ral — submitted 2026-09-04 — wall 0:00 — job B, numba chain (8c / 96gb / 48 h) on the post-numba-speed-up mains (PyAutoFit cdda28b5f, PyAutoArray e36a5af4, PyAutoGalaxy 6d216c15, PyAutoLens 146a3d725); pl_sersic_0 alone (ARRAY=0) to watch memory and runtime before the other lenses; reloads job A 342231_0
+- 342273_0: done — ral — submitted 2026-09-04 — wall 22:08 — job B, numba chain (8c / 96gb / 48 h) on the post-numba-speed-up mains (PyAutoFit cdda28b5f, PyAutoArray e36a5af4, PyAutoGalaxy 6d216c15, PyAutoLens 146a3d725); pl_sersic_0 alone (ARRAY=0) to watch memory and runtime before the other lenses; reloads job A 342231_0
+    pulled_to: output/subhalo/detect/delaunay_adapt_split/pl_sersic_0_no_subhalo/
 
 ## Ruling
 
