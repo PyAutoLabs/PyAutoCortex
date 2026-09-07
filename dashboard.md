@@ -16,12 +16,12 @@ Every science task the Cortex is holding, on one page: one line each under the p
 <details><summary>📋 check in since last time</summary>
 
 ```
-/cortex — check in on every active science project since the last check-in (2026-09-07T15:28Z): pull each project through its sync CLI, score every live run against its pre-registered witness, move what came back, re-render and push the board, then read me the by-project summary with the prompt each task needs next.
+/cortex — check in on every active science project since the last check-in (2026-09-07T20:42Z): pull each project through its sync CLI, score every live run against its pre-registered witness, move what came back, re-render and push the board, then read me the by-project summary with the prompt each task needs next.
 ```
 
 </details>
 
-### Last check-in: 2026-09-07T15:28Z
+### Last check-in: 2026-09-07T20:42Z
 
 ## Summary
 
