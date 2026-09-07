@@ -190,13 +190,17 @@ def test_comment_only_projects_yaml_parses_to_an_empty_map():
 
 def test_the_live_body_map_parses_clean():
     """The seeded map (phase 3) is the real witness for the field validation:
-    it is the only file that exercises `planned`, `note`, and a 17-verb list."""
+    it is the only file that exercises `note` and a 17-verb list. It stopped
+    exercising `planned` on 2026-09-07, when euclid_dr1_prelim's phase 4
+    launched and its row flipped to `active` — the last `planned` row in the
+    live map. `planned` as a legal status is covered on the fixture by
+    `test_planned_and_retired_are_legal_statuses`."""
     text = (REPO / "projects.yaml").read_text()
     rows, problems = cortex.parse_projects(text)
     assert problems == []
     assert {"inference_programme", "subhalo_validation", "euclid",
             "euclid_dr1_prelim"} <= set(rows)
-    assert rows["euclid_dr1_prelim"]["status"] == "planned"
+    assert rows["euclid_dr1_prelim"]["status"] == "active"
     assert rows["euclid"]["remote"] == "none"
     assert "PyAutoLabs remote" in rows["euclid"]["note"]
 

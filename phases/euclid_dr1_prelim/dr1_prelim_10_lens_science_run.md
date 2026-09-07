@@ -2,11 +2,11 @@
 
 Project: euclid_dr1_prelim
 Phase: 4
-State: ready
+State: submitted
 Gates: euclid_strong_lens_modeling_pipeline#48, euclid_strong_lens_modeling_pipeline#49
 Witness: 10 lenses fitted end to end on RAL from the pipeline repo alone, with a complete catalogue folder (latents present) whose numerics match the 20260623 reference within the tolerance stated before the run
 Budget: 48:00
-Runs:
+Runs: 342301
 Ruling:
 Review-minutes: 25
 Epic: euclid-dr1-prep
@@ -71,7 +71,31 @@ The catalogue product set is the reference tile's: `lens_mass.csv`, `lens_sersic
   and any comparison of it is against a sentinel, not a measurement. Mind ledger:
   `PyAutoMind/draft/feature/euclid/euclid_dr1_prep_epic.md` item 8.
 
+- 2026-09-07 — launched: sort key `sorted()` (plain Python, byte-wise ascending) over the
+  directory names under `/mnt/c/Users/Jammy/Science/euclid/dataset/dr1_prelim_grade_ab/`
+  (3097 entries, all directories), first 10 taken; datasets:
+  `Tile102005065RA0135279431487DECNEG0701599765928`,
+  `Tile102007299RA0702283866574DECNEG0660415308762`,
+  `Tile102007899RA0631694872236DECNEG0650584220817`,
+  `Tile102007903RA0668831429074DECNEG0648901814905`,
+  `Tile102008165RA0109664211519DECNEG0642902327064`,
+  `Tile102008219RA0727851454839DECNEG0644382776514`,
+  `Tile102008468RA3567390985250DECNEG0647172046261`,
+  `Tile102008475RA0039777627054DECNEG0637715426503`,
+  `Tile102008532RA0683495100072DECNEG0642073858939`,
+  `Tile102008848RA0601376380877DECNEG0634605061157`;
+  jobs 342301_[0-9]; project born at `/mnt/c/Users/Jammy/Science/euclid_dr1_prelim`,
+  RAL `/mnt/ral/jnightin/euclid_dr1_prelim`. Born by cloning
+  `euclid_strong_lens_modeling_pipeline` (`dbdbe1d`) and nothing else; the only local
+  adaptations are `hpc/sync.conf` and the project's own copy of
+  `hpc/batch_cpu/submit_initial_lens_model_two_stage` (sample, the 10-entry `datasets`
+  list, `--array=0-9`, `--partition=ral`, the mail address, and `PROJECT_PATH` /
+  `PYAUTO_HPC_BASE` exported in-script because `hpc/sync submit` carries none). `config/`
+  is exactly as committed — the configuration the 2026-09-03 RAL acceptance run used.
+
 ## Runs
+
+- 342301_[0-9]: submitted — ral — submitted 2026-09-07 — wall 0:00 — vis_lp (JAX on CPU) then vis_pix (numba+pool) in one two-stage chain, 10 lenses, two-stage CPU route from the pipeline repo alone; sort key and dataset list in ## Notes
 
 ## Ruling
 
