@@ -78,8 +78,8 @@ euclid:
   ledger: CLAUDE.md
   witness_file: catalogue/**/*.csv
   partition: both
-  status: active
-  note: "NO PyAutoLabs remote by ruling 2026-09-01: tracks DR1 tile-keyed catalogue CSV, personal remote Jammy2211/euclid-dr1-modeling, nested Overleaf paper repo, 34 GB; code half = PyAutoLabs/euclid_strong_lens_modeling_pipeline; witness undefined until a science phase pre-registers one"
+  status: dormant
+  note: "NO PyAutoLabs remote by ruling 2026-09-01: tracks DR1 tile-keyed catalogue CSV, personal remote Jammy2211/euclid-dr1-modeling, nested Overleaf paper repo, 34 GB; code half = PyAutoLabs/euclid_strong_lens_modeling_pipeline; witness undefined until a science phase pre-registers one; dormant 2026-09-07: superseded by euclid_dr1_prelim, which phase 4 births; local output/ cleared 2026-09-07 (60 GB of May–June DR1 grade_ab runs, still on RAL under /mnt/ral/jnightin/euclid)"
 
 euclid_dr1_prelim:
   remote: none
@@ -92,7 +92,7 @@ euclid_dr1_prelim:
   witness_file: results/**/*.json
   partition: both
   status: planned
-  note: "created by euclid-dr1-prep phase 4 (a Cortex phase after migration); every path is the planned one"
+  note: "created by euclid-dr1-prep phase 4 (a Cortex phase after migration); every path is the planned one; flips to active when phase 4 launches and the local folder exists"
 
 # --------------------------------------------------------------------------- #
 # dormant — git repos only. The non-git trees (subhalo, euclid_group, z_*) are

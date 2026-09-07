@@ -32,7 +32,6 @@ One row per active project — the next thing, what it is holding, and when it l
 
 | Project | Next phase | Awaiting | Running | Ready | Last ruling |
 |---|---|---:|---:|---:|---|
-| euclid | 4 ready | 0 | 0 | 1 | - |
 | inference_programme | 21 gated | 0 | 0 | 0 | 2026-09-04 |
 | subhalo_validation | 1 running | 0 | 3 | 3 | 2026-09-02 |
 
@@ -40,9 +39,9 @@ One row per active project — the next thing, what it is holding, and when it l
 
 | Project | Status | Phases | Retire |
 |---|---|---|---|
-| euclid_dr1_prelim | planned | none |  |
 | concr | dormant | none | retire ↓ |
 | cowls_diana | dormant | none | retire ↓ |
+| euclid | dormant | planned 3 | retire ↓ |
 | ic50_workspace | dormant | planned 1 | retire ↓ |
 | pj011646 | dormant | none | retire ↓ |
 | profiling | dormant | none | retire ↓ |
@@ -61,6 +60,14 @@ One row per active project — the next thing, what it is holding, and when it l
 
 ```
 /cortex — retire the science project cowls_diana: confirm it is holding nothing live, then in PyAutoCortex run `python3 scripts/cortex.py retire cowls_diana --why "<one line on why>"`, `python3 scripts/cortex.py check`, `pyauto-brain cortex dashboard --apply`, and push the ledger. The row, its phases and its rulings all stay — only the status and the note change.
+```
+
+</details>
+
+<details><summary>📋 retire euclid</summary>
+
+```
+/cortex — retire the science project euclid: confirm it is holding nothing live, then in PyAutoCortex run `python3 scripts/cortex.py retire euclid --why "<one line on why>"`, `python3 scripts/cortex.py check`, `pyauto-brain cortex dashboard --apply`, and push the ledger. The row, its phases and its rulings all stay — only the status and the note change.
 ```
 
 </details>
@@ -108,34 +115,6 @@ One row per active project — the next thing, what it is holding, and when it l
 ## Projects
 
 [markdown version](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects.yaml)
-
-### euclid
-
-**Local** `/mnt/c/Users/Jammy/Science/euclid`
-
-**RAL** `/mnt/ral/jnightin/euclid_strong_lens_modeling_pipeline`
-
-active · both partition · phases: planned 3 · ready 1
-
-<details><summary>📋 <a href="phases/euclid/dr1_prelim_10_lens_science_run.md">Euclid — phase 4: DR1 prelim science run — 10 real Euclid lenses in euclid_dr1_prelim on RAL</a> — euclid phase 4 · budget 48:00 · 25 review-min — <b>ready</b></summary>
-
-```
-phases/euclid/dr1_prelim_10_lens_science_run.md
-# project euclid: no `submit` verb in projects.yaml — submit by hand
-python3 scripts/cortex.py move phases/euclid/dr1_prelim_10_lens_science_run.md submitted --run <jobid>
-```
-
-</details>
-
-<details><summary>3 more open phase(s) · plans and issues</summary>
-
-- [Euclid — phase 5: resimulate a fitted Euclid lens, and resimulate the 10 prelim lenses with true magnifications recorded](phases/euclid/resimulate_fitted_lens_simulator.md) — planned
-- [Euclid — phase 6: do we recover Sersic indices? 10 simulated Euclid lenses vs the real prior-edge pile-up](phases/euclid/sersic_index_recovery.md) — planned
-- [Euclid — phase 7: how robust are magnification estimates? model-match vs mismatch across the 10 Euclid lenses](phases/euclid/magnification_robustness.md) — planned
-
-[phases/euclid/](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/phases/euclid/)
-
-</details>
 
 ### inference_programme
 
@@ -192,6 +171,24 @@ cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync jobs
 - [Subhalo_validation — phase 4: rectangular_adapt on pl_sersic_0 — the RectangularBilinear comparison](phases/subhalo_validation/rectangular_adapt_pl_sersic_0.md) — ready
 
 [phases/subhalo_validation/](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/phases/subhalo_validation/) · [issues](https://github.com/PyAutoLabs/subhalo_validation/issues)
+
+</details>
+
+### euclid_dr1_prelim
+
+**Local** `/mnt/c/Users/Jammy/Science/euclid_dr1_prelim`
+
+**RAL** `/mnt/ral/jnightin/euclid_dr1_prelim`
+
+planned · both partition · phases: ready 1
+
+<details><summary>📋 <a href="phases/euclid_dr1_prelim/dr1_prelim_10_lens_science_run.md">Euclid_dr1_prelim — phase 4: DR1 prelim science run — 10 real Euclid lenses in euclid_dr1_prelim on RAL</a> — euclid_dr1_prelim phase 4 · budget 48:00 · 25 review-min — <b>ready</b></summary>
+
+```
+phases/euclid_dr1_prelim/dr1_prelim_10_lens_science_run.md
+# project euclid_dr1_prelim: no `submit` verb in projects.yaml — submit by hand
+python3 scripts/cortex.py move phases/euclid_dr1_prelim/dr1_prelim_10_lens_science_run.md submitted --run <jobid>
+```
 
 </details>
 
@@ -267,12 +264,12 @@ python3 scripts/cortex.py move phases/subhalo_validation/rectangular_adapt_pl_se
 
 </details>
 
-<details><summary>📋 <a href="phases/euclid/dr1_prelim_10_lens_science_run.md">Euclid — phase 4: DR1 prelim science run — 10 real Euclid lenses in euclid_dr1_prelim on RAL</a> — euclid phase 4 · budget 48:00 · 25 review-min</summary>
+<details><summary>📋 <a href="phases/euclid_dr1_prelim/dr1_prelim_10_lens_science_run.md">Euclid_dr1_prelim — phase 4: DR1 prelim science run — 10 real Euclid lenses in euclid_dr1_prelim on RAL</a> — euclid_dr1_prelim phase 4 · budget 48:00 · 25 review-min</summary>
 
 ```
-phases/euclid/dr1_prelim_10_lens_science_run.md
-# project euclid: no `submit` verb in projects.yaml — submit by hand
-python3 scripts/cortex.py move phases/euclid/dr1_prelim_10_lens_science_run.md submitted --run <jobid>
+phases/euclid_dr1_prelim/dr1_prelim_10_lens_science_run.md
+# project euclid_dr1_prelim: no `submit` verb in projects.yaml — submit by hand
+python3 scripts/cortex.py move phases/euclid_dr1_prelim/dr1_prelim_10_lens_science_run.md submitted --run <jobid>
 ```
 
 </details>
