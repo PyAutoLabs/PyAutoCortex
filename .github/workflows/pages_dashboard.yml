@@ -6,7 +6,7 @@ name: Pages Dashboard
 # Why a twin exists at all: GitHub's markdown rendering strips JavaScript, so
 # `dashboard.md` can never write to the clipboard — on the GitHub mobile app its
 # fenced blocks have no copy affordance at all, leaving long-press text
-# selection as the only way to grab a phase's command. The HTML page carries a
+# selection as the only way to grab a task's command. The HTML page carries a
 # real copy button instead: one tap and the command is on the clipboard, ready
 # to paste into a Claude Code chat. It is also where a review is done — the
 # board is read on a phone as often as on the laptop.
@@ -15,7 +15,7 @@ name: Pages Dashboard
 # `dashboard.md` (one census, two pages) and kept fresh by the same self-heal in
 # `dashboard_refresh.yml`; this workflow only publishes it.
 # Only the uploaded files reach Pages — nothing else in the repo, and in
-# particular not `phases/`, `rulings/` or `projects.yaml`, whose absolute laptop
+# particular not `tasks/`, `rulings/` or `projects.yaml`, whose absolute laptop
 # paths are not for a public site.
 
 on:

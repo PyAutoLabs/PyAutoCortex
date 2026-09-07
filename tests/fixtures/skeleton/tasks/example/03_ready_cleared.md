@@ -1,0 +1,29 @@
+# Example — the anchor refit, gate cleared
+
+Project: example
+Summary: Does the refit reproduce the published anchor
+State: ready
+Gates: PyAutoGalaxy#486
+Witness: anchor lens theta_E within 0.01 arcsec of the published value
+Budget: 5:00
+Review-minutes: 4
+Epic: example-programme
+Filed: 2026-08-27
+
+## Question
+
+Does the refit on the released stack reproduce the published anchor?
+
+## Witness
+
+`output/task_03/anchor/samples_summary.json` — `theta_E` within 0.01 arcsec.
+
+## Where to look
+
+- `/mnt/c/Users/Jammy/Science/example/output/task_03/`
+
+## Runs
+
+## Ruling
+
+(none)

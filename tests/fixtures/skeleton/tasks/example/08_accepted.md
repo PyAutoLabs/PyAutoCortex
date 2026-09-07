@@ -1,0 +1,35 @@
+# Example — the anchor comparison, accepted
+
+Project: example
+Summary: Does the new sampler reproduce the anchor
+State: accepted
+Gates: PyAutoFit#1400
+Witness: anchor theta_E within 0.01 arcsec of the published value on the new sampler
+Budget: 6:00
+Runs: 342050
+Ruling: R-20260901-02
+Review-minutes: 6
+Epic: example-programme
+Filed: 2026-08-24
+
+## Question
+
+Does the new sampler reproduce the anchor within the published error?
+
+## Witness
+
+`output/task_08/anchor/samples_summary.json` — `theta_E` within 0.01 arcsec.
+
+## Where to look
+
+- `/mnt/c/Users/Jammy/Science/example/output/task_08/`
+
+## Runs
+
+- 342050: done — gpu — submitted 2026-08-28 — wall 5:10
+    pulled_to: /mnt/c/Users/Jammy/Science/example/output/task_08
+    ruled: R-20260901-02
+
+## Ruling
+
+R-20260901-02 — accept (supersedes R-20260901-01)

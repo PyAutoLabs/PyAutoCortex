@@ -36,7 +36,7 @@
 # THE WORKSPACE-PATHS EXCEPTION. `local_path` and `mirror` are absolute laptop
 # paths OUTSIDE the PyAutoLabs workspace — the Science folder under /mnt/c/…
 # where the datasets, output trees and pulled results live. This file is the
-# one place in the organism that carries such a path; a phase file or a ruling
+# one place in the organism that carries such a path; a task file or a ruling
 # reaches a project through its row here, never with a bare path of its own.
 
 # --------------------------------------------------------------------------- #
@@ -79,7 +79,7 @@ euclid:
   witness_file: catalogue/**/*.csv
   partition: both
   status: dormant
-  note: "NO PyAutoLabs remote by ruling 2026-09-01: tracks DR1 tile-keyed catalogue CSV, personal remote Jammy2211/euclid-dr1-modeling, nested Overleaf paper repo, 34 GB; code half = PyAutoLabs/euclid_strong_lens_modeling_pipeline; witness undefined until a science phase pre-registers one; dormant 2026-09-07: superseded by euclid_dr1_prelim, which phase 4 births; local output/ cleared 2026-09-07 (60 GB of May–June DR1 grade_ab runs, still on RAL under /mnt/ral/jnightin/euclid)"
+  note: "NO PyAutoLabs remote by ruling 2026-09-01: tracks DR1 tile-keyed catalogue CSV, personal remote Jammy2211/euclid-dr1-modeling, nested Overleaf paper repo, 34 GB; code half = PyAutoLabs/euclid_strong_lens_modeling_pipeline; witness undefined until a science task pre-registers one; dormant 2026-09-07: superseded by euclid_dr1_prelim, which phase 4 births; local output/ cleared 2026-09-07 (60 GB of May–June DR1 grade_ab runs, still on RAL under /mnt/ral/jnightin/euclid)"
 
 euclid_dr1_prelim:
   remote: none
@@ -92,7 +92,7 @@ euclid_dr1_prelim:
   witness_file: results/**/*.json
   partition: both
   status: active
-  note: "created by euclid-dr1-prep phase 4 (a Cortex phase after migration); every path is the planned one; active 2026-09-07: phase 4 launched (jobs 342301_[0-9])"
+  note: "created by euclid-dr1-prep phase 4 (a Cortex task after migration); every path is the planned one; active 2026-09-07: phase 4 launched (jobs 342301_[0-9])"
 
 # --------------------------------------------------------------------------- #
 # dormant — git repos only. The non-git trees (subhalo, euclid_group, z_*) are
