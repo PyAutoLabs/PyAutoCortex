@@ -30,7 +30,7 @@ One row per active project — the next thing, what it is holding, and when it l
 | Project | Next task | Awaiting | Running | Last ruling |
 |---|---|---:|---:|---|
 | euclid_dr1_prelim | Ten real DR1 lenses fitted from the pipeline repo alone | 0 | 1 | - |
-| slope_hierarchy_scale | Does hierarchical slope recovery hold at N=25 to 50 | 0 | 0 | - |
+| slope_hierarchy_scale | Does hierarchical slope recovery hold at N=25 to 50 | 0 | 1 | - |
 | subhalo_validation | Does rectangular_adapt false-detect a subhalo on the clumpy source | 0 | 5 | 2026-09-07 |
 
 #### Nothing open
@@ -136,13 +136,12 @@ Report where the runs of the PyAutoCortex task tasks/euclid_dr1_prelim/dr1_preli
 
 **RAL** `/mnt/ral/jnightin/slope_hierarchy_scale`
 
-active · both partition · tasks: gated 1
+active · both partition · tasks: submitted 1
 
-<details><summary>📋 <a href="tasks/slope_hierarchy_scale/n25_scale_up.md">Does hierarchical slope recovery hold at N=25 to 50</a> — <b>gated</b> — PyAutoFit#1405, PyAutoFit#1558, PyAutoFit#1560, PyAutoFit#1562</summary>
+<details><summary>📋 <a href="tasks/slope_hierarchy_scale/n25_scale_up.md">Does hierarchical slope recovery hold at N=25 to 50</a> — <b>submitted</b> — runs 342348_[0-24], 342350_0, 342351_0 · wall 0:00 of 48:00 (0%)</summary>
 
 ```
-python3 scripts/cortex.py gates   # then, once they have closed: move tasks/slope_hierarchy_scale/n25_scale_up.md ready
-# gates: PyAutoFit#1405, PyAutoFit#1558, PyAutoFit#1560, PyAutoFit#1562
+cd /mnt/c/Users/Jammy/Science/slope_hierarchy_scale && hpc/sync jobs
 ```
 
 </details>
