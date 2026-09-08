@@ -1,9 +1,9 @@
-# Slope_hierarchy — scale the hierarchical slope recovery to N=25–50
+# slope_hierarchy_scale — scale the hierarchical slope recovery to N=25–50
 
-Project: slope_hierarchy
+Project: slope_hierarchy_scale
 Summary: Does hierarchical slope recovery hold at N=25 to 50
-State: planned
-Gates:
+State: gated
+Gates: PyAutoFit#1405, PyAutoFit#1558, PyAutoFit#1560, PyAutoFit#1562
 Witness: an N=25–50 parity table in the same shape as the N=5 one, committed under `results/`, plus the scaling measurements (VRAM ceiling, JAX compile time vs model size, sampler ladder at 3N+1 dims, gradient-utilisation sanity)
 Budget: 48:00
 Runs:
@@ -15,7 +15,20 @@ Migrated-from: PyAutoMind/draft/research/graphical_ep/slope_hierarchy_n25_scale_
 
 ## Question
 
-Ready when: graphical-ep phase 2 (Mind) is issued — add its ref to `Gates:` and move to `gated`.
+Gate evidence (phase 2 of the `graphical-ep` epic is issued and shipped): the Mind record
+`PyAutoMind/complete/2026/09/ep-scale-collapse-basin-cure-or-caveat.md`, the phase-2 review
+bundle PyAutoFit#1572 / #1573 / #1574 / #1576, and the stale-mask fixed-point fix
+PyAutoFit#1580. `Gates:` carries PyAutoFit#1405 — the collapse-basin umbrella, deliberately
+still open pending the moment-matching cure decision — alongside PyAutoFit#1558, #1560 and
+#1562, the phase-2 EP defects this scale-up rests on, so `gates` surfaces all four for the
+human's `move … ready`.
+
+Borrowed from: this task's project was reborn 2026-09-08 as `slope_hierarchy_scale`
+(`/mnt/c/Users/Jammy/Science/slope_hierarchy_scale`), scaffolded fresh with the code borrowed
+from `slope_hierarchy`, which was wrapped up at N=5 on 2026-07-22 and vaulted intact at
+`/mnt/c/Users/Jammy/Science/z_projects_complete/slope_hierarchy`. The N=5 baseline of record
+is `results/ep_history_n5_maxsteps12/` inside that vault; the datasets are **re-simulated** at
+N=25 in the new tree, never copied.
 
 The `slope_hierarchy` project answered all four of its goals at N=5 and was wrapped up on
 2026-07-22. This is the *optional* scale-up that was left on the table, not a blocker or an open
@@ -51,8 +64,10 @@ CPU `ral` partition for the EP arm (finiteness, not throughput).
 
 ## Witness
 
-An N=25–50 parity table in the same shape as the N=5 one, committed under `results/`, plus an
-issue comment on slope_hierarchy#1.
+An N=25–50 parity table in the same shape as the N=5 one, committed under `results/` in
+`slope_hierarchy_scale`. (The old N=5 witness was commented on Jammy2211/slope_hierarchy#1;
+the new tree has no remote yet, so the committed table is the whole witness until a human
+runs `gh repo create`.)
 
 Scaling measurements to capture while the runs are up anyway (the EP campaign needs them):
 
@@ -70,7 +85,8 @@ Each number goes in the committed results table beside the parity numbers.
 
 ## Where to look
 
-- `slope_hierarchy` (project row): `results/ep_history_n5_maxsteps12/` — the N=5 baseline
+- `slope_hierarchy` (retired project row, vaulted at `/mnt/c/Users/Jammy/Science/z_projects_complete/slope_hierarchy`): `results/ep_history_n5_maxsteps12/` — the N=5 baseline
+- `slope_hierarchy_scale` (this project's row): `results/` — where the N=25 parity table and the scaling measurements land
 - Jammy2211/slope_hierarchy#1 — the project issue the parity table is commented on
 - Mind `research/graphical_ep/ep_campaign.md` phase 3 — the campaign rows this feeds
 - Mind `draft/research/graphical_ep/slope_hierarchy_methods_writeup.md` — the write-up it feeds

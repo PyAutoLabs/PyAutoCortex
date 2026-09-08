@@ -151,7 +151,7 @@ subhalo_simulations:
 
 slope_hierarchy:
   remote: Jammy2211/slope_hierarchy
-  local_path: /mnt/c/Users/Jammy/Science/slope_hierarchy
+  local_path: /mnt/c/Users/Jammy/Science/z_projects_complete/slope_hierarchy
   ral_root: /mnt/ral/jnightin/slope_hierarchy
   mirror: none
   sync_cli: hpc/sync
@@ -160,8 +160,22 @@ slope_hierarchy:
   assistant: none
   witness_file: results/**/*.json
   partition: both
-  status: dormant
-  note: "personal remote, recorded as a fact — not a PyAutoLabs repo; ral_root planned, sync_verbs unverified"
+  status: retired
+  note: "retired 2026-09-08: wrapped up 2026-07-22 at N=5; succeeded by slope_hierarchy_scale; tree vaulted under z_projects_complete/"
+
+slope_hierarchy_scale:
+  remote: PyAutoLabs/slope_hierarchy_scale
+  local_path: /mnt/c/Users/Jammy/Science/slope_hierarchy_scale
+  ral_root: /mnt/ral/jnightin/slope_hierarchy_scale
+  mirror: none
+  sync_cli: hpc/sync
+  sync_verbs: [push, pull, sync, status, submit, push-submit, jobs, tail, check]
+  ledger: wiki/project/state.md
+  assistant: autolens_assistant
+  witness_file: results/**/*.json
+  partition: both
+  status: active
+  note: "born 2026-09-08 as graphical-ep phase 3, code borrowed from slope_hierarchy (vaulted under z_projects_complete/); private remote created 2026-09-08"
 
 pj011646:
   remote: Jammy2211/PJ011646

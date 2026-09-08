@@ -237,6 +237,7 @@ a.go:hover{opacity:.9;text-decoration:none}
 <table class="map">
 <tr><th>Project</th><th>Next task</th><th>Awaiting</th><th>Running</th><th>Last ruling</th></tr>
 <tr><td><b>euclid_dr1_prelim</b></td><td>Ten real DR1 lenses fitted from the pipeline repo alone</td><td>0</td><td>1</td><td>-</td></tr>
+<tr><td><b>slope_hierarchy_scale</b></td><td>Does hierarchical slope recovery hold at N=25 to 50</td><td>0</td><td>0</td><td>-</td></tr>
 <tr><td><b>subhalo_validation</b></td><td>Does rectangular_adapt false-detect a subhalo on the clumpy source</td><td>0</td><td>5</td><td>2026-09-07</td></tr>
 </table>
 <h3>Nothing open</h3>
@@ -248,11 +249,11 @@ a.go:hover{opacity:.9;text-decoration:none}
 <tr><td>ic50_workspace</td><td>dormant</td><td>planned 1</td><td><button class="copy text" data-cmd="/cortex — retire the science project ic50_workspace: confirm it is holding nothing live, then in PyAutoCortex run `python3 scripts/cortex.py retire ic50_workspace --why &quot;&lt;one line on why&gt;&quot;`, `python3 scripts/cortex.py check`, `pyauto-brain cortex dashboard --apply`, and push the ledger. The row, its tasks and its rulings all stay — only the status and the note change." aria-label="Copy the retire prompt">📋 retire</button></td></tr>
 <tr><td>pj011646</td><td>dormant</td><td>none</td><td><button class="copy text" data-cmd="/cortex — retire the science project pj011646: confirm it is holding nothing live, then in PyAutoCortex run `python3 scripts/cortex.py retire pj011646 --why &quot;&lt;one line on why&gt;&quot;`, `python3 scripts/cortex.py check`, `pyauto-brain cortex dashboard --apply`, and push the ledger. The row, its tasks and its rulings all stay — only the status and the note change." aria-label="Copy the retire prompt">📋 retire</button></td></tr>
 <tr><td>profiling</td><td>dormant</td><td>none</td><td><button class="copy text" data-cmd="/cortex — retire the science project profiling: confirm it is holding nothing live, then in PyAutoCortex run `python3 scripts/cortex.py retire profiling --why &quot;&lt;one line on why&gt;&quot;`, `python3 scripts/cortex.py check`, `pyauto-brain cortex dashboard --apply`, and push the ledger. The row, its tasks and its rulings all stay — only the status and the note change." aria-label="Copy the retire prompt">📋 retire</button></td></tr>
-<tr><td>slope_hierarchy</td><td>dormant</td><td>planned 2</td><td><button class="copy text" data-cmd="/cortex — retire the science project slope_hierarchy: confirm it is holding nothing live, then in PyAutoCortex run `python3 scripts/cortex.py retire slope_hierarchy --why &quot;&lt;one line on why&gt;&quot;`, `python3 scripts/cortex.py check`, `pyauto-brain cortex dashboard --apply`, and push the ledger. The row, its tasks and its rulings all stay — only the status and the note change." aria-label="Copy the retire prompt">📋 retire</button></td></tr>
 <tr><td>subhalo_simulations</td><td>dormant</td><td>none</td><td><button class="copy text" data-cmd="/cortex — retire the science project subhalo_simulations: confirm it is holding nothing live, then in PyAutoCortex run `python3 scripts/cortex.py retire subhalo_simulations --why &quot;&lt;one line on why&gt;&quot;`, `python3 scripts/cortex.py check`, `pyauto-brain cortex dashboard --apply`, and push the ledger. The row, its tasks and its rulings all stay — only the status and the note change." aria-label="Copy the retire prompt">📋 retire</button></td></tr>
 </table>
-<details><summary>1 retired</summary><ul>
+<details><summary>2 retired</summary><ul>
 <li>inference_programme — retired 2026-09-07: restarting from scratch: the project setup was unsatisfactory and it informed how the Cortex manages projects; RAL outputs stashed at /mnt/ral/jnightin/inference_programme_retired_2026-09-07</li>
+<li>slope_hierarchy — retired 2026-09-08: wrapped up 2026-07-22 at N=5; succeeded by slope_hierarchy_scale; tree vaulted under z_projects_complete/</li>
 </ul></details>
 <a id="projects"></a><h2>Projects <a class="mdsrc" href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects.yaml">markdown version</a></h2>
 <section class="project">
@@ -262,6 +263,15 @@ a.go:hover{opacity:.9;text-decoration:none}
 <p class="muted">active · both partition · tasks: submitted 1</p>
 <div class="task"><button class="copy" data-cmd="Report where the runs of the PyAutoCortex task tasks/euclid_dr1_prelim/dr1_prelim_10_lens_science_run.md (342301_[0-9], 342314_3) stand." aria-label="Copy the Claude command">📋</button><p><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/tasks/euclid_dr1_prelim/dr1_prelim_10_lens_science_run.md">Ten real DR1 lenses fitted from the pipeline repo alone</a><span class="tags"><span class="pill y">submitted</span></span><span class="facets"> — runs 342301_[0-9], 342314_3 · wall 0:00 of 48:00 (0%)</span></p></div>
 <p class="muted"><a href="https://github.com/PyAutoLabs/PyAutoCortex/tree/main/tasks/euclid_dr1_prelim/">tasks/euclid_dr1_prelim/</a></p>
+</section>
+<section class="project">
+<h3>slope_hierarchy_scale</h3>
+<p class="paths"><b>Local</b> <span class="pathchip">/mnt/c/Users/Jammy/Science/slope_hierarchy_scale</span></p>
+<p class="paths"><b>RAL</b> <span class="pathchip">/mnt/ral/jnightin/slope_hierarchy_scale</span></p>
+<p class="muted">active · both partition · tasks: gated 1</p>
+<div class="task"><button class="copy" data-cmd="python3 scripts/cortex.py gates   # then, once they have closed: move tasks/slope_hierarchy_scale/n25_scale_up.md ready
+# gates: PyAutoFit#1405, PyAutoFit#1558, PyAutoFit#1560, PyAutoFit#1562" aria-label="Copy the Claude command">📋</button><p><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/tasks/slope_hierarchy_scale/n25_scale_up.md">Does hierarchical slope recovery hold at N=25 to 50</a><span class="tags"><span class="pill n">gated</span></span><span class="facets"> — PyAutoFit#1405, PyAutoFit#1558, PyAutoFit#1560, PyAutoFit#1562</span></p></div>
+<p class="muted"><a href="https://github.com/PyAutoLabs/PyAutoCortex/tree/main/tasks/slope_hierarchy_scale/">tasks/slope_hierarchy_scale/</a> · <a href="https://github.com/PyAutoLabs/slope_hierarchy_scale/issues">issues</a></p>
 </section>
 <section class="project">
 <h3>subhalo_validation</h3>
