@@ -393,9 +393,14 @@ listed here. A document PyYAML cannot read is reported as one problem.
   projects; a personal remote is recorded as a fact with a `note:`),
   `local_path` (absolute laptop path — the Cortex-only exception to the
   workspace-paths rule), `ral_root`, `mirror` (path | `none`), `sync_cli`,
-  `sync_verbs`, `ledger`, `witness_file` (glob), `partition`
+  `sync_verbs`, `ledger`, `assistant`, `witness_file` (glob), `partition`
   (`gpu | ral | both`), `status`
   (`active | dormant | planned | retired`).
+- `assistant` is the domain assistant this project's work enters through — a
+  workspace-relative repo name such as `autolens_assistant`, or `none`; the
+  Cortex names it, never reads it. `check` accepts `none` or a bare directory
+  name (`^[A-Za-z0-9_.-]+$`: no `/`, never absolute) and stats nothing, so the
+  render does not need an assistant checkout.
 - `note` (free text) is the **one optional field**: a row may omit it, an
   empty `note:` is drift, and any other field is still an unknown-field
   error. A note holding `:` or `#` is quoted like any other scalar.
