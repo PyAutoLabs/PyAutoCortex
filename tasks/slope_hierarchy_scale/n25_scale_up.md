@@ -2,11 +2,11 @@
 
 Project: slope_hierarchy_scale
 Summary: Does hierarchical slope recovery hold at N=25 to 50
-State: gated
+State: submitted
 Gates: PyAutoFit#1405, PyAutoFit#1558, PyAutoFit#1560, PyAutoFit#1562
 Witness: an N=25–50 parity table in the same shape as the N=5 one, committed under `results/`, plus the scaling measurements (VRAM ceiling, JAX compile time vs model size, sampler ladder at 3N+1 dims, gradient-utilisation sanity)
 Budget: 48:00
-Runs:
+Runs: 342348, 342350, 342351
 Ruling:
 Review-minutes: 20
 Epic: graphical-ep
@@ -91,8 +91,20 @@ Each number goes in the committed results table beside the parity numbers.
 - Mind `research/graphical_ep/ep_campaign.md` phase 3 — the campaign rows this feeds
 - Mind `draft/research/graphical_ep/slope_hierarchy_methods_writeup.md` — the write-up it feeds
 - PyAutoFit#1405 — the collapse basin
+- `slope_hierarchy_scale` (this project's row): `wiki/project/2026-09-08-n25-wave-1-submitted.md`
+  — the wave-1 submission record: sample, job table, and the two caveats these runs carry
+  (the RAL PyAutoFit mirror is at `68ff9bd57`, Release 2026.9.8.1, which does **not** contain
+  PyAutoFit#1580, so the EP arm runs without the stale-mask fixed-point fix — the mirror was
+  deliberately not refreshed because subhalo jobs 342299_* are live on it; and the `gpu`
+  partition has `euclid-ral-gpu-1` drained and `euclid-ral-gpu-2` busy, so the 25-task array
+  342348 will drain slowly)
+- PyAutoFit#1580 — the stale-mask fixed-point fix the RAL mirror does not yet carry
 
 ## Runs
+
+- 342348_[0-24]: submitted — gpu — submitted 2026-09-08 — wall 0:00 — one lens per array task, hpc/batch_gpu/submit_one_by_one, sample_n25_seed42
+- 342350_0: submitted — gpu — submitted 2026-09-08 — wall 0:00 — joint hierarchical NUTS fit, hpc/batch_gpu/submit_graphical
+- 342351_0: submitted — ral — submitted 2026-09-08 — wall 0:00 — EP arm on the CPU partition, hpc/batch_cpu/submit_ep, max_steps 12; RAL PyAutoFit mirror 68ff9bd57 predates PyAutoFit#1580, so this arm runs without the stale-mask fixed-point fix
 
 ## Ruling
 
