@@ -30,6 +30,7 @@ One row per active project — the next thing, what it is holding, and when it l
 | Project | Next task | Awaiting | Running | Last ruling |
 |---|---|---:|---:|---|
 | euclid_dr1_prelim | Ten real DR1 lenses fitted from the pipeline repo alone | 0 | 1 | - |
+| slope_hierarchy_scale | Does hierarchical slope recovery hold at N=25 to 50 | 0 | 0 | - |
 | subhalo_validation | Does rectangular_adapt false-detect a subhalo on the clumpy source | 0 | 5 | 2026-09-07 |
 
 #### Nothing open
@@ -42,7 +43,6 @@ One row per active project — the next thing, what it is holding, and when it l
 | ic50_workspace | dormant | planned 1 | retire ↓ |
 | pj011646 | dormant | none | retire ↓ |
 | profiling | dormant | none | retire ↓ |
-| slope_hierarchy | dormant | planned 2 | retire ↓ |
 | subhalo_simulations | dormant | none | retire ↓ |
 
 <details><summary>📋 retire concr</summary>
@@ -93,14 +93,6 @@ One row per active project — the next thing, what it is holding, and when it l
 
 </details>
 
-<details><summary>📋 retire slope_hierarchy</summary>
-
-```
-/cortex — retire the science project slope_hierarchy: confirm it is holding nothing live, then in PyAutoCortex run `python3 scripts/cortex.py retire slope_hierarchy --why "<one line on why>"`, `python3 scripts/cortex.py check`, `pyauto-brain cortex dashboard --apply`, and push the ledger. The row, its tasks and its rulings all stay — only the status and the note change.
-```
-
-</details>
-
 <details><summary>📋 retire subhalo_simulations</summary>
 
 ```
@@ -109,9 +101,10 @@ One row per active project — the next thing, what it is holding, and when it l
 
 </details>
 
-<details><summary>1 retired</summary>
+<details><summary>2 retired</summary>
 
 - inference_programme — retired 2026-09-07: restarting from scratch: the project setup was unsatisfactory and it informed how the Cortex manages projects; RAL outputs stashed at /mnt/ral/jnightin/inference_programme_retired_2026-09-07
+- slope_hierarchy — retired 2026-09-08: wrapped up 2026-07-22 at N=5; succeeded by slope_hierarchy_scale; tree vaulted under z_projects_complete/
 
 </details>
 
@@ -136,6 +129,25 @@ Report where the runs of the PyAutoCortex task tasks/euclid_dr1_prelim/dr1_preli
 </details>
 
 [tasks/euclid_dr1_prelim/](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/tasks/euclid_dr1_prelim/)
+
+### slope_hierarchy_scale
+
+**Local** `/mnt/c/Users/Jammy/Science/slope_hierarchy_scale`
+
+**RAL** `/mnt/ral/jnightin/slope_hierarchy_scale`
+
+active · both partition · tasks: gated 1
+
+<details><summary>📋 <a href="tasks/slope_hierarchy_scale/n25_scale_up.md">Does hierarchical slope recovery hold at N=25 to 50</a> — <b>gated</b> — PyAutoFit#1405, PyAutoFit#1558, PyAutoFit#1560, PyAutoFit#1562</summary>
+
+```
+python3 scripts/cortex.py gates   # then, once they have closed: move tasks/slope_hierarchy_scale/n25_scale_up.md ready
+# gates: PyAutoFit#1405, PyAutoFit#1558, PyAutoFit#1560, PyAutoFit#1562
+```
+
+</details>
+
+[tasks/slope_hierarchy_scale/](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/tasks/slope_hierarchy_scale/)
 
 ### subhalo_validation
 
