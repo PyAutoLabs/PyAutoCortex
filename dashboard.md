@@ -147,7 +147,7 @@ python3 scripts/cortex.py gates   # then, once they have closed: move tasks/slop
 
 </details>
 
-[tasks/slope_hierarchy_scale/](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/tasks/slope_hierarchy_scale/)
+[tasks/slope_hierarchy_scale/](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/tasks/slope_hierarchy_scale/) · [issues](https://github.com/PyAutoLabs/slope_hierarchy_scale/issues)
 
 ### subhalo_validation
 
