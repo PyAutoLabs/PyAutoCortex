@@ -211,10 +211,10 @@ ic50_workspace:
   ral_root: /mnt/ral/jnightin/ic50_workspace
   mirror: none
   sync_cli: hpc/sync
-  sync_verbs: [pull]
-  ledger: README.md
+  sync_verbs: [push, pull, logs, sync, push-data-init, pull-full, status, submit, push-submit, jobs, sacct, cancel, wait-and-pull, tail, du, check, clear-logs]
+  ledger: NOTES.md
   assistant: none
   witness_file: results/**/*.json
-  partition: both
-  status: dormant
-  note: "personal remote, recorded as a fact — not a PyAutoLabs repo; ral_root planned, sync_verbs unverified"
+  partition: ral
+  status: active
+  note: "personal remote, recorded as a fact — not a PyAutoLabs repo; activated 2026-09-09 for graphical-ep phase 4, ral_root created and first runs submitted; NOTES.md predates the graphical/HPC work and needs a refresh"
