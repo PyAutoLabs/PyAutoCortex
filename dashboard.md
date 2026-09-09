@@ -172,7 +172,7 @@ cd /mnt/c/Users/Jammy/Science/ic50_workspace && hpc/sync jobs
 
 active · both partition · tasks: running 1
 
-<details><summary>📋 <a href="tasks/slope_hierarchy_scale/n25_scale_up.md">Does hierarchical slope recovery hold at N=25 to 50</a> — <b>running</b> — runs 342348_[0-24], 342350_0, 342351_0 · wall 0:00 of 48:00 (0%)</summary>
+<details><summary>📋 <a href="tasks/slope_hierarchy_scale/n25_scale_up.md">Does hierarchical slope recovery hold at N=25 to 50</a> — <b>running</b> — runs 342348_[0-24], 342350_0, 342351_0, 342410 · wall 0:00 of 48:00 (0%)</summary>
 
 ```
 cd /mnt/c/Users/Jammy/Science/slope_hierarchy_scale && hpc/sync jobs

@@ -6,7 +6,7 @@ State: running
 Gates: PyAutoFit#1405, PyAutoFit#1558, PyAutoFit#1560, PyAutoFit#1562
 Witness: an N=25–50 parity table in the same shape as the N=5 one, committed under `results/`, plus the scaling measurements (VRAM ceiling, JAX compile time vs model size, sampler ladder at 3N+1 dims, gradient-utilisation sanity)
 Budget: 48:00
-Runs: 342348, 342350, 342351
+Runs: 342348, 342350, 342351, 342410
 Ruling:
 Review-minutes: 20
 Epic: graphical-ep
@@ -105,6 +105,7 @@ Each number goes in the committed results table beside the parity numbers.
 - 342348_[0-24]: submitted — gpu — submitted 2026-09-08 — wall 0:00 — one lens per array task, hpc/batch_gpu/submit_one_by_one, sample_n25_seed42
 - 342350_0: submitted — gpu — submitted 2026-09-08 — wall 0:00 — joint hierarchical NUTS fit, hpc/batch_gpu/submit_graphical
 - 342351_0: submitted — ral — submitted 2026-09-08 — wall 0:00 — EP arm on the CPU partition, hpc/batch_cpu/submit_ep, max_steps 12; RAL PyAutoFit mirror 68ff9bd57 predates PyAutoFit#1580, so this arm runs without the stale-mask fixed-point fix
+- 342410: submitted — ral — submitted 2026-09-09 — wall 0:00 — EP arm rerun on the JAX-on-CPU path (no multiprocessing pool); replaces 342351_0
 
 ## Ruling
 
