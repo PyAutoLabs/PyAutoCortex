@@ -16,12 +16,12 @@ Every science task the Cortex is holding, on one page: one line each under the p
 <details><summary>📋 check in since last time</summary>
 
 ```
-/cortex — check in on every active science project since the last check-in (2026-09-09T13:32Z): pull each project through its sync CLI, score every live run against its pre-registered witness, move what came back, re-render and push the board, then read me the by-project summary with the prompt each task needs next.
+/cortex — check in on every active science project since the last check-in (2026-09-09T19:52Z): pull each project through its sync CLI, score every live run against its pre-registered witness, move what came back, re-render and push the board, then read me the by-project summary with the prompt each task needs next.
 ```
 
 </details>
 
-### Last check-in: 2026-09-09T13:32Z
+### Last check-in: 2026-09-09T19:52Z
 
 ## Summary
 
@@ -118,7 +118,7 @@ One row per active project — the next thing, what it is holding, and when it l
 
 **RAL** `/mnt/ral/jnightin/euclid_dr1_prelim`
 
-active · both partition · tasks: running 2 · submitted 1
+active · both partition · tasks: gated 1 · running 2 · submitted 1
 
 <details><summary>📋 <a href="tasks/euclid_dr1_prelim/ordered_mge_control_unordered_102005065.md">Is the ordered run's 8-nat gain ordering or library drift</a> — <b>running</b> — runs 342377_0 · wall 0:00 of 8:00 (0%)</summary>
 
@@ -144,6 +144,15 @@ Report where the runs of the PyAutoCortex task tasks/euclid_dr1_prelim/dr1_preli
 
 </details>
 
+<details><summary>📋 <a href="tasks/euclid_dr1_prelim/ordered_rerun_catalogue_parity.md">Do ordered Nautilus reruns reproduce the euclid catalogue values?</a> — <b>gated</b> — euclid_strong_lens_modeling_pipeline#60</summary>
+
+```
+python3 scripts/cortex.py gates   # then, once they have closed: move tasks/euclid_dr1_prelim/ordered_rerun_catalogue_parity.md ready
+# gates: euclid_strong_lens_modeling_pipeline#60
+```
+
+</details>
+
 [tasks/euclid_dr1_prelim/](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/tasks/euclid_dr1_prelim/)
 
 ### slope_hierarchy_scale
@@ -152,9 +161,9 @@ Report where the runs of the PyAutoCortex task tasks/euclid_dr1_prelim/dr1_preli
 
 **RAL** `/mnt/ral/jnightin/slope_hierarchy_scale`
 
-active · both partition · tasks: submitted 1
+active · both partition · tasks: running 1
 
-<details><summary>📋 <a href="tasks/slope_hierarchy_scale/n25_scale_up.md">Does hierarchical slope recovery hold at N=25 to 50</a> — <b>submitted</b> — runs 342348_[0-24], 342350_0, 342351_0 · wall 0:00 of 48:00 (0%)</summary>
+<details><summary>📋 <a href="tasks/slope_hierarchy_scale/n25_scale_up.md">Does hierarchical slope recovery hold at N=25 to 50</a> — <b>running</b> — runs 342348_[0-24], 342350_0, 342351_0 · wall 0:00 of 48:00 (0%)</summary>
 
 ```
 cd /mnt/c/Users/Jammy/Science/slope_hierarchy_scale && hpc/sync jobs

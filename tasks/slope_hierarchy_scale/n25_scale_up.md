@@ -2,7 +2,7 @@
 
 Project: slope_hierarchy_scale
 Summary: Does hierarchical slope recovery hold at N=25 to 50
-State: submitted
+State: running
 Gates: PyAutoFit#1405, PyAutoFit#1558, PyAutoFit#1560, PyAutoFit#1562
 Witness: an N=25–50 parity table in the same shape as the N=5 one, committed under `results/`, plus the scaling measurements (VRAM ceiling, JAX compile time vs model size, sampler ladder at 3N+1 dims, gradient-utilisation sanity)
 Budget: 48:00
