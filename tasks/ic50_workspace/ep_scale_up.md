@@ -2,11 +2,11 @@
 
 Project: ic50_workspace
 Summary: Does EP match the graphical joint fit end to end
-State: planned
+State: submitted
 Gates:
 Witness: one committed EP-vs-graphical parity table (means ± errors) at small N, EP running at the largest N reached with per-rung timings committed, and any derived-variable or scaling blocker recorded as its own filed prompt
 Budget: 48:00
-Runs:
+Runs: 342408, 342409
 Ruling:
 Review-minutes: 25
 Epic: graphical-ep
@@ -15,7 +15,12 @@ Migrated-from: PyAutoMind/draft/research/graphical_ep/ic50_ep_scale_up.md
 
 ## Question
 
-Ready when: graphical-ep phase 2 (Mind) is issued — add its ref to `Gates:` and move to `gated`.
+Started 2026-09-09. Phases 1 and 2 of the campaign shipped on 2026-09-02 (the whole
+D1–D6 PyAutoFit fix wave: #1558, #1560, #1562, #1572, #1573, #1574, #1576, #1578,
+#1580), so the gate this task was waiting on is cleared and it went
+`planned → ready → submitted` directly. The RAL PyAutoFit mirror was verified to
+contain #1580 before submitting, so unlike phase 3's EP arm these runs carry the
+stale-mask fixed-point fix.
 
 The IC50 cancer use case is the scale target: the end goal is graphical + EP fits at 10 000+
 datasets, with a clear demonstration that EP matches the graphical joint fit at small N before
@@ -55,8 +60,13 @@ Acceptance, verbatim from the Mind prompt:
 - Mind `draft/feature/autofit/ep_lbfgs_jax.md` — the development half (the speed lever)
 - Mind `research/graphical_ep/ep_campaign.md` phase 4 — the campaign row this feeds
 - Mind `research/autofit/autofit_profiling_bootstrap.md` — where the wrapper-overhead evidence goes
+- `scripts/compare_graphical_ep.py` (in the project) — writes the parity table this
+  task's witness asks for, to `results/graphical_ep_comparison_<name>.{txt,json}`
 
 ## Runs
+
+- 342408: submitted — ral — submitted 2026-09-09 — wall 0:00 — EP sim, nlive 150, max_steps 12
+- 342409: submitted — ral — submitted 2026-09-09 — wall 0:00 — graphical sim joint Dynesty, nlive 150
 
 ## Ruling
 
