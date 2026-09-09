@@ -6,7 +6,7 @@ State: submitted
 Gates:
 Witness: one committed EP-vs-graphical parity table (means ± errors) at small N, EP running at the largest N reached with per-rung timings committed, and any derived-variable or scaling blocker recorded as its own filed prompt
 Budget: 48:00
-Runs: 342408, 342409
+Runs: 342408, 342409, 342411, 342412
 Ruling:
 Review-minutes: 25
 Epic: graphical-ep
@@ -67,6 +67,8 @@ Acceptance, verbatim from the Mind prompt:
 
 - 342408: submitted — ral — submitted 2026-09-09 — wall 0:00 — EP sim, nlive 150, max_steps 12
 - 342409: submitted — ral — submitted 2026-09-09 — wall 0:00 — graphical sim joint Dynesty, nlive 150
+- 342411: submitted — ral — submitted 2026-09-09 — wall 0:00 — EP scale ladder, sim rungs 5/10/25/50, nlive 150 max_steps 12
+- 342412: submitted — ral — submitted 2026-09-09 — wall 0:00 — graphical scale ladder, sim rungs 5/10/25/50, nlive 150
 
 ## Ruling
 

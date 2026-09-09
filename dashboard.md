@@ -154,7 +154,7 @@ Report where the runs of the PyAutoCortex task tasks/euclid_dr1_prelim/ordered_r
 
 active · ral partition · tasks: submitted 1
 
-<details><summary>📋 <a href="tasks/ic50_workspace/ep_scale_up.md">Does EP match the graphical joint fit end to end</a> — <b>submitted</b> — runs 342408, 342409 · wall 0:00 of 48:00 (0%)</summary>
+<details><summary>📋 <a href="tasks/ic50_workspace/ep_scale_up.md">Does EP match the graphical joint fit end to end</a> — <b>submitted</b> — runs 342408, 342409, 342411, 342412 · wall 0:00 of 48:00 (0%)</summary>
 
 ```
 cd /mnt/c/Users/Jammy/Science/ic50_workspace && hpc/sync jobs
