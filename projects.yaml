@@ -101,6 +101,20 @@ euclid_dr1_prelim:
   status: active
   note: "created by euclid-dr1-prep phase 4 (a Cortex task after migration); every path is the planned one; active 2026-09-07: phase 4 launched (jobs 342301_[0-9])"
 
+analytic_gaussian:
+  remote: none
+  local_path: /mnt/c/Users/Jammy/Science/analytic_gaussian
+  ral_root: /mnt/ral/jnightin/analytic_gaussian
+  mirror: none
+  sync_cli: hpc/sync
+  sync_verbs: [push, pull, logs, sync, status, submit, push-submit, jobs, sacct, cancel, tail, du, check]
+  ledger: wiki/project/state.md
+  assistant: autofit_assistant
+  witness_file: results/**/*.json
+  partition: ral
+  status: active
+  note: "born 2026-09-09 as the graphical-ep campaign's phase-1 keystone at ensemble scale; benchmark model with a closed-form posterior, borrowed from autofit_workspace_test scripts/graphical (PR #92 lineage); CPU-only, no dataset (every draw is simulated in memory from its seed); remote none until the human runs gh repo create PyAutoLabs/analytic_gaussian --private"
+
 # --------------------------------------------------------------------------- #
 # dormant — git repos only. The non-git trees (subhalo, euclid_group, z_*) are
 # storage, not projects, and aris_PJ011646 is an assistant clone; none get a
