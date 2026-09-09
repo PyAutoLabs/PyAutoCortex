@@ -29,7 +29,8 @@ One row per active project — the next thing, what it is holding, and when it l
 
 | Project | Next task | Awaiting | Running | Last ruling |
 |---|---|---:|---:|---|
-| euclid_dr1_prelim | Is the ordered run's 8-nat gain ordering or library drift | 0 | 3 | - |
+| euclid_dr1_prelim | Is the ordered run's 8-nat gain ordering or library drift | 0 | 4 | - |
+| ic50_workspace | Does EP match the graphical joint fit end to end | 0 | 1 | - |
 | slope_hierarchy_scale | Does hierarchical slope recovery hold at N=25 to 50 | 0 | 1 | - |
 | subhalo_validation | Does rectangular_adapt false-detect a subhalo on the clumpy source | 0 | 5 | 2026-09-07 |
 
@@ -40,7 +41,6 @@ One row per active project — the next thing, what it is holding, and when it l
 | concr | dormant | none | retire ↓ |
 | cowls_diana | dormant | none | retire ↓ |
 | euclid | dormant | planned 3 | retire ↓ |
-| ic50_workspace | dormant | planned 1 | retire ↓ |
 | pj011646 | dormant | none | retire ↓ |
 | profiling | dormant | none | retire ↓ |
 | subhalo_simulations | dormant | none | retire ↓ |
@@ -65,14 +65,6 @@ One row per active project — the next thing, what it is holding, and when it l
 
 ```
 /cortex — retire the science project euclid: confirm it is holding nothing live, then in PyAutoCortex run `python3 scripts/cortex.py retire euclid --why "<one line on why>"`, `python3 scripts/cortex.py check`, `pyauto-brain cortex dashboard --apply`, and push the ledger. The row, its tasks and its rulings all stay — only the status and the note change.
-```
-
-</details>
-
-<details><summary>📋 retire ic50_workspace</summary>
-
-```
-/cortex — retire the science project ic50_workspace: confirm it is holding nothing live, then in PyAutoCortex run `python3 scripts/cortex.py retire ic50_workspace --why "<one line on why>"`, `python3 scripts/cortex.py check`, `pyauto-brain cortex dashboard --apply`, and push the ledger. The row, its tasks and its rulings all stay — only the status and the note change.
 ```
 
 </details>
@@ -118,7 +110,7 @@ One row per active project — the next thing, what it is holding, and when it l
 
 **RAL** `/mnt/ral/jnightin/euclid_dr1_prelim`
 
-active · both partition · tasks: gated 1 · running 2 · submitted 1
+active · both partition · tasks: running 2 · submitted 2
 
 <details><summary>📋 <a href="tasks/euclid_dr1_prelim/ordered_mge_control_unordered_102005065.md">Is the ordered run's 8-nat gain ordering or library drift</a> — <b>running</b> — runs 342377_0 · wall 0:00 of 8:00 (0%)</summary>
 
@@ -144,16 +136,33 @@ Report where the runs of the PyAutoCortex task tasks/euclid_dr1_prelim/dr1_preli
 
 </details>
 
-<details><summary>📋 <a href="tasks/euclid_dr1_prelim/ordered_rerun_catalogue_parity.md">Do ordered Nautilus reruns reproduce the euclid catalogue values?</a> — <b>gated</b> — euclid_strong_lens_modeling_pipeline#60</summary>
+<details><summary>📋 <a href="tasks/euclid_dr1_prelim/ordered_rerun_catalogue_parity.md">Do ordered Nautilus reruns reproduce the euclid catalogue values?</a> — <b>submitted</b> — runs 342398 · wall 0:00 of 36:00 (0%)</summary>
 
 ```
-python3 scripts/cortex.py gates   # then, once they have closed: move tasks/euclid_dr1_prelim/ordered_rerun_catalogue_parity.md ready
-# gates: euclid_strong_lens_modeling_pipeline#60
+Report where the runs of the PyAutoCortex task tasks/euclid_dr1_prelim/ordered_rerun_catalogue_parity.md (342398) stand.
 ```
 
 </details>
 
 [tasks/euclid_dr1_prelim/](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/tasks/euclid_dr1_prelim/)
+
+### ic50_workspace
+
+**Local** `/mnt/c/Users/Jammy/Science/ic50_workspace`
+
+**RAL** `/mnt/ral/jnightin/ic50_workspace`
+
+active · ral partition · tasks: submitted 1
+
+<details><summary>📋 <a href="tasks/ic50_workspace/ep_scale_up.md">Does EP match the graphical joint fit end to end</a> — <b>submitted</b> — runs 342408, 342409 · wall 0:00 of 48:00 (0%)</summary>
+
+```
+cd /mnt/c/Users/Jammy/Science/ic50_workspace && hpc/sync jobs
+```
+
+</details>
+
+[tasks/ic50_workspace/](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/tasks/ic50_workspace/) · [issues](https://github.com/Jammy2211/ic50_workspace/issues)
 
 ### slope_hierarchy_scale
 
@@ -163,7 +172,7 @@ python3 scripts/cortex.py gates   # then, once they have closed: move tasks/eucl
 
 active · both partition · tasks: running 1
 
-<details><summary>📋 <a href="tasks/slope_hierarchy_scale/n25_scale_up.md">Does hierarchical slope recovery hold at N=25 to 50</a> — <b>running</b> — runs 342348_[0-24], 342350_0, 342351_0 · wall 0:00 of 48:00 (0%)</summary>
+<details><summary>📋 <a href="tasks/slope_hierarchy_scale/n25_scale_up.md">Does hierarchical slope recovery hold at N=25 to 50</a> — <b>running</b> — runs 342348_[0-24], 342350_0, 342351_0, 342410 · wall 0:00 of 48:00 (0%)</summary>
 
 ```
 cd /mnt/c/Users/Jammy/Science/slope_hierarchy_scale && hpc/sync jobs
