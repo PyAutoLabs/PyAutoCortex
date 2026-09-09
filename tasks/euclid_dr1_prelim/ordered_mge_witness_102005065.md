@@ -2,7 +2,7 @@
 
 Project: euclid_dr1_prelim
 Summary: Does ordering the MGE bases fix labelling on one tile
-State: submitted
+State: running
 Gates: PyAutoFit#1586,PyAutoGalaxy#611,euclid_strong_lens_modeling_pipeline#58
 Witness: Two independent unseeded vis_lp runs of the ordered model (mge_model_from order_bases=True, ell_comps_limit=0.5; pipeline#58) on tile 102005065, each in its own PYAUTO_OUTPUT_DIR, give set-A and set-B ell_comps that agree run-to-run to within 0.05 per component with no A<->B swap; log evidence within 1.0 of the unordered phase-4 vis_lp run of this tile (342301_0); per-set ell_comps marginal widths narrower than the unordered run's (the two-mode mixture collapses); wall time per run reported against 342301_0's 5:35 for the speed comparison.
 Budget: 8:00
