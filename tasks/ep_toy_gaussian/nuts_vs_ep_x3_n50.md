@@ -2,11 +2,11 @@
 
 Project: ep_toy_gaussian
 Summary: Do three EP fits agree with NUTS at N=50
-State: ready
+State: submitted
 Gates:
 Witness: over one 50-dataset draw (seed 42), NUTS is healthy and every one of 3 EP repeats on identical data recovers the NUTS parent mean and sigma within the pre-registered thresholds in `## Witness`, committed as `results/n50_seed42/{summary.json, comparison.md}`
 Budget: 24:00
-Runs:
+Runs: 342639, 342640
 Ruling:
 Review-minutes: 20
 Epic: graphical-ep
@@ -100,6 +100,9 @@ Deliverable: `results/n50_seed42/summary.json` (the witness file) + `comparison.
 - PyAutoFit#1405 — the collapse basin, still open pending the moment-matching cure
 
 ## Runs
+
+- 342639: submitted — ral — submitted 2026-09-10 — wall 0:00 — one_by_one + BlackJAX NUTS, partition ral
+- 342640: submitted — ral — submitted 2026-09-10 — wall 0:00 — EP x3 on identical data, array 0-2
 
 ## Ruling
 
