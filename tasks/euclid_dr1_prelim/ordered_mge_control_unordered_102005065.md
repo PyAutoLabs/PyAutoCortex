@@ -2,12 +2,12 @@
 
 Project: euclid_dr1_prelim
 Summary: Is the ordered run's 8-nat gain ordering or library drift
-State: running
+State: accepted
 Gates:
 Witness: One unseeded vis_lp run of tile 102005065 with order_bases=False on today's stack (PyAutoFit 84512bffa, PyAutoGalaxy 99cf7429), own output root output_ordered_witness/control_unordered: if its log evidence lands within 1.0 of the unordered phase-4 baseline 9492.74 with the wide two-mode per-set ell_comps marginals, the ordered runs' log Z 9501.04 and narrow marginals are the ordering's doing; if it lands within 1.0 of 9501.04, the gain is library drift and the ordering's contribution is the collapsed marginals only; mass ell_comps_1 (-0.010 baseline vs -0.127 ordered) reported either way.
 Budget: 8:00
 Runs: 342377
-Ruling:
+Ruling: R-20260910-02
 Review-minutes: 10
 Epic:
 Filed: 2026-09-08
@@ -49,8 +49,9 @@ One unseeded vis_lp run of tile 102005065 with order_bases=False on today's stac
 
 ## Runs
 
-- 342377_0: submitted — ral — submitted 2026-09-08 — wall 0:00 — unordered control on today's stack; own output root output_ordered_witness/control_unordered
+- 342377_0: done — ral — submitted 2026-09-08 — wall 1:18 — unordered control on today's stack; own output root output_ordered_witness/control_unordered; finished vis_lp clean, log Z 9501.12 — within 0.08 of the ordered runs, so the 8-nat gain over the phase-4 baseline is library drift
+    pulled_to: /mnt/c/Users/Jammy/Science/euclid_dr1_prelim/output_ordered_witness/control_unordered
 
 ## Ruling
 
-(none)
+R-20260910-02 — accept

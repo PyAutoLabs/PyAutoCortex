@@ -11,7 +11,7 @@ Every science task the Cortex is holding, on one page: one line each under the p
 | Where | Count |
 |-------|------:|
 | [Awaiting ruling](#awaiting-ruling) | 0 |
-| [Recent rulings](#recent-rulings) | 33 |
+| [Recent rulings](#recent-rulings) | 36 |
 
 <details><summary>📋 check in since last time</summary>
 
@@ -29,7 +29,7 @@ One row per active project — the next thing, what it is holding, and when it l
 
 | Project | Next task | Awaiting | Running | Last ruling |
 |---|---|---:|---:|---|
-| euclid_dr1_prelim | Is the ordered run's 8-nat gain ordering or library drift | 0 | 4 | - |
+| euclid_dr1_prelim | Do ordered Nautilus reruns reproduce the euclid catalogue values? | 0 | 1 | 2026-09-10 |
 | ic50_workspace | Does EP match the graphical joint fit end to end | 0 | 1 | - |
 | slope_hierarchy_scale | Does hierarchical slope recovery hold at N=25 to 50 | 0 | 1 | - |
 | subhalo_validation | Does rectangular_adapt false-detect a subhalo on the clumpy source | 0 | 5 | 2026-09-07 |
@@ -110,36 +110,12 @@ One row per active project — the next thing, what it is holding, and when it l
 
 **RAL** `/mnt/ral/jnightin/euclid_dr1_prelim`
 
-active · both partition · tasks: running 2 · submitted 2
+active · both partition · tasks: accepted 3 · running 1
 
-<details><summary>📋 <a href="tasks/euclid_dr1_prelim/ordered_mge_control_unordered_102005065.md">Is the ordered run's 8-nat gain ordering or library drift</a> — <b>running</b> — runs 342377_0 · wall 0:00 of 8:00 (0%)</summary>
-
-```
-Report where the runs of the PyAutoCortex task tasks/euclid_dr1_prelim/ordered_mge_control_unordered_102005065.md (342377_0) stand.
-```
-
-</details>
-
-<details><summary>📋 <a href="tasks/euclid_dr1_prelim/ordered_mge_witness_102005065.md">Does ordering the MGE bases fix labelling on one tile</a> — <b>running</b> — runs 342375_[0-1] · wall 0:00 of 8:00 (0%)</summary>
+<details><summary>📋 <a href="tasks/euclid_dr1_prelim/ordered_rerun_catalogue_parity.md">Do ordered Nautilus reruns reproduce the euclid catalogue values?</a> — <b>running</b> — runs 342398_[0-9] · wall 13:12 of 36:00 (37%)</summary>
 
 ```
-Report where the runs of the PyAutoCortex task tasks/euclid_dr1_prelim/ordered_mge_witness_102005065.md (342375_[0-1]) stand.
-```
-
-</details>
-
-<details><summary>📋 <a href="tasks/euclid_dr1_prelim/dr1_prelim_10_lens_science_run.md">Ten real DR1 lenses fitted from the pipeline repo alone</a> — <b>submitted</b> — runs 342301_[0-9], 342314_3 · wall 0:00 of 48:00 (0%)</summary>
-
-```
-Report where the runs of the PyAutoCortex task tasks/euclid_dr1_prelim/dr1_prelim_10_lens_science_run.md (342301_[0-9], 342314_3) stand.
-```
-
-</details>
-
-<details><summary>📋 <a href="tasks/euclid_dr1_prelim/ordered_rerun_catalogue_parity.md">Do ordered Nautilus reruns reproduce the euclid catalogue values?</a> — <b>submitted</b> — runs 342398 · wall 0:00 of 36:00 (0%)</summary>
-
-```
-Report where the runs of the PyAutoCortex task tasks/euclid_dr1_prelim/ordered_rerun_catalogue_parity.md (342398) stand.
+Report where the runs of the PyAutoCortex task tasks/euclid_dr1_prelim/ordered_rerun_catalogue_parity.md (342398_[0-9]) stand.
 ```
 
 </details>
@@ -244,6 +220,9 @@ cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync jobs
 
 | Ruling | Verb | Task | Batch |
 |---|---|---|---|
+| [R-20260910-03](rulings/2026/09/R-20260910-03.md) | accept | tasks/euclid_dr1_prelim/dr1_prelim_10_lens_science_run.md | - |
+| [R-20260910-02](rulings/2026/09/R-20260910-02.md) | accept | tasks/euclid_dr1_prelim/ordered_mge_control_unordered_102005065.md | - |
+| [R-20260910-01](rulings/2026/09/R-20260910-01.md) | accept | tasks/euclid_dr1_prelim/ordered_mge_witness_102005065.md | - |
 | [R-20260907-06](rulings/2026/09/R-20260907-06.md) | drop | tasks/inference_programme/legacy_point_output_sweep.md | - |
 | [R-20260907-05](rulings/2026/09/R-20260907-05.md) | drop | tasks/inference_programme/cluster_extended_source_inference.md | - |
 | [R-20260907-04](rulings/2026/09/R-20260907-04.md) | drop | tasks/inference_programme/likelihood_term_levers.md | - |
@@ -253,9 +232,6 @@ cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync jobs
 | [R-20260904-05](rulings/2026/09/R-20260904-05.md) | drop | tasks/inference_programme/multiband_compile_census_completion.md | - |
 | [R-20260904-04](rulings/2026/09/R-20260904-04.md) | drop | tasks/inference_programme/mass_pix_gradient_cost_probe.md | - |
 | [R-20260904-03](rulings/2026/09/R-20260904-03.md) | drop | tasks/inference_programme/cluster_gradient_search_benchmark.md | - |
-| [R-20260904-02](rulings/2026/09/R-20260904-02.md) | drop | tasks/inference_programme/phase5_mesh_gradient_positions_on.md | - |
-| [R-20260904-01](rulings/2026/09/R-20260904-01.md) | accept | tasks/inference_programme/refs_v1_positions_on_completion.md | - |
-| [R-20260902-10](rulings/2026/09/R-20260902-10.md) | accept | tasks/inference_programme/phase4_positions_gate_b2_reuse.md | 2026-09-02-pm |
 
 ---
 
