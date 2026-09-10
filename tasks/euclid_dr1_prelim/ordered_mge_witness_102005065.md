@@ -2,12 +2,12 @@
 
 Project: euclid_dr1_prelim
 Summary: Does ordering the MGE bases fix labelling on one tile
-State: running
+State: accepted
 Gates: PyAutoFit#1586,PyAutoGalaxy#611,euclid_strong_lens_modeling_pipeline#58
 Witness: Two independent unseeded vis_lp runs of the ordered model (mge_model_from order_bases=True, ell_comps_limit=0.5; pipeline#58) on tile 102005065, each in its own PYAUTO_OUTPUT_DIR, give set-A and set-B ell_comps that agree run-to-run to within 0.05 per component with no A<->B swap; log evidence within 1.0 of the unordered phase-4 vis_lp run of this tile (342301_0); per-set ell_comps marginal widths narrower than the unordered run's (the two-mode mixture collapses); wall time per run reported against 342301_0's 5:35 for the speed comparison.
 Budget: 8:00
 Runs: 342375
-Ruling:
+Ruling: R-20260910-01
 Review-minutes: 10
 Epic:
 Filed: 2026-09-08
@@ -47,8 +47,9 @@ Two independent unseeded vis_lp runs of the ordered model (mge_model_from order_
 
 ## Runs
 
-- 342375_[0-1]: submitted — ral — submitted 2026-09-08 — wall 0:00 — two independent unseeded runs, own output roots output_ordered_witness/run_0,1; RAL PyAutoFit 84512bffa, PyAutoGalaxy 99cf7429, science clone 152d086
+- 342375_[0-1]: done — ral — submitted 2026-09-08 — wall 0:46 — two independent unseeded runs, own output roots output_ordered_witness/run_0,1; RAL PyAutoFit 84512bffa, PyAutoGalaxy 99cf7429, science clone 152d086; both finished vis_lp clean, log Z 9501.04 in each, walls 0:45 and 0:46
+    pulled_to: /mnt/c/Users/Jammy/Science/euclid_dr1_prelim/output_ordered_witness
 
 ## Ruling
 
-(none)
+R-20260910-01 — accept
