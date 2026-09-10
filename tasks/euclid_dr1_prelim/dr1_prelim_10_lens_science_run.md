@@ -2,12 +2,12 @@
 
 Project: euclid_dr1_prelim
 Summary: Ten real DR1 lenses fitted from the pipeline repo alone
-State: submitted
+State: accepted
 Gates: euclid_strong_lens_modeling_pipeline#48, euclid_strong_lens_modeling_pipeline#49
 Witness: 10 lenses fitted end to end on RAL from the pipeline repo alone, with a complete catalogue folder (latents present) whose numerics match the 20260623 reference within the tolerance stated before the run
 Budget: 48:00
 Runs: 342301, 342314
-Ruling:
+Ruling: R-20260910-03
 Review-minutes: 25
 Epic: euclid-dr1-prep
 Filed: 2026-08-28
@@ -112,9 +112,13 @@ The catalogue product set is the reference tile's: `lens_mass.csv`, `lens_sersic
 
 ## Runs
 
-- 342301_[0-9]: submitted — ral — submitted 2026-09-07 — wall 0:00 — vis_lp (JAX on CPU) then vis_pix (numba+pool) in one two-stage chain, 10 lenses, two-stage CPU route from the pipeline repo alone; sort key and dataset list in ## Notes
-- 342314_3: submitted — ral — submitted 2026-09-07 — wall 0:00 — task 3 (Tile102007903RA0668831429074DECNEG0648901814905) resubmitted under the ell_comps fix — PyAutoFit f6a991504 (#1568) + pipeline d78468b (#53); 342301_3 failed 03:52 on ell_comps magnitude 1.009 at the first quick update; the other nine 342301 tasks continue under the pre-fix code (RAL PyAutoFit was cdda28b5f; PyAutoArray e36a5af4 / PyAutoGalaxy 6d216c15 / PyAutoLens 146a3d725 / PyAutoNerves fc9c474 left untouched)
+- 342301_[0,2,4-6,9]: done — ral — submitted 2026-09-07 — wall 6:54 — six of the ten tiles finished both stages (vis_lp JAX on CPU then vis_pix numba+pool) under the pre-fix code; walls 5:35, 6:54, 4:52, 6:50, 5:12, 5:23; sort key and dataset list in ## Notes
+    pulled_to: /mnt/c/Users/Jammy/Science/euclid_dr1_prelim/output_v1/dr1_prelim_grade_ab
+- 342301_[1,7-8]: failed — ral — submitted 2026-09-07 — wall 1:59 — vis_lp finished, then the vis_pix stage aborted with "Run the light-profile stage first": the vis_lp result identifier changed when PyAutoFit was pulled on RAL mid-run; walls 1:39, 1:59, 1:56
+- 342301_3: failed — ral — submitted 2026-09-07 — wall 0:02 — died at the first quick update on a source MGE ell_comps magnitude 1.009 (ModelParameterException), see ## Notes; resubmitted alone as 342314_3
+- 342314_3: done — ral — submitted 2026-09-07 — wall 7:28 — task 3 (Tile102007903RA0668831429074DECNEG0648901814905) resubmitted under the ell_comps fix — PyAutoFit f6a991504 (#1568) + pipeline d78468b (#53); both stages finished (the other nine 342301 tasks ran on under the pre-fix code: RAL PyAutoFit was cdda28b5f; PyAutoArray e36a5af4 / PyAutoGalaxy 6d216c15 / PyAutoLens 146a3d725 / PyAutoNerves fc9c474 left untouched)
+    pulled_to: /mnt/c/Users/Jammy/Science/euclid_dr1_prelim/output_v1/dr1_prelim_grade_ab
 
 ## Ruling
 
-(none)
+R-20260910-03 — accept
