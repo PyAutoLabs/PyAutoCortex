@@ -2,12 +2,12 @@
 
 Project: analytic_gaussian
 Summary: Do graphical and EP recover closed-form means and errors
-State: awaiting-ruling
+State: accepted
 Gates:
 Witness: over >= 200 independent dataset draws at N=5, the a/b error distributions and the empirical [q05, q95] coverage per column meet the pre-registered thresholds in the `## Witness` section below, committed as `results/ens_n5/{summary.json, parity_ensemble.md}`
 Budget: 2:00
 Runs: 342413
-Ruling:
+Ruling: R-20260910-04
 Review-minutes: 20
 Epic: graphical-ep
 Filed: 2026-09-09
@@ -102,4 +102,4 @@ baseline.
 
 ## Ruling
 
-(none)
+R-20260910-04 — accept
