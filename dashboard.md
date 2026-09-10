@@ -30,6 +30,7 @@ One row per active project — the next thing, what it is holding, and when it l
 | Project | Next task | Awaiting | Running | Last ruling |
 |---|---|---:|---:|---|
 | analytic_gaussian | Is criterion 2's mu threshold or the minimal-EP control wrong | 0 | 0 | 2026-09-10 |
+| autolens_inference | - | 0 | 0 | - |
 | ep_toy_gaussian | Do three EP fits agree with NUTS at N=50 | 0 | 1 | - |
 | euclid_dr1_prelim | Do ordered Nautilus reruns reproduce the euclid catalogue values? | 1 | 0 | 2026-09-10 |
 | ic50_workspace | Does EP match the graphical joint fit end to end | 0 | 1 | - |
@@ -130,6 +131,16 @@ Finish: write today's journal entry, rewrite wiki/project/state.md, and return (
 </details>
 
 [tasks/analytic_gaussian/](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/tasks/analytic_gaussian/)
+
+### autolens_inference
+
+**Local** `/home/jammy/Code/PyAutoLabs/autolens_inference`
+
+**RAL** `/mnt/ral/jnightin/autolens_inference`
+
+active · both partition · tasks: none
+
+_Nothing open — every task of this project is history._
 
 ### ep_toy_gaussian
 
