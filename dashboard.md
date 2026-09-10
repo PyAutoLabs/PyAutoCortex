@@ -29,6 +29,7 @@ One row per active project — the next thing, what it is holding, and when it l
 
 | Project | Next task | Awaiting | Running | Last ruling |
 |---|---|---:|---:|---|
+| analytic_gaussian | Do graphical and EP recover closed-form means and errors | 0 | 1 | - |
 | euclid_dr1_prelim | Do ordered Nautilus reruns reproduce the euclid catalogue values? | 0 | 1 | 2026-09-10 |
 | ic50_workspace | Does EP match the graphical joint fit end to end | 0 | 1 | - |
 | slope_hierarchy_scale | Does hierarchical slope recovery hold at N=25 to 50 | 0 | 1 | - |
@@ -103,6 +104,24 @@ One row per active project — the next thing, what it is holding, and when it l
 ## Projects
 
 [markdown version](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects.yaml)
+
+### analytic_gaussian
+
+**Local** `/mnt/c/Users/Jammy/Science/analytic_gaussian`
+
+**RAL** `/mnt/ral/jnightin/analytic_gaussian`
+
+active · ral partition · tasks: submitted 1
+
+<details><summary>📋 <a href="tasks/analytic_gaussian/ensemble_parity.md">Do graphical and EP recover closed-form means and errors</a> — <b>submitted</b> — runs 342413_[0-199] · wall 0:00 of 2:00 (0%)</summary>
+
+```
+cd /mnt/c/Users/Jammy/Science/analytic_gaussian && hpc/sync jobs
+```
+
+</details>
+
+[tasks/analytic_gaussian/](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/tasks/analytic_gaussian/)
 
 ### euclid_dr1_prelim
 
