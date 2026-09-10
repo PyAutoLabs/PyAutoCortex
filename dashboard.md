@@ -10,18 +10,18 @@ Every science task the Cortex is holding, on one page: one line each under the p
 
 | Where | Count |
 |-------|------:|
-| [Awaiting ruling](#awaiting-ruling) | 0 |
+| [Awaiting ruling](#awaiting-ruling) | 1 |
 | [Recent rulings](#recent-rulings) | 36 |
 
 <details><summary>📋 check in since last time</summary>
 
 ```
-/cortex — check in on every active science project since the last check-in (2026-09-10T13:51Z): pull each project through its sync CLI, score every live run against its pre-registered witness, move what came back, re-render and push the board, then read me the by-project summary with the prompt each task needs next.
+/cortex — check in on every active science project since the last check-in (2026-09-10T16:00Z): pull each project through its sync CLI, score every live run against its pre-registered witness, move what came back, re-render and push the board, then read me the by-project summary with the prompt each task needs next.
 ```
 
 </details>
 
-### Last check-in: 2026-09-10T13:51Z
+### Last check-in: 2026-09-10T16:00Z
 
 ## Summary
 
@@ -29,7 +29,7 @@ One row per active project — the next thing, what it is holding, and when it l
 
 | Project | Next task | Awaiting | Running | Last ruling |
 |---|---|---:|---:|---|
-| analytic_gaussian | Do graphical and EP recover closed-form means and errors | 0 | 1 | - |
+| analytic_gaussian | Do graphical and EP recover closed-form means and errors | 1 | 0 | - |
 | euclid_dr1_prelim | Do ordered Nautilus reruns reproduce the euclid catalogue values? | 0 | 1 | 2026-09-10 |
 | ic50_workspace | Does EP match the graphical joint fit end to end | 0 | 1 | - |
 | slope_hierarchy_scale | Does hierarchical slope recovery hold at N=25 to 50 | 0 | 1 | - |
@@ -111,12 +111,50 @@ One row per active project — the next thing, what it is holding, and when it l
 
 **RAL** `/mnt/ral/jnightin/analytic_gaussian`
 
-active · ral partition · tasks: submitted 1
+active · ral partition · tasks: awaiting-ruling 1
 
-<details><summary>📋 <a href="tasks/analytic_gaussian/ensemble_parity.md">Do graphical and EP recover closed-form means and errors</a> — <b>submitted</b> — runs 342413_[0-199] · wall 0:00 of 2:00 (0%)</summary>
+<details><summary>📋 <a href="tasks/analytic_gaussian/ensemble_parity.md">Do graphical and EP recover closed-form means and errors</a> — <b>awaiting-ruling</b></summary>
 
 ```
-cd /mnt/c/Users/Jammy/Science/analytic_gaussian && hpc/sync jobs
+Review the PyAutoCortex task tasks/analytic_gaussian/ensemble_parity.md and help me rule on it: read its `## Witness` and the pulled evidence under its `## Where to look`, score the witness, then draft the ruling body for my approval and run `python3 scripts/cortex.py rule tasks/analytic_gaussian/ensemble_parity.md <accept|rerun|drop|leave-to-finish> --body <file>`.
+```
+
+</details>
+
+<details><summary>📋 ↳ the results are good — accept and open the next task</summary>
+
+```
+The results for the PyAutoCortex task tasks/analytic_gaussian/ensemble_parity.md are good. Read its `## Witness` and the evidence under its `## Where to look`, draft the accept body for my approval, then file it and open the next task:
+python3 scripts/cortex.py rule tasks/analytic_gaussian/ensemble_parity.md accept --body <file>
+python3 scripts/cortex.py new analytic_gaussian <slug> --summary "<the question it asks, ten words at most>" --epic graphical-ep
+python3 scripts/cortex.py move tasks/analytic_gaussian/<slug>.md ready
+cd /mnt/c/Users/Jammy/Science/analytic_gaussian && hpc/sync submit <script>
+
+Work brief — analytic_gaussian / ensemble_parity. Delegate this to an execution-tier subagent; never work it in the Cortex chat.
+cd /mnt/c/Users/Jammy/Science/analytic_gaussian && source activate.sh
+Enter through the assistant `autofit_assistant`: resolve it as $AUTOFIT_ASSISTANT, else <workspace root>/autofit_assistant; read its AGENTS.md first and follow its constitution.
+Then read wiki/project/state.md, the newest wiki/project/YYYY-MM-DD-*.md, and the skills the task names.
+Then the task tasks/analytic_gaussian/ensemble_parity.md — its ## Witness is the contract.
+Finish: write today's journal entry, rewrite wiki/project/state.md, and return (1) the outcome against the witness and (2) assistant drift — any skill or wiki page that was wrong, missing or stale.
+```
+
+</details>
+
+<details><summary>📋 ↳ run it again</summary>
+
+```
+The PyAutoCortex task tasks/analytic_gaussian/ensemble_parity.md needs running again. Draft the rerun body — what came back, and what changes — for my approval, then file it and relaunch:
+python3 scripts/cortex.py rule tasks/analytic_gaussian/ensemble_parity.md rerun --body <file>
+python3 scripts/cortex.py move tasks/analytic_gaussian/ensemble_parity.md ready
+cd /mnt/c/Users/Jammy/Science/analytic_gaussian && hpc/sync submit <script>
+python3 scripts/cortex.py move tasks/analytic_gaussian/ensemble_parity.md submitted --run <jobid>   # one run per call; --after <run> chains the next
+
+Work brief — analytic_gaussian / ensemble_parity. Delegate this to an execution-tier subagent; never work it in the Cortex chat.
+cd /mnt/c/Users/Jammy/Science/analytic_gaussian && source activate.sh
+Enter through the assistant `autofit_assistant`: resolve it as $AUTOFIT_ASSISTANT, else <workspace root>/autofit_assistant; read its AGENTS.md first and follow its constitution.
+Then read wiki/project/state.md, the newest wiki/project/YYYY-MM-DD-*.md, and the skills the task names.
+Then the task tasks/analytic_gaussian/ensemble_parity.md — its ## Witness is the contract.
+Finish: write today's journal entry, rewrite wiki/project/state.md, and return (1) the outcome against the witness and (2) assistant drift — any skill or wiki page that was wrong, missing or stale.
 ```
 
 </details>
@@ -231,7 +269,51 @@ cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync jobs
 
 [markdown version](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/tasks/) — Results are in and nothing is running — the human's verdict is the only thing outstanding. Ordered failures first, then the tasks a ruling is required for, then the clean ones.
 
-- _(nothing awaiting a ruling)_
+<details><summary>📋 <a href="tasks/analytic_gaussian/ensemble_parity.md">Do graphical and EP recover closed-form means and errors</a> — <b>awaiting-ruling</b></summary>
+
+```
+Review the PyAutoCortex task tasks/analytic_gaussian/ensemble_parity.md and help me rule on it: read its `## Witness` and the pulled evidence under its `## Where to look`, score the witness, then draft the ruling body for my approval and run `python3 scripts/cortex.py rule tasks/analytic_gaussian/ensemble_parity.md <accept|rerun|drop|leave-to-finish> --body <file>`.
+```
+
+</details>
+
+<details><summary>📋 ↳ the results are good — accept and open the next task</summary>
+
+```
+The results for the PyAutoCortex task tasks/analytic_gaussian/ensemble_parity.md are good. Read its `## Witness` and the evidence under its `## Where to look`, draft the accept body for my approval, then file it and open the next task:
+python3 scripts/cortex.py rule tasks/analytic_gaussian/ensemble_parity.md accept --body <file>
+python3 scripts/cortex.py new analytic_gaussian <slug> --summary "<the question it asks, ten words at most>" --epic graphical-ep
+python3 scripts/cortex.py move tasks/analytic_gaussian/<slug>.md ready
+cd /mnt/c/Users/Jammy/Science/analytic_gaussian && hpc/sync submit <script>
+
+Work brief — analytic_gaussian / ensemble_parity. Delegate this to an execution-tier subagent; never work it in the Cortex chat.
+cd /mnt/c/Users/Jammy/Science/analytic_gaussian && source activate.sh
+Enter through the assistant `autofit_assistant`: resolve it as $AUTOFIT_ASSISTANT, else <workspace root>/autofit_assistant; read its AGENTS.md first and follow its constitution.
+Then read wiki/project/state.md, the newest wiki/project/YYYY-MM-DD-*.md, and the skills the task names.
+Then the task tasks/analytic_gaussian/ensemble_parity.md — its ## Witness is the contract.
+Finish: write today's journal entry, rewrite wiki/project/state.md, and return (1) the outcome against the witness and (2) assistant drift — any skill or wiki page that was wrong, missing or stale.
+```
+
+</details>
+
+<details><summary>📋 ↳ run it again</summary>
+
+```
+The PyAutoCortex task tasks/analytic_gaussian/ensemble_parity.md needs running again. Draft the rerun body — what came back, and what changes — for my approval, then file it and relaunch:
+python3 scripts/cortex.py rule tasks/analytic_gaussian/ensemble_parity.md rerun --body <file>
+python3 scripts/cortex.py move tasks/analytic_gaussian/ensemble_parity.md ready
+cd /mnt/c/Users/Jammy/Science/analytic_gaussian && hpc/sync submit <script>
+python3 scripts/cortex.py move tasks/analytic_gaussian/ensemble_parity.md submitted --run <jobid>   # one run per call; --after <run> chains the next
+
+Work brief — analytic_gaussian / ensemble_parity. Delegate this to an execution-tier subagent; never work it in the Cortex chat.
+cd /mnt/c/Users/Jammy/Science/analytic_gaussian && source activate.sh
+Enter through the assistant `autofit_assistant`: resolve it as $AUTOFIT_ASSISTANT, else <workspace root>/autofit_assistant; read its AGENTS.md first and follow its constitution.
+Then read wiki/project/state.md, the newest wiki/project/YYYY-MM-DD-*.md, and the skills the task names.
+Then the task tasks/analytic_gaussian/ensemble_parity.md — its ## Witness is the contract.
+Finish: write today's journal entry, rewrite wiki/project/state.md, and return (1) the outcome against the witness and (2) assistant drift — any skill or wiki page that was wrong, missing or stale.
+```
+
+</details>
 
 ## Recent rulings
 

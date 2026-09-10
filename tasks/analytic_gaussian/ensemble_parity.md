@@ -2,7 +2,7 @@
 
 Project: analytic_gaussian
 Summary: Do graphical and EP recover closed-form means and errors
-State: submitted
+State: awaiting-ruling
 Gates:
 Witness: over >= 200 independent dataset draws at N=5, the a/b error distributions and the empirical [q05, q95] coverage per column meet the pre-registered thresholds in the `## Witness` section below, committed as `results/ens_n5/{summary.json, parity_ensemble.md}`
 Budget: 2:00
@@ -96,7 +96,8 @@ baseline.
 
 ## Runs
 
-- 342413_[0-199]: submitted — ral — submitted 2026-09-09 — wall 0:00 — the N=5 seed ensemble, 200 seeds, 50 concurrent, `hpc/batch_cpu/submit_ensemble_n5`, sample `ens_n5`. RAL PyAuto mirror verified at PyAutoFit `66f9f8d5d` before submission, which **contains** `08207bad0` (#1580) — unlike phase 3's EP arm, this wave carries the full D1–D6 wave plus the review bundle
+- 342413_[0-199]: done — ral — submitted 2026-09-09 — wall 0:05 — the N=5 seed ensemble, 200 seeds, 50 concurrent, `hpc/batch_cpu/submit_ensemble_n5`, sample `ens_n5`. RAL PyAuto mirror verified at PyAutoFit `66f9f8d5d` before submission, which **contains** `08207bad0` (#1580) — unlike phase 3's EP arm, this wave carries the full D1–D6 wave plus the review bundle; sacct 200/200 COMPLETED exit 0:0, per-seed wall 63–303 s; pulled + aggregated 2026-09-10 → analytic_gaussian b44390d (WITNESS NOT MET: 7 met / 4 miss)
+    pulled_to: /mnt/c/Users/Jammy/Science/analytic_gaussian/hpc/batch_cpu/output
 
 
 ## Ruling
