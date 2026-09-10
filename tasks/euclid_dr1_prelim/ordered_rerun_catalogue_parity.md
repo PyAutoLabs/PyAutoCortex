@@ -2,7 +2,7 @@
 
 Project: euclid_dr1_prelim
 Summary: Do ordered Nautilus reruns reproduce the euclid catalogue values?
-State: running
+State: awaiting-ruling
 Gates: euclid_strong_lens_modeling_pipeline#60
 Witness: The same ten dr1_prelim tiles are refitted on RAL with af.Nautilus through the two-stage vis_lp (n_live=750) / vis_pix (n_live=300) submit, from a science clone that has merged pipeline main so order_bases=True, hpc_mode on, quick updates off and samples.csv off are all in force, after output/ has been archived to output_v1 on both the laptop and RAL so the fresh runs write into a clean output/; all ten tiles complete, including the three that failed in 342301 (tasks 1, 7, 8); the Sersic and multi-wavelength follow-ups then run into output_sed; a catalogue built from output/ and output_sed reproduces the original euclid reference catalogue/catalogue/dr1_prelim_grade_ab_catalogue_csvs_20260623/ for those ten tiles, with tile identity and astrometry exact, effective Einstein radius and per-band magnitudes within combined 3 sigma, and MGE ell_comps agreeing up to a set swap; the same build then completes on RAL as it did for the original euclid project; and the fresh output/ holds no unzipped sibling directories and no samples.csv, coming in under 40% of the 130 MB zip payload the 2026-09-07 runs produced.
 Budget: 36:00

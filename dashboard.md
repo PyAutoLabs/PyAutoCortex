@@ -10,18 +10,18 @@ Every science task the Cortex is holding, on one page: one line each under the p
 
 | Where | Count |
 |-------|------:|
-| [Awaiting ruling](#awaiting-ruling) | 0 |
+| [Awaiting ruling](#awaiting-ruling) | 1 |
 | [Recent rulings](#recent-rulings) | 37 |
 
 <details><summary>📋 check in since last time</summary>
 
 ```
-/cortex — check in on every active science project since the last check-in (2026-09-10T16:00Z): pull each project through its sync CLI, score every live run against its pre-registered witness, move what came back, re-render and push the board, then read me the by-project summary with the prompt each task needs next.
+/cortex — check in on every active science project since the last check-in (2026-09-10T19:41Z): pull each project through its sync CLI, score every live run against its pre-registered witness, move what came back, re-render and push the board, then read me the by-project summary with the prompt each task needs next.
 ```
 
 </details>
 
-### Last check-in: 2026-09-10T16:00Z
+### Last check-in: 2026-09-10T19:41Z
 
 ## Summary
 
@@ -30,7 +30,7 @@ One row per active project — the next thing, what it is holding, and when it l
 | Project | Next task | Awaiting | Running | Last ruling |
 |---|---|---:|---:|---|
 | analytic_gaussian | Is criterion 2's mu threshold or the minimal-EP control wrong | 0 | 0 | 2026-09-10 |
-| euclid_dr1_prelim | Do ordered Nautilus reruns reproduce the euclid catalogue values? | 0 | 1 | 2026-09-10 |
+| euclid_dr1_prelim | Do ordered Nautilus reruns reproduce the euclid catalogue values? | 1 | 0 | 2026-09-10 |
 | ic50_workspace | Does EP match the graphical joint fit end to end | 0 | 1 | - |
 | slope_hierarchy_scale | Does hierarchical slope recovery hold at N=25 to 50 | 0 | 1 | - |
 | subhalo_validation | Does rectangular_adapt false-detect a subhalo on the clumpy source | 0 | 5 | 2026-09-07 |
@@ -136,12 +136,50 @@ Finish: write today's journal entry, rewrite wiki/project/state.md, and return (
 
 **RAL** `/mnt/ral/jnightin/euclid_dr1_prelim`
 
-active · both partition · tasks: accepted 3 · running 1
+active · both partition · tasks: accepted 3 · awaiting-ruling 1
 
-<details><summary>📋 <a href="tasks/euclid_dr1_prelim/ordered_rerun_catalogue_parity.md">Do ordered Nautilus reruns reproduce the euclid catalogue values?</a> — <b>running</b> — runs 342398_[0-9] · wall 13:12 of 36:00 (37%)</summary>
+<details><summary>📋 <a href="tasks/euclid_dr1_prelim/ordered_rerun_catalogue_parity.md">Do ordered Nautilus reruns reproduce the euclid catalogue values?</a> — <b>awaiting-ruling</b></summary>
 
 ```
-Report where the runs of the PyAutoCortex task tasks/euclid_dr1_prelim/ordered_rerun_catalogue_parity.md (342398_[0-9]) stand.
+Review the PyAutoCortex task tasks/euclid_dr1_prelim/ordered_rerun_catalogue_parity.md and help me rule on it: read its `## Witness` and the pulled evidence under its `## Where to look`, score the witness, then draft the ruling body for my approval and run `python3 scripts/cortex.py rule tasks/euclid_dr1_prelim/ordered_rerun_catalogue_parity.md <accept|rerun|drop|leave-to-finish> --body <file>`.
+```
+
+</details>
+
+<details><summary>📋 ↳ the results are good — accept and open the next task</summary>
+
+```
+The results for the PyAutoCortex task tasks/euclid_dr1_prelim/ordered_rerun_catalogue_parity.md are good. Read its `## Witness` and the evidence under its `## Where to look`, draft the accept body for my approval, then file it and open the next task:
+python3 scripts/cortex.py rule tasks/euclid_dr1_prelim/ordered_rerun_catalogue_parity.md accept --body <file>
+python3 scripts/cortex.py new euclid_dr1_prelim <slug> --summary "<the question it asks, ten words at most>"
+python3 scripts/cortex.py move tasks/euclid_dr1_prelim/<slug>.md ready
+# project euclid_dr1_prelim: no `submit` verb in projects.yaml — submit by hand
+
+Work brief — euclid_dr1_prelim / ordered_rerun_catalogue_parity. Delegate this to an execution-tier subagent; never work it in the Cortex chat.
+cd /mnt/c/Users/Jammy/Science/euclid_dr1_prelim && source activate.sh
+Enter through the assistant `autolens_assistant`: resolve it as $AUTOLENS_ASSISTANT, else <workspace root>/autolens_assistant; read its AGENTS.md first and follow its constitution.
+Then read wiki/project/state.md, the newest wiki/project/YYYY-MM-DD-*.md, and the skills the task names.
+Then the task tasks/euclid_dr1_prelim/ordered_rerun_catalogue_parity.md — its ## Witness is the contract.
+Finish: write today's journal entry, rewrite wiki/project/state.md, and return (1) the outcome against the witness and (2) assistant drift — any skill or wiki page that was wrong, missing or stale.
+```
+
+</details>
+
+<details><summary>📋 ↳ run it again</summary>
+
+```
+The PyAutoCortex task tasks/euclid_dr1_prelim/ordered_rerun_catalogue_parity.md needs running again. Draft the rerun body — what came back, and what changes — for my approval, then file it and relaunch:
+python3 scripts/cortex.py rule tasks/euclid_dr1_prelim/ordered_rerun_catalogue_parity.md rerun --body <file>
+python3 scripts/cortex.py move tasks/euclid_dr1_prelim/ordered_rerun_catalogue_parity.md ready
+# project euclid_dr1_prelim: no `submit` verb in projects.yaml — submit by hand
+python3 scripts/cortex.py move tasks/euclid_dr1_prelim/ordered_rerun_catalogue_parity.md submitted --run <jobid>   # one run per call; --after <run> chains the next
+
+Work brief — euclid_dr1_prelim / ordered_rerun_catalogue_parity. Delegate this to an execution-tier subagent; never work it in the Cortex chat.
+cd /mnt/c/Users/Jammy/Science/euclid_dr1_prelim && source activate.sh
+Enter through the assistant `autolens_assistant`: resolve it as $AUTOLENS_ASSISTANT, else <workspace root>/autolens_assistant; read its AGENTS.md first and follow its constitution.
+Then read wiki/project/state.md, the newest wiki/project/YYYY-MM-DD-*.md, and the skills the task names.
+Then the task tasks/euclid_dr1_prelim/ordered_rerun_catalogue_parity.md — its ## Witness is the contract.
+Finish: write today's journal entry, rewrite wiki/project/state.md, and return (1) the outcome against the witness and (2) assistant drift — any skill or wiki page that was wrong, missing or stale.
 ```
 
 </details>
@@ -238,7 +276,51 @@ cd /mnt/c/Users/Jammy/Science/subhalo_validation && hpc/sync jobs
 
 [markdown version](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/tasks/) — Results are in and nothing is running — the human's verdict is the only thing outstanding. Ordered failures first, then the tasks a ruling is required for, then the clean ones.
 
-- _(nothing awaiting a ruling)_
+<details><summary>📋 <a href="tasks/euclid_dr1_prelim/ordered_rerun_catalogue_parity.md">Do ordered Nautilus reruns reproduce the euclid catalogue values?</a> — <b>awaiting-ruling</b></summary>
+
+```
+Review the PyAutoCortex task tasks/euclid_dr1_prelim/ordered_rerun_catalogue_parity.md and help me rule on it: read its `## Witness` and the pulled evidence under its `## Where to look`, score the witness, then draft the ruling body for my approval and run `python3 scripts/cortex.py rule tasks/euclid_dr1_prelim/ordered_rerun_catalogue_parity.md <accept|rerun|drop|leave-to-finish> --body <file>`.
+```
+
+</details>
+
+<details><summary>📋 ↳ the results are good — accept and open the next task</summary>
+
+```
+The results for the PyAutoCortex task tasks/euclid_dr1_prelim/ordered_rerun_catalogue_parity.md are good. Read its `## Witness` and the evidence under its `## Where to look`, draft the accept body for my approval, then file it and open the next task:
+python3 scripts/cortex.py rule tasks/euclid_dr1_prelim/ordered_rerun_catalogue_parity.md accept --body <file>
+python3 scripts/cortex.py new euclid_dr1_prelim <slug> --summary "<the question it asks, ten words at most>"
+python3 scripts/cortex.py move tasks/euclid_dr1_prelim/<slug>.md ready
+# project euclid_dr1_prelim: no `submit` verb in projects.yaml — submit by hand
+
+Work brief — euclid_dr1_prelim / ordered_rerun_catalogue_parity. Delegate this to an execution-tier subagent; never work it in the Cortex chat.
+cd /mnt/c/Users/Jammy/Science/euclid_dr1_prelim && source activate.sh
+Enter through the assistant `autolens_assistant`: resolve it as $AUTOLENS_ASSISTANT, else <workspace root>/autolens_assistant; read its AGENTS.md first and follow its constitution.
+Then read wiki/project/state.md, the newest wiki/project/YYYY-MM-DD-*.md, and the skills the task names.
+Then the task tasks/euclid_dr1_prelim/ordered_rerun_catalogue_parity.md — its ## Witness is the contract.
+Finish: write today's journal entry, rewrite wiki/project/state.md, and return (1) the outcome against the witness and (2) assistant drift — any skill or wiki page that was wrong, missing or stale.
+```
+
+</details>
+
+<details><summary>📋 ↳ run it again</summary>
+
+```
+The PyAutoCortex task tasks/euclid_dr1_prelim/ordered_rerun_catalogue_parity.md needs running again. Draft the rerun body — what came back, and what changes — for my approval, then file it and relaunch:
+python3 scripts/cortex.py rule tasks/euclid_dr1_prelim/ordered_rerun_catalogue_parity.md rerun --body <file>
+python3 scripts/cortex.py move tasks/euclid_dr1_prelim/ordered_rerun_catalogue_parity.md ready
+# project euclid_dr1_prelim: no `submit` verb in projects.yaml — submit by hand
+python3 scripts/cortex.py move tasks/euclid_dr1_prelim/ordered_rerun_catalogue_parity.md submitted --run <jobid>   # one run per call; --after <run> chains the next
+
+Work brief — euclid_dr1_prelim / ordered_rerun_catalogue_parity. Delegate this to an execution-tier subagent; never work it in the Cortex chat.
+cd /mnt/c/Users/Jammy/Science/euclid_dr1_prelim && source activate.sh
+Enter through the assistant `autolens_assistant`: resolve it as $AUTOLENS_ASSISTANT, else <workspace root>/autolens_assistant; read its AGENTS.md first and follow its constitution.
+Then read wiki/project/state.md, the newest wiki/project/YYYY-MM-DD-*.md, and the skills the task names.
+Then the task tasks/euclid_dr1_prelim/ordered_rerun_catalogue_parity.md — its ## Witness is the contract.
+Finish: write today's journal entry, rewrite wiki/project/state.md, and return (1) the outcome against the witness and (2) assistant drift — any skill or wiki page that was wrong, missing or stale.
+```
+
+</details>
 
 ## Recent rulings
 
