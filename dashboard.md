@@ -30,6 +30,7 @@ One row per active project — the next thing, what it is holding, and when it l
 | Project | Next task | Awaiting | Running | Last ruling |
 |---|---|---:|---:|---|
 | analytic_gaussian | Is criterion 2's mu threshold or the minimal-EP control wrong | 0 | 0 | 2026-09-10 |
+| ep_toy_gaussian | Do three EP fits agree with NUTS at N=50 | 0 | 0 | - |
 | euclid_dr1_prelim | Do ordered Nautilus reruns reproduce the euclid catalogue values? | 1 | 0 | 2026-09-10 |
 | ic50_workspace | Does EP match the graphical joint fit end to end | 0 | 1 | - |
 | slope_hierarchy_scale | Does hierarchical slope recovery hold at N=25 to 50 | 0 | 1 | - |
@@ -129,6 +130,26 @@ Finish: write today's journal entry, rewrite wiki/project/state.md, and return (
 </details>
 
 [tasks/analytic_gaussian/](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/tasks/analytic_gaussian/)
+
+### ep_toy_gaussian
+
+**Local** `/mnt/c/Users/Jammy/Science/ep_toy_gaussian`
+
+**RAL** `/mnt/ral/jnightin/ep_toy_gaussian`
+
+active · ral partition · tasks: ready 1
+
+<details><summary>📋 <a href="tasks/ep_toy_gaussian/nuts_vs_ep_x3_n50.md">Do three EP fits agree with NUTS at N=50</a> — <b>ready</b></summary>
+
+```
+tasks/ep_toy_gaussian/nuts_vs_ep_x3_n50.md
+cd /mnt/c/Users/Jammy/Science/ep_toy_gaussian && hpc/sync submit <script>
+python3 scripts/cortex.py move tasks/ep_toy_gaussian/nuts_vs_ep_x3_n50.md submitted --run <jobid>
+```
+
+</details>
+
+[tasks/ep_toy_gaussian/](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/tasks/ep_toy_gaussian/)
 
 ### euclid_dr1_prelim
 
