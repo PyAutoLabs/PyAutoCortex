@@ -232,3 +232,17 @@ ic50_workspace:
   partition: ral
   status: active
   note: "personal remote, recorded as a fact — not a PyAutoLabs repo; activated 2026-09-09 for graphical-ep phase 4, ral_root created and first runs submitted; NOTES.md predates the graphical/HPC work and needs a refresh"
+
+autolens_inference:
+  remote: PyAutoLabs/autolens_inference
+  local_path: /home/jammy/Code/PyAutoLabs/autolens_inference
+  ral_root: /mnt/ral/jnightin/autolens_inference
+  mirror: none
+  sync_cli: hpc/sync
+  sync_verbs: [pull, logs, status, submit, jobs, sacct, cancel, tail, du, check]
+  ledger: wiki/project/state.md
+  assistant: autolens_assistant
+  witness_file: results/**/*.json
+  partition: both
+  status: active
+  note: "born 2026-09-10 as the from-scratch restart of inference_programme (retired PyAutoCortex#22); nothing inherited; phase 1 = birth (PyAutoMind#399), first task slam_hst_base"
