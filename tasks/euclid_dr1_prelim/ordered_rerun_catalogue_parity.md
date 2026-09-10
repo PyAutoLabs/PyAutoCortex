@@ -6,7 +6,7 @@ State: awaiting-ruling
 Gates: euclid_strong_lens_modeling_pipeline#60
 Witness: The same ten dr1_prelim tiles are refitted on RAL with af.Nautilus through the two-stage vis_lp (n_live=750) / vis_pix (n_live=300) submit, from a science clone that has merged pipeline main so order_bases=True, hpc_mode on, quick updates off and samples.csv off are all in force, after output/ has been archived to output_v1 on both the laptop and RAL so the fresh runs write into a clean output/; all ten tiles complete, including the three that failed in 342301 (tasks 1, 7, 8); the Sersic and multi-wavelength follow-ups then run into output_sed; a catalogue built from output/ and output_sed reproduces the original euclid reference catalogue/catalogue/dr1_prelim_grade_ab_catalogue_csvs_20260623/ for those ten tiles, with tile identity and astrometry exact, effective Einstein radius and per-band magnitudes within combined 3 sigma, and MGE ell_comps agreeing up to a set swap; the same build then completes on RAL as it did for the original euclid project; and the fresh output/ holds no unzipped sibling directories and no samples.csv, coming in under 40% of the 130 MB zip payload the 2026-09-07 runs produced.
 Budget: 36:00
-Runs: 342398
+Runs: 342398, 342629
 Ruling:
 Review-minutes: 25
 Epic:
@@ -126,11 +126,21 @@ Then:
   array 0-9, `output_sed`), with the RAL seed-copy sequence in the session report.
   Laptop bundle: `inspect/dr1_prelim_grade_ab_ordered_v2/` (stage 1 PNGs for all ten,
   5-row `lens_mass.csv`).
+- 2026-09-10 (evening) — **library and pipeline fixes shipped, confirmation rerun 342629 submitted.**
+  pipeline#65 fixed the `latent.<name>` prefix so `effective_einstein_radius` is no longer a silent
+  `None`; PyAutoFit#1598 corrected the 3σ / `max_lh` aggregate-CSV paths; PyAutoLens#734 +
+  PyAutoFit#1600 + pipeline#67 trace `LatentEuclid.variables` under the latent engine's `jax.jit` so
+  `vis_lp` writes latents (12 keys on 102005065). PyAutoFit#1602 found the aggregator sibling-dir
+  root cause: post-completion caches recreate `<hash>/` via `_files_path` mkdir plus a
+  `preserve_in_zip` loose copy — fixed, and aggregator output order is now path-sorted.
+  The 14-file laptop residue dirs were rsync-without-`--delete` mid-run pulls, not a library bug.
 
 ## Runs
 
 - 342398_[0-9]: done — ral — submitted 2026-09-09 — wall 13:12 — two-stage vis_lp(n_live=750)+vis_pix(n_live=300), array 0-9, ten dr1_prelim tiles; output/ archived to output_v1 on laptop and RAL; RAL libs refreshed BEFORE submit (PyAutoFit 66f9f8d5d, Array 35aa681f, Lens 7d1b04de8, Galaxy 99cf7429, Nerves 0e7163b) and must not be touched until it finishes - mid-run library drift is what broke 342301_1/_7/_8; pipeline main 93a389e (PR#61); all ten tiles finished both stages, .err files carry only the standard warnings
     pulled_to: /mnt/c/Users/Jammy/Science/euclid_dr1_prelim/output/dr1_prelim_grade_ab
+
+- 342629_[0-9]: running — ral — submitted 2026-09-10 — wall 0:00 — two-stage vis_lp(n_live=750)+vis_pix(n_live=300), array 0-9, ten dr1_prelim tiles; libraries refreshed BEFORE submit (PyAutoNerves 0e7163bc2, PyAutoFit e354dbb6b, PyAutoArray 667deed3a, PyAutoGalaxy 6640a7494, PyAutoLens 0da06de63) carrying PyAutoFit#1598/#1600/#1602 and PyAutoLens#734; pipeline main 2a8b4db (PR#65 + #67); 342398 output archived to output_v2_pre_refresh on laptop and RAL; purpose: confirmation rerun — vis_lp latents written (12 keys on 102005065), catalogue rebuild with 0 blank cells, same-library rerun scatter vs 342398 for the restated parity witness
 
 ## Ruling
 
