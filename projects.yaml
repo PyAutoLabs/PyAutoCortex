@@ -101,6 +101,20 @@ euclid_dr1_prelim:
   status: active
   note: "created by euclid-dr1-prep phase 4 (a Cortex task after migration); every path is the planned one; active 2026-09-07: phase 4 launched (jobs 342301_[0-9])"
 
+euclid_dr1:
+  remote: none
+  local_path: /mnt/c/Users/Jammy/Science/euclid_dr1
+  ral_root: /mnt/ral/jnightin/euclid_dr1
+  mirror: none
+  sync_cli: hpc/sync
+  sync_verbs: [push, pull, logs, sync, push-data-init, pull-full, status, submit, push-submit, jobs, sacct, cancel, wait-and-pull, tail, du, check, clear-logs]
+  ledger: wiki/project/state.md
+  assistant: autolens_assistant
+  witness_file: results/**/*.json
+  partition: ral
+  status: active
+  note: "born 2026-09-11: the actual DR1 run on the sep1 segmentation delivery (Segmentation.zip = 3 nested batch zips, 15032 tiles, every tile already in the pipeline dataset layout); born by cloning euclid_strong_lens_modeling_pipeline main with config/visualize colormap back to autoarray; first task reruns the ten euclid_dr1_prelim lenses on the new data; remote none until the human creates one"
+
 analytic_gaussian:
   remote: none
   local_path: /mnt/c/Users/Jammy/Science/analytic_gaussian
