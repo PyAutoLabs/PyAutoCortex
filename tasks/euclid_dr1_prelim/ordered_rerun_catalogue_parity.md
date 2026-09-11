@@ -134,6 +134,43 @@ Then:
   root cause: post-completion caches recreate `<hash>/` via `_files_path` mkdir plus a
   `preserve_in_zip` loose copy — fixed, and aggregator output order is now path-sorted.
   The 14-file laptop residue dirs were rsync-without-`--delete` mid-run pulls, not a library bug.
+- 2026-09-11 — **342629 scored on the eight tiles that finished; all four 09-10 defects
+  confirmed fixed; parity fails on rerun scatter, not ordering.** `sacct`: tasks 0,2,4,5,6,7,8,9
+  COMPLETED (walls 5:45–9:42, MaxRSS 7.6–10.9 GB); tasks 1 (`Tile102007299…`) and 3
+  (`Tile102007903…`) still RUNNING in **stage 1 `vis_lp`** at 15:52 of 36:00 — alive, not hung
+  (`checkpoint.hdf5` 72.5/76.9 MB written minutes ago; first checkpoint only at 7.6 h / 9.9 h in).
+  Those are two of the three positions-penalty-pinned tiles. Fixes verified: (1) every one of the
+  16 zips carries `.completed` and a **12-key** `files/latent/latent_summary.json` in *both*
+  stages, all finite, and no `search.log` says "latent function raised" or "no finite latent
+  samples" (PyAutoLens#734 + PyAutoFit#1600); (2) `lens_mass.csv` has **0 blank cells across all
+  42 columns** including the `effective_einstein_radius` family (pipeline#65); (3) **0 of 64**
+  (row, quantity) cells have 3σ exactly equal to 1σ, 62/64 strictly outside (PyAutoFit#1598);
+  (4) `output/` holds **0** sibling `<hash>/` directories beside a zip and **0** `samples.csv`,
+  the aggregator found 16/16 searches and the bundle has **8 rows** where 09-10 got 5 of 10
+  (PyAutoFit#1602). The #1602 fix was also re-run against the tree that broke it:
+  `output_v2_pre_refresh`, with its 15 residue dirs, now builds a **10-row, 0-blank**
+  `lens_mass.csv` while emitting 60 warnings "…has no `.completed` file but ….zip does; the zip
+  was used", and writing nothing into that tree (verified byte-identical). **Parity** (reports
+  under `inspect/`): vs `20260623`, tile identity 8/8 exact, coverage 100 %,
+  `effective_einstein_radius` 2/8 within combined 3σ (median z 4.94, max 27.3); vs **342398, the
+  same code on the same data**, 2/8 with median z **15.4**, max **41.9** — three times worse, so
+  the disagreement is Nautilus rerun scatter and the pre-registered "within combined 3σ" clause
+  **cannot be met by any pair of these runs and needs restating**. "Astrometry exact" is likewise
+  untestable today: `lens_mass.csv` has no astrometry column, and `magnitudes.csv` needs the SED
+  chain, which has never run. **MGE ordering is clean**: key `A.ell_comps_1 > B.ell_comps_1`
+  holds **8/8**, and the two lens-light bases agree with 342398 as a set **8/8** (7 same order,
+  1 swap on `Tile102008165…`, whose key separation 0.0130 sits below its marginal width 0.0389 —
+  the undetermined case the script documents). Note the comparator applies the basis-swap
+  symmetry to `lens_mass.csv`'s `ell_comps`, which are the `Isothermal` **mass** ellipticity, so
+  its `ell_comps` FAIL is a scatter row, not a labelling finding. **Disk**: 16 zips = **47.44 MB**
+  (tree 49 MB) against the `output_v1` baseline 130.05 MB / 17 zips / 503 MB — **2.97 MB per
+  search vs 7.65 = 38.8 %**, which clears the <40 % clause per search, while the eight-tile
+  payload projected to ten is ≈59 MB = **45.6 %**, which does not; the clause needs a reading.
+  New: latent 1σ **collapses** on some stages (the latent PDF is drawn from 100 samples, so both
+  1σ percentiles can land on one sample — `Tile102008532…` `vis_lp` is degenerate on 12 of 12).
+  `Tile102008475…` `vis_lp` is still pinned (log Z −5.07e6 → max source-plane separation ≈0.2507"
+  against `threshold` 0.2); its `vis_pix` is healthy. Science clone merged to pipeline main
+  (`a8529cb`, PR #68) and committed locally at `d481264`; nothing pushed, nothing submitted.
 
 ## Runs
 
