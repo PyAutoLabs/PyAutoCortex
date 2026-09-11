@@ -75,7 +75,9 @@ Then:
   8 CPU, 64 GB, 36 h, `--array=0-9`), `af.Nautilus` - `vis_lp` n_live=750 then
   `vis_pix` n_live=300 in a second interpreter. Results land in
   `output/dr1_prelim_grade_ab/<Tile>/initial_lens_model/{vis_lp,vis_pix}/`.
-- SED chain: `hpc/batch_gpu/submit_sersic_waveband`, which exports
+- SED chain: `hpc/batch_cpu/submit_sersic_waveband` (CPU default, partition ral,
+  8 CPU, 64 GB, 12 h, JAX pinned to the CPU backend; `hpc/batch_gpu/submit_sersic_waveband`
+  is the optional GPU route and is what 342648 ran), which exports
   `PYAUTO_OUTPUT_DIR=output_sed`; the per-band results are what
   `catalogue/scripts/multi_wavelength.py` and `magnitudes.py` read.
 - Catalogue: `scripts/build_inspection_bundle.sh`, locally first, then on RAL
