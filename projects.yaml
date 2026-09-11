@@ -115,6 +115,20 @@ euclid_dr1:
   status: active
   note: "born 2026-09-11: the actual DR1 run on the sep1 segmentation delivery (Segmentation.zip = 3 nested batch zips, 15032 tiles, every tile already in the pipeline dataset layout); born by cloning euclid_strong_lens_modeling_pipeline main with config/visualize colormap back to autoarray; first task reruns the ten euclid_dr1_prelim lenses on the new data; remote none until the human creates one"
 
+euclid_sersics:
+  remote: none
+  local_path: /mnt/c/Users/Jammy/Science/euclid_sersics
+  ral_root: /mnt/ral/jnightin/euclid_sersics
+  mirror: none
+  sync_cli: hpc/sync
+  sync_verbs: [push, pull, logs, sync, push-data-init, pull-full, status, submit, push-submit, jobs, sacct, cancel, wait-and-pull, tail, du, check, clear-logs]
+  ledger: wiki/project/state.md
+  assistant: autolens_assistant
+  witness_file: results/**/*.json
+  partition: ral
+  status: active
+  note: "born 2026-09-11: Sersic-index pile-up investigation — 100 unanimous-success lenses (euclid inspection) on the sep1 segmentation data; core two-stage CPU run first, then four sersic_lens_model variants (baseline / n∈[0.5,10] / central noise inflation / Sersic+point MGE) reuse its vis_lp; remote none until the human creates one"
+
 analytic_gaussian:
   remote: none
   local_path: /mnt/c/Users/Jammy/Science/analytic_gaussian
