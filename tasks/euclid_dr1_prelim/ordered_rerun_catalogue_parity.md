@@ -6,7 +6,7 @@ State: awaiting-ruling
 Gates: euclid_strong_lens_modeling_pipeline#60
 Witness: The same ten dr1_prelim tiles are refitted on RAL with af.Nautilus through the two-stage vis_lp (n_live=750) / vis_pix (n_live=300) submit, from a science clone that has merged pipeline main so order_bases=True, hpc_mode on, quick updates off and samples.csv off are all in force, after output/ has been archived to output_v1 on both the laptop and RAL so the fresh runs write into a clean output/; all ten tiles complete, including the three that failed in 342301 (tasks 1, 7, 8); the Sersic and multi-wavelength follow-ups then run into output_sed; a catalogue built from output/ and output_sed reproduces the original euclid reference catalogue/catalogue/dr1_prelim_grade_ab_catalogue_csvs_20260623/ for those ten tiles, with tile identity and astrometry exact, effective Einstein radius and per-band magnitudes within combined 3 sigma, and MGE ell_comps agreeing up to a set swap; the same build then completes on RAL as it did for the original euclid project; and the fresh output/ holds no unzipped sibling directories and no samples.csv, coming in under 40% of the 130 MB zip payload the 2026-09-07 runs produced.
 Budget: 36:00
-Runs: 342398, 342629
+Runs: 342398, 342629, 342648
 Ruling:
 Review-minutes: 25
 Epic:
@@ -178,6 +178,8 @@ Then:
     pulled_to: /mnt/c/Users/Jammy/Science/euclid_dr1_prelim/output/dr1_prelim_grade_ab
 
 - 342629_[0-9]: running — ral — submitted 2026-09-10 — wall 0:00 — two-stage vis_lp(n_live=750)+vis_pix(n_live=300), array 0-9, ten dr1_prelim tiles; libraries refreshed BEFORE submit (PyAutoNerves 0e7163bc2, PyAutoFit e354dbb6b, PyAutoArray 667deed3a, PyAutoGalaxy 6640a7494, PyAutoLens 0da06de63) carrying PyAutoFit#1598/#1600/#1602 and PyAutoLens#734; pipeline main 2a8b4db (PR#65 + #67); 342398 output archived to output_v2_pre_refresh on laptop and RAL; purpose: confirmation rerun — vis_lp latents written (12 keys on 102005065), catalogue rebuild with 0 blank cells, same-library rerun scatter vs 342398 for the restated parity witness
+
+- 342648_[0,2,4-9]: submitted — gpu — submitted 2026-09-11 — wall 0:00 — SED chain `hpc/batch_gpu/submit_sersic_waveband_8tiles` (a copy of `submit_sersic_waveband` differing only in `--array=0,2,4-9`, because `hpc/sync submit` passes no sbatch arguments), `PYAUTO_OUTPUT_DIR=output_sed`: Sersic lens model on VIS then every non-VIS waveband fit (nir_y/j/h on all eight tiles, plus decam_g/r/i/z on the seven non-102005065 tiles), for the eight tiles 342629 completed; tiles 1 and 3 omitted because 342629_1/_3 are still fitting `vis_lp` and have no result to seed from. `output_sed/<sample>/<tile>/initial_lens_model/vis_lp/<hash>.zip` seeded by `cp -p` from `output/` for all eight tiles before submit so the upstream stage short-circuits; `output/` untouched (16 zips before and after). No library refresh on RAL, no push. Purpose: produce `sersic_lens_model/{vis,<band>}` so `catalogue/scripts/magnitudes.py` and `multi_wavelength.py` can run and the per-band magnitudes can be compared against `dr1_prelim_grade_ab_catalogue_csvs_20260623`
 
 ## Ruling
 
