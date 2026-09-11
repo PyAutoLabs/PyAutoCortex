@@ -34,6 +34,7 @@ One row per active project — the next thing, what it is holding, and when it l
 | ep_toy_gaussian | Do three EP fits agree with NUTS at N=50 | 0 | 1 | - |
 | euclid_dr1 | Does the sep1 DR1 delivery reproduce the prelim ten lenses | 0 | 1 | - |
 | euclid_dr1_prelim | Do ordered Nautilus reruns reproduce the euclid catalogue values? | 1 | 0 | 2026-09-10 |
+| euclid_sersics | Core two-stage run of the 100 sersic lenses | 0 | 1 | - |
 | ic50_workspace | Does EP match the graphical joint fit end to end | 0 | 1 | - |
 | slope_hierarchy_scale | Does hierarchical slope recovery hold at N=25 to 50 | 0 | 1 | - |
 | subhalo_validation | Does rectangular_adapt false-detect a subhalo on the clumpy source | 0 | 5 | 2026-09-07 |
@@ -234,6 +235,24 @@ Finish: write today's journal entry, rewrite wiki/project/state.md, and return (
 </details>
 
 [tasks/euclid_dr1_prelim/](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/tasks/euclid_dr1_prelim/)
+
+### euclid_sersics
+
+**Local** `/mnt/c/Users/Jammy/Science/euclid_sersics`
+
+**RAL** `/mnt/ral/jnightin/euclid_sersics`
+
+active · ral partition · tasks: submitted 1
+
+<details><summary>📋 <a href="tasks/euclid_sersics/core_two_stage_100.md">Core two-stage run of the 100 sersic lenses</a> — <b>submitted</b> — runs 342696 · wall 0:00 of 36:00 (0%)</summary>
+
+```
+cd /mnt/c/Users/Jammy/Science/euclid_sersics && hpc/sync jobs
+```
+
+</details>
+
+[tasks/euclid_sersics/](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/tasks/euclid_sersics/)
 
 ### ic50_workspace
 
