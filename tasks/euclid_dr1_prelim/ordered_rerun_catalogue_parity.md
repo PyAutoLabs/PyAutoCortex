@@ -174,6 +174,15 @@ Then:
   against `threshold` 0.2); its `vis_pix` is healthy. Science clone merged to pipeline main
   (`a8529cb`, PR #68) and committed locally at `d481264`; nothing pushed, nothing submitted.
 
+- 2026-09-11 (wrap-up, 16:15 BST) — **CPU verification PASSED and was faster than the GPU.**
+  `342668_9` (ral, 8 CPU, JAX on the CPU backend) COMPLETED in **9:24** wall, exit 0, all
+  eight `sersic_lens_model/{vis,nir_y,nir_j,nir_h,decam_g,decam_r,decam_i,decam_z}` searches
+  written for `Tile102008848…`; the GPU tiles of `342648` took 13:34–20:56 each (`_0,_2,_4-7`
+  COMPLETED). The CPU route is the one the main experiment uses. Anomaly to read next: `342648_8`
+  (`Tile102008532…`, GPU) was still RUNNING at 1:36 — five times its siblings. `342629_1/_3`
+  still in `vis_lp` at 19:33. Next: pull, bundle with `output_sed`, magnitudes (µJy fluxes) vs
+  `dr1_prelim_grade_ab_catalogue_csvs_20260623`; then tiles 1/3 SED on the CPU script.
+
 ## Runs
 
 - 342398_[0-9]: done — ral — submitted 2026-09-09 — wall 13:12 — two-stage vis_lp(n_live=750)+vis_pix(n_live=300), array 0-9, ten dr1_prelim tiles; output/ archived to output_v1 on laptop and RAL; RAL libs refreshed BEFORE submit (PyAutoFit 66f9f8d5d, Array 35aa681f, Lens 7d1b04de8, Galaxy 99cf7429, Nerves 0e7163b) and must not be touched until it finishes - mid-run library drift is what broke 342301_1/_7/_8; pipeline main 93a389e (PR#61); all ten tiles finished both stages, .err files carry only the standard warnings
