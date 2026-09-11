@@ -32,7 +32,7 @@ One row per active project — the next thing, what it is holding, and when it l
 | analytic_gaussian | Is criterion 2's mu threshold or the minimal-EP control wrong | 0 | 0 | 2026-09-10 |
 | autolens_inference | - | 0 | 0 | - |
 | ep_toy_gaussian | Do three EP fits agree with NUTS at N=50 | 0 | 1 | - |
-| euclid_dr1 | Does the sep1 DR1 delivery reproduce the prelim ten lenses | 0 | 0 | - |
+| euclid_dr1 | Does the sep1 DR1 delivery reproduce the prelim ten lenses | 0 | 1 | - |
 | euclid_dr1_prelim | Do ordered Nautilus reruns reproduce the euclid catalogue values? | 1 | 0 | 2026-09-10 |
 | ic50_workspace | Does EP match the graphical joint fit end to end | 0 | 1 | - |
 | slope_hierarchy_scale | Does hierarchical slope recovery hold at N=25 to 50 | 0 | 1 | - |
@@ -167,14 +167,12 @@ cd /mnt/c/Users/Jammy/Science/ep_toy_gaussian && hpc/sync jobs
 
 **RAL** `/mnt/ral/jnightin/euclid_dr1`
 
-active · ral partition · tasks: ready 1
+active · ral partition · tasks: submitted 1
 
-<details><summary>📋 <a href="tasks/euclid_dr1/sep1_delivery_reproduces_prelim_ten.md">Does the sep1 DR1 delivery reproduce the prelim ten lenses</a> — <b>ready</b></summary>
+<details><summary>📋 <a href="tasks/euclid_dr1/sep1_delivery_reproduces_prelim_ten.md">Does the sep1 DR1 delivery reproduce the prelim ten lenses</a> — <b>submitted</b> — runs 342650 · wall 0:00 of 36:00 (0%)</summary>
 
 ```
-tasks/euclid_dr1/sep1_delivery_reproduces_prelim_ten.md
-cd /mnt/c/Users/Jammy/Science/euclid_dr1 && hpc/sync submit <script>
-python3 scripts/cortex.py move tasks/euclid_dr1/sep1_delivery_reproduces_prelim_ten.md submitted --run <jobid>
+cd /mnt/c/Users/Jammy/Science/euclid_dr1 && hpc/sync jobs
 ```
 
 </details>

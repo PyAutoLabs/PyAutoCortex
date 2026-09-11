@@ -2,11 +2,11 @@
 
 Project: euclid_dr1
 Summary: Does the sep1 DR1 delivery reproduce the prelim ten lenses
-State: ready
+State: submitted
 Gates:
 Witness: all 10 tiles finish both stages (vis_lp then vis_pix) on RAL from the euclid_dr1 clone on the sep1 delivery; a per-tile side-by-side sheet (new vis_pix fit PNG beside prelim run 342629's) shows the same lens configuration by eye on 10/10 tiles; effective Einstein radius per tile is tabulated against prelim 342629 and any tile differing by more than 10 % is named
 Budget: 36:00
-Runs:
+Runs: 342650
 Ruling:
 Review-minutes: 25
 Epic: euclid-dr1-prep
@@ -111,6 +111,8 @@ Products, committed in `euclid_dr1`:
   is by eye and not numerical.
 
 ## Runs
+
+- 342650: submitted — ral — submitted 2026-09-11 — wall 0:00
 
 ## Ruling
 
