@@ -30,7 +30,7 @@ One row per active project — the next thing, what it is holding, and when it l
 | Project | Next task | Awaiting | Running | Last ruling |
 |---|---|---:|---:|---|
 | analytic_gaussian | Is criterion 2's mu threshold or the minimal-EP control wrong | 0 | 0 | 2026-09-10 |
-| autolens_inference | - | 0 | 0 | - |
+| autolens_inference | Do six backend legs agree on the HST SLaM posterior? | 0 | 0 | - |
 | ep_toy_gaussian | Do three EP fits agree with NUTS at N=50 | 0 | 1 | - |
 | euclid_dr1_prelim | Do ordered Nautilus reruns reproduce the euclid catalogue values? | 1 | 0 | 2026-09-10 |
 | ic50_workspace | Does EP match the graphical joint fit end to end | 0 | 1 | - |
@@ -138,9 +138,19 @@ Finish: write today's journal entry, rewrite wiki/project/state.md, and return (
 
 **RAL** `/mnt/ral/jnightin/autolens_inference`
 
-active · both partition · tasks: none
+active · both partition · tasks: ready 1
 
-_Nothing open — every task of this project is history._
+<details><summary>📋 <a href="tasks/autolens_inference/slam_hst_base.md">Do six backend legs agree on the HST SLaM posterior?</a> — <b>ready</b></summary>
+
+```
+tasks/autolens_inference/slam_hst_base.md
+cd /home/jammy/Code/PyAutoLabs/autolens_inference && hpc/sync submit <script>
+python3 scripts/cortex.py move tasks/autolens_inference/slam_hst_base.md submitted --run <jobid>
+```
+
+</details>
+
+[tasks/autolens_inference/](https://github.com/PyAutoLabs/PyAutoCortex/tree/main/tasks/autolens_inference/) · [issues](https://github.com/PyAutoLabs/autolens_inference/issues)
 
 ### ep_toy_gaussian
 
