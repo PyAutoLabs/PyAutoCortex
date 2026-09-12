@@ -15,7 +15,7 @@ name: Pages Dashboard
 # `dashboard.md` (one census, two pages) and kept fresh by the same self-heal in
 # `dashboard_refresh.yml`; this workflow only publishes it.
 # Only the uploaded files reach Pages — nothing else in the repo, and in
-# particular not `tasks/`, `rulings/` or `projects.yaml`, whose absolute laptop
+# particular not `projects/` or `projects.yaml`, whose absolute laptop
 # paths are not for a public site.
 
 on:

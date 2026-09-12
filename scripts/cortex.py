@@ -1,24 +1,36 @@
 #!/usr/bin/env python3
-"""cortex.py — the Cortex's lifecycle script: check · gates · rule · move · new · retire.
+"""cortex.py — the Cortex's lifecycle script over one ledger per project.
 
-The run-and-ruling registry (project → task → runs → rulings) is a tree of
-markdown files with light headers, and this script is the one thing that
-writes their state and the one thing that checks it. Every rule it enforces is
-written down in REFERENCE.md; the transition table there is `move`'s and the
-chain rules are `rule`'s. Nothing here is not in that file.
+The Cortex is a **history of how each science project unfolds**, not a queue
+of work to finish. Every project in `projects.yaml` that is doing anything has
+one file, `projects/<key>.md`, holding three things and nothing else:
+
+    ## Now    — two or three lines, rewritten: what is running and what the
+                human meant to do next. The "pick up where I left off" line.
+    ## Runs   — the jobs on the cluster right now, `open` or `running`. A run
+                that has finished leaves this list and becomes a log entry.
+    ## Log    — dated entries, newest first: a run set off, a result the human
+                noted, a lesson they stated, a thought. Nothing here is ever
+                "done"; it only gets older. The board shows the last five.
+
+Nothing in a ledger is inferred from results. A run's submission, start and
+end are cluster facts and this script records them; a `result` or `lesson`
+entry is the human's own words, written on their ask.
 
 PyYAML for `projects.yaml` and otherwise stdlib only, `main(argv)`, no
-import-time side effects, `--root` on every verb
-(default: the repo this script lives in), so every leg runs against a
-`tmp_path` copy of the fixture in tests. The date is injectable (`--today`)
-for the same reason.
+import-time side effects, `--root` on every verb (default: the repo this
+script lives in), so every leg runs against a `tmp_path` copy of the fixture
+in tests. The date is injectable (`--today`) for the same reason.
 
 Usage:
-    python3 scripts/cortex.py check                      # OK or DRIFT (exit 1)
-    python3 scripts/cortex.py gates                       # gated tasks and their refs
-    python3 scripts/cortex.py rule <task> <verb> --body <file> [...]
-    python3 scripts/cortex.py move <task> <state> [...]
-    python3 scripts/cortex.py new <project> <slug> --summary "<≤10 words>" [...]
+    python3 scripts/cortex.py check                                 # OK or DRIFT (exit 1)
+    python3 scripts/cortex.py new <project> --summary "<one line>" [--issue Repo#N]
+    python3 scripts/cortex.py run <project> <jobid> "<what it is>" [--partition P]
+    python3 scripts/cortex.py running <project> <jobid>
+    python3 scripts/cortex.py done <project> <jobid> [--failed] [--wall H:MM] [--note "..."]
+    python3 scripts/cortex.py log <project> "<text>" [--kind note|result|lesson]
+    python3 scripts/cortex.py now <project> "<text>"
+    python3 scripts/cortex.py issue <project> [-n 5]               # the issue-top block
     python3 scripts/cortex.py retire <project> --why "<one line>"   # a project's row
 
 Exit codes: 0 = done · 1 = drift or a refused edit · 2 = bad arguments.
@@ -29,7 +41,7 @@ from __future__ import annotations
 import argparse
 import re
 import sys
-from datetime import date, datetime, timezone
+from datetime import date
 from pathlib import Path
 
 import yaml
@@ -39,118 +51,66 @@ ROOT = Path(__file__).resolve().parents[1]
 # --------------------------------------------------------------------------- #
 # vocabulary (REFERENCE.md)
 # --------------------------------------------------------------------------- #
-TASK_STATES = (
-    "planned", "gated", "ready", "submitted", "running", "pulled",
-    "awaiting-ruling", "accepted", "rerun", "dropped",
-)
-TERMINAL_STATES = {"dropped"}
-NON_TERMINAL_STATES = set(TASK_STATES) - TERMINAL_STATES
-#: `submitted..accepted` (and `rerun`) — the states that need a `Witness:`.
-WITNESS_STATES = {"submitted", "running", "pulled", "awaiting-ruling",
-                  "accepted", "rerun"}
-#: reachable only through `rule`, so they need a `Ruling:`.
-RULED_STATES = {"accepted", "rerun", "dropped"}
-
-RUN_STATES = ("submitted", "running", "done", "failed", "timeout", "void",
-              "legacy", "legacy_wrong")
-LIVE_RUN_STATES = {"submitted", "running"}
-LEGACY_RUN_STATES = {"legacy", "legacy_wrong"}
-RESET_RUN_STATES = {"failed", "timeout", "void"}
-
-#: What `new` writes into `## Where to look` before a task has an output
-#: path. It is honest on a `planned` task and a hole on any other, because
-#: the section is now rendered as the "which folder do I open" answer on the
-#: dashboard's `## By project` view and in `pyauto-brain cortex checkin`.
-WHERE_PLACEHOLDER = "(the output path, once there is one)"
-#: The one state that may still be carrying the placeholder.
-WHERE_EXEMPT_STATES = {"planned"}
-
-RULING_VERBS = ("accept", "rerun", "drop", "leave-to-finish")
-#: the head verb ↔ task state agreement `check` enforces.
-VERB_STATES = {
-    "accept": {"accepted"},
-    "drop": {"dropped"},
-    "rerun": {"rerun", "ready", "submitted", "running", "pulled", "awaiting-ruling"},
-    "leave-to-finish": NON_TERMINAL_STATES,
-}
-#: `rule` writes the task into this state (None = unchanged).
-VERB_TARGET = {"accept": "accepted", "rerun": "rerun", "drop": "dropped",
-               "leave-to-finish": None}
-
-# Canonical header key order — `new` writes it and the edit helpers insert a
-# missing key at its slot so a hand-edited file keeps reading the same.
-TASK_KEYS = (
-    "Project", "Summary", "State", "Gates", "Reset", "Witness", "Budget",
-    "Runs", "Ruling", "Review-minutes", "Epic", "Filed", "Migrated-from",
-)
-#: `Summary:` is the board's line: the QUESTION the task answers, in at most
-#: ten words. It is required on every task file and `check` enforces both.
-SUMMARY_MAX_WORDS = 10
-#: Header keys that were retired, and what to say instead of the generic
-#: `unknown header key`. `Phase:` died on 2026-09-07: science is unordered
-#: ideas, the slug is the identity, the number carried nothing.
-DEAD_KEYS = {
-    "Phase": "Phase: is a retired header — a task is identified by its slug, "
-             "not a number (delete the line; `Task:` on a ruling names the path)",
-}
-#: `Batch:` is optional-historical — the 2026-08/09 rulings cite the batch
-#: record they were filed from; nothing writes new ones (the slot apparatus
-#: was retired 2026-09-03).
-RULING_KEYS = (
-    "Project", "Task", "Runs", "Ruling", "Supersedes", "Batch", "Reviewed-at",
-    "Review-minutes-actual", "Follow-ups", "Migrated-from",
-)
-TASK_SECTIONS = ("Question", "Witness", "Where to look", "Runs", "Ruling")
-RULING_SECTIONS = ("Ruling", "Evidence")
+LEDGER_DIR = "projects"
+SECTIONS = ("Now", "Runs", "Log")
+HEADER_KEYS = ("Project", "Issue")
+#: what an entry is: a run set off or finished (recorded by this script), a
+#: result the human read off, a lesson they want kept, or anything else.
+KINDS = ("run", "result", "lesson", "note")
+#: a run on the cluster is `open` (submitted, not seen running) or `running`;
+#: there is no third state — a finished run is a log entry, not a run line.
+RUN_STATES = ("open", "running")
+#: how many words a project's one-line summary (the title tail) may hold.
+SUMMARY_MAX_WORDS = 15
+#: the board's window on the log.
+LOG_WINDOW = 5
 
 PROJECT_FIELDS = ("remote", "local_path", "ral_root", "mirror", "sync_cli",
                   "sync_verbs", "ledger", "assistant", "witness_file", "partition",
                   "status")
-#: the one optional field — free text about the row (why a remote is `none`,
-#: what a verb does). A row may omit it; an empty `note:` is still drift, and
-#: any field outside these two tuples is still an error.
 PROJECT_OPTIONAL_FIELDS = ("note",)
 PARTITIONS = ("gpu", "ral", "both")
 PROJECT_STATUSES = ("active", "dormant", "planned", "retired")
 
 # --------------------------------------------------------------------------- #
-# grammars (REFERENCE.md)
+# grammars
 # --------------------------------------------------------------------------- #
-# Copied verbatim from PyAutoMind/scripts/lifecycle.py: the lookbehind is what
-# rejects `owner/Repo#N` — another owner is spelled as a URL.
-GATE_REF_RE = re.compile(
-    r"https://github\.com/([\w.-]+)/([\w.-]+)/(?:issues|pull)/(\d+)"
-    r"|(?<![\w/])([A-Za-z_][\w.]*)#(\d+)\b"
-)
-DEFAULT_GATE_OWNER = "PyAutoLabs"
-
-RUN_LINE_RE = re.compile(
-    r"^- (?P<stem>\d+)"
-    r"(?:_(?P<task>\d+)|_\[(?P<tasks>\d+(?:-\d+)?(?:,\d+(?:-\d+)?)*)\])?"
-    r": (?P<state>submitted|running|done|failed|timeout|void|legacy|legacy_wrong)"
-    r" — (?P<partition>[a-z][a-z0-9_-]*)"
-    r" — submitted (?P<date>\d{4}-\d{2}-\d{2})"
-    r" — wall (?P<wall>\d+:\d{2})"
-    r"(?: — (?P<note>.+))?$"
-)
-RUN_CONT_RE = re.compile(
-    r"^    (?P<key>pulled_to|after|resumes|where|ruled): (?P<value>\S.*)$"
-)
-RUN_IDENT_RE = re.compile(r"^\d+(?:_\d+|_\[\d+(?:-\d+)?(?:,\d+(?:-\d+)?)*\])?$")
-PARTITION_RE = re.compile(r"^[a-z][a-z0-9_-]*$")
-
-RULING_ID_RE = re.compile(r"^R-(\d{4})(\d{2})(\d{2})-(\d{2})$")
-RULING_FILE_RE = re.compile(r"^rulings/(\d{4})/(\d{2})/(R-\d{8}-\d{2})\.md$")
-TASK_FILE_RE = re.compile(r"^tasks/([a-z][a-z0-9_]*)/([^/]+)\.md$")
 PROJECT_KEY_RE = re.compile(r"^[a-z][a-z0-9_]*$")
-SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9_-]*$")
+LEDGER_FILE_RE = re.compile(r"^projects/([a-z][a-z0-9_]*)\.md$")
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 WALL_RE = re.compile(r"^\d+:\d{2}$")
-INT_RE = re.compile(r"^\d+$")
-
-#: a light-header line: `Key: value` or a bare `Key:` (empty, or a list follows).
+RUN_IDENT_RE = re.compile(r"^\d+(?:_\d+|_\[\d+(?:-\d+)?(?:,\d+(?:-\d+)?)*\])?$")
+PARTITION_RE = re.compile(r"^[a-z][a-z0-9_-]*$")
+#: `Repo#N` (owner PyAutoLabs), an issue URL, or `none` — the same grammar the
+#: Mind uses for a GitHub ref.
+ISSUE_RE = re.compile(
+    r"^(?:none|(?<![\w/])[A-Za-z0-9_.-]+#\d+|"
+    r"https://github\.com/[\w.-]+/[\w.-]+/issues/\d+)$")
+DEFAULT_ISSUE_OWNER = "PyAutoLabs"
+RUN_LINE_RE = re.compile(
+    r"^- (?P<ident>\d+(?:_\d+|_\[[\d,\-]+\])?) — (?P<state>open|running) — "
+    r"(?P<partition>[a-z][a-z0-9_-]*) — (?P<date>\d{4}-\d{2}-\d{2}) — (?P<what>\S.*)$")
+LOG_LINE_RE = re.compile(
+    r"^- (?P<date>\d{4}-\d{2}-\d{2}) — (?P<kind>run|result|lesson|note) — (?P<text>\S.*)$")
+CONT_RE = re.compile(r"^  (?P<text>\S.*)$")
 HEADER_KEY_RE = re.compile(r"^([A-Z][A-Za-z0-9-]*):(?:[ \t]+(.*?))?[ \t]*$")
-HEADER_LINES = 30
+HEADER_LINES = 12
+
+TEMPLATE = """# {key} — {summary}
+
+Project: {key}
+Issue: {issue}
+
+## Now
+
+{now}
+
+## Runs
+
+## Log
+
+- {today} — note — ledger opened
+"""
 
 
 class CortexError(Exception):
@@ -166,11 +126,6 @@ def _dash(line: str) -> str:
 # the light header
 # --------------------------------------------------------------------------- #
 def header_span(lines: "list[str]") -> "tuple[int, int]":
-    """(start, end) line indexes of the header block, end exclusive.
-
-    The block starts at the first `Key:` line after the title (within the
-    first 30 lines) and ends at the next blank line; (1, 1) when there is
-    none."""
     start = None
     for i in range(1, min(len(lines), HEADER_LINES)):
         if HEADER_KEY_RE.match(lines[i]):
@@ -185,65 +140,15 @@ def header_span(lines: "list[str]") -> "tuple[int, int]":
 
 
 def parse_header(text: str) -> "tuple[str | None, dict[str, str]]":
-    """(title, fields) — first occurrence of a key wins; a bare `Key:` followed
-    by `- item` lines is a list, joined with commas."""
     lines = text.split("\n")
     title = lines[0][2:].strip() if lines and lines[0].startswith("# ") else None
     fields: "dict[str, str]" = {}
     start, end = header_span(lines)
-    last_key = None
     for line in lines[start:end]:
         m = HEADER_KEY_RE.match(line)
-        if m:
-            key, value = m.group(1), (m.group(2) or "").strip()
-            if key not in fields:
-                fields[key] = value
-                last_key = key
-            else:
-                last_key = None
-            continue
-        if line.startswith("- ") and last_key is not None:
-            item = line[2:].strip()
-            fields[last_key] = f"{fields[last_key]}, {item}" if fields[last_key] else item
+        if m and m.group(1) not in fields:
+            fields[m.group(1)] = (m.group(2) or "").strip()
     return title, fields
-
-
-def edit_header(text: str, updates: "dict[str, str | None]", order=TASK_KEYS) -> str:
-    """Return `text` with header keys set (value) or removed (None), in place.
-
-    Every other byte is preserved: a present key has only its value replaced;
-    a missing key is inserted at its canonical slot; the block, the body and
-    the line endings are untouched."""
-    lines = text.split("\n")
-    start, end = header_span(lines)
-    if start == end and any(v is not None for v in updates.values()):
-        # No header block yet: open one after the title line.
-        insert_at = 1
-        if len(lines) > 1 and lines[1].strip():
-            lines.insert(1, "")
-        lines.insert(insert_at + 1, "")
-        start = end = insert_at + 1
-    for key, value in updates.items():
-        idx = next((i for i in range(start, end) if HEADER_KEY_RE.match(lines[i])
-                    and HEADER_KEY_RE.match(lines[i]).group(1) == key), None)
-        if value is None:
-            if idx is not None:
-                del lines[idx]
-                end -= 1
-            continue
-        line = f"{key}: {value}" if value else f"{key}:"
-        if idx is not None:
-            lines[idx] = line
-            continue
-        rank = {k: i for i, k in enumerate(order)}
-        after = start - 1
-        for i in range(start, end):
-            m = HEADER_KEY_RE.match(lines[i])
-            if m and rank.get(m.group(1), -1) < rank.get(key, len(order)):
-                after = i
-        lines.insert(after + 1, line)
-        end += 1
-    return "\n".join(lines)
 
 
 def sections(text: str) -> "dict[str, tuple[int, int]]":
@@ -257,43 +162,29 @@ def sections(text: str) -> "dict[str, tuple[int, int]]":
     return out
 
 
-def append_to_section(text: str, name: str, new_lines: "list[str]",
-                      replace_placeholder: "str | None" = None) -> str:
-    """Append lines at the end of `## name` (before the next heading),
-    keeping one blank line between the content and the next heading."""
+def _section_lines(text: str, name: str) -> "list[str]":
+    span = sections(text).get(name)
+    if span is None:
+        return []
+    return text.split("\n")[span[0]:span[1]]
+
+
+def _replace_section(text: str, name: str, body: "list[str]") -> str:
+    """Return `text` with the body of `## name` replaced by `body` (one blank
+    line either side; every other byte preserved)."""
     lines = text.split("\n")
     span = sections(text).get(name)
     if span is None:
-        raise CortexError(f"no `## {name}` section to write into")
-    body_start, stop = span
-    # last content line of the section
-    last = stop - 1
-    while last >= body_start and not lines[last].strip():
-        last -= 1
-    if replace_placeholder is not None and last >= body_start \
-            and lines[last].strip() == replace_placeholder \
-            and all(not ln.strip() for ln in lines[body_start:last]):
-        lines[last:last + 1] = new_lines
-        return "\n".join(lines)
-    if last < body_start:
-        # An empty section: replace whatever blank lines it held with
-        # `blank, content, blank` so the next heading keeps its gap.
-        lines[body_start:stop] = [""] + new_lines + [""]
-        return "\n".join(lines)
-    lines[last + 1:last + 1] = new_lines
-    return "\n".join(lines)
+        raise CortexError(f"no `## {name}` section")
+    start, stop = span
+    new = [""] + body + [""]
+    return "\n".join(lines[:start] + new + lines[stop:])
 
 
 # --------------------------------------------------------------------------- #
-# projects.yaml — PyYAML plus the field validation
+# projects.yaml
 # --------------------------------------------------------------------------- #
 def parse_projects(text: str) -> "tuple[dict[str, dict], list[str]]":
-    """Parse projects.yaml into {key: {field: value}} and validate the fields.
-
-    The document itself is PyYAML's job (`yaml.safe_load`); this validates the
-    shape the Cortex depends on — a mapping of project key → field mapping,
-    the required and optional field names, and each field's value. An empty or
-    comment-only file parses to an empty map."""
     problems: "list[str]" = []
     try:
         doc = yaml.safe_load(text)
@@ -319,7 +210,6 @@ def parse_projects(text: str) -> "tuple[dict[str, dict], list[str]]":
 
 
 def _project_row(key: str, row: dict, problems: "list[str]") -> dict:
-    """One validated row: unknown/missing fields and bad values are problems."""
     out: "dict[str, object]" = {}
     for field, value in row.items():
         if field not in PROJECT_FIELDS + PROJECT_OPTIONAL_FIELDS:
@@ -382,398 +272,214 @@ def load_projects(root: Path) -> "tuple[dict[str, dict], list[str]]":
 
 
 # --------------------------------------------------------------------------- #
-# run lines
+# the ledger file
 # --------------------------------------------------------------------------- #
 class Run:
-    __slots__ = ("ident", "stem", "task", "tasks", "state", "partition", "date",
-                 "wall", "note", "cont", "lineno")
+    __slots__ = ("ident", "state", "partition", "date", "what", "cont", "lineno")
 
     def __init__(self, m: "re.Match", lineno: int):
-        self.stem = m.group("stem")
-        self.task = m.group("task")
-        self.tasks = m.group("tasks")
-        self.ident = self.stem + (f"_{self.task}" if self.task else
-                                  f"_[{self.tasks}]" if self.tasks else "")
+        self.ident = m.group("ident")
         self.state = m.group("state")
         self.partition = m.group("partition")
         self.date = m.group("date")
-        self.wall = m.group("wall")
-        self.note = m.group("note") or ""
-        self.cont: "dict[str, str]" = {}
+        self.what = m.group("what").strip()
+        self.cont: "list[str]" = []
         self.lineno = lineno
 
-    def task_set(self) -> "set[int] | None":
-        """The tasks this line covers; None = the whole job (a bare stem)."""
-        if self.task:
-            return {int(self.task)}
-        if self.tasks is None:
-            return None
-        out: "set[int]" = set()
-        for part in self.tasks.split(","):
-            if "-" in part:
-                a, b = (int(x) for x in part.split("-"))
-                out.update(range(a, b + 1))
-            else:
-                out.add(int(part))
-        return out
+    def line(self) -> str:
+        return f"- {self.ident} — {self.state} — {self.partition} — {self.date} — {self.what}"
 
-    def ascending(self) -> bool:
-        if self.tasks is None:
-            return True
-        last = -1
-        for part in self.tasks.split(","):
-            a, b = (int(x) for x in part.split("-")) if "-" in part else (int(part),) * 2
-            if a <= last or b < a:
-                return False
-            last = b
-        return True
+    def text(self) -> str:
+        return " ".join([self.what] + self.cont)
 
 
-def parse_runs(text: str) -> "tuple[list[Run], list[str]]":
-    """Run lines of `## Runs`; a missing section = no runs (reported by the
-    section check, not here)."""
-    lines = text.split("\n")
-    span = sections(text).get("Runs")
-    runs: "list[Run]" = []
-    problems: "list[str]" = []
-    if span is None:
-        return runs, problems
-    for i in range(*span):
-        raw = lines[i]
+class Entry:
+    __slots__ = ("date", "kind", "text_head", "cont", "lineno")
+
+    def __init__(self, m: "re.Match", lineno: int):
+        self.date = m.group("date")
+        self.kind = m.group("kind")
+        self.text_head = m.group("text").strip()
+        self.cont: "list[str]" = []
+        self.lineno = lineno
+
+    def text(self) -> str:
+        return " ".join([self.text_head] + self.cont)
+
+    def lines(self) -> "list[str]":
+        return [f"- {self.date} — {self.kind} — {self.text_head}"] + [f"  {c}" for c in self.cont]
+
+
+class Ledger:
+    __slots__ = ("key", "path", "rel", "title", "summary", "header", "now",
+                 "runs", "log", "problems")
+
+    def __init__(self, key: str, path: Path, rel: str):
+        self.key = key
+        self.path = path
+        self.rel = rel
+        self.title: "str | None" = None
+        self.summary = ""
+        self.header: "dict[str, str]" = {}
+        self.now = ""
+        self.runs: "list[Run]" = []
+        self.log: "list[Entry]" = []
+        self.problems: "list[str]" = []
+
+    @property
+    def issue(self) -> str:
+        return self.header.get("Issue", "none") or "none"
+
+    def live(self) -> "list[Run]":
+        return list(self.runs)
+
+    def recent(self, n: int = LOG_WINDOW) -> "list[Entry]":
+        return self.log[:n]
+
+    def updated(self) -> str:
+        """The newest date on the file: the head log entry, else nothing."""
+        return self.log[0].date if self.log else ""
+
+
+def _parse_items(lines: "list[str]", offset: int, line_re, factory, problems: "list[str]",
+                 what: str) -> list:
+    out = []
+    for i, raw in enumerate(lines):
         if not raw.strip():
             continue
         line = _dash(raw)
-        m = RUN_LINE_RE.match(line)
+        m = line_re.match(line)
         if m:
-            run = Run(m, i + 1)
-            if not run.ascending():
-                problems.append(f"line {i + 1}: task set not ascending: {run.ident}")
-            runs.append(run)
+            out.append(factory(m, offset + i + 1))
             continue
-        m = RUN_CONT_RE.match(line)
+        m = CONT_RE.match(raw)
         if m:
-            if not runs:
-                problems.append(f"line {i + 1}: continuation line without a run line")
+            if not out:
+                problems.append(f"line {offset + i + 1}: continuation line without a {what} line")
             else:
-                runs[-1].cont[m.group("key")] = m.group("value").strip()
+                out[-1].cont.append(m.group("text").strip())
             continue
-        problems.append(f"line {i + 1}: run line does not parse: {raw.strip()}")
-    return runs, problems
-
-
-def _overlaps(a: "set[int] | None", b: "set[int] | None") -> bool:
-    return a is None or b is None or bool(a & b)
-
-
-def run_problems(runs: "list[Run]", header_runs: str, state: str,
-                 ruling_ids: "set[str]") -> "list[str]":
-    problems: "list[str]" = []
-    idents = {r.ident for r in runs}
-    for i, a in enumerate(runs):
-        for b in runs[i + 1:]:
-            if a.stem == b.stem and _overlaps(a.task_set(), b.task_set()):
-                problems.append(f"run {a.ident} overlaps {b.ident} on stem {a.stem}")
-    body_stems = {r.stem for r in runs}
-    listed = [s.strip() for s in header_runs.split(",") if s.strip()]
-    for s in listed:
-        if not INT_RE.match(s):
-            problems.append(f"Runs: '{s}' is not a job stem")
-    if set(listed) != body_stems:
-        problems.append(f"Runs: header {{{', '.join(sorted(listed))}}} != body stems "
-                        f"{{{', '.join(sorted(body_stems))}}}")
-    if state == "pulled" and not any(r.state in ("done", "legacy") and "pulled_to" in r.cont
-                                     for r in runs):
-        problems.append("State: pulled needs at least one done | legacy run with pulled_to:")
-    for r in runs:
-        if r.state in LEGACY_RUN_STATES and "where" not in r.cont:
-            problems.append(f"run {r.ident} is {r.state} without where:")
-        for key in ("after", "resumes"):
-            target = r.cont.get(key)
-            if target is not None and (target not in idents or target == r.ident):
-                problems.append(f"run {r.ident} {key}: {target} names no other run of this task")
-        ruled = r.cont.get("ruled")
-        if ruled is not None and ruled not in ruling_ids:
-            problems.append(f"run {r.ident} ruled: {ruled} does not resolve to a ruling file")
-    return problems
-
-
-def gate_refs(value: str) -> "tuple[list[str], list[str]]":
-    """(refs, bad) from a comma-separated `Gates:` / `Follow-ups:` value."""
-    refs, bad = [], []
-    for token in (t.strip() for t in value.split(",")):
-        if not token:
-            continue
-        if GATE_REF_RE.fullmatch(token):
-            refs.append(token)
-        else:
-            bad.append(token)
-    return refs, bad
-
-
-def gate_url(ref: str) -> str:
-    """Canonical issues URL for either GATE_REF_RE form (a PR *is* an issue)."""
-    m = GATE_REF_RE.fullmatch(ref)
-    owner, repo, num, short_repo, short_num = m.groups()
-    if owner:
-        return f"https://github.com/{owner}/{repo}/issues/{num}"
-    return f"https://github.com/{DEFAULT_GATE_OWNER}/{short_repo}/issues/{short_num}"
-
-
-# --------------------------------------------------------------------------- #
-# the tree
-# --------------------------------------------------------------------------- #
-class Task:
-    def __init__(self, root: Path, path: Path):
-        self.path = path
-        self.rel = path.relative_to(root).as_posix()
-        self.text = path.read_text(encoding="utf-8")
-        self.title, self.fields = parse_header(self.text)
-        self.project_dir = path.parent.name
-        self.slug = path.stem
-        self.runs, self.run_parse_problems = parse_runs(self.text)
-
-    def get(self, key: str) -> str:
-        return self.fields.get(key, "")
-
-    @property
-    def state(self) -> str:
-        return self.get("State")
-
-
-class Ruling:
-    def __init__(self, root: Path, path: Path):
-        self.path = path
-        self.rel = path.relative_to(root).as_posix()
-        self.text = path.read_text(encoding="utf-8")
-        self.title, self.fields = parse_header(self.text)
-        self.id = path.stem
-
-    def get(self, key: str) -> str:
-        return self.fields.get(key, "")
-
-
-def _md_files(d: Path):
-    return sorted(p for p in d.rglob("*.md")) if d.is_dir() else []
-
-
-def load_tasks(root: Path) -> "tuple[list[Task], list[str]]":
-    tasks, problems = [], []
-    for p in _md_files(root / "tasks"):
-        rel = p.relative_to(root).as_posix()
-        if not TASK_FILE_RE.match(rel):
-            problems.append(f"{rel}: not a task path (tasks/<project>/<slug>.md)")
-            continue
-        tasks.append(Task(root, p))
-    return tasks, problems
-
-
-def load_rulings(root: Path) -> "tuple[list[Ruling], list[str]]":
-    rulings, problems = [], []
-    for p in _md_files(root / "rulings"):
-        rel = p.relative_to(root).as_posix()
-        if rel == "rulings/AGENTS.md":
-            continue
-        m = RULING_FILE_RE.match(rel)
-        if not m:
-            problems.append(f"{rel}: not a ruling path (rulings/<YYYY>/<MM>/R-<YYYYMMDD>-<nn>.md)")
-            continue
-        yyyy, mm, rid = m.groups()
-        r = Ruling(root, p)
-        if rid[2:6] != yyyy or rid[6:8] != mm:
-            problems.append(f"{rel}: filed under {yyyy}/{mm} but the id is dated {rid[2:6]}-{rid[6:8]}")
-        rulings.append(r)
-    return rulings, problems
-
-
-def ruling_files(root: Path) -> "dict[str, Path]":
-    """{id: path} of every ruling on disk (no validation)."""
-    out = {}
-    for p in _md_files(root / "rulings"):
-        if RULING_ID_RE.match(p.stem):
-            out.setdefault(p.stem, p)
+        problems.append(f"line {offset + i + 1}: {what} line does not parse: {raw.strip()}")
     return out
 
 
-def batch_records(root: Path) -> "list[Path]":
-    d = root / "batches"
-    return sorted(p for p in d.glob("*.md") if p.name != "AGENTS.md") if d.is_dir() else []
+def parse_ledger(text: str, key: str, path: Path, rel: str) -> Ledger:
+    led = Ledger(key, path, rel)
+    lines = text.split("\n")
+    led.title, led.header = parse_header(text)
+    secs = sections(text)
+    names = [ln[3:].strip() for ln in lines if ln.startswith("## ")]
+    if names != list(SECTIONS):
+        led.problems.append(f"sections must be exactly ## {' · ## '.join(SECTIONS)} in that "
+                            f"order (found: {', '.join(names) or 'none'})")
+    if "Now" in secs:
+        a, b = secs["Now"]
+        led.now = "\n".join(lines[a:b]).strip()
+    if "Runs" in secs:
+        a, b = secs["Runs"]
+        led.runs = _parse_items(lines[a:b], a, RUN_LINE_RE, Run, led.problems, "run")
+    if "Log" in secs:
+        a, b = secs["Log"]
+        led.log = _parse_items(lines[a:b], a, LOG_LINE_RE, Entry, led.problems, "log")
+    # title: `# <key> — <summary>`
+    if led.title is None:
+        led.problems.append("first line must be `# <key> — <summary>`")
+    else:
+        m = re.match(r"^([a-z][a-z0-9_]*) — (\S.*)$", _dash(led.title))
+        if not m or m.group(1) != key:
+            led.problems.append(f"title must be `# {key} — <summary>`, not `# {led.title}`")
+        else:
+            led.summary = m.group(2).strip()
+            if len(led.summary.split()) > SUMMARY_MAX_WORDS:
+                led.problems.append(f"summary is over {SUMMARY_MAX_WORDS} words: {led.summary}")
+    return led
 
 
-def batch_reviews(root: Path) -> "list[Path]":
-    d = root / "batches" / "reviews"
-    return sorted(p for p in d.glob("*.md") if p.name != "AGENTS.md") if d.is_dir() else []
+def _md_files(d: Path):
+    return sorted(p for p in d.glob("*.md") if p.name not in ("AGENTS.md", "TEMPLATE.md"))
 
 
-# --------------------------------------------------------------------------- #
-# check
-# --------------------------------------------------------------------------- #
-def task_problems(root: Path, tasks: "list[Task]", projects: "dict[str, dict]",
-                  rulings: "dict[str, Ruling]", successors: "dict[str, list[str]]") -> "list[str]":
+def load_ledgers(root: Path) -> "tuple[list[Ledger], list[str]]":
+    d = root / LEDGER_DIR
+    out: "list[Ledger]" = []
     problems: "list[str]" = []
-    for tk in tasks:
-        f = tk.fields
-        p = [f"{tk.rel}: {msg}" for msg in tk.run_parse_problems]
-        if tk.title is None:
-            p.append(f"{tk.rel}: line 1 is not `# <title>`")
-        for key in ("Project", "Summary", "State"):
-            if not f.get(key):
-                p.append(f"{tk.rel}: missing header key {key}:")
-        for key in f:
-            if key in DEAD_KEYS:
-                p.append(f"{tk.rel}: {DEAD_KEYS[key]}")
-            elif key not in TASK_KEYS:
-                p.append(f"{tk.rel}: unknown header key {key}:")
-        summary = f.get("Summary", "")
-        if summary:
-            words = summary.split()
-            if len(words) > SUMMARY_MAX_WORDS:
-                p.append(f"{tk.rel}: Summary: {len(words)} words — at most "
-                         f"{SUMMARY_MAX_WORDS} (the question the task answers)")
-        for name in TASK_SECTIONS:
-            if name not in sections(tk.text):
-                p.append(f"{tk.rel}: missing section ## {name}")
-        project = f.get("Project", "")
-        if project and project != tk.project_dir:
-            p.append(f"{tk.rel}: Project: {project} is not the directory name {tk.project_dir}")
-        if project and project not in projects:
-            p.append(f"{tk.rel}: Project: {project} is not a projects.yaml key")
-        state = f.get("State", "")
-        if state and state not in TASK_STATES:
-            p.append(f"{tk.rel}: State: '{state}' is not a task state")
-        refs, bad = gate_refs(f.get("Gates", ""))
-        for token in bad:
-            p.append(f"{tk.rel}: Gates: unrecognised ref '{token}' — Repo#N or an "
-                     f"issue/PR URL; no owner/Repo#N form")
-        if f.get("Filed") and not DATE_RE.match(f["Filed"]):
-            p.append(f"{tk.rel}: Filed: '{f['Filed']}' is not YYYY-MM-DD")
-        if f.get("Budget") and not WALL_RE.match(f["Budget"]):
-            p.append(f"{tk.rel}: Budget: '{f['Budget']}' is not H+:MM")
-        if f.get("Review-minutes") and not INT_RE.match(f["Review-minutes"]):
-            p.append(f"{tk.rel}: Review-minutes: '{f['Review-minutes']}' is not an integer")
-        # the offline invariants on top of the table
-        if state == "gated" and not refs:
-            p.append(f"{tk.rel}: State: gated with an empty Gates:")
-        if state in WITNESS_STATES and not f.get("Witness"):
-            p.append(f"{tk.rel}: State: {state} needs a Witness:")
-        ruling_id = f.get("Ruling", "")
-        if state in RULED_STATES and not ruling_id:
-            p.append(f"{tk.rel}: State: {state} needs a Ruling: (reachable only through rule)")
-        head = None
-        if ruling_id:
-            if not RULING_ID_RE.match(ruling_id):
-                p.append(f"{tk.rel}: Ruling: '{ruling_id}' is not a ruling id")
-            elif ruling_id not in rulings:
-                p.append(f"{tk.rel}: Ruling: {ruling_id} does not resolve to a ruling file")
-            else:
-                head = rulings[ruling_id]
-                if successors.get(ruling_id):
-                    p.append(f"{tk.rel}: Ruling: {ruling_id} is not a chain head "
-                             f"(superseded by {', '.join(successors[ruling_id])})")
-                if head.get("Task") != tk.rel:
-                    p.append(f"{tk.rel}: Ruling: {ruling_id} names {head.get('Task') or '(nothing)'}, not this task")
-                verb = head.get("Ruling")
-                if state and verb in VERB_STATES and state not in VERB_STATES[verb]:
-                    p.append(f"{tk.rel}: Ruling: {ruling_id} verb '{verb}' does not fit State: {state}")
-        # `## Where to look` is rendered, not just parsed: the by-project view
-        # prints these bullets verbatim as the folders to open, and `collect`
-        # resolves them to the artefacts it scores. A task that has left
-        # `planned` with only the template placeholder names nowhere.
-        if state and state not in WHERE_EXEMPT_STATES:
-            if not [b for b in _where_to_look(tk) if WHERE_PLACEHOLDER not in b]:
-                p.append(f"{tk.rel}: ## Where to look names nowhere — a task "
-                         f"past planned needs at least one bullet that is not "
-                         f"'{WHERE_PLACEHOLDER}'")
-        if state == "pulled" and any(r.state in LIVE_RUN_STATES for r in tk.runs):
-            if head is None or head.get("Ruling") != "leave-to-finish":
-                p.append(f"{tk.rel}: State: pulled with a live run needs a leave-to-finish ruling head (--partial)")
-        p.extend(f"{tk.rel}: {msg}" for msg in
-                 run_problems(tk.runs, f.get("Runs", ""), state, set(rulings)))
-        problems.extend(p)
+    if not d.is_dir():
+        return out, problems
+    for p in _md_files(d):
+        rel = p.relative_to(root).as_posix()
+        m = LEDGER_FILE_RE.match(rel)
+        if not m:
+            problems.append(f"{rel}: file name must be projects/<key>.md with a bare key")
+            continue
+        out.append(parse_ledger(p.read_text(encoding="utf-8"), m.group(1), p, rel))
+    return out, problems
+
+
+def ledger_problems(root: Path, ledgers: "list[Ledger]", projects: "dict[str, dict]") -> "list[str]":
+    problems: "list[str]" = []
+    seen: "set[str]" = set()
+    for led in ledgers:
+        seen.add(led.key)
+        rel = led.rel
+        problems += [f"{rel}: {p}" for p in led.problems]
+        if led.key not in projects:
+            problems.append(f"{rel}: {led.key} is not a projects.yaml key")
+        row = projects.get(led.key, {})
+        for k in HEADER_KEYS:
+            if k not in led.header:
+                problems.append(f"{rel}: header is missing `{k}:`")
+        extra = [k for k in led.header if k not in HEADER_KEYS]
+        if extra:
+            problems.append(f"{rel}: unknown header key(s) {', '.join(extra)} — the header "
+                            f"holds only {', '.join(HEADER_KEYS)}")
+        if led.header.get("Project") not in (None, led.key):
+            problems.append(f"{rel}: `Project:` must be {led.key}")
+        issue = led.header.get("Issue")
+        if issue is not None and not ISSUE_RE.match(issue):
+            problems.append(f"{rel}: `Issue:` must be Repo#N, an issue URL or none, not {issue!r}")
+        if row.get("status") == "active" and not led.now:
+            problems.append(f"{rel}: `## Now` is empty on an active project")
+        idents: "set[str]" = set()
+        for r in led.runs:
+            if r.ident in idents:
+                problems.append(f"{rel}: run {r.ident} listed twice")
+            idents.add(r.ident)
+            if not RUN_IDENT_RE.match(r.ident):
+                problems.append(f"{rel}: run ident does not parse: {r.ident}")
+            problems += _date_problems(rel, r.date, f"run {r.ident}")
+            if row.get("partition") not in (None, "both", r.partition):
+                problems.append(f"{rel}: run {r.ident} is on `{r.partition}` but the project "
+                                f"runs on `{row['partition']}`")
+        prev = None
+        for e in led.log:
+            problems += _date_problems(rel, e.date, f"log line {e.lineno}")
+            if prev is not None and e.date > prev:
+                problems.append(f"{rel}: log is not newest-first at line {e.lineno} "
+                                f"({e.date} after {prev})")
+            prev = e.date
+        if row.get("status") == "retired" and led.runs:
+            problems.append(f"{rel}: a retired project still lists runs")
+    for key, row in projects.items():
+        if row.get("status") == "active" and key not in seen:
+            problems.append(f"projects.yaml: {key} is active but has no projects/{key}.md")
     return problems
 
 
-def ruling_problems(root: Path, rulings: "list[Ruling]", tasks_by_rel: "dict[str, Task]",
-                    by_id: "dict[str, Ruling]", successors: "dict[str, list[str]]") -> "list[str]":
-    problems: "list[str]" = []
-    seen: "dict[str, str]" = {}
-    for r in rulings:
-        p: "list[str]" = []
-        prior = seen.setdefault(r.id, r.rel)
-        if prior != r.rel:
-            p.append(f"{r.rel}: duplicate ruling id {r.id} (also {prior})")
-        if r.title is None or not (r.title == r.id or r.title.startswith(f"{r.id} — ")):
-            p.append(f"{r.rel}: title must be `# {r.id}` or `# {r.id} — <summary>`")
-        for key in ("Project", "Task", "Ruling"):
-            if not r.get(key):
-                p.append(f"{r.rel}: missing header key {key}:")
-        for key in r.fields:
-            if key in DEAD_KEYS:
-                p.append(f"{r.rel}: {DEAD_KEYS[key]}")
-            elif key not in RULING_KEYS:
-                p.append(f"{r.rel}: unknown header key {key}:")
-        for name in RULING_SECTIONS:
-            if name not in sections(r.text):
-                p.append(f"{r.rel}: missing section ## {name}")
-        verb = r.get("Ruling")
-        if verb and verb not in RULING_VERBS:
-            p.append(f"{r.rel}: Ruling: '{verb}' is not a ruling verb")
-        task_rel = r.get("Task")
-        tk = tasks_by_rel.get(task_rel)
-        if task_rel and tk is None:
-            p.append(f"{r.rel}: Task: {task_rel} does not resolve to a task file")
-        if tk is not None and r.get("Project") and tk.get("Project") != r.get("Project"):
-            p.append(f"{r.rel}: Task: {task_rel} is not a task of Project: {r.get('Project')}")
-        if tk is not None:
-            stems = {s.strip() for s in r.get("Runs").split(",") if s.strip()}
-            task_stems = {x.stem for x in tk.runs}
-            if not stems <= task_stems:
-                p.append(f"{r.rel}: Runs: {{{', '.join(sorted(stems - task_stems))}}} not in the task's runs")
-        sup = r.get("Supersedes")
-        if sup:
-            if sup == r.id:
-                p.append(f"{r.rel}: Supersedes: itself")
-            elif sup not in by_id:
-                p.append(f"{r.rel}: Supersedes: {sup} does not resolve to a ruling file")
-            else:
-                old = by_id[sup]
-                if not sup < r.id:
-                    p.append(f"{r.rel}: Supersedes: {sup} is not earlier than {r.id}")
-                if (old.get("Project"), old.get("Task")) != (r.get("Project"), r.get("Task")):
-                    p.append(f"{r.rel}: Supersedes: {sup} names a different project/task")
-        if len(successors.get(r.id, [])) > 1:
-            p.append(f"{r.rel}: has {len(successors[r.id])} successors "
-                     f"({', '.join(successors[r.id])}) — a chain, not a tree")
-        batch = r.get("Batch")
-        if batch and not (root / "batches" / f"{batch}.md").is_file():
-            p.append(f"{r.rel}: Batch: {batch} names no batches/{batch}.md")
-        for key in ("Reviewed-at",):
-            pass
-        if r.get("Review-minutes-actual") and not INT_RE.match(r.get("Review-minutes-actual")):
-            p.append(f"{r.rel}: Review-minutes-actual: not an integer")
-        _, bad = gate_refs(r.get("Follow-ups"))
-        for token in bad:
-            p.append(f"{r.rel}: Follow-ups: unrecognised ref '{token}'")
-        problems.extend(p)
-    return problems
+def _date_problems(rel: str, value: str, what: str) -> "list[str]":
+    if not DATE_RE.match(value):
+        return [f"{rel}: {what} date is not YYYY-MM-DD: {value}"]
+    try:
+        date.fromisoformat(value)
+    except ValueError:
+        return [f"{rel}: {what} date is not a real date: {value}"]
+    return []
 
 
 def check_problems(root: Path) -> "list[str]":
-    """Every `check` rule, over the tree at `root`. Hermetic."""
     projects, problems = load_projects(root)
-    tasks, stray = load_tasks(root)
-    problems.extend(stray)
-    rulings, stray = load_rulings(root)
-    problems.extend(stray)
-    by_id: "dict[str, Ruling]" = {}
-    for r in rulings:
-        by_id.setdefault(r.id, r)
-    successors: "dict[str, list[str]]" = {}
-    for r in rulings:
-        if r.get("Supersedes"):
-            successors.setdefault(r.get("Supersedes"), []).append(r.id)
-    tasks_by_rel = {tk.rel: tk for tk in tasks}
-    problems.extend(task_problems(root, tasks, projects, by_id, successors))
-    problems.extend(ruling_problems(root, rulings, tasks_by_rel, by_id, successors))
+    ledgers, more = load_ledgers(root)
+    problems += more
+    problems += ledger_problems(root, ledgers, projects)
     return problems
 
 
@@ -789,38 +495,7 @@ def cmd_check(args) -> int:
 
 
 # --------------------------------------------------------------------------- #
-# gates
-# --------------------------------------------------------------------------- #
-def gates_report(root: Path) -> "tuple[list[str], int]":
-    """(report lines, exit code) — every `gated` task, its refs and their URLs.
-
-    Read-only and offline: nothing asks GitHub whether a ref has cleared. Gate
-    grading was retired 2026-09-03 — 2 gated refs and 0 flips in its whole
-    life, while schema decision 54 routes sequencing through prose
-    `Ready when:` lines. A gated task is moved on by a human reading this
-    listing and typing `move <task> ready`."""
-    tasks, _ = load_tasks(root)
-    wanted = [tk for tk in tasks
-              if tk.state == "gated" and gate_refs(tk.get("Gates"))[0]]
-    if not wanted:
-        return ["gates: no gated task"], 0
-    lines = [f"gates: {len(wanted)} task(s)"]
-    for tk in wanted:
-        refs = gate_refs(tk.get("Gates"))[0]
-        lines.append(f"  {tk.rel}: {tk.state} — {', '.join(refs)}")
-        for ref in refs:
-            lines.append(f"    {ref} → {gate_url(ref)}")
-    return lines, 0
-
-
-def cmd_gates(args) -> int:
-    lines, rc = gates_report(args.root)
-    print("\n".join(lines))
-    return rc
-
-
-# --------------------------------------------------------------------------- #
-# shared helpers for the writing verbs
+# the verbs that write a ledger
 # --------------------------------------------------------------------------- #
 def _today(args) -> date:
     if getattr(args, "today", None):
@@ -831,200 +506,213 @@ def _today(args) -> date:
     return date.today()
 
 
-def _task_at(root: Path, ref: str) -> Task:
-    """The task file `ref` names — repo-relative, or a path under root."""
-    p = Path(ref)
-    path = p if p.is_absolute() else root / p
+def _ledger_at(root: Path, key: str) -> Ledger:
+    if not PROJECT_KEY_RE.match(key or ""):
+        raise CortexError(f"{key!r} is not a project key")
+    path = root / LEDGER_DIR / f"{key}.md"
     if not path.is_file():
-        raise CortexError(f"no task file at {ref}")
-    try:
-        path = path.resolve()
-        path.relative_to(root.resolve())
-    except ValueError:
-        raise CortexError(f"{ref} is outside {root}")
-    rel_path = root.resolve() / path.relative_to(root.resolve())
-    if not TASK_FILE_RE.match(path.relative_to(root.resolve()).as_posix()):
-        raise CortexError(f"{ref} is not tasks/<project>/<slug>.md")
-    return Task(root.resolve(), rel_path)
+        raise CortexError(f"no ledger for {key} — `new {key} --summary ...` opens one")
+    led = parse_ledger(path.read_text(encoding="utf-8"), key, path,
+                       path.relative_to(root).as_posix())
+    if led.problems:
+        raise CortexError(f"{led.rel} does not parse clean — run `check` first: "
+                          + "; ".join(led.problems))
+    return led
 
 
-def _partition_for(root: Path, project: str, given: "str | None") -> str:
+def _write(led: Ledger, text: str) -> None:
+    led.path.write_text(text, encoding="utf-8")
+    after = parse_ledger(text, led.key, led.path, led.rel)
+    if after.problems:
+        raise CortexError(f"the edit would not read back: " + "; ".join(after.problems))
+
+
+def _one_line(text: str, what: str) -> str:
+    text = _dash((text or "").strip())
+    if not text:
+        raise CortexError(f"{what} must say something")
+    if "\n" in text:
+        raise CortexError(f"{what} is one line (continuation lines are for the file)")
+    return text
+
+
+def _prepend_entry(text: str, entry_line: str) -> str:
+    body = _section_lines(text, "Log")
+    body = [ln for ln in body if ln.strip() or True]
+    stripped = [ln for ln in body]
+    # drop leading/trailing blanks, then put the new entry first
+    while stripped and not stripped[0].strip():
+        stripped.pop(0)
+    while stripped and not stripped[-1].strip():
+        stripped.pop()
+    return _replace_section(text, "Log", [entry_line] + stripped)
+
+
+def add_entry(root: Path, key: str, kind: str, text: str, today: date) -> str:
+    if kind not in KINDS:
+        raise CortexError(f"--kind must be one of {', '.join(KINDS)}")
+    text = _one_line(text, "the entry")
+    led = _ledger_at(root, key)
+    raw = led.path.read_text(encoding="utf-8")
+    if led.log and today.isoformat() < led.log[0].date:
+        raise CortexError(f"the log's head is {led.log[0].date}; an entry dated "
+                          f"{today.isoformat()} would break newest-first")
+    _write(led, _prepend_entry(raw, f"- {today.isoformat()} — {kind} — {text}"))
+    return f"{led.rel}: {kind} — {text}"
+
+
+def set_now(root: Path, key: str, text: str) -> str:
+    text = _dash((text or "").strip())
+    if not text:
+        raise CortexError("`now` must say something")
+    led = _ledger_at(root, key)
+    raw = led.path.read_text(encoding="utf-8")
+    _write(led, _replace_section(raw, "Now", text.split("\n")))
+    return f"{led.rel}: now — {text.splitlines()[0]}"
+
+
+def _partition_for(row: dict, given: "str | None") -> str:
     if given:
         if not PARTITION_RE.match(given):
-            raise CortexError(f"--partition '{given}' is not a bare partition name")
+            raise CortexError(f"--partition must be a bare word, not {given!r}")
         return given
-    projects, problems = load_projects(root)
-    row = projects.get(project)
-    if row is None:
-        raise CortexError(f"project {project} is not a projects.yaml key")
-    part = row.get("partition")
+    part = row.get("partition", "")
     if part in ("gpu", "ral"):
         return part
-    raise CortexError(f"project {project} may use either partition (`both`) — pass --partition")
+    raise CortexError("the project runs on both partitions — say which with --partition")
 
 
-def _run_line(ident: str, state: str, partition: str, day: date, wall: str = "0:00",
-              note: str = "") -> str:
-    line = f"- {ident}: {state} — {partition} — submitted {day.isoformat()} — wall {wall}"
-    return f"{line} — {note}" if note else line
+def _runs_body(runs: "list[Run]") -> "list[str]":
+    out: "list[str]" = []
+    for r in runs:
+        out.append(r.line())
+        out += [f"  {c}" for c in r.cont]
+    return out
 
 
-def _append_run(tk: Task, ident: str, state: str, partition: str, day: date, *,
-                note: str = "", cont: "dict[str, str] | None" = None) -> str:
-    """Task text with one run line (and its continuations) appended to
-    `## Runs` and the `Runs:` header re-derived from the body."""
-    if not RUN_IDENT_RE.match(ident):
-        raise CortexError(f"--run '{ident}' is not <stem>[_<task>|_[<set>]]")
-    probe = Run(RUN_LINE_RE.match(_run_line(ident, state, partition, day)), 0)
-    for r in tk.runs:
-        if r.stem == probe.stem and _overlaps(r.task_set(), probe.task_set()):
-            raise CortexError(f"run {ident} overlaps {r.ident} already on this task")
-    idents = {r.ident for r in tk.runs}
-    for key, value in (cont or {}).items():
-        if key in ("after", "resumes") and value not in idents:
-            raise CortexError(f"{key}: {value} names no run of this task")
-    new_lines = [_run_line(ident, state, partition, day, note=note)]
-    new_lines += [f"    {k}: {v}" for k, v in (cont or {}).items()]
-    text = append_to_section(tk.text, "Runs", new_lines)
-    stems = []
-    for r in tk.runs + [probe]:
-        if r.stem not in stems:
-            stems.append(r.stem)
-    return edit_header(text, {"Runs": ", ".join(stems)})
+def add_run(root: Path, key: str, ident: str, what: str, today: date, *,
+            partition: "str | None" = None, projects: "dict | None" = None) -> str:
+    if not RUN_IDENT_RE.match(ident or ""):
+        raise CortexError(f"{ident!r} is not a SLURM job id (`342301`, `342301_3`, "
+                          "`342301_[0-9]`)")
+    what = _one_line(what, "what the run is")
+    led = _ledger_at(root, key)
+    if any(r.ident == ident for r in led.runs):
+        raise CortexError(f"{ident} is already listed under ## Runs")
+    rows = projects if projects is not None else load_projects(root)[0]
+    part = _partition_for(rows.get(key, {}), partition)
+    raw = led.path.read_text(encoding="utf-8")
+    line = f"- {ident} — open — {part} — {today.isoformat()} — {what}"
+    text = _replace_section(raw, "Runs", _runs_body(led.runs) + [line])
+    text = _prepend_entry(text, f"- {today.isoformat()} — run — {ident} submitted: {what}")
+    _write(led, text)
+    return f"{led.rel}: run {ident} open"
 
 
-def _add_pulled_to(tk: Task, text: str, pulled_to: "str | None", states: "set[str]") -> str:
-    """Give every run in `states` a `pulled_to:` it lacks — `pulled_to` if
-    given, else the run's own `where:` (a legacy run's quarantine path is
-    where its results already are). Refuse when no run would carry one, so
-    `move pulled` never writes a state `check` rejects."""
-    targets = [r for r in tk.runs if r.state in states]
-    if not targets:
-        raise CortexError(f"no {' | '.join(sorted(states))} run to pull — nothing to review "
-                          "(rule drop, or fix the run lines)")
-    lacking = [r for r in targets if "pulled_to" not in r.cont]
-    if not lacking or (not pulled_to and all("where" not in r.cont for r in lacking)):
-        if any("pulled_to" in r.cont for r in targets):
-            return text
-        raise CortexError("no run carries pulled_to: — pass --pulled-to <laptop path>")
-    lines = text.split("\n")
-    for r in sorted(lacking, key=lambda x: x.lineno, reverse=True):
-        path = pulled_to or r.cont.get("where")
-        if not path:
-            continue
-        i = r.lineno  # 1-based run line → index of the line after it
-        while i < len(lines) and RUN_CONT_RE.match(_dash(lines[i])):
-            i += 1
-        lines.insert(i, f"    pulled_to: {path}")
-    return "\n".join(lines)
+def _run_at(led: Ledger, ident: str) -> Run:
+    for r in led.runs:
+        if r.ident == ident:
+            return r
+    raise CortexError(f"{ident} is not under ## Runs of {led.rel} "
+                      f"({', '.join(r.ident for r in led.runs) or 'no runs'})")
+
+
+def set_running(root: Path, key: str, ident: str) -> str:
+    led = _ledger_at(root, key)
+    run = _run_at(led, ident)
+    if run.state == "running":
+        return f"{led.rel}: run {ident} already running"
+    run.state = "running"
+    raw = led.path.read_text(encoding="utf-8")
+    _write(led, _replace_section(raw, "Runs", _runs_body(led.runs)))
+    return f"{led.rel}: run {ident} running"
+
+
+def finish_run(root: Path, key: str, ident: str, today: date, *, failed: bool = False,
+               wall: "str | None" = None, note: str = "") -> str:
+    if wall and not WALL_RE.match(wall):
+        raise CortexError(f"--wall must be H:MM, not {wall!r}")
+    led = _ledger_at(root, key)
+    run = _run_at(led, ident)
+    verb = "failed" if failed else "finished"
+    bits = [f"{ident} {verb}"]
+    if wall:
+        bits.append(f"wall {wall}")
+    text = " — ".join(bits) + f": {run.what}"
+    if note:
+        text += f" — {_one_line(note, '--note')}"
+    remaining = [r for r in led.runs if r.ident != ident]
+    raw = led.path.read_text(encoding="utf-8")
+    out = _replace_section(raw, "Runs", _runs_body(remaining))
+    out = _prepend_entry(out, f"- {today.isoformat()} — run — {text}")
+    _write(led, out)
+    return f"{led.rel}: run {ident} {verb}"
+
+
+def new_ledger(root: Path, key: str, summary: str, today: date, *, issue: str = "none",
+               now: str = "") -> str:
+    projects, problems = load_projects(root)
+    if problems:
+        raise CortexError("projects.yaml does not parse clean — run `check` first: "
+                          + "; ".join(problems))
+    if key not in projects:
+        raise CortexError(f"{key} is not a projects.yaml key — add its row first "
+                          "(projects.yaml is code: a human's turn)")
+    summary = _one_line(summary, "--summary")
+    if len(summary.split()) > SUMMARY_MAX_WORDS:
+        raise CortexError(f"--summary is over {SUMMARY_MAX_WORDS} words")
+    issue = (issue or "none").strip()
+    if not ISSUE_RE.match(issue):
+        raise CortexError(f"--issue must be Repo#N, an issue URL or none, not {issue!r}")
+    path = root / LEDGER_DIR / f"{key}.md"
+    if path.exists():
+        raise CortexError(f"{path.relative_to(root).as_posix()} already exists")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    now = _dash((now or "").strip()) or "Just opened — nothing submitted yet."
+    path.write_text(TEMPLATE.format(key=key, summary=summary, issue=issue, now=now,
+                                    today=today.isoformat()), encoding="utf-8")
+    return f"opened {path.relative_to(root).as_posix()}"
 
 
 # --------------------------------------------------------------------------- #
-# move
+# the issue-top block
 # --------------------------------------------------------------------------- #
-def move_task(root: Path, ref: str, to: str, *, run: "str | None" = None,
-              reason: "str | None" = None,
-              partial: bool = False, partition: "str | None" = None,
-              after: "str | None" = None, resumes: "str | None" = None,
-              note: str = "", pulled_to: "str | None" = None,
-              today: "date | None" = None) -> str:
-    """Apply one edge of the transition table; return a one-line summary."""
-    today = today or date.today()
-    tk = _task_at(root, ref)
-    cur = tk.state
-    if cur not in TASK_STATES:
-        raise CortexError(f"{tk.rel} has State: '{cur}', which is not a task state")
-    if to not in TASK_STATES:
-        raise CortexError(f"'{to}' is not a task state ({' | '.join(TASK_STATES)})")
-    if cur == "dropped":
-        raise CortexError(f"{tk.rel} is dropped — terminal; revival is a new slug")
-    if to == "dropped":
-        raise CortexError("dropped is a ruling edge: `cortex.py rule <task> drop`")
-    if to in ("accepted", "rerun"):
-        raise CortexError(f"{to} is a ruling edge: `cortex.py rule <task> {VERB_FOR_STATE[to]}`"
-                          + (" --supersedes <Ruling:>" if cur == "accepted" else ""))
-    refs, bad = gate_refs(tk.get("Gates"))
-    if bad:
-        raise CortexError(f"{tk.rel}: Gates: unrecognised ref '{bad[0]}' — fix it first")
-    updates: "dict[str, str | None]" = {}
-    text = tk.text
-    cont = {}
-    if after:
-        cont["after"] = after
-    if resumes:
-        cont["resumes"] = resumes
+ISSUE_BEGIN = "<!-- cortex:ledger begin — regenerated from projects/{key}.md; edit there -->"
+ISSUE_END = "<!-- cortex:ledger end -->"
 
-    if cur == to:
-        if cur in ("submitted", "running") and run:
-            part = _partition_for(root, tk.project_dir, partition)
-            text = _append_run(tk, run, "submitted", part, today, note=note, cont=cont)
-            tk.path.write_text(text, encoding="utf-8")
-            return f"{tk.rel}: {cur} — appended run {run}"
-        raise CortexError(f"{tk.rel} is already {cur}"
-                          + ("" if cur in ("submitted", "running") else
-                             "; --run is for submitted | running tasks"))
-    edge = (cur, to)
-    if run and edge not in (("ready", "submitted"), ("submitted", "running")):
-        raise CortexError("--run applies to ready → submitted and to a submitted | running task")
-    if edge == ("planned", "gated"):
-        if not refs:
-            raise CortexError(f"{tk.rel}: Gates: is empty — planned → ready")
-    elif edge == ("planned", "ready"):
-        if refs:
-            raise CortexError(f"{tk.rel}: Gates: is non-empty — planned → gated")
-    elif edge == ("gated", "ready"):
-        pass  # the human read `gates` and judged the refs cleared
-    elif edge == ("ready", "gated"):
-        raise CortexError("ready → gated is a hand edit of the header — re-gating a "
-                          "ready task is a judgement, not an edge")
-    elif edge == ("ready", "submitted"):
-        if not tk.get("Witness"):
-            raise CortexError(f"{tk.rel}: Witness: is empty — register the witness before submitting")
-        if not run:
-            raise CortexError("ready → submitted needs --run <id>")
-        part = _partition_for(root, tk.project_dir, partition)
-        text = _append_run(tk, run, "submitted", part, today, note=note, cont=cont)
-    elif edge == ("ready", "pulled"):
-        if not tk.runs or not all(r.state in LEGACY_RUN_STATES for r in tk.runs):
-            raise CortexError("ready → pulled is for a legacy-born task: every run line "
-                              "legacy | legacy_wrong")
-        if not tk.get("Witness"):
-            raise CortexError(f"{tk.rel}: Witness: is empty — still mandatory for a legacy-born task")
-        text = _add_pulled_to(tk, text, pulled_to, {"legacy"})
-    elif edge == ("submitted", "running"):
-        if run:
-            part = _partition_for(root, tk.project_dir, partition)
-            text = _append_run(tk, run, "submitted", part, today, note=note, cont=cont)
-    elif edge in (("submitted", "ready"), ("running", "ready")):
-        if any(r.state in LIVE_RUN_STATES for r in tk.runs):
-            raise CortexError(f"{tk.rel}: a run is still submitted | running")
-        if not any(r.state in RESET_RUN_STATES for r in tk.runs):
-            raise CortexError(f"{tk.rel}: no failed | timeout | void run to reset from")
-        if not reason:
-            raise CortexError(f"{cur} → ready needs --reason")
-        updates["Reset"] = reason
-    elif edge == ("running", "pulled"):
-        if any(r.state in LIVE_RUN_STATES for r in tk.runs) and not partial:
-            raise CortexError(f"{tk.rel}: a run is still submitted | running — "
-                              "--partial for a partial array (then rule leave-to-finish)")
-        text = _add_pulled_to(tk, text, pulled_to, {"done"})
-    elif edge in (("pulled", "awaiting-ruling"), ("rerun", "ready")):
-        pass
+
+def issue_url(ref: str) -> str:
+    if ref.startswith("https://"):
+        return ref
+    repo, _, n = ref.partition("#")
+    return f"https://github.com/{DEFAULT_ISSUE_OWNER}/{repo}/issues/{n}"
+
+
+def issue_block(led: Ledger, row: dict, n: int = LOG_WINDOW, home: str = "") -> str:
+    """The concise, human-readable ledger that sits at the top of a project's
+    issue: Now, the runs on the cluster, the last `n` entries. Markdown, fenced
+    by the two markers so a re-sync replaces exactly this block."""
+    link = f"{home}/blob/main/{led.rel}" if home else led.rel
+    out = [ISSUE_BEGIN.format(key=led.key),
+           f"**{led.key}** — {led.summary}  ",
+           f"_{row.get('status', '?')} · ledger: [{led.rel}]({link})"
+           + (f" · updated {led.updated()}" if led.updated() else "") + "_",
+           "", "**Now**", "", led.now or "_(nothing yet)_", "", "**Runs**", ""]
+    if led.runs:
+        out += [f"- `{r.ident}` — {r.state} — {r.partition} — {r.date} — {r.text()}"
+                for r in led.runs]
     else:
-        raise CortexError(f"no edge {cur} → {to} in the transition table")
-    updates["State"] = to
-    tk.path.write_text(edit_header(text, updates), encoding="utf-8")
-    return f"{tk.rel}: {cur} → {to}"
+        out.append("_nothing on the cluster_")
+    out += ["", f"**Last {n}**", ""]
+    out += [f"- {e.date} — *{e.kind}* — {e.text()}" for e in led.recent(n)] or ["_empty_"]
+    out.append(ISSUE_END)
+    return "\n".join(out) + "\n"
 
 
-VERB_FOR_STATE = {"accepted": "accept", "rerun": "rerun", "dropped": "drop"}
-
-
-def cmd_move(args) -> int:
-    print(move_task(args.root, args.task, args.state, run=args.run, reason=args.reason,
-                    partial=args.partial, partition=args.partition,
-                    after=args.after, resumes=args.resumes, note=args.note or "",
-                    pulled_to=args.pulled_to, today=_today(args)))
+def cmd_issue(args) -> int:
+    led = _ledger_at(args.root, args.project)
+    projects, _ = load_projects(args.root)
+    print(issue_block(led, projects.get(args.project, {}), args.n), end="")
     return 0
 
 
@@ -1033,22 +721,10 @@ def cmd_move(args) -> int:
 # --------------------------------------------------------------------------- #
 def retire_project(root: Path, key: str, why: str, today: date) -> str:
     """Flip one `projects.yaml` row to `status: retired` and stamp the reason
-    on its `note:`. The only verb that writes `projects.yaml`.
-
-    Three things it deliberately does not do. It does not **delete the row**:
-    that row is the only record of where the project's data lives, and a
-    retired project still has to be findable. It does not touch a **task** or
-    a **ruling**: `rulings/` is append-only and history is not rewritten by a
-    change of status. And it does not retire over **live work** — every state
-    outside `RULED_STATES` and `planned` is an unfinished question, so the
-    refusal names each one and the human rules or drops it first. `planned`
-    stays: an unasked question costs nothing to leave behind.
-
-    The edit is two lines. Everything else in the file — comments, blank
-    lines, the order of the rows, the other rows' bytes — is preserved, and
-    the result is re-parsed before it is kept: a `projects.yaml` this verb
-    could not read back is restored to the bytes it had.
-    """
+    on its `note:`. The only verb that writes `projects.yaml`. It does not
+    delete the row (it is the one record of where the data lives), it does not
+    touch the ledger file (history is not rewritten by a change of status), and
+    it refuses while the ledger still lists a run on the cluster."""
     why = (why or "").strip()
     if not why:
         raise CortexError("--why must say why, in one line")
@@ -1063,21 +739,20 @@ def retire_project(root: Path, key: str, why: str, today: date) -> str:
         raise CortexError(f"{key} is not a projects.yaml key")
     if projects[key].get("status") == "retired":
         raise CortexError(f"{key} is already retired")
-    tasks, _ = load_tasks(root)
-    live = [f"{tk.rel} — {tk.state}" for tk in tasks
-            if tk.project_dir == key
-            and tk.state not in RULED_STATES | {"planned"}]
-    if live:
-        raise CortexError(f"{key} still has live work — rule or drop it "
-                          f"first: {', '.join(live)}")
+    path_led = root / LEDGER_DIR / f"{key}.md"
+    if path_led.is_file():
+        led = parse_ledger(path_led.read_text(encoding="utf-8"), key, path_led,
+                           path_led.relative_to(root).as_posix())
+        if led.runs:
+            raise CortexError(f"{key} still lists runs on the cluster — `done` them "
+                              f"first: {', '.join(r.ident for r in led.runs)}")
 
     path = root / "projects.yaml"
     original = path.read_text(encoding="utf-8")
     lines = original.split("\n")
     starts = [i for i, ln in enumerate(lines) if ln == f"{key}:"]
     if len(starts) != 1:
-        raise CortexError(f"projects.yaml: expected one `{key}:` line, "
-                          f"found {len(starts)}")
+        raise CortexError(f"projects.yaml: expected one `{key}:` line, found {len(starts)}")
     start = starts[0]
     stop = start + 1
     while stop < len(lines) and lines[stop].startswith("  "):
@@ -1103,7 +778,45 @@ def retire_project(root: Path, key: str, why: str, today: date) -> str:
         raise CortexError("the edit would not read back — projects.yaml is "
                           "unchanged: " + ("; ".join(problems) or
                                            f"{key} did not come back retired"))
+    if path_led.is_file():
+        add_entry(root, key, "note", f"retired: {why}", today)
     return f"retired {key}"
+
+
+# --------------------------------------------------------------------------- #
+# CLI
+# --------------------------------------------------------------------------- #
+def cmd_new(args) -> int:
+    print(new_ledger(args.root, args.project, args.summary, _today(args),
+                     issue=args.issue, now=args.now or ""))
+    return 0
+
+
+def cmd_run(args) -> int:
+    print(add_run(args.root, args.project, args.jobid, args.what, _today(args),
+                  partition=args.partition))
+    return 0
+
+
+def cmd_running(args) -> int:
+    print(set_running(args.root, args.project, args.jobid))
+    return 0
+
+
+def cmd_done(args) -> int:
+    print(finish_run(args.root, args.project, args.jobid, _today(args),
+                     failed=args.failed, wall=args.wall, note=args.note or ""))
+    return 0
+
+
+def cmd_log(args) -> int:
+    print(add_entry(args.root, args.project, args.kind, args.text, _today(args)))
+    return 0
+
+
+def cmd_now(args) -> int:
+    print(set_now(args.root, args.project, args.text))
+    return 0
 
 
 def cmd_retire(args) -> int:
@@ -1111,249 +824,6 @@ def cmd_retire(args) -> int:
     return 0
 
 
-# --------------------------------------------------------------------------- #
-# rule
-# --------------------------------------------------------------------------- #
-def next_ruling_id(root: Path, day: date, taken: "set[str] | None" = None) -> str:
-    stamp = day.strftime("%Y%m%d")
-    existing = set(ruling_files(root)) | (taken or set())
-    for n in range(1, 100):
-        rid = f"R-{stamp}-{n:02d}"
-        if rid not in existing:
-            return rid
-    raise CortexError(f"99 rulings already filed on {day.isoformat()}")
-
-
-def _ruling_target(tk: Task, verb: str, supersedes: "str | None", by_id: "dict[str, Ruling]",
-                   successors: "dict[str, list[str]]") -> "str | None":
-    """The task state `verb` writes, or raise if the table forbids it."""
-    state = tk.state
-    if verb not in RULING_VERBS:
-        raise CortexError(f"'{verb}' is not a ruling verb ({' | '.join(RULING_VERBS)})")
-    if state == "dropped":
-        raise CortexError(f"{tk.rel} is dropped — terminal")
-    if supersedes:
-        if supersedes not in by_id:
-            raise CortexError(f"--supersedes {supersedes} does not resolve to a ruling file")
-        old = by_id[supersedes]
-        if old.get("Task") != tk.rel:
-            raise CortexError(f"--supersedes {supersedes} rules on {old.get('Task')}, not {tk.rel}")
-        if successors.get(supersedes):
-            raise CortexError(f"{supersedes} already has a successor "
-                              f"({successors[supersedes][0]}) — supersede the head")
-    if state == "accepted":
-        if verb not in ("rerun", "drop"):
-            raise CortexError(f"accepted takes only rerun | drop, with --supersedes {tk.get('Ruling')}")
-        if supersedes != tk.get("Ruling"):
-            raise CortexError(f"accepted → {VERB_TARGET[verb]} needs --supersedes {tk.get('Ruling')} "
-                              "(the REWIND case)")
-        return VERB_TARGET[verb]
-    if verb == "leave-to-finish":
-        if state not in ("running", "pulled", "awaiting-ruling"):
-            raise CortexError(f"leave-to-finish applies to running | pulled | awaiting-ruling, "
-                              f"not {state}")
-        return None
-    if state == "awaiting-ruling":
-        return VERB_TARGET[verb]
-    if verb == "drop":
-        return "dropped"
-    raise CortexError(f"'{verb}' is not allowed from State: {state} "
-                      f"(the table: awaiting-ruling → {VERB_TARGET[verb]})")
-
-
-def rule_task(root: Path, ref: str, verb: str, body: str, *, supersedes: "str | None" = None,
-              batch: "str | None" = None, minutes: "int | None" = None,
-              follow_ups: "tuple[str, ...]" = (),
-              today: "date | None" = None, now: "datetime | None" = None) -> "list[str]":
-    """File the ruling for one task and update its `Ruling:` and `State:`;
-    return the ruling paths written (a list of one).
-    Everything is validated before anything is written."""
-    today = today or date.today()
-    now = now or datetime.now(timezone.utc)
-    root = root.resolve()
-    rulings, _ = load_rulings(root)
-    by_id = {r.id: r for r in rulings}
-    successors: "dict[str, list[str]]" = {}
-    for r in rulings:
-        if r.get("Supersedes"):
-            successors.setdefault(r.get("Supersedes"), []).append(r.id)
-    if batch and not (root / "batches" / f"{batch}.md").is_file():
-        raise CortexError(f"--batch {batch} names no batches/{batch}.md")
-    _, bad = gate_refs(", ".join(follow_ups))
-    if bad:
-        raise CortexError(f"--follow-up '{bad[0]}' is not Repo#N or an issue/PR URL "
-                          "(create the issue first)")
-    body = body.strip("\n")
-    if not body.strip():
-        raise CortexError("--body is empty — the human's words, verbatim")
-
-    tk = _task_at(root, ref)
-    plan = [(tk, supersedes, _ruling_target(tk, verb, supersedes, by_id, successors))]
-
-    taken: "set[str]" = set()
-    written = []
-    for tk, sup, new_state in plan:
-        rid = next_ruling_id(root, today, taken)
-        taken.add(rid)
-        if sup and not sup < rid:
-            raise CortexError(f"{sup} is not earlier than the new id {rid} (--today?)")
-        path = root / "rulings" / rid[2:6] / rid[6:8] / f"{rid}.md"
-        if path.exists():
-            raise CortexError(f"refusing to touch an existing ruling: {path.relative_to(root)}")
-        plan_item = (tk, sup, new_state, rid, path)
-        written.append(plan_item)
-
-    stamp = f"{today.isoformat()}T{now.strftime('%H:%M')}Z"
-    out = []
-    for tk, sup, new_state, rid, path in written:
-        header = [f"Project: {tk.get('Project')}", f"Task: {tk.rel}",
-                  f"Runs: {tk.get('Runs')}" if tk.get("Runs") else "Runs:",
-                  f"Ruling: {verb}"]
-        if sup:
-            header.append(f"Supersedes: {sup}")
-        if batch:
-            header.append(f"Batch: {batch}")
-        header.append(f"Reviewed-at: {stamp}")
-        if minutes is not None:
-            header.append(f"Review-minutes-actual: {minutes}")
-        if follow_ups:
-            header.append(f"Follow-ups: {', '.join(follow_ups)}")
-        evidence = _where_to_look(tk) or ["- (none given)"]
-        text = "\n".join([f"# {rid} — {verb} {tk.get('Project')} {tk.slug}", ""]
-                         + header + ["", "## Ruling", "", body, "", "## Evidence", ""]
-                         + evidence) + "\n"
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(text, encoding="utf-8")
-        updates: "dict[str, str | None]" = {"Ruling": rid}
-        if new_state:
-            updates["State"] = new_state
-        line = f"{rid} — {verb}" + (f" (supersedes {sup})" if sup else "")
-        ptext = append_to_section(tk.text, "Ruling", [line], replace_placeholder="(none)")
-        tk.path.write_text(edit_header(ptext, updates), encoding="utf-8")
-        out.append(path.relative_to(root).as_posix())
-    return out
-
-
-def _where_to_look(tk: Task) -> "list[str]":
-    span = sections(tk.text).get("Where to look")
-    if span is None:
-        return []
-    lines = tk.text.split("\n")[span[0]:span[1]]
-    return [ln for ln in lines if ln.startswith("- ") and ln.strip() != "-"]
-
-
-def cmd_rule(args) -> int:
-    body_path = Path(args.body)
-    if not body_path.is_file():
-        raise CortexError(f"--body {args.body} is not a file")
-    paths = rule_task(args.root, args.task, args.verb, body_path.read_text(encoding="utf-8"),
-                      supersedes=args.supersedes, batch=args.batch, minutes=args.minutes,
-                      follow_ups=tuple(args.follow_up or ()), today=_today(args))
-    for p in paths:
-        print(f"wrote {p}")
-    return 0
-
-
-# --------------------------------------------------------------------------- #
-# new
-# --------------------------------------------------------------------------- #
-def new_task(root: Path, project: str, slug: str, summary: str, *, gates: str = "",
-             epic: str = "", legacy_runs: "tuple[str, ...]" = (),
-             legacy_wrong: "tuple[str, ...]" = (), where: "str | None" = None,
-             partition: "str | None" = None, witness: str = "", budget: str = "",
-             minutes: "int | None" = None, title: "str | None" = None,
-             today: "date | None" = None) -> str:
-    """Write tasks/<project>/<slug>.md from the template; return its rel path."""
-    today = today or date.today()
-    projects, problems = load_projects(root)
-    if project not in projects:
-        raise CortexError(f"project {project} is not a projects.yaml key"
-                          + (f" ({problems[0]})" if problems else ""))
-    if not SLUG_RE.match(slug):
-        raise CortexError(f"slug '{slug}' must match {SLUG_RE.pattern}")
-    summary = " ".join((summary or "").split())
-    if not summary:
-        raise CortexError("--summary must say what the task asks, in one line")
-    if len(summary.split()) > SUMMARY_MAX_WORDS:
-        raise CortexError(f"--summary is {len(summary.split())} words — at most "
-                          f"{SUMMARY_MAX_WORDS} (the question the task answers)")
-    # The slug IS the identity: the path is unique per project, so there is
-    # nothing else to collide on.
-    path = root / "tasks" / project / f"{slug}.md"
-    if path.exists():
-        raise CortexError(f"{path.relative_to(root).as_posix()} already exists")
-    _, bad = gate_refs(gates)
-    if bad:
-        raise CortexError(f"--gates '{bad[0]}' is not Repo#N or an issue/PR URL (no owner/Repo#N form)")
-    legacy = [(r, "legacy") for r in legacy_runs] + [(r, "legacy_wrong") for r in legacy_wrong]
-    if legacy:
-        if gates.strip():
-            raise CortexError("a legacy-born task cannot be gated — its runs already happened")
-        if not where:
-            raise CortexError("--legacy-run needs --where <quarantine path> (check requires where:)")
-        for ident, _ in legacy:
-            if not RUN_IDENT_RE.match(ident):
-                raise CortexError(f"legacy run '{ident}' is not <stem>[_<task>|_[<set>]]")
-        part = _partition_for(root, project, partition)
-    if budget and not WALL_RE.match(budget):
-        raise CortexError(f"--budget '{budget}' is not H+:MM")
-    state = "ready" if legacy else "planned"
-    stems = []
-    for ident, _ in legacy:
-        stem = ident.split("_")[0]
-        if stem not in stems:
-            stems.append(stem)
-    words = slug.replace("_", " ").replace("-", " ")
-    title = title or words
-    header = [
-        f"Project: {project}", f"Summary: {summary}", f"State: {state}",
-        f"Gates: {gates.strip()}" if gates.strip() else "Gates:",
-        f"Witness: {witness}" if witness else "Witness:",
-        f"Budget: {budget}" if budget else "Budget:",
-        f"Runs: {', '.join(stems)}" if stems else "Runs:",
-        "Ruling:",
-        f"Review-minutes: {minutes}" if minutes is not None else "Review-minutes:",
-        f"Epic: {epic}" if epic else "Epic:", f"Filed: {today.isoformat()}",
-    ]
-    run_lines = []
-    for ident, rstate in legacy:
-        run_lines.append(_run_line(ident, rstate, part, today, note="pre-Cortex run, migrated"))
-        run_lines.append(f"    where: {where}")
-    body = [
-        f"# {project.capitalize()} — {title}", "",
-        *header, "",
-        "## Question", "", "(the question this task answers)", "",
-        "## Witness", "", witness or "(not yet registered — a planned task may leave this empty)", "",
-        # A legacy-born task already knows where to look — `--where` is the
-        # quarantine path its runs landed in, and it is required for one — so
-        # the section names it rather than the placeholder `check` refuses on
-        # anything past `planned`.
-        "## Where to look", "",
-        f"- `{where}`" if where else f"- {WHERE_PLACEHOLDER}", "",
-        "## Runs", "",
-    ]
-    if run_lines:
-        body += run_lines + [""]
-    body += ["## Ruling", "", "(none)", ""]
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text("\n".join(body), encoding="utf-8")
-    return path.relative_to(root).as_posix()
-
-
-def cmd_new(args) -> int:
-    rel = new_task(args.root, args.project, args.slug, args.summary, gates=args.gates or "",
-                   epic=args.epic or "", legacy_runs=tuple(args.legacy_run or ()),
-                   legacy_wrong=tuple(args.legacy_wrong or ()), where=args.where,
-                   partition=args.partition, witness=args.witness or "",
-                   budget=args.budget or "", minutes=args.minutes, title=args.title,
-                   today=_today(args))
-    print(f"wrote {rel}")
-    return 0
-
-
-# --------------------------------------------------------------------------- #
-# main
-# --------------------------------------------------------------------------- #
 def _common(p: argparse.ArgumentParser, dated: bool = False) -> None:
     p.add_argument("--root", type=Path, default=ROOT,
                    help="the Cortex tree to operate on (default: this checkout)")
@@ -1362,72 +832,68 @@ def _common(p: argparse.ArgumentParser, dated: bool = False) -> None:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(
-        prog="cortex.py", description=__doc__.split("\n\n")[0],
-        formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser = argparse.ArgumentParser(prog="cortex", description=__doc__.split("\n")[0])
     sub = parser.add_subparsers(dest="command", required=True)
 
-    c = sub.add_parser("check", help="every rule in REFERENCE.md; exit 1 on drift")
-    _common(c)
-    c.set_defaults(func=cmd_check)
+    p = sub.add_parser("check", help="every structural rule; OK or DRIFT")
+    _common(p)
+    p.set_defaults(func=cmd_check)
 
-    g = sub.add_parser("gates", help="list every gated task, its refs and their URLs")
-    _common(g)
-    g.set_defaults(func=cmd_gates)
+    p = sub.add_parser("new", help="open a project's ledger")
+    p.add_argument("project")
+    p.add_argument("--summary", required=True, help=f"one line, at most {SUMMARY_MAX_WORDS} words")
+    p.add_argument("--issue", default="none", help="Repo#N or an issue URL (default none)")
+    p.add_argument("--now", help="the opening `## Now` text")
+    _common(p, dated=True)
+    p.set_defaults(func=cmd_new)
 
-    r = sub.add_parser("rule", help="file a ruling and move the task per the table")
-    _common(r, dated=True)
-    r.add_argument("task", help="tasks/<project>/<slug>.md")
-    r.add_argument("verb", choices=RULING_VERBS)
-    r.add_argument("--body", required=True, help="file holding the human's words, verbatim")
-    r.add_argument("--supersedes", help="the ruling id this one replaces (the chain head)")
-    r.add_argument("--batch", help="the <YYYY-MM-DD>-<slot> the ruling was filed from")
-    r.add_argument("--minutes", type=int, help="Review-minutes-actual")
-    r.add_argument("--follow-up", action="append", metavar="REF",
-                   help="Repo#N or an issue/PR URL; repeatable; the issue exists already")
-    r.set_defaults(func=cmd_rule)
+    p = sub.add_parser("run", help="record a submission: the run goes under ## Runs as open")
+    p.add_argument("project")
+    p.add_argument("jobid")
+    p.add_argument("what", help="what the run is, one line")
+    p.add_argument("--partition", help="gpu | ral (needed when the project runs on both)")
+    _common(p, dated=True)
+    p.set_defaults(func=cmd_run)
 
-    m = sub.add_parser("move", help="one edge of the transition table")
-    _common(m, dated=True)
-    m.add_argument("task", help="tasks/<project>/<slug>.md")
-    m.add_argument("state", help="the state to move to")
-    m.add_argument("--run", metavar="ID", help="SLURM job id (<stem>[_<task>|_[<set>]]) to append")
-    m.add_argument("--reason", help="why a submitted | running task goes back to ready (Reset:)")
-    m.add_argument("--partial", action="store_true",
-                   help="running → pulled with a run still live (needs a leave-to-finish ruling)")
-    m.add_argument("--partition", help="the run line's partition (default: the project's row)")
-    m.add_argument("--after", metavar="RUN", help="afterok dependency of the appended run")
-    m.add_argument("--resumes", metavar="RUN", help="the run the appended run resumes from")
-    m.add_argument("--note", help="free text after the appended run line's fourth dash")
-    m.add_argument("--pulled-to", metavar="PATH",
-                   help="→ pulled: the laptop path written as pulled_to: on each done | legacy "
-                        "run lacking one (default for a legacy run: its where:)")
-    m.set_defaults(func=cmd_move)
+    p = sub.add_parser("running", help="a run has started on the cluster")
+    p.add_argument("project")
+    p.add_argument("jobid")
+    _common(p)
+    p.set_defaults(func=cmd_running)
 
-    n = sub.add_parser("new", help="write tasks/<project>/<slug>.md from the template")
-    _common(n, dated=True)
-    n.add_argument("project")
-    n.add_argument("slug")
-    n.add_argument("--summary", required=True,
-                   help=f"the question the task answers, at most {SUMMARY_MAX_WORDS} words")
-    n.add_argument("--gates", help="comma-separated Repo#N or issue/PR URLs")
-    n.add_argument("--epic", help="the epic slug shared with the Mind")
-    n.add_argument("--legacy-run", action="append", metavar="ID", help="a pre-Cortex run, reusable")
-    n.add_argument("--legacy-wrong", action="append", metavar="ID", help="a pre-Cortex run, not reusable")
-    n.add_argument("--where", help="quarantine path written to each legacy run's where:")
-    n.add_argument("--partition", help="the legacy runs' partition (default: the project's row)")
-    n.add_argument("--witness", help="the pre-registered checkable claim")
-    n.add_argument("--budget", help="wall budget per run, H+:MM")
-    n.add_argument("--minutes", type=int, help="Review-minutes seed")
-    n.add_argument("--title", help="the title after `# <Project> — ` (default: the slug's words)")
-    n.set_defaults(func=cmd_new)
+    p = sub.add_parser("done", help="a run has finished: it leaves ## Runs and enters the log")
+    p.add_argument("project")
+    p.add_argument("jobid")
+    p.add_argument("--failed", action="store_true")
+    p.add_argument("--wall", help="H:MM")
+    p.add_argument("--note", help="one line to carry into the entry")
+    _common(p, dated=True)
+    p.set_defaults(func=cmd_done)
 
-    t = sub.add_parser("retire", help="flip a project's row to status: retired")
-    _common(t, dated=True)
-    t.add_argument("project", help="the projects.yaml key")
-    t.add_argument("--why", required=True,
-                   help="one line: why the project is being retired")
-    t.set_defaults(func=cmd_retire)
+    p = sub.add_parser("log", help="write a dated entry in the human's words")
+    p.add_argument("project")
+    p.add_argument("text")
+    p.add_argument("--kind", default="note", choices=KINDS)
+    _common(p, dated=True)
+    p.set_defaults(func=cmd_log)
+
+    p = sub.add_parser("now", help="rewrite ## Now")
+    p.add_argument("project")
+    p.add_argument("text")
+    _common(p)
+    p.set_defaults(func=cmd_now)
+
+    p = sub.add_parser("issue", help="print the block that sits at the top of the project's issue")
+    p.add_argument("project")
+    p.add_argument("-n", type=int, default=LOG_WINDOW)
+    _common(p)
+    p.set_defaults(func=cmd_issue)
+
+    p = sub.add_parser("retire", help="retire a project's row (the only verb that writes projects.yaml)")
+    p.add_argument("project")
+    p.add_argument("--why", required=True)
+    _common(p, dated=True)
+    p.set_defaults(func=cmd_retire)
     return parser
 
 

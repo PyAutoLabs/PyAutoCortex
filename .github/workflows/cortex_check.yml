@@ -13,9 +13,8 @@ on:
   push:
     branches: [main]
     paths:
-      - "tasks/**"
-      - "rulings/**"
-      - "batches/**"
+      - "projects/**"
+      - "archive/**"
       - "projects.yaml"
       - "checkin.yaml"
       - "dashboard.md"
@@ -25,9 +24,8 @@ on:
       - ".github/workflows/cortex_check.yml"
   pull_request:
     paths:
-      - "tasks/**"
-      - "rulings/**"
-      - "batches/**"
+      - "projects/**"
+      - "archive/**"
       - "projects.yaml"
       - "checkin.yaml"
       - "dashboard.md"

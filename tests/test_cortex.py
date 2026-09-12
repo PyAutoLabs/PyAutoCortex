@@ -1,14 +1,13 @@
-"""Contract tests for scripts/cortex.py — the Cortex's check, gates, rule, move, new.
+"""Contract tests for scripts/cortex.py — check, new, run, running, done, log, now, issue, retire.
 
-Two things these tests deliberately do, matching the Mind's `test_lifecycle_check.py`:
+Two things these tests deliberately do:
 
-1. **The fixture is the witness.** `tests/fixtures/skeleton/` holds one project,
-   one task per state, five rulings (one chain of two), one batch record and
-   one review; `tests/fixtures/empty/` is an empty map. Both must pass `check`
+1. **The fixture is the witness.** `tests/fixtures/skeleton/` holds four rows
+   (two active with ledgers, one retired with a closed ledger, one dormant
+   with none) and `tests/fixtures/empty/` an empty map. Both pass `check`
    unchanged, and every writing verb runs on a `copytree` of the skeleton.
 2. **Prove each leg FAILS.** Every `check` rule in REFERENCE.md is driven with
-   a `tmp_path` mutation that must trip it, asserting the `  - …` line; every
-   transition the table allows is taken and every one it refuses is refused.
+   a `tmp_path` mutation that must trip it, asserting the `  - …` line.
 """
 
 import shutil
@@ -27,1104 +26,385 @@ REPO = Path(__file__).resolve().parents[1]
 SCRIPT = REPO / "scripts" / "cortex.py"
 SKELETON = REPO / "tests" / "fixtures" / "skeleton"
 EMPTY = REPO / "tests" / "fixtures" / "empty"
-TODAY = "2026-09-02"
-
-P = {n: f"tasks/example/{n}.md" for n in (
-    "01_scope", "02_gated_on_dev", "03_ready_cleared", "04_submitted_override",
-    "05_running_array", "06_pulled", "07_awaiting_ruling", "08_accepted",
-    "09_rerun", "10_dropped")}
+TODAY = "2026-09-03"
+EX = "projects/example.md"
 
 
-# --------------------------------------------------------------------------- #
-# helpers
-# --------------------------------------------------------------------------- #
 def _copy(tmp_path: Path, src: Path = SKELETON) -> Path:
     root = tmp_path / "tree"
     shutil.copytree(src, root)
     return root
 
 
-def _run(*args, root=None, stdin=""):
+def _run(*args, root=None):
     cmd = [sys.executable, str(SCRIPT), *args]
     if root is not None:
         cmd += ["--root", str(root)]
-    return subprocess.run(cmd, input=stdin, capture_output=True, text=True)
+    return subprocess.run(cmd, capture_output=True, text=True)
 
 
 def _problems(root: Path):
     return cortex.check_problems(root)
 
 
-def _edit(root: Path, rel: str, old: str, new: str, count: int = 1):
+def _edit(root: Path, rel: str, old: str, new: str):
     p = root / rel
     text = p.read_text()
     assert old in text, f"{old!r} not in {rel}"
-    p.write_text(text.replace(old, new, count))
+    p.write_text(text.replace(old, new, 1))
 
 
-def _fields(root: Path, rel: str):
-    return cortex.parse_header((root / rel).read_text())[1]
-
-
-def _assert_drift(root: Path, *needles: str):
-    problems = _problems(root)
-    joined = "\n".join(problems)
-    for needle in needles:
-        assert needle in joined, f"expected {needle!r} in:\n{joined}"
-    return problems
-
-
-def _move(root, rel, state, *extra, today=TODAY):
-    return _run("move", rel, state, "--today", today, *extra, root=root)
-
-
-def _body(tmp_path: Path, text="Accept. The human's words, verbatim.\n") -> Path:
-    p = tmp_path / "body.txt"
-    p.write_text(text)
-    return p
+def _ledger(root: Path, key: str = "example") -> cortex.Ledger:
+    leds, _ = cortex.load_ledgers(root)
+    return next(l for l in leds if l.key == key)
 
 
 # --------------------------------------------------------------------------- #
-# the witness — both fixtures pass check unchanged
+# check
 # --------------------------------------------------------------------------- #
-def test_skeleton_fixture_passes_check():
-    result = _run("check", root=SKELETON)
-    assert result.returncode == 0, result.stdout + result.stderr
-    assert result.stdout.strip() == "cortex check: OK"
-
-
-def test_empty_fixture_passes_check():
-    result = _run("check", root=EMPTY)
-    assert result.returncode == 0, result.stdout + result.stderr
-    assert result.stdout.strip() == "cortex check: OK"
-
-
-def test_check_problems_is_quiet_on_the_witness():
+def test_the_fixtures_check_clean():
     assert _problems(SKELETON) == []
     assert _problems(EMPTY) == []
+    assert _run("check", root=SKELETON).returncode == 0
+    assert _run("check", root=EMPTY).returncode == 0
 
 
-def test_check_reports_drift_in_lifecycle_shape(tmp_path):
+def test_the_live_tree_checks_clean():
+    r = _run("check", root=REPO)
+    assert r.returncode == 0, r.stdout
+
+
+def test_check_prints_one_line_per_finding_and_exits_1(tmp_path):
     root = _copy(tmp_path)
-    _edit(root, P["03_ready_cleared"], "State: ready\n", "State: flying\n")
-    result = _run("check", root=root)
-    assert result.returncode == 1
-    lines = result.stdout.splitlines()
-    assert lines[0] == "cortex check: DRIFT"
-    assert lines[1].startswith("  - tasks/example/03_ready_cleared.md: ")
+    _edit(root, EX, "Issue: example#7", "Issue: nonsense")
+    r = _run("check", root=root)
+    assert r.returncode == 1
+    assert "cortex check: DRIFT" in r.stdout
+    assert "  - projects/example.md: `Issue:` must be" in r.stdout
 
 
-def test_no_import_time_side_effects_and_root_on_every_verb():
-    help_text = _run("--help").stdout
-    for verb in ("check", "gates", "rule", "move", "new"):
-        assert verb in help_text
-        assert "--root" in _run(verb, "--help").stdout
+def test_an_active_project_needs_a_ledger(tmp_path):
+    root = _copy(tmp_path)
+    (root / "projects" / "single.md").unlink()
+    assert any("single is active but has no projects/single.md" in p for p in _problems(root))
+
+
+def test_a_ledger_needs_a_row(tmp_path):
+    root = _copy(tmp_path)
+    shutil.copy(root / EX, root / "projects" / "stranger.md")
+    _edit(root, "projects/stranger.md", "# example —", "# stranger —")
+    _edit(root, "projects/stranger.md", "Project: example", "Project: stranger")
+    assert any("stranger is not a projects.yaml key" in p for p in _problems(root))
+
+
+def test_the_file_name_is_the_key(tmp_path):
+    root = _copy(tmp_path)
+    (root / "projects" / "Example-Two.md").write_text("# x — y\n")
+    assert any("file name must be projects/<key>.md" in p for p in _problems(root))
+
+
+def test_the_title_names_the_key_and_carries_a_short_summary(tmp_path):
+    root = _copy(tmp_path)
+    _edit(root, EX, "# example — Does", "# other — Does")
+    assert any("title must be `# example — <summary>`" in p for p in _problems(root))
+    root = _copy(tmp_path / "b")
+    _edit(root, EX, "# example — Does the example pipeline recover the truth on the fixture lens",
+          "# example — " + " ".join(["word"] * 16))
+    assert any("summary is over 15 words" in p for p in _problems(root))
+
+
+def test_the_header_holds_project_and_issue_only(tmp_path):
+    root = _copy(tmp_path)
+    _edit(root, EX, "Issue: example#7", "Issue: example#7\nState: running")
+    assert any("unknown header key(s) State" in p for p in _problems(root))
+    root = _copy(tmp_path / "b")
+    _edit(root, EX, "Issue: example#7\n", "")
+    assert any("header is missing `Issue:`" in p for p in _problems(root))
+    root = _copy(tmp_path / "c")
+    _edit(root, EX, "Project: example", "Project: other")
+    assert any("`Project:` must be example" in p for p in _problems(root))
+
+
+def test_issue_grammar():
+    for ok in ("none", "example#7", "PyAutoCortex#12",
+               "https://github.com/Jammy2211/ic50_workspace/issues/3"):
+        assert cortex.ISSUE_RE.match(ok), ok
+    for bad in ("PyAutoLabs/example#7", "example", "#7", ""):
+        assert not cortex.ISSUE_RE.match(bad), bad
+    assert cortex.issue_url("example#7") == "https://github.com/PyAutoLabs/example/issues/7"
+
+
+def test_the_three_sections_in_order_and_nothing_else(tmp_path):
+    root = _copy(tmp_path)
+    _edit(root, EX, "## Runs", "## Jobs")
+    assert any("sections must be exactly ## Now · ## Runs · ## Log" in p for p in _problems(root))
+    root = _copy(tmp_path / "b")
+    _edit(root, EX, "## Log", "## Notes\n\n## Log")
+    assert any("sections must be exactly" in p for p in _problems(root))
+
+
+def test_an_active_project_must_say_where_it_is(tmp_path):
+    root = _copy(tmp_path)
+    p = root / EX
+    text = p.read_text()
+    a, b = text.index("## Now"), text.index("## Runs")
+    p.write_text(text[:a] + "## Now\n\n" + text[b:])
+    assert any("`## Now` is empty on an active project" in p for p in _problems(root))
+
+
+def test_run_lines_parse_to_open_or_running_with_a_partition_and_a_date(tmp_path):
+    led = _ledger(SKELETON)
+    assert [(r.ident, r.state, r.partition, r.date) for r in led.runs] == [
+        ("3002_[0-3]", "running", "ral", "2026-09-01"),
+        ("3003", "open", "gpu", "2026-09-02")]
+    assert led.runs[1].text() == "joint fit on the same four seeds chained after 3002 with afterok"
+    root = _copy(tmp_path)
+    _edit(root, EX, "- 3003 — open — gpu", "- 3003 — submitted — gpu")
+    assert any("run line does not parse" in p for p in _problems(root))
+    root = _copy(tmp_path / "b")
+    _edit(root, EX, "- 3003 — open — gpu", "- 3003 — open — cpu")
+    assert not any("3003" in p and "partition" in p for p in _problems(root))  # `both` allows any
+    _edit(root, "projects/single.md", "## Runs\n", "## Runs\n\n- 9 — open — gpu — 2026-09-01 — x\n")
+    assert any("run 9 is on `gpu` but the project runs on `ral`" in p for p in _problems(root))
+
+
+def test_a_run_is_listed_once_and_a_retired_project_lists_none(tmp_path):
+    root = _copy(tmp_path)
+    _edit(root, EX, "- 3003 — open — gpu — 2026-09-02 — joint fit",
+          "- 3003 — open — gpu — 2026-09-02 — joint fit\n- 3003 — open — gpu — 2026-09-02 — again")
+    assert any("run 3003 listed twice" in p for p in _problems(root))
+    root = _copy(tmp_path / "b")
+    _edit(root, "projects/wound_down.md", "## Runs\n", "## Runs\n\n- 1 — open — ral — 2026-09-01 — x\n")
+    assert any("a retired project still lists runs" in p for p in _problems(root))
+
+
+def test_the_dash_may_be_typed_as_two_hyphens():
+    led = cortex.parse_ledger(
+        "# k -- summary\n\nProject: k\nIssue: none\n\n## Now\n\nx\n\n## Runs\n\n"
+        "- 1 -- open -- ral -- 2026-09-01 -- a run\n\n## Log\n\n- 2026-09-01 -- note -- hi\n",
+        "k", Path("k.md"), "projects/k.md")
+    assert led.problems == []
+    assert led.summary == "summary" and led.runs[0].state == "open" and led.log[0].kind == "note"
+
+
+def test_log_lines_carry_a_date_a_kind_and_text_newest_first(tmp_path):
+    led = _ledger(SKELETON)
+    assert [e.kind for e in led.log] == ["run", "run", "lesson", "result", "run", "run", "note"]
+    assert led.log[3].text() == ("wave 1 recovered the parent mean but its sigma is 4x too "
+                                 "tight the widths are the finding, not the means")
+    assert led.updated() == "2026-09-02"
+    assert [e.date for e in led.recent(2)] == ["2026-09-02", "2026-09-01"]
+    root = _copy(tmp_path)
+    _edit(root, EX, "- 2026-09-01 — lesson —", "- 2026-09-01 — verdict —")
+    assert any("log line does not parse" in p for p in _problems(root))
+    root = _copy(tmp_path / "b")
+    _edit(root, EX, "- 2026-08-28 — note — ledger opened", "- 2026-09-09 — note — out of order")
+    assert any("log is not newest-first" in p for p in _problems(root))
+    root = _copy(tmp_path / "c")
+    _edit(root, EX, "- 2026-08-28 — note", "- 2026-02-30 — note")
+    assert any("not a real date" in p for p in _problems(root))
+
+
+def test_a_continuation_line_needs_something_to_continue(tmp_path):
+    root = _copy(tmp_path)
+    _edit(root, EX, "## Log\n\n", "## Log\n\n  orphan\n")
+    assert any("continuation line without a log line" in p for p in _problems(root))
+
+
+def test_projects_yaml_is_validated(tmp_path):
+    root = _copy(tmp_path)
+    _edit(root, "projects.yaml", "  partition: both\n  status: active\n  note: \"the fixture project\"",
+          "  partition: moon\n  status: active\n  note: \"the fixture project\"")
+    assert any("example.partition must be gpu | ral | both" in p for p in _problems(root))
+    root = _copy(tmp_path / "b")
+    _edit(root, "projects.yaml", "  status: active\n  note: \"the fixture project\"",
+          "  status: active\n  colour: red\n  note: \"the fixture project\"")
+    assert any("unknown field `colour` on example" in p for p in _problems(root))
 
 
 # --------------------------------------------------------------------------- #
-# the light header and the grammars
+# the writing verbs
 # --------------------------------------------------------------------------- #
-def test_header_first_occurrence_wins_block_ends_at_blank_line_list_keys():
-    text = ("# Title\n\nProject: one\nProject: two\nGates:\n- A#1\n- B#2\nState: ready\n\n"
-            "Task: 99\n")
-    title, fields = cortex.parse_header(text)
-    assert title == "Title"
-    assert fields["Project"] == "one"
-    assert fields["Gates"] == "A#1, B#2"
-    assert "Task" not in fields  # after the blank line — body, not header
-
-
-def test_header_beyond_30_lines_is_body():
-    text = "# T\n\n" + "\n".join(f"K{i}: v" for i in range(40)) + "\n"
-    _, fields = cortex.parse_header(text)
-    assert "K27" in fields and "K28" not in fields
-
-
-def test_edit_header_preserves_every_other_byte(tmp_path):
+def test_new_opens_a_ledger_for_a_row_and_refuses_the_rest(tmp_path):
     root = _copy(tmp_path)
-    before = (root / P["03_ready_cleared"]).read_text()
-    after = cortex.edit_header(before, {"State": "submitted"})
-    assert after.replace("State: submitted", "State: ready") == before
-    # a removed key drops exactly one line; an inserted key lands at its slot
-    removed = cortex.edit_header(before, {"Budget": None})
-    assert removed == before.replace("Budget: 5:00\n", "")
-    inserted = cortex.edit_header(removed, {"Reset": "why"})
-    lines = inserted.splitlines()
-    assert lines[lines.index("Gates: PyAutoGalaxy#486") + 1] == "Reset: why"
-
-
-def test_run_line_regex_matches_reference_examples():
-    for line in (
-        "- 342091_[0-8,10]: done — gpu — submitted 2026-08-30 — wall 6:12",
-        "- 342091_9: failed — gpu — submitted 2026-08-30 — wall 0:00 — OOM before the first step",
-        "- 342102: running — gpu — submitted 2026-09-01 — wall 0:00 — task 9 resubmitted alone",
-    ):
-        assert cortex.RUN_LINE_RE.match(line), line
-    assert cortex.RUN_CONT_RE.match("    after: 342091_9")
-    assert not cortex.RUN_CONT_RE.match("  after: 342091_9")
-    assert not cortex.RUN_LINE_RE.match("- 342102: running — GPU — submitted 2026-09-01 — wall 0:00")
-
-
-def test_double_dash_is_read_as_the_em_dash(tmp_path):
-    root = _copy(tmp_path)
-    _edit(root, P["06_pulled"], " — gpu — submitted 2026-08-31 — wall 3:40 — ",
-          " -- gpu -- submitted 2026-08-31 -- wall 3:40 -- ")
+    (root / "projects" / "single.md").unlink()
+    r = _run("new", "single", "--summary", "A fresh question", "--issue", "single#1",
+             "--today", TODAY, root=root)
+    assert r.returncode == 0, r.stderr
+    led = _ledger(root, "single")
+    assert led.summary == "A fresh question" and led.issue == "single#1"
+    assert led.now.startswith("Just opened")
+    assert led.log[0].text() == "ledger opened" and led.log[0].date == TODAY
     assert _problems(root) == []
+    assert _run("new", "single", "--summary", "again", root=root).returncode == 1
+    r = _run("new", "nobody", "--summary", "x", root=root)
+    assert r.returncode == 1 and "not a projects.yaml key" in r.stderr
+    r = _run("new", "sleeping", "--summary", " ".join(["w"] * 16), root=root)
+    assert r.returncode == 1 and "over 15 words" in r.stderr
+    r = _run("new", "sleeping", "--summary", "x", "--issue", "PyAutoLabs/x#1", root=root)
+    assert r.returncode == 1 and "--issue must be" in r.stderr
 
 
-def test_gate_ref_regex_rejects_owner_repo_form():
-    assert cortex.GATE_REF_RE.fullmatch("PyAutoArray#431")
-    assert cortex.GATE_REF_RE.fullmatch("https://github.com/PyAutoLabs/PyAutoFit/pull/1436")
-    assert not cortex.GATE_REF_RE.fullmatch("PyAutoLabs/PyAutoArray#431")
-    assert cortex.gate_url("PyAutoArray#431") == "https://github.com/PyAutoLabs/PyAutoArray/issues/431"
-    assert cortex.gate_url("https://github.com/o/r/pull/7") == "https://github.com/o/r/issues/7"
+def test_run_records_a_submission_as_open_and_logs_it(tmp_path):
+    root = _copy(tmp_path)
+    r = _run("run", "example", "3004_[0-9]", "wave 3, ten seeds", "--partition", "ral",
+             "--today", TODAY, root=root)
+    assert r.returncode == 0, r.stderr
+    led = _ledger(root)
+    assert [x.ident for x in led.runs] == ["3002_[0-3]", "3003", "3004_[0-9]"]
+    assert led.runs[-1].state == "open" and led.runs[-1].partition == "ral"
+    assert led.log[0].kind == "run" and led.log[0].text() == "3004_[0-9] submitted: wave 3, ten seeds"
+    assert _problems(root) == []
+    # again → refused; a project on both partitions needs --partition; a bad id is refused
+    assert _run("run", "example", "3004_[0-9]", "x", "--partition", "ral", root=root).returncode == 1
+    r = _run("run", "example", "3005", "x", root=root)
+    assert r.returncode == 1 and "--partition" in r.stderr
+    r = _run("run", "example", "job-five", "x", "--partition", "ral", root=root)
+    assert r.returncode == 1 and "not a SLURM job id" in r.stderr
+    # a one-partition project needs no flag
+    assert _run("run", "single", "77", "first run", "--today", TODAY, root=root).returncode == 0
+    assert _ledger(root, "single").runs[0].partition == "ral"
+
+
+def test_running_flips_the_state_and_done_moves_the_run_into_the_log(tmp_path):
+    root = _copy(tmp_path)
+    assert _run("running", "example", "3003", root=root).returncode == 0
+    assert _ledger(root).runs[1].state == "running"
+    assert "already running" in _run("running", "example", "3003", root=root).stdout
+    r = _run("done", "example", "3002_[0-3]", "--wall", "20:05", "--note", "all four landed",
+             "--today", TODAY, root=root)
+    assert r.returncode == 0, r.stderr
+    led = _ledger(root)
+    assert [x.ident for x in led.runs] == ["3003"]
+    assert led.log[0].text() == ("3002_[0-3] finished — wall 20:05: wave 2, four seeds on the "
+                                 "corrected settings — all four landed")
+    r = _run("done", "example", "3003", "--failed", "--today", TODAY, root=root)
+    assert r.returncode == 0
+    led = _ledger(root)
+    assert led.runs == [] and led.log[0].text().startswith("3003 failed: joint fit")
+    assert _problems(root) == []
+    r = _run("done", "example", "3003", root=root)
+    assert r.returncode == 1 and "is not under ## Runs" in r.stderr
+    r = _run("done", "single", "1", "--wall", "20", root=root)
+    assert r.returncode == 1 and "--wall must be H:MM" in r.stderr
+
+
+def test_log_writes_the_humans_words_newest_first(tmp_path):
+    root = _copy(tmp_path)
+    r = _run("log", "example", "the sigma is the finding, not the mean", "--kind", "lesson",
+             "--today", TODAY, root=root)
+    assert r.returncode == 0, r.stderr
+    led = _ledger(root)
+    assert led.log[0].kind == "lesson" and led.log[0].date == TODAY
+    assert len(led.log) == 8 and _problems(root) == []
+    assert _run("log", "example", "plain", "--today", TODAY, root=root).returncode == 0
+    assert _ledger(root).log[0].kind == "note"
+    r = _run("log", "example", "backdated", "--today", "2026-08-01", root=root)
+    assert r.returncode == 1 and "newest-first" in r.stderr
+    r = _run("log", "example", "   ", root=root)
+    assert r.returncode == 1
+    r = _run("log", "example", "x", "--kind", "verdict", root=root)
+    assert r.returncode == 2
+
+
+def test_now_rewrites_the_head_pointer_and_nothing_else(tmp_path):
+    root = _copy(tmp_path)
+    before = _ledger(root)
+    r = _run("now", "example", "Pulled wave 2.\nNext: compare against wave 1.", root=root)
+    assert r.returncode == 0, r.stderr
+    led = _ledger(root)
+    assert led.now == "Pulled wave 2.\nNext: compare against wave 1."
+    assert [x.ident for x in led.runs] == [x.ident for x in before.runs]
+    assert len(led.log) == len(before.log)
+    assert _problems(root) == []
+    assert _run("now", "example", "", root=root).returncode == 1
+
+
+def test_a_verb_refuses_a_ledger_that_does_not_parse(tmp_path):
+    root = _copy(tmp_path)
+    _edit(root, EX, "- 3003 — open — gpu", "- 3003 — weird — gpu")
+    r = _run("log", "example", "x", root=root)
+    assert r.returncode == 1 and "does not parse clean" in r.stderr
+    r = _run("log", "nobody", "x", root=root)
+    assert r.returncode == 1 and "no ledger for nobody" in r.stderr
 
 
 # --------------------------------------------------------------------------- #
-# projects.yaml — PyYAML plus the field validation
+# the issue block
 # --------------------------------------------------------------------------- #
-def test_comment_only_projects_yaml_parses_to_an_empty_map():
-    rows, problems = cortex.parse_projects((EMPTY / "projects.yaml").read_text())
-    assert rows == {} and problems == []
+def test_issue_prints_the_concise_ledger_between_markers():
+    r = _run("issue", "example", "-n", "3", root=SKELETON)
+    assert r.returncode == 0, r.stderr
+    out = r.stdout
+    assert out.startswith(cortex.ISSUE_BEGIN.format(key="example"))
+    assert out.rstrip().endswith(cortex.ISSUE_END)
+    assert "**Now**" in out and "Wave 2 is on the cluster" in out
+    assert "`3002_[0-3]` — running — ral" in out
+    assert "**Last 3**" in out
+    assert out.count("\n- `") == 2  # two runs
+    assert out.count("\n- 2026-") == 3  # three entries
+    assert "2026-08-31 — *result*" not in out  # the fourth entry is outside the window
 
 
-def test_the_live_body_map_parses_clean():
-    """The seeded map (task 3) is the real witness for the field validation:
-    it is the only file that exercises `note` and a 17-verb list. It stopped
-    exercising `planned` on 2026-09-07, when euclid_dr1_prelim's task 4
-    launched and its row flipped to `active` — the last `planned` row in the
-    live map. `planned` as a legal status is covered on the fixture by
-    `test_planned_and_retired_are_legal_statuses`."""
-    text = (REPO / "projects.yaml").read_text()
-    rows, problems = cortex.parse_projects(text)
-    assert problems == []
-    assert {"inference_programme", "subhalo_validation", "euclid",
-            "euclid_dr1_prelim"} <= set(rows)
-    assert rows["euclid_dr1_prelim"]["status"] == "active"
-    assert rows["euclid"]["remote"] == "none"
-    assert "PyAutoLabs remote" in rows["euclid"]["note"]
-    assert rows["subhalo_validation"]["assistant"] == "autolens_assistant"
-    assert rows["inference_programme"]["assistant"] == "none"
-
-
-def test_a_block_list_and_a_quoted_scalar_are_ordinary_yaml(tmp_path):
-    """What the retired hand parser refused, PyYAML reads: a block list, and a
-    quoted scalar holding a colon or a hash."""
-    root = _copy(tmp_path)
-    _edit(root, "projects.yaml", "  sync_verbs: [pull, submit, jobs, tail]\n",
-          "  sync_verbs:\n    - pull\n    - submit\n")
-    _edit(root, "projects.yaml", "  status: active\n",
-          '  status: active\n  note: "a fact: with a colon # and a hash"\n')
-    assert _problems(root) == []
-    rows, problems = cortex.parse_projects((root / "projects.yaml").read_text())
-    assert problems == []
-    assert rows["example"]["sync_verbs"] == ["pull", "submit"]
-    assert rows["example"]["note"] == "a fact: with a colon # and a hash"
-
-
-def test_a_document_pyyaml_cannot_read_is_one_problem():
-    rows, problems = cortex.parse_projects("example:\n  remote: [unclosed\n")
-    assert rows == {} and len(problems) == 1
-    assert "not valid YAML" in problems[0]
-
-
-def test_a_document_that_is_not_a_mapping_of_rows():
-    rows, problems = cortex.parse_projects("- example\n")
-    assert rows == {} and problems == ["projects.yaml: the document is not a mapping of project keys"]
-    rows, problems = cortex.parse_projects("example: a string\n")
-    assert rows == {} and problems == ["projects.yaml: example is not a mapping of fields"]
-
-
-def test_sync_verbs_must_hold_bare_words(tmp_path):
-    root = _copy(tmp_path)
-    _edit(root, "projects.yaml", "  sync_verbs: [pull, submit, jobs, tail]\n",
-          "  sync_verbs: [pull, 'Not A Verb']\n")
-    _assert_drift(root, "example.sync_verbs holds a non-bare word")
-
-
-def test_unknown_projects_field_is_an_error(tmp_path):
-    root = _copy(tmp_path)
-    _edit(root, "projects.yaml", "  status: active\n", "  status: active\n  colour: blue\n")
-    _assert_drift(root, "projects.yaml: unknown field `colour` on example")
-
-
-def test_missing_projects_field_and_bad_enums(tmp_path):
-    root = _copy(tmp_path)
-    _edit(root, "projects.yaml", "  partition: gpu\n", "  partition: cpu\n")
-    _edit(root, "projects.yaml", "  ledger: wiki/project/state.md\n", "")
-    _assert_drift(root, "example is missing ledger", "partition must be gpu | ral | both")
-
-
-def test_planned_and_retired_are_legal_statuses(tmp_path):
-    root = _copy(tmp_path)
-    for status in ("planned", "retired"):
-        _edit(root, "projects.yaml", "  status: active\n", f"  status: {status}\n")
-        assert _problems(root) == [], status
-        _edit(root, "projects.yaml", f"  status: {status}\n", "  status: active\n")
-    _edit(root, "projects.yaml", "  status: active\n", "  status: someday\n")
-    _assert_drift(root, "status must be active | dormant | planned | retired")
-
-
-def test_note_is_optional_but_never_empty_and_the_field_set_still_closes(tmp_path):
-    """`note` is the one field a row may omit. An empty one is still drift,
-    and everything outside the field set is still an unknown field."""
-    root = _copy(tmp_path)
-    assert _problems(root) == [], "the fixture carries no `note:`"
-    _edit(root, "projects.yaml", "  status: active\n",
-          '  status: active\n  note: "a fact: with a colon # and a hash"\n')
-    assert _problems(root) == []
-    rows, problems = cortex.parse_projects((root / "projects.yaml").read_text())
-    assert problems == [] and rows["example"]["note"] == \
-        "a fact: with a colon # and a hash"
-    _edit(root, "projects.yaml", '  note: "a fact: with a colon # and a hash"\n',
-          "  note:\n")
-    _assert_drift(root, "example.note is empty")
-
-
-def test_assistant_is_required_and_names_a_bare_workspace_directory(tmp_path):
-    """`assistant` is required like every field but `note`. Its value is
-    exactly `none` or a bare workspace-relative directory name — the Cortex
-    names the assistant, it never reads it, so no path and no stat."""
-    root = _copy(tmp_path)
-    assert _problems(root) == [], "the fixture carries `assistant: none`"
-    _edit(root, "projects.yaml", "  assistant: none\n",
-          "  assistant: autolens_assistant\n")
-    assert _problems(root) == []
-    rows, problems = cortex.parse_projects((root / "projects.yaml").read_text())
-    assert problems == [] and rows["example"]["assistant"] == "autolens_assistant"
-    _edit(root, "projects.yaml", "  assistant: autolens_assistant\n",
-          "  assistant:\n")
-    _assert_drift(root, "example.assistant is empty")
-    _edit(root, "projects.yaml", "  assistant:\n", "")
-    _assert_drift(root, "example is missing assistant")
-    for bad in ("../autolens_assistant", "/home/jammy/Code/PyAutoLabs/autolens_assistant"):
-        root = _copy(tmp_path / bad.replace("/", "_"))
-        _edit(root, "projects.yaml", "  assistant: none\n", f"  assistant: {bad}\n")
-        _assert_drift(root, "example.assistant must be 'none' or a bare "
-                            "workspace-relative directory name")
+def test_issue_block_names_the_home_when_given():
+    led = _ledger(SKELETON)
+    block = cortex.issue_block(led, {"status": "active"}, 5, home="https://github.com/x/y")
+    assert "(https://github.com/x/y/blob/main/projects/example.md)" in block
 
 
 # --------------------------------------------------------------------------- #
 # retire
 # --------------------------------------------------------------------------- #
-#: The states `retire` allows a project to still hold: the three ruled ones
-#: plus `planned`, which is an unasked question.
-_QUIET = {"01_scope", "08_accepted", "09_rerun", "10_dropped"}
-
-
-def _quiesce(root: Path, project: str = "example") -> "list[str]":
-    """Leave `project` holding only ruled and planned tasks — dropping the
-    rulings that named the tasks removed, so `check` stays clean."""
-    gone = []
-    for p in sorted((root / "tasks" / project).glob("*.md")):
-        if p.stem not in _QUIET:
-            gone.append(p.relative_to(root).as_posix())
-            p.unlink()
-    for r in sorted((root / "rulings").rglob("*.md")):
-        if any(f"Task: {g}" in r.read_text() for g in gone):
-            r.unlink()
-    assert _problems(root) == [], _problems(root)
-    return gone
-
-
-def test_retire_flips_the_status_and_stamps_the_note(tmp_path):
-    """Two lines change and nothing else — the row, its tasks and its
-    rulings all stay, and `check` is clean afterwards."""
+def test_retire_flips_the_row_logs_it_and_refuses_over_live_runs(tmp_path):
     root = _copy(tmp_path)
-    _quiesce(root)
-    before = (root / "projects.yaml").read_text().split("\n")
-    tasks_before = sorted(p.name for p in (root / "tasks" / "example").glob("*.md"))
-    assert cortex.retire_project(root, "example", "the question was answered",
-                                 date(2026, 9, 4)) == "retired example"
-    after = (root / "projects.yaml").read_text().split("\n")
-    assert "  status: retired" in after
-    assert '  note: "retired 2026-09-04: the question was answered"' in after
-    # every byte outside the two edited lines is identical: the fixture row
-    # carries no `note:`, so the note is an appended line.
-    assert [ln for ln in after if not ln.startswith(("  status:", "  note:"))] == \
-        [ln for ln in before if not ln.startswith("  status:")]
-    assert sorted(p.name for p in (root / "tasks" / "example").glob("*.md")) == \
-        tasks_before
+    r = _run("retire", "example", "--why", "done", "--today", TODAY, root=root)
+    assert r.returncode == 1 and "still lists runs" in r.stderr
+    r = _run("retire", "single", "--why", "never started", "--today", TODAY, root=root)
+    assert r.returncode == 0, r.stderr
+    rows, _ = cortex.load_projects(root)
+    assert rows["single"]["status"] == "retired"
+    assert rows["single"]["note"] == f"retired {TODAY}: never started"
+    assert _ledger(root, "single").log[0].text() == "retired: never started"
     assert _problems(root) == []
-    rows, problems = cortex.parse_projects((root / "projects.yaml").read_text())
-    assert problems == [] and rows["example"]["status"] == "retired"
+    assert _run("retire", "single", "--why", "again", root=root).returncode == 1
+    r = _run("retire", "sleeping", "--why", "no ledger, still fine", "--today", TODAY, root=root)
+    assert r.returncode == 0
+    assert (root / "projects.yaml").read_text().count("status: retired") == 3
 
 
-def test_retire_rewrites_an_existing_note_in_place(tmp_path):
+def test_retire_preserves_every_other_byte_of_projects_yaml(tmp_path):
     root = _copy(tmp_path)
-    _quiesce(root)
-    _edit(root, "projects.yaml", "  status: active\n",
-          '  status: active\n  note: "a fact: recorded"\n')
     before = (root / "projects.yaml").read_text()
-    cortex.retire_project(root, "example", "no science since 2026-05",
-                          date(2026, 9, 4))
+    _run("retire", "sleeping", "--why", "x", "--today", TODAY, root=root)
     after = (root / "projects.yaml").read_text()
-    assert '  note: "a fact: recorded"' not in after
-    assert '  note: "retired 2026-09-04: no science since 2026-05"' in after
-    assert after.count("  note:") == before.count("  note:") == 1
-    assert _problems(root) == []
-
-
-def test_retire_refuses_while_a_task_is_still_live(tmp_path):
-    """Every state outside `accepted | rerun | dropped | planned` is an
-    unfinished question, and the refusal names each one."""
-    root = _copy(tmp_path)
-    before = (root / "projects.yaml").read_text()
-    with pytest.raises(cortex.CortexError) as e:
-        cortex.retire_project(root, "example", "why", date(2026, 9, 4))
-    message = str(e.value)
-    assert "still has live work" in message
-    for name in ("02_gated_on_dev", "03_ready_cleared", "04_submitted_override",
-                 "05_running_array", "06_pulled", "07_awaiting_ruling"):
-        assert f"tasks/example/{name}.md — " in message
-    # planned and the ruled states are not named — they are allowed to stay
-    for name in ("01_scope", "08_accepted", "09_rerun", "10_dropped"):
-        assert f"tasks/example/{name}.md" not in message
-    assert (root / "projects.yaml").read_text() == before
-
-
-def test_retire_refuses_an_unknown_key_a_repeat_and_a_bad_why(tmp_path):
-    root = _copy(tmp_path)
-    _quiesce(root)
-    before = (root / "projects.yaml").read_text()
-    for why, needle in ((" ", "--why must say why"),
-                        ('a "quoted" reason', "double quote")):
-        with pytest.raises(cortex.CortexError) as e:
-            cortex.retire_project(root, "example", why, date(2026, 9, 4))
-        assert needle in str(e.value)
-    with pytest.raises(cortex.CortexError) as e:
-        cortex.retire_project(root, "nobody", "why", date(2026, 9, 4))
-    assert "not a projects.yaml key" in str(e.value)
-    assert (root / "projects.yaml").read_text() == before
-    cortex.retire_project(root, "example", "done", date(2026, 9, 4))
-    with pytest.raises(cortex.CortexError) as e:
-        cortex.retire_project(root, "example", "done again", date(2026, 9, 4))
-    assert "already retired" in str(e.value)
-
-
-def test_retire_round_trips_through_the_cli(tmp_path):
-    root = _copy(tmp_path)
-    r = _run("retire", "example", "--why", "the question was answered",
-             "--today", TODAY, root=root)
-    assert r.returncode == 1 and "still has live work" in r.stderr
-    _quiesce(root)
-    r = _run("retire", "example", "--why", "the question was answered",
-             "--today", TODAY, root=root)
-    assert r.returncode == 0, r.stderr
-    assert r.stdout.strip() == "retired example"
-    text = (root / "projects.yaml").read_text()
-    assert "  status: retired" in text
-    assert f'  note: "retired {TODAY}: the question was answered"' in text
-    assert _run("check", root=root).returncode == 0
+    diff = [(a, b) for a, b in zip(before.split("\n"), after.split("\n")) if a != b]
+    assert diff == [("  status: dormant", "  status: retired"),
+                    ('  note: "no ledger yet"', f'  note: "retired {TODAY}: x"')]
 
 
 # --------------------------------------------------------------------------- #
-# check — tasks
+# the CLI surface
 # --------------------------------------------------------------------------- #
-def test_summary_is_required(tmp_path):
-    """`Summary:` is the board's line: a task without one is drift, and so is
-    a task whose `Summary:` is present but empty."""
+def test_every_verb_is_registered():
+    parser = cortex.build_parser()
+    verbs = set(parser._subparsers._group_actions[0].choices)
+    assert verbs == {"check", "new", "run", "running", "done", "log", "now", "issue", "retire"}
+
+
+def test_a_bad_root_is_a_usage_error(tmp_path):
+    assert _run("check", root=tmp_path / "nowhere").returncode == 2
+
+
+def test_no_verb_of_the_old_schema_survives():
+    text = SCRIPT.read_text()
+    for gone in ("def move_task", "def rule_task", "def gates_report", "awaiting-ruling",
+                 "def load_tasks", "def load_rulings"):
+        assert gone not in text, gone
+
+
+def test_today_is_injectable_and_validated(tmp_path):
     root = _copy(tmp_path)
-    _edit(root, P["02_gated_on_dev"],
-          "Summary: Does the pixel-scale sweep change the preferred model\n", "")
-    _assert_drift(root, "02_gated_on_dev.md: missing header key Summary:")
-    root = _copy(tmp_path / "b")
-    _edit(root, P["02_gated_on_dev"],
-          "Summary: Does the pixel-scale sweep change the preferred model\n", "Summary:\n")
-    _assert_drift(root, "02_gated_on_dev.md: missing header key Summary:")
-
-
-def test_summary_is_capped_at_ten_words(tmp_path):
-    """Ten words is the cap the board is readable at; eleven is drift."""
-    root = _copy(tmp_path)
-    ten = " ".join(f"w{i}" for i in range(10))
-    _edit(root, P["02_gated_on_dev"],
-          "Summary: Does the pixel-scale sweep change the preferred model\n",
-          f"Summary: {ten}\n")
-    assert _problems(root) == []
-    _edit(root, P["02_gated_on_dev"], f"Summary: {ten}\n", f"Summary: {ten} w10\n")
-    _assert_drift(root, "02_gated_on_dev.md: Summary: 11 words — at most 10")
-
-
-def test_phase_header_is_dead(tmp_path):
-    """The number went on 2026-09-07: `Phase:` is named as retired rather than
-    passing as a generic unknown key, on a task file and on a ruling alike."""
-    root = _copy(tmp_path)
-    _edit(root, P["01_scope"], "State: planned\n", "Phase: 1\nState: planned\n")
-    _edit(root, R + "R-20260901-05.md", "Task: tasks/example/10_dropped.md\n",
-          "Phase: tasks/example/10_dropped.md\nTask: tasks/example/10_dropped.md\n")
-    _assert_drift(root, "01_scope.md: Phase: is a retired header",
-                  "R-20260901-05.md: Phase: is a retired header")
-
-
-def test_unknown_project(tmp_path):
-    root = _copy(tmp_path)
-    shutil.move(root / "tasks" / "example", root / "tasks" / "other")
-    for p in (root / "tasks" / "other").glob("*.md"):
-        p.write_text(p.read_text().replace("Project: example", "Project: other"))
-    _assert_drift(root, "tasks/other/01_scope.md: Project: other is not a projects.yaml key")
-
-
-def test_directory_must_equal_project(tmp_path):
-    root = _copy(tmp_path)
-    _edit(root, P["01_scope"], "Project: example\n", "Project: sample\n")
-    _assert_drift(root, "01_scope.md: Project: sample is not the directory name example",
-                  "01_scope.md: Project: sample is not a projects.yaml key")
-
-
-def test_where_to_look_must_name_somewhere_past_planned(tmp_path):
-    """The section is rendered, not just parsed — the dashboard's
-    `## By project` view and `checkin` print these bullets verbatim as the
-    folders to open. A task that has left `planned` carrying only the
-    template placeholder names nowhere."""
-    root = _copy(tmp_path)
-    holder = f"- {cortex.WHERE_PLACEHOLDER}\n"
-    # `planned` is the one state the placeholder is honest on
-    _edit(root, P["01_scope"], "- `/mnt/c/Users/Jammy/Science/example/wiki/project/state.md`\n",
-          holder)
-    assert _problems(root) == []
-    _edit(root, P["07_awaiting_ruling"],
-          "- `/mnt/c/Users/Jammy/Science/example/output/task_07/`\n", holder)
-    _assert_drift(root, "07_awaiting_ruling.md: ## Where to look names nowhere")
-
-
-def test_a_new_task_ships_the_placeholder_and_no_other_bullet(tmp_path):
-    """`new` writes `planned`, so the task it writes passes `check` — and
-    the placeholder it writes is the exact string the rule exempts."""
-    root = _copy(tmp_path)
-    _run("new", "example", "11_fresh", "--summary", "Does the fresh idea hold",
-         "--today", TODAY, root=root)
-    text = (root / "tasks/example/11_fresh.md").read_text()
-    assert f"- {cortex.WHERE_PLACEHOLDER}" in text
-    assert _problems(root) == []
-
-
-def test_illegal_state_unknown_key_and_missing_section(tmp_path):
-    root = _copy(tmp_path)
-    _edit(root, P["01_scope"], "State: planned\n", "State: queued\nGate-cleared: x\n")
-    _edit(root, P["01_scope"], "## Where to look", "## Where")
-    _assert_drift(root, "State: 'queued' is not a task state", "unknown header key Gate-cleared:",
-                  "missing section ## Where to look")
-
-
-def test_migrated_from_is_legal_on_a_task_and_a_ruling(tmp_path):
-    """Decision 53: the provenance key joins both key tables; everything else
-    outside them is still drift."""
-    root = _copy(tmp_path)
-    _edit(root, P["01_scope"], "Filed: 2026-08-25\n",
-          "Filed: 2026-08-25\nMigrated-from: PyAutoMind/draft/research/example/scope.md\n")
-    _edit(root, R + "R-20260901-05.md", "Ruling: drop\n",
-          "Ruling: drop\nMigrated-from: PyAutoMind/batches/reviews/2026-09-01-pm.md\n")
-    assert _problems(root) == []
-    _edit(root, P["01_scope"], "Migrated-from: PyAutoMind", "Migrated-to: PyAutoMind")
-    _edit(root, R + "R-20260901-05.md", "Migrated-from: PyAutoMind", "Migrated-to: PyAutoMind")
-    _assert_drift(root, "01_scope.md: unknown header key Migrated-to:",
-                  "R-20260901-05.md: unknown header key Migrated-to:")
-
-
-def test_owner_repo_gate_form_is_refused(tmp_path):
-    root = _copy(tmp_path)
-    _edit(root, P["02_gated_on_dev"], "Gates: PyAutoArray#431,", "Gates: PyAutoLabs/PyAutoArray#431,")
-    _assert_drift(root, "Gates: unrecognised ref 'PyAutoLabs/PyAutoArray#431'")
-
-
-def test_gated_with_empty_gates(tmp_path):
-    root = _copy(tmp_path)
-    _edit(root, P["02_gated_on_dev"], "Gates: PyAutoArray#431, https://github.com/PyAutoLabs/PyAutoFit/pull/1436\n",
-          "Gates:\n")
-    _assert_drift(root, "02_gated_on_dev.md: State: gated with an empty Gates:")
-
-
-@pytest.mark.parametrize("rel", [P["04_submitted_override"], P["05_running_array"], P["06_pulled"],
-                                 P["07_awaiting_ruling"], P["08_accepted"], P["09_rerun"]])
-def test_witness_invariant(tmp_path, rel):
-    root = _copy(tmp_path)
-    witness = _fields(root, rel)["Witness"]
-    _edit(root, rel, f"Witness: {witness}\n", "Witness:\n")
-    _assert_drift(root, f"{rel}: State: {_fields(root, rel)['State']} needs a Witness:")
-
-
-def test_planned_task_may_leave_the_witness_empty():
-    assert _fields(SKELETON, P["01_scope"])["Witness"] == ""
-    assert _problems(SKELETON) == []
-
-
-@pytest.mark.parametrize("rel,rid", [(P["08_accepted"], "R-20260901-02"),
-                                     (P["09_rerun"], "R-20260901-04"),
-                                     (P["10_dropped"], "R-20260901-05")])
-def test_ruled_states_need_a_ruling(tmp_path, rel, rid):
-    root = _copy(tmp_path)
-    _edit(root, rel, f"Ruling: {rid}\n", "Ruling:\n")
-    _assert_drift(root, f"{rel}: State: {_fields(root, rel)['State']} needs a Ruling:")
-
-
-def test_header_body_run_mismatch(tmp_path):
-    root = _copy(tmp_path)
-    _edit(root, P["04_submitted_override"], "Runs: 342001, 342010\n", "Runs: 342001\n")
-    _assert_drift(root, "04_submitted_override.md: Runs: header {342001} != body stems {342001, 342010}")
-
-
-def test_overlapping_task_sets_on_one_stem(tmp_path):
-    root = _copy(tmp_path)
-    _edit(root, P["05_running_array"], "- 342091_9: failed", "- 342091_[7-9]: failed")
-    _assert_drift(root, "05_running_array.md: run 342091_[0-8,10] overlaps 342091_[7-9] on stem 342091")
-
-
-def test_bare_stem_overlaps_every_task_of_that_stem(tmp_path):
-    root = _copy(tmp_path)
-    _edit(root, P["05_running_array"], "- 342091_9: failed", "- 342091: failed")
-    _assert_drift(root, "run 342091_[0-8,10] overlaps 342091 on stem 342091")
-
-
-def test_one_array_may_feed_two_tasks():
-    """Job ids are unique per task, not globally: 342120 sits in tasks 6 and 7."""
-    assert _fields(SKELETON, P["06_pulled"])["Runs"] == "342120"
-    assert "342120" in _fields(SKELETON, P["07_awaiting_ruling"])["Runs"]
-    assert _problems(SKELETON) == []
-
-
-def test_run_line_that_does_not_parse_and_stray_continuation(tmp_path):
-    root = _copy(tmp_path)
-    _edit(root, P["06_pulled"], "- 342120_[0-4]: done — gpu — submitted 2026-08-31 — wall 3:40",
-          "- 342120_[0-4]: done — gpu — 2026-08-31 — wall 3:40")
-    _edit(root, P["04_submitted_override"], "## Runs\n\n", "## Runs\n\n    after: 1\n")
-    _assert_drift(root, "06_pulled.md: line 27: run line does not parse",
-                  "04_submitted_override.md: line 28: continuation line without a run line")
-
-
-def test_pulled_needs_a_pulled_to(tmp_path):
-    root = _copy(tmp_path)
-    _edit(root, P["06_pulled"], "    pulled_to: /mnt/c/Users/Jammy/Science/example/output/task_06\n", "")
-    _assert_drift(root, "06_pulled.md: State: pulled needs at least one done | legacy run with pulled_to:")
-
-
-def test_legacy_needs_where(tmp_path):
-    root = _copy(tmp_path)
-    _edit(root, P["10_dropped"], "    where: /mnt/c/Users/Jammy/Science/example/output/legacy_wrong/task_10\n", "")
-    _assert_drift(root, "10_dropped.md: run 341950_[0-3] is legacy_wrong without where:")
-
-
-def test_after_and_resumes_name_a_run_of_the_same_task(tmp_path):
-    root = _copy(tmp_path)
-    _edit(root, P["05_running_array"], "    after: 342091_9", "    after: 342091")
-    _edit(root, P["07_awaiting_ruling"], "    resumes: 342110", "    resumes: 342120_[5-9]")
-    _assert_drift(root, "05_running_array.md: run 342102 after: 342091 names no other run of this task",
-                  "07_awaiting_ruling.md: run 342120_[5-9] resumes: 342120_[5-9] names no other run")
-
-
-def test_ruled_continuation_must_resolve(tmp_path):
-    root = _copy(tmp_path)
-    _edit(root, P["08_accepted"], "    ruled: R-20260901-02", "    ruled: R-20260901-09")
-    _assert_drift(root, "08_accepted.md: run 342050 ruled: R-20260901-09 does not resolve to a ruling file")
-
-
-def test_pulled_with_a_live_run_needs_leave_to_finish(tmp_path):
-    root = _copy(tmp_path)
-    _edit(root, P["05_running_array"], "State: running\n", "State: pulled\n")
-    assert _problems(root) == []  # R-20260901-03 is a leave-to-finish head
-    _edit(root, P["05_running_array"], "Ruling: R-20260901-03\n", "Ruling:\n")
-    _assert_drift(root, "05_running_array.md: State: pulled with a live run needs a leave-to-finish ruling head")
-
-
-def test_stray_file_under_tasks(tmp_path):
-    root = _copy(tmp_path)
-    (root / "tasks" / "notes.md").write_text("# stray\n")
-    _assert_drift(root, "tasks/notes.md: not a task path")
-
-
-# --------------------------------------------------------------------------- #
-# check — rulings and chains
-# --------------------------------------------------------------------------- #
-R = "rulings/2026/09/"
-
-
-def test_dangling_supersedes(tmp_path):
-    root = _copy(tmp_path)
-    _edit(root, R + "R-20260901-02.md", "Supersedes: R-20260901-01\n", "Supersedes: R-20260831-01\n")
-    _assert_drift(root, "R-20260901-02.md: Supersedes: R-20260831-01 does not resolve to a ruling file")
-
-
-def test_self_supersedes(tmp_path):
-    root = _copy(tmp_path)
-    _edit(root, R + "R-20260901-02.md", "Supersedes: R-20260901-01\n", "Supersedes: R-20260901-02\n")
-    _assert_drift(root, "R-20260901-02.md: Supersedes: itself")
-
-
-def test_supersedes_must_be_earlier_and_same_task(tmp_path):
-    root = _copy(tmp_path)
-    _edit(root, R + "R-20260901-01.md", "Ruling: accept\n", "Ruling: accept\nSupersedes: R-20260901-03\n")
-    _assert_drift(root, "R-20260901-01.md: Supersedes: R-20260901-03 is not earlier than R-20260901-01",
-                  "R-20260901-01.md: Supersedes: R-20260901-03 names a different project/task")
-
-
-def test_duplicate_successor_is_a_tree_not_a_chain(tmp_path):
-    root = _copy(tmp_path)
-    _edit(root, R + "R-20260901-03.md", "Ruling: leave-to-finish\n",
-          "Ruling: leave-to-finish\nSupersedes: R-20260901-01\n")
-    _assert_drift(root, "R-20260901-01.md: has 2 successors (R-20260901-02, R-20260901-03) — a chain, not a tree")
-
-
-def test_superseded_ruling_as_task_head(tmp_path):
-    root = _copy(tmp_path)
-    _edit(root, P["08_accepted"], "Ruling: R-20260901-02\n", "Ruling: R-20260901-01\n")
-    _assert_drift(root, "08_accepted.md: Ruling: R-20260901-01 is not a chain head (superseded by R-20260901-02)")
-
-
-def test_task_ruling_must_name_that_task(tmp_path):
-    root = _copy(tmp_path)
-    _edit(root, P["09_rerun"], "Ruling: R-20260901-04\n", "Ruling: R-20260901-05\n")
-    _assert_drift(root, "09_rerun.md: Ruling: R-20260901-05 names tasks/example/10_dropped.md, not this task",
-                  "09_rerun.md: Ruling: R-20260901-05 verb 'drop' does not fit State: rerun")
-
-
-def test_verb_state_mismatch(tmp_path):
-    root = _copy(tmp_path)
-    _edit(root, P["08_accepted"], "State: accepted\n", "State: awaiting-ruling\n")
-    _assert_drift(root, "08_accepted.md: Ruling: R-20260901-02 verb 'accept' does not fit State: awaiting-ruling")
-
-
-def test_ruling_id_filename_title_and_directory(tmp_path):
-    root = _copy(tmp_path)
-    _edit(root, R + "R-20260901-05.md", "# R-20260901-05 — drop", "# R-20260901-06 — drop")
-    (root / "rulings" / "2026" / "08").mkdir()
-    shutil.copy(root / R / "R-20260901-04.md", root / "rulings" / "2026" / "08" / "R-20260901-04.md")
-    (root / "rulings" / "2026" / "stray.md").write_text("# stray\n")
-    _assert_drift(root, "R-20260901-05.md: title must be `# R-20260901-05`",
-                  "rulings/2026/08/R-20260901-04.md: filed under 2026/08 but the id is dated 2026-09",
-                  "duplicate ruling id R-20260901-04",
-                  "rulings/2026/stray.md: not a ruling path")
-
-
-def test_ruling_runs_subset_task_path_verb_and_batch(tmp_path):
-    root = _copy(tmp_path)
-    _edit(root, R + "R-20260901-03.md", "Runs: 342091, 342102\n", "Runs: 342091, 342999\n")
-    _edit(root, R + "R-20260901-03.md", "Batch: 2026-09-01-pm\n", "Batch: 2026-09-01-am\n")
-    _edit(root, R + "R-20260901-04.md", "Ruling: rerun\n", "Ruling: redo\n")
-    _edit(root, R + "R-20260901-05.md", "Task: tasks/example/10_dropped.md\n", "Task: tasks/example/11.md\n")
-    _assert_drift(root, "R-20260901-03.md: Runs: {342999} not in the task's runs",
-                  "R-20260901-03.md: Batch: 2026-09-01-am names no batches/2026-09-01-am.md",
-                  "R-20260901-04.md: Ruling: 'redo' is not a ruling verb",
-                  "R-20260901-05.md: Task: tasks/example/11.md does not resolve to a task file")
-
-
-def test_ruling_follow_up_uses_the_gate_grammar(tmp_path):
-    root = _copy(tmp_path)
-    _edit(root, R + "R-20260901-02.md", "Follow-ups: PyAutoLens#901\n", "Follow-ups: PyAutoLabs/PyAutoLens#901\n")
-    _assert_drift(root, "R-20260901-02.md: Follow-ups: unrecognised ref 'PyAutoLabs/PyAutoLens#901'")
-
-
-def test_two_chains_of_one_on_a_task_are_fine(tmp_path):
-    """leave-to-finish then accept need not chain; Supersedes: replaces, never sequences."""
-    root = _copy(tmp_path)
-    _move(root, P["05_running_array"], "pulled", "--partial")
-    _move(root, P["05_running_array"], "awaiting-ruling")
-    r = _run("rule", P["05_running_array"], "accept", "--body", str(_body(tmp_path)),
-             "--today", TODAY, root=root)
-    assert r.returncode == 0, r.stderr
-    assert _problems(root) == []
-    assert _fields(root, P["05_running_array"])["Ruling"] == "R-20260902-01"
-    assert "Supersedes" not in _fields(root, "rulings/2026/09/R-20260902-01.md")
-
-
-# --------------------------------------------------------------------------- #
-# move — every legal transition, every refused one
-# --------------------------------------------------------------------------- #
-def test_planned_to_gated_or_ready_by_gates(tmp_path):
-    root = _copy(tmp_path)
-    r = _move(root, P["01_scope"], "gated")
-    assert r.returncode == 1 and "Gates: is empty — planned → ready" in r.stderr
-    r = _move(root, P["01_scope"], "ready")
-    assert r.returncode == 0 and r.stdout.strip() == "tasks/example/01_scope.md: planned → ready"
-    assert _fields(root, P["01_scope"])["State"] == "ready"
-    _edit(root, P["01_scope"], "State: ready\nGates:\n", "State: planned\nGates: PyAutoLens#1\n")
-    r = _move(root, P["01_scope"], "ready")
-    assert r.returncode == 1 and "Gates: is non-empty — planned → gated" in r.stderr
-    assert _move(root, P["01_scope"], "gated").returncode == 0
-    assert _problems(root) == []
-
-
-def test_gated_to_ready_is_a_plain_move(tmp_path):
-    """Gate grading is retired: the human reads `gates`, judges the refs and
-    moves the task. No flag, and nothing written but `State:`."""
-    root = _copy(tmp_path)
-    before = (root / P["02_gated_on_dev"]).read_text()
-    r = _move(root, P["02_gated_on_dev"], "ready")
-    assert r.returncode == 0, r.stderr
-    assert _fields(root, P["02_gated_on_dev"])["State"] == "ready"
-    assert (root / P["02_gated_on_dev"]).read_text() == \
-        before.replace("State: gated", "State: ready")
-    assert _problems(root) == []
-
-
-def test_ready_to_gated_is_a_hand_edit(tmp_path):
-    root = _copy(tmp_path)
-    r = _move(root, P["03_ready_cleared"], "gated")
-    assert r.returncode == 1 and "hand edit of the header" in r.stderr
-
-
-def test_ready_to_submitted_needs_witness_and_run(tmp_path):
-    root = _copy(tmp_path)
-    r = _move(root, P["03_ready_cleared"], "submitted")
-    assert r.returncode == 1 and "--run" in r.stderr
-    _edit(root, P["03_ready_cleared"], "Witness: anchor lens theta_E within 0.01 arcsec of the published value\n",
-          "Witness:\n")
-    r = _move(root, P["03_ready_cleared"], "submitted", "--run", "350000")
-    assert r.returncode == 1 and "Witness: is empty" in r.stderr
-    _edit(root, P["03_ready_cleared"], "Witness:\n", "Witness: theta_E within 0.01\n")
-    before = (root / P["03_ready_cleared"]).read_text()
-    r = _move(root, P["03_ready_cleared"], "submitted", "--run", "350000", "--note", "first wave")
-    assert r.returncode == 0, r.stderr
-    after = (root / P["03_ready_cleared"]).read_text()
-    assert "- 350000: submitted — gpu — submitted 2026-09-02 — wall 0:00 — first wave\n" in after
-    f = _fields(root, P["03_ready_cleared"])
-    assert f["State"] == "submitted" and f["Runs"] == "350000"
-    # the body outside `## Runs` and the rest of the header are untouched
-    assert after.split("## Runs")[0].replace("State: submitted", "State: ready") \
-        .replace("Runs: 350000\n", "") == before.split("## Runs")[0]
-    assert after.split("## Ruling")[1] == before.split("## Ruling")[1]
-    assert _problems(root) == []
-
-
-def test_run_self_loop_appends_a_wave_and_keeps_state(tmp_path):
-    root = _copy(tmp_path)
-    r = _move(root, P["04_submitted_override"], "submitted", "--run", "342020", "--after", "342010")
-    assert r.returncode == 0 and "appended run 342020" in r.stdout
-    text = (root / P["04_submitted_override"]).read_text()
-    assert "- 342020: submitted — gpu — submitted 2026-09-02 — wall 0:00\n    after: 342010\n" in text
-    f = _fields(root, P["04_submitted_override"])
-    assert f["State"] == "submitted" and f["Runs"] == "342001, 342010, 342020"
-    r = _move(root, P["05_running_array"], "running", "--run", "342103", "--resumes", "342091_9")
-    assert r.returncode == 0
-    assert _fields(root, P["05_running_array"])["State"] == "running"
-    assert _problems(root) == []
-
-
-def test_run_self_loop_refuses_overlap_and_dangling_after(tmp_path):
-    root = _copy(tmp_path)
-    r = _move(root, P["05_running_array"], "running", "--run", "342091_[9-10]")
-    assert r.returncode == 1 and "overlaps" in r.stderr
-    r = _move(root, P["05_running_array"], "running", "--run", "342200", "--after", "999")
-    assert r.returncode == 1 and "names no run of this task" in r.stderr
-    r = _move(root, P["03_ready_cleared"], "ready", "--run", "1")
-    assert r.returncode == 1 and "already ready" in r.stderr
-
-
-def test_submitted_to_running_and_back_to_ready(tmp_path):
-    root = _copy(tmp_path)
-    assert _move(root, P["04_submitted_override"], "running").returncode == 0
-    r = _move(root, P["04_submitted_override"], "ready", "--reason", "node failure")
-    assert r.returncode == 1 and "still submitted | running" in r.stderr
-    _edit(root, P["04_submitted_override"], "- 342010: submitted", "- 342010: failed")
-    r = _move(root, P["04_submitted_override"], "ready")
-    assert r.returncode == 1 and "--reason" in r.stderr
-    r = _move(root, P["04_submitted_override"], "ready", "--reason", "both waves died on node failure")
-    assert r.returncode == 0, r.stderr
-    f = _fields(root, P["04_submitted_override"])
-    assert f["State"] == "ready" and f["Reset"] == "both waves died on node failure"
-    assert _problems(root) == []
-    # a task whose runs all succeeded has nothing to reset from
-    _edit(root, P["03_ready_cleared"], "State: ready\n", "State: running\n")
-    _edit(root, P["03_ready_cleared"], "## Runs\n\n", "## Runs\n\n- 1: done — gpu — submitted 2026-09-01 — wall 1:00\n")
-    _edit(root, P["03_ready_cleared"], "Runs:\n", "Runs: 1\n") if "Runs:" in (root / P["03_ready_cleared"]).read_text() \
-        else _edit(root, P["03_ready_cleared"], "Budget: 5:00\n", "Budget: 5:00\nRuns: 1\n")
-    r = _move(root, P["03_ready_cleared"], "ready", "--reason", "x")
-    assert r.returncode == 1 and "no failed | timeout | void run" in r.stderr
-
-
-def test_running_to_pulled_and_partial(tmp_path):
-    root = _copy(tmp_path)
-    r = _move(root, P["05_running_array"], "pulled")
-    assert r.returncode == 1 and "--partial" in r.stderr
-    r = _move(root, P["05_running_array"], "pulled", "--partial")
-    assert r.returncode == 0
-    assert _problems(root) == []  # the leave-to-finish head closes the partial pull
-    _edit(root, P["05_running_array"], "- 342102: running", "- 342102: done")
-    _edit(root, P["05_running_array"], "State: pulled\n", "State: running\n")
-    assert _move(root, P["05_running_array"], "pulled").returncode == 0
-
-
-def test_running_to_pulled_writes_pulled_to(tmp_path):
-    root = _copy(tmp_path)
-    _edit(root, P["04_submitted_override"], "State: submitted\n", "State: running\n")
-    _edit(root, P["04_submitted_override"], "- 342010: submitted", "- 342010: done")
-    r = _move(root, P["04_submitted_override"], "pulled")
-    assert r.returncode == 1 and "--pulled-to" in r.stderr
-    r = _move(root, P["04_submitted_override"], "pulled", "--pulled-to", "/mnt/c/out/task_04")
-    assert r.returncode == 0, r.stderr
-    text = (root / P["04_submitted_override"]).read_text()
-    assert "- 342010: done — gpu — submitted 2026-09-01 — wall 0:00\n    pulled_to: /mnt/c/out/task_04\n" in text
-    assert "- 342001: failed — gpu — submitted 2026-08-31 — wall 0:00 — node failure before the first step\n- 342010" in text
-    assert _problems(root) == []
-
-
-def test_pulled_to_awaiting_ruling_and_rerun_to_ready(tmp_path):
-    root = _copy(tmp_path)
-    assert _move(root, P["06_pulled"], "awaiting-ruling").returncode == 0
-    assert _move(root, P["09_rerun"], "ready").returncode == 0
-    assert _problems(root) == []
-
-
-def test_legacy_born_ready_to_pulled(tmp_path):
-    root = _copy(tmp_path)
-    _edit(root, P["09_rerun"], "State: rerun\nWitness: the legacy run's mask edge matches the released mask within one pixel\n",
-          "State: ready\nWitness:\n")
-    r = _move(root, P["09_rerun"], "pulled")
-    assert r.returncode == 1 and "Witness: is empty" in r.stderr
-    _edit(root, P["09_rerun"], "Witness:\n", "Witness: mask edge within one pixel\n")
-    assert _move(root, P["09_rerun"], "pulled").returncode == 0
-    _edit(root, P["09_rerun"], "State: pulled\n", "State: ready\n")
-    _edit(root, P["09_rerun"], "- 341900: legacy", "- 341900: done")
-    r = _move(root, P["09_rerun"], "pulled")
-    assert r.returncode == 1 and "legacy-born" in r.stderr
-
-
-@pytest.mark.parametrize("rel,to,needle", [
-    (P["07_awaiting_ruling"], "accepted", "rule <task> accept"),
-    (P["07_awaiting_ruling"], "rerun", "rule <task> rerun"),
-    (P["07_awaiting_ruling"], "dropped", "rule <task> drop"),
-    (P["01_scope"], "dropped", "rule <task> drop"),
-    (P["08_accepted"], "rerun", "--supersedes"),
-    (P["10_dropped"], "ready", "terminal"),
-    (P["04_submitted_override"], "pulled", "no edge submitted → pulled"),
-    (P["03_ready_cleared"], "running", "no edge ready → running"),
-    (P["06_pulled"], "ready", "no edge pulled → ready"),
-    (P["01_scope"], "flying", "not a task state"),
-])
-def test_refused_edges(tmp_path, rel, to, needle):
-    root = _copy(tmp_path)
-    before = (root / rel).read_text()
-    r = _move(root, rel, to)
-    assert r.returncode == 1, r.stdout
-    assert needle in r.stderr, r.stderr
-    assert (root / rel).read_text() == before
-
-
-# --------------------------------------------------------------------------- #
-# rule
-# --------------------------------------------------------------------------- #
-def _rule(root, rel, verb, body, *extra, today=TODAY):
-    return _run("rule", rel, verb, "--body", str(body), "--today", today, *extra, root=root)
-
-
-def test_rule_assigns_ids_in_sequence_and_moves_the_task(tmp_path):
-    root = _copy(tmp_path)
-    body = _body(tmp_path)
-    r = _rule(root, P["07_awaiting_ruling"], "accept", body, "--batch", "2026-09-01-pm",
-              "--minutes", "4", "--follow-up", "PyAutoLens#902")
-    assert r.returncode == 0, r.stderr
-    assert r.stdout.strip() == "wrote rulings/2026/09/R-20260902-01.md"
-    rf = _fields(root, "rulings/2026/09/R-20260902-01.md")
-    assert rf["Task"] == P["07_awaiting_ruling"] and rf["Ruling"] == "accept"
-    assert rf["Runs"] == "342110, 342120" and rf["Batch"] == "2026-09-01-pm"
-    assert rf["Review-minutes-actual"] == "4" and rf["Follow-ups"] == "PyAutoLens#902"
-    assert rf["Reviewed-at"].startswith("2026-09-02T")
-    text = (root / "rulings/2026/09/R-20260902-01.md").read_text()
-    assert text.startswith("# R-20260902-01 — accept example 07_awaiting_ruling\n")
-    assert "## Ruling\n\nAccept. The human's words, verbatim.\n\n## Evidence\n\n- " in text
-    pf = _fields(root, P["07_awaiting_ruling"])
-    assert pf["State"] == "accepted" and pf["Ruling"] == "R-20260902-01"
-    assert "R-20260902-01 — accept" in (root / P["07_awaiting_ruling"]).read_text().split("## Ruling")[1]
-    assert _problems(root) == []
-    # the second ruling of the day is -02
-    _move(root, P["06_pulled"], "awaiting-ruling")
-    r = _rule(root, P["06_pulled"], "rerun", body)
-    assert r.stdout.strip() == "wrote rulings/2026/09/R-20260902-02.md"
-    assert _fields(root, P["06_pulled"])["State"] == "rerun"
-    assert _problems(root) == []
-
-
-def test_rule_supersedes_an_accepted_ruling(tmp_path):
-    root = _copy(tmp_path)
-    body = _body(tmp_path, "REWIND: the gates were wrong.\n")
-    r = _rule(root, P["08_accepted"], "rerun", body)
-    assert r.returncode == 1 and "--supersedes R-20260901-02" in r.stderr
-    r = _rule(root, P["08_accepted"], "rerun", body, "--supersedes", "R-20260901-01")
-    assert r.returncode == 1 and "already has a successor" in r.stderr
-    r = _rule(root, P["08_accepted"], "accept", body, "--supersedes", "R-20260901-02")
-    assert r.returncode == 1 and "only rerun | drop" in r.stderr
-    r = _rule(root, P["08_accepted"], "rerun", body, "--supersedes", "R-20260901-02")
-    assert r.returncode == 0, r.stderr
-    rf = _fields(root, "rulings/2026/09/R-20260902-01.md")
-    assert rf["Supersedes"] == "R-20260901-02"
-    pf = _fields(root, P["08_accepted"])
-    assert pf["State"] == "rerun" and pf["Ruling"] == "R-20260902-01"
-    assert _problems(root) == []
-
-
-def test_rule_refuses_a_verb_the_table_forbids(tmp_path):
-    root = _copy(tmp_path)
-    body = _body(tmp_path)
-    for rel, verb, needle in (
-        (P["05_running_array"], "accept", "not allowed from State: running"),
-        (P["06_pulled"], "rerun", "not allowed from State: pulled"),
-        (P["10_dropped"], "drop", "terminal"),
-        (P["01_scope"], "leave-to-finish", "running | pulled | awaiting-ruling"),
-        (P["09_rerun"], "accept", "not allowed from State: rerun"),
-    ):
-        before = (root / rel).read_text()
-        r = _rule(root, rel, verb, body)
-        assert r.returncode == 1, (rel, verb, r.stdout)
-        assert needle in r.stderr, r.stderr
-        assert (root / rel).read_text() == before
-    assert not list((root / "rulings" / "2026" / "09").glob("R-20260902-*"))
-
-
-def test_rule_leave_to_finish_keeps_state(tmp_path):
-    root = _copy(tmp_path)
-    r = _rule(root, P["06_pulled"], "leave-to-finish", _body(tmp_path, "Wait.\n"))
-    assert r.returncode == 0, r.stderr
-    f = _fields(root, P["06_pulled"])
-    assert f["State"] == "pulled" and f["Ruling"] == "R-20260902-01"
-    assert _problems(root) == []
-
-
-def test_rule_refuses_to_touch_an_existing_ruling(tmp_path):
-    root = _copy(tmp_path)
-    r = _rule(root, P["07_awaiting_ruling"], "accept", _body(tmp_path), today="2026-09-01")
-    assert r.returncode == 0  # -06 is free on 2026-09-01
-    assert r.stdout.strip() == "wrote rulings/2026/09/R-20260901-06.md"
-    existing = root / "rulings/2026/09/R-20260901-06.md"
-    before = existing.read_text()
-    # an id that exists somewhere unexpected is still taken
-    (root / "rulings" / "2026" / "10").mkdir()
-    for n in range(7, 100):
-        (root / "rulings" / "2026" / "09" / f"R-20260901-{n:02d}.md").write_text("# x\n")
-    _move(root, P["06_pulled"], "awaiting-ruling")
-    r = _rule(root, P["06_pulled"], "accept", _body(tmp_path), today="2026-09-01")
-    assert r.returncode == 1 and "99 rulings already filed" in r.stderr
-    assert existing.read_text() == before
-
-
-def test_rule_validates_batch_follow_up_and_body(tmp_path):
-    root = _copy(tmp_path)
-    body = _body(tmp_path)
-    r = _rule(root, P["07_awaiting_ruling"], "accept", body, "--batch", "2026-09-09-x")
-    assert r.returncode == 1 and "names no batches/2026-09-09-x.md" in r.stderr
-    r = _rule(root, P["07_awaiting_ruling"], "accept", body, "--follow-up", "PyAutoLabs/PyAutoLens#1")
-    assert r.returncode == 1 and "--follow-up" in r.stderr
-    r = _rule(root, P["07_awaiting_ruling"], "accept", _body(tmp_path, "\n\n"))
-    assert r.returncode == 1 and "--body is empty" in r.stderr
-    assert _fields(root, P["07_awaiting_ruling"])["State"] == "awaiting-ruling"
-
-
-# --------------------------------------------------------------------------- #
-# gates
-# --------------------------------------------------------------------------- #
-def test_gates_offline_lists_gated_tasks():
-    r = _run("gates", root=SKELETON)
-    assert r.returncode == 0
-    assert r.stdout.splitlines() == [
-        "gates: 1 task(s)",
-        "  tasks/example/02_gated_on_dev.md: gated — PyAutoArray#431, "
-        "https://github.com/PyAutoLabs/PyAutoFit/pull/1436",
-        "    PyAutoArray#431 → https://github.com/PyAutoLabs/PyAutoArray/issues/431",
-        "    https://github.com/PyAutoLabs/PyAutoFit/pull/1436 → "
-        "https://github.com/PyAutoLabs/PyAutoFit/issues/1436",
-    ]
-    r = _run("gates", root=EMPTY)
-    assert r.returncode == 0 and r.stdout.strip() == "gates: no gated task"
-
-
-# --------------------------------------------------------------------------- #
-# new
-# --------------------------------------------------------------------------- #
-def test_new_writes_a_parseable_task(tmp_path):
-    root = _copy(tmp_path)
-    r = _run("new", "example", "11_next", "--summary", "Does the next idea hold up",
-             "--gates", "PyAutoLens#1, https://github.com/o/r/pull/2",
-             "--epic", "example-programme", "--budget", "6:00", "--minutes", "5", "--witness", "a claim",
-             "--today", TODAY, root=root)
-    assert r.returncode == 0, r.stderr
-    assert r.stdout.strip() == "wrote tasks/example/11_next.md"
-    text = (root / "tasks/example/11_next.md").read_text()
-    assert text.startswith("# Example — 11 next\n\nProject: example\n"
-                           "Summary: Does the next idea hold up\nState: planned\n")
-    f = _fields(root, "tasks/example/11_next.md")
-    assert f["Summary"] == "Does the next idea hold up" and "Phase" not in f
-    assert f["Gates"] == "PyAutoLens#1, https://github.com/o/r/pull/2" and "Lane" not in f
-    assert f["Filed"] == TODAY and f["Budget"] == "6:00" and f["Review-minutes"] == "5"
-    for name in cortex.TASK_SECTIONS:
-        assert f"\n## {name}\n" in text
-    assert _problems(root) == []
-    assert _move(root, "tasks/example/11_next.md", "gated").returncode == 0
-
-
-def test_new_refuses_duplicates_and_unknown_projects(tmp_path):
-    """The slug is the identity: the only collision left is the path itself.
-    A second task alongside `03_ready_cleared` is fine — it just needs its own
-    slug — while re-using that slug is refused."""
-    root = _copy(tmp_path)
-    s = ("--summary", "Does the anchor refit reproduce the published value")
-    r = _run("new", "example", "03_again", *s, "--today", TODAY, root=root)
-    assert r.returncode == 0, r.stderr
-    assert _problems(root) == []
-    r = _run("new", "example", "03_ready_cleared", *s, root=root)
-    assert r.returncode == 1 and "already exists" in r.stderr
-    r = _run("new", "nobody", "x", *s, root=root)
-    assert r.returncode == 1 and "not a projects.yaml key" in r.stderr
-    r = _run("new", "example", "x", *s, "--gates", "PyAutoLabs/PyAutoLens#1", root=root)
-    assert r.returncode == 1 and "no owner/Repo#N form" in r.stderr
-    assert not (root / "tasks/example/x.md").exists()
-
-
-def test_new_requires_a_summary_within_the_cap(tmp_path):
-    """`new` refuses what `check` would reject, before writing anything."""
-    root = _copy(tmp_path)
-    r = _run("new", "example", "11_next", root=root)
-    assert r.returncode == 2 and "--summary" in r.stderr
-    r = _run("new", "example", "11_next", "--summary", "   ", root=root)
-    assert r.returncode == 1 and "--summary must say what the task asks" in r.stderr
-    eleven = " ".join(f"w{i}" for i in range(11))
-    r = _run("new", "example", "11_next", "--summary", eleven, root=root)
-    assert r.returncode == 1 and "--summary is 11 words — at most 10" in r.stderr
-    assert not (root / "tasks/example/11_next.md").exists()
-
-
-def test_new_legacy_born_task_is_ready_and_pullable(tmp_path):
-    root = _copy(tmp_path)
-    r = _run("new", "example", "12_legacy", "--summary", "Is the quarantined run reusable",
-             "--legacy-run", "300000",
-             "--legacy-wrong", "300001_[0-3]", "--today", TODAY, root=root)
-    assert r.returncode == 1 and "--where" in r.stderr
-    r = _run("new", "example", "12_legacy", "--summary", "Is the quarantined run reusable",
-             "--legacy-run", "300000",
-             "--legacy-wrong", "300001_[0-3]", "--where", "/mnt/q", "--witness", "w", "--today", TODAY, root=root)
-    assert r.returncode == 0, r.stderr
-    f = _fields(root, "tasks/example/12_legacy.md")
-    assert f["State"] == "ready" and f["Runs"] == "300000, 300001"
-    text = (root / "tasks/example/12_legacy.md").read_text()
-    assert "- 300000: legacy — gpu — submitted 2026-09-02 — wall 0:00 — pre-Cortex run, migrated\n    where: /mnt/q\n" in text
-    assert "- 300001_[0-3]: legacy_wrong — gpu" in text
-    assert _problems(root) == []
-    assert _move(root, "tasks/example/12_legacy.md", "pulled").returncode == 0
-    text = (root / "tasks/example/12_legacy.md").read_text()
-    # the reusable run gets pulled_to: (its where:), the wrong one does not
-    assert "    where: /mnt/q\n    pulled_to: /mnt/q\n- 300001_[0-3]: legacy_wrong" in text
-    assert text.count("pulled_to:") == 1
-    assert _problems(root) == []
-    # legacy_wrong-only: nothing to pull — rule drop is the door
-    r = _run("new", "example", "14", "--summary", "Is the wrong-stack run reusable",
-             "--legacy-wrong", "2", "--where", "/q", "--witness", "w", root=root)
-    assert r.returncode == 0, r.stderr
-    r = _move(root, "tasks/example/14.md", "pulled")
-    assert r.returncode == 1 and "no legacy run to pull" in r.stderr
-    r = _run("new", "example", "13", "--summary", "Is the gated legacy run reusable",
-             "--legacy-run", "1", "--where", "/q", "--gates", "PyAutoLens#1", root=root)
-    assert r.returncode == 1 and "cannot be gated" in r.stderr
-
-
-def test_partition_comes_from_the_project_row_or_the_flag(tmp_path):
-    root = _copy(tmp_path)
-    _edit(root, "projects.yaml", "  partition: gpu\n", "  partition: both\n")
-    r = _move(root, P["03_ready_cleared"], "submitted", "--run", "1")
-    assert r.returncode == 1 and "--partition" in r.stderr
-    r = _move(root, P["03_ready_cleared"], "submitted", "--run", "1", "--partition", "ral")
-    assert r.returncode == 0
-    assert "- 1: submitted — ral — " in (root / P["03_ready_cleared"]).read_text()
-
-
-def test_bad_root_and_bad_today():
-    r = _run("check", root=Path("/nonexistent/tree"))
-    assert r.returncode == 2
-    r = _run("move", P["01_scope"], "ready", "--today", "yesterday", root=SKELETON)
+    r = _run("log", "example", "x", "--today", "yesterday", root=root)
     assert r.returncode == 1 and "--today must be YYYY-MM-DD" in r.stderr
+    assert _run("log", "example", "x", root=root).returncode == 0
+    assert _ledger(root).log[0].date == date.today().isoformat()

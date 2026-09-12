@@ -1,754 +1,206 @@
-# PyAutoCortex reference
+# PyAutoCortex — Reference
 
-The schemas, grammars and conventions for this repo — the file `scripts/cortex.py`
-implements and `scripts/cortex.py check` enforces. Agent docs that point at a
-schema ("the transition table", "the run-line grammar", "the ruling schema")
-resolve here, one link from [AGENTS.md](AGENTS.md).
+The schema of the Cortex, in full. Everything `scripts/cortex.py check`
+enforces is written here; nothing it enforces is not. Design choices are dated
+in [docs/schema_decisions.md](docs/schema_decisions.md).
 
----
+## The ledger file
 
-## What a task looks like
+One file per project, `projects/<key>.md`, where `<key>` is a row of
+`projects.yaml` (`^[a-z][a-z0-9_]*$`). Every `status: active` row must have
+one; a `dormant`, `planned` or `retired` row may.
 
-Here is a task file — `tasks/example/05_running_array.md` from the test
-fixture — of a project whose GPU array is most of the way through:
+```markdown
+# <key> — <one-line summary, at most 15 words>
 
-````markdown
-# Example — the nine-lens array
+Project: <key>
+Issue: <Repo#N | https://github.com/<owner>/<repo>/issues/N | none>
 
-Project: example
-Summary: Does Delaunay reach the same theta_E basin on ten lenses
-State: running
-Gates: PyAutoArray#431
-Witness: nine of ten array tasks write a sane checkpoint.hdf5 within 8:00 wall
-Budget: 8:00
-Runs: 342091, 342102
-Ruling: R-20260901-03
-Review-minutes: 8
-Epic: example-programme
-Filed: 2026-08-29
+## Now
 
-## Question
-
-Does the Delaunay pipeline reach the same theta_E basin on all ten lenses?
-
-## Witness
-
-`output/task_05/*/checkpoint.hdf5` present for nine lenses, `.err` clean.
-
-## Where to look
-
-- `/mnt/c/Users/Jammy/Science/example/output/task_05/`
+Two or three lines, rewritten whenever the project is touched: what is on the
+cluster and what the human meant to do next. May not be empty on an active
+project.
 
 ## Runs
 
-- 342091_[0-8,10]: done — gpu — submitted 2026-08-30 — wall 6:12
-    pulled_to: /mnt/c/Users/Jammy/Science/example/output/task_05
-- 342091_9: failed — gpu — submitted 2026-08-30 — wall 0:00 — OOM before the first step
-- 342102: running — gpu — submitted 2026-09-01 — wall 0:00 — task 9 resubmitted alone
-    after: 342091_9
+- <jobid> — <open | running> — <partition> — <YYYY-MM-DD> — <what it is>
+  an optional continuation line, indented two spaces
 
-## Ruling
+## Log
 
-R-20260901-03 — leave-to-finish
-````
+- <YYYY-MM-DD> — <run | result | lesson | note> — <text>
+  an optional continuation line, indented two spaces
+```
 
-The header is the Mind's **light header**: line 1 is `# <title>`; `Key: value`
-lines within the first 30 lines — the block starts at the first `Key: value`
-line after the title and ends at the next blank line; the first occurrence of a
-key wins; a list-valued key is a bare `Key:` line followed by `- item` lines; a
-key with no value (`Gates:`, `Runs:`, `Ruling:`) may be left empty or omitted.
-No YAML frontmatter. The body
-sections are fixed: `## Question`, `## Witness`, `## Where to look`, `## Runs`,
-`## Ruling`.
+The header holds exactly `Project:` and `Issue:`; `Project:` must equal the
+key. The three sections appear in that order and no other section exists.
+` -- ` is read as ` — ` everywhere (phone keyboards).
 
-**`## Where to look` is rendered, not just parsed.** Its `- ` bullets are the
-answer to *which folder do I open* — the dashboard's `## By project` view and
-`pyauto-brain cortex checkin` print them verbatim under the task, and
-`collect` resolves the ones that are absolute paths inside the project's roots
-to the artefacts it scores. `new` seeds the section with the placeholder
-`- (the output path, once there is one)`, which is honest on a `planned` task
-and a hole on any other, so **`check` requires a task whose `State:` is past
-`planned` to carry at least one bullet that is not that placeholder**. A
-bullet is free text: a path, a project-row-relative location, a Mind prompt, a
-GitHub ref — whatever a human would open.
+### Run lines (`## Runs`)
 
-A task has **no number**. Its identity is its **slug** — the file name, unique
-per project by the path itself — because a science project is a set of ideas
-run in whatever order the results dictate, not a sequence (decision, 2026-09-07).
-
-### Task header keys
-
-| Key | Value | Notes |
+| Field | Grammar | Meaning |
 |---|---|---|
-| `Project:` | project key | must equal the directory name **and** a `projects.yaml` key |
-| `Summary:` | at most ten words | **required** — the QUESTION the task answers, not its method or its run ids; the board's one line per task. No project name, no number |
-| `State:` | `planned \| gated \| ready \| submitted \| running \| pulled \| awaiting-ruling \| accepted \| rerun \| dropped` | |
-| `Gates:` | comma-separated GitHub refs | `Repo#N` (owner `PyAutoLabs`) or an issue/PR URL; **no `owner/Repo#N`** form |
-| `Reset:` | reason | written by `move ready --reason "<reason>"` when a `submitted \| running` task goes back to `ready` |
-| `Witness:` | free text | **mandatory before `submitted`** — the pre-registered checkable claim |
-| `Budget:` | `H+:MM` | wall budget per run |
-| `Runs:` | comma-separated job **stems** | the index of the `## Runs` body; equal to the set of body stems |
-| `Ruling:` | ruling id | the chain head (see "Rulings") |
-| `Review-minutes:` | integer | a seed, not a measurement |
-| `Epic:` | slug | OPTIONAL join key to a **Mind** epic; the Cortex keeps no epics file of its own |
-| `Filed:` | `YYYY-MM-DD` | |
-| `Migrated-from:` | source path or ledger anchor | the Mind prompt, review file or project-ledger entry this task was transcribed from (phase 4 of the birth epic) |
+| jobid | `342301`, `342301_3`, `342301_[0-9]`, `342301_[0,2,4-9]` | the SLURM id, array task or task set |
+| state | `open` \| `running` | `open` = submitted and not yet seen running. There is no third state: a run that has finished is removed by `done` and becomes a log entry |
+| partition | a bare word (`ral`, `gpu`) | must agree with the row's `partition:` unless that is `both` |
+| date | `YYYY-MM-DD` | the submission date |
+| what | free text, one line | what the run is — the human's description at submission |
 
-Gate refs are matched by `GATE_REF_RE`, copied verbatim from
-`PyAutoMind/scripts/lifecycle.py`:
+A job id appears once per file. A retired project lists no runs.
 
-```python
-GATE_REF_RE = re.compile(
-    r"https://github\.com/([\w.-]+)/([\w.-]+)/(?:issues|pull)/(\d+)"
-    r"|(?<![\w/])([A-Za-z_][\w.]*)#(\d+)\b"
-)
-DEFAULT_GATE_OWNER = "PyAutoLabs"
-```
+### Log lines (`## Log`)
 
-The lookbehind `(?<![\w/])` is what rejects `owner/Repo#N`: the shorthand is
-`Repo#N` with the default owner, and any other owner is spelled as a URL.
+Newest first — `check` refuses a date that is later than the entry above it.
+Four kinds:
 
----
-
-## How a task flows
-
-```
-  planned ──(Gates: non-empty)──► gated ──(move ready: the human judged the refs)──► ready
-     │                                                                                   │
-     └──────(Gates: empty)───────────────────────────────────────────────────────────────┤
-                                                                                         ▼
-  ready ──(Witness: + --run)──► submitted ──► running ──(no live run)──► pulled ──► awaiting-ruling
-    ▲                              │              │                                      │
-    │       (no live run, ≥1 failed|timeout|void, --reason)                              │ rule
-    └──────────────────────────────┴──────────────┘                                      ▼
-                                                              accepted  │  rerun ──► ready  │  dropped
-                                                                 │ rule --supersedes
-                                                                 └──► rerun | dropped
-```
-
-`cortex.py move` owns every edge except the ruling edges, which `cortex.py rule`
-owns. The full table:
-
-| from | to | condition |
+| Kind | Written by | What it is |
 |---|---|---|
-| planned | gated / ready | `Gates:` non-empty / empty |
-| gated | ready | `move <task> ready` — a human read `gates`, opened the refs and judged them cleared. No flag, and nothing written but `State:` |
-| ready | gated | not an edge: re-gating a `ready` task is a judgement, so it is a hand edit of the header |
-| ready | submitted | `Witness:` non-empty AND `--run <id>` supplied |
-| ready | pulled | legacy-born task: every run line is `legacy\|legacy_wrong` (`new --legacy-run` / `move pulled`); `Witness:` still mandatory; every `legacy` run gets a `pulled_to:` (`--pulled-to`, else its own `where:`); refused when no run is `legacy` (nothing to review — `rule drop`) |
-| submitted / running | same | `--run <id>` appends a wave, a chained job or a checkpoint resubmit (`resumes:`); state unchanged |
-| submitted | running | — |
-| submitted / running | ready | no run line in `submitted\|running` AND ≥1 `failed\|timeout\|void`; `--reason` required (→ writes `Reset:`) |
-| running | pulled | no run line live; or `--partial` (a partial array), which `check` expects closed by a `leave-to-finish` ruling; `--pulled-to <path>` writes `pulled_to:` on every `done` run lacking one, and the move is refused when no `done` run would carry one |
-| pulled | awaiting-ruling | — (the task joins the rolling board) |
-| awaiting-ruling | accepted / rerun / dropped | **`rule` only** |
-| running / pulled / awaiting-ruling | same | `rule leave-to-finish` (state unchanged) |
-| accepted | rerun / dropped | `rule --supersedes <current Ruling:>` only (the REWIND case) |
-| rerun | ready | — (the witness may be re-registered; run history is kept) |
-| any non-terminal | dropped | `rule drop` only |
-| dropped | — | terminal (revival = a new slug) |
+| `run` | `cortex.py run` / `done` | `<jobid> submitted: <what>` · `<jobid> finished — wall H:MM: <what>` · `<jobid> failed: <what>` |
+| `result` | `cortex.py log --kind result` | what the human read off the results, in their words |
+| `lesson` | `cortex.py log --kind lesson` | something the human wants kept — a trap, a rule, a fact about the setup |
+| `note` | `cortex.py log` (default), `new`, `retire` | anything else: a thought, a plan, `ledger opened`, `retired: <why>` |
 
-`accepted` is **not** terminal: a later ruling may supersede the acceptance
-(2026-08-31's REWIND superseded accepted gates). `dropped` is.
+The board and the issue block show the newest `LOG_WINDOW = 5` entries; the
+file keeps them all. An entry is never edited or removed: a wrong entry is
+answered by a newer one.
 
-Offline invariants `check` enforces on top of the table:
+### The issue block
 
-- `State ∈ submitted..accepted` (and `rerun`) ⇒ `Witness:` non-empty.
-- `State ∈ accepted | rerun | dropped` ⇒ `Ruling:` present (those states are
-  reachable only through `rule`).
-- `State = pulled` AND any run line `submitted | running` ⇒ `Ruling:` present
-  and its head verb is `leave-to-finish` (the `--partial` case).
-- `State = gated` ⇒ `Gates:` non-empty (a gate that does not exist cannot
-  clear).
-- A header key outside the table is drift (`Gate:` must not pass as a silent
-  typo for `Gates:`); the five body sections are present; `Summary:` is
-  present, non-empty and at most ten words; `Review-minutes:` is an integer,
-  `Budget:` is `H+:MM` and `Filed:` is `YYYY-MM-DD`. A key with an empty value
-  is read as absent. `Phase:` is named as a **retired** key rather than passing
-  as a generic unknown one — the number went on 2026-09-07.
+`cortex.py issue <project> [-n 5]` prints the concise ledger that sits at the
+top of the project's GitHub issue: the title line and status, `**Now**`, the
+runs on the cluster, and the last `n` entries, fenced by
 
----
+```
+<!-- cortex:ledger begin — regenerated from projects/<key>.md; edit there -->
+…
+<!-- cortex:ledger end -->
+```
+
+The Brain's `cortex issue --apply` replaces exactly that span in the issue
+body (or prepends it when the markers are absent) and leaves everything under
+it — the detailed, agent-friendly run-through — untouched. The Cortex never
+creates an issue; `Issue:` is set by hand (`new --issue`, or an edit that
+`check` validates).
+
+## `scripts/cortex.py` — the verb reference
+
+| Verb | Writes | Refuses when |
+|---|---|---|
+| `check` | nothing | — (exit 1 on any finding) |
+| `new <project> --summary "…" [--issue REF] [--now "…"]` | a fresh `projects/<key>.md` from the template, with one `note — ledger opened` | the key is not a row; the file exists; the summary is over 15 words; the ref is malformed |
+| `run <project> <jobid> "<what>" [--partition P]` | a run line (`open`) + a `run` entry | the id is not SLURM-shaped; it is already listed; the row is `both` and no `--partition` |
+| `running <project> <jobid>` | the run line's state | the id is not under `## Runs` |
+| `done <project> <jobid> [--failed] [--wall H:MM] [--note "…"]` | removes the run line, prepends a `run` entry | the id is not under `## Runs`; `--wall` is not `H:MM` |
+| `log <project> "<text>" [--kind KIND]` | one entry at the head of the log | empty text; a `--today` earlier than the head entry |
+| `now <project> "<text>"` | the body of `## Now` | empty text |
+| `issue <project> [-n N]` | nothing (prints) | — |
+| `retire <project> --why "…"` | `projects.yaml` (`status: retired`, `note:`), one `note` entry | the row is already retired; the ledger still lists a run; `--why` holds `"` |
+
+Every verb takes `--root <dir>` (default: this checkout) and every dated verb
+`--today YYYY-MM-DD`, so the tests run against a copy of the fixture with a
+fixed clock. A verb that would leave a file `check` cannot read refuses and
+writes nothing.
+
+## `projects.yaml`
+
+The science body map. **Code, not ledger** — `sync_cli` and `local_path` are
+paths a conductor executes under. Real YAML read with `yaml.safe_load`; the
+shape is validated by `cortex.py`:
+
+| Field | Value | Notes |
+|---|---|---|
+| `remote` | `owner/repo` or `none` | PyAutoLabs for active projects; a personal remote is a fact with a `note:` |
+| `local_path` | absolute path | the laptop checkout — the workspace-paths exception (AGENTS.md) |
+| `ral_root` | absolute path | the project root on RAL |
+| `mirror` | absolute path or `none` | the laptop pull root the sync CLI fills |
+| `sync_cli` | path relative to `local_path` | the project's own sync CLI — the only thing that reaches a cluster |
+| `sync_verbs` | flow list of bare words | the verbs that CLI has; `pull` is what `checkin` runs, `jobs` what it shows |
+| `ledger` | path relative to `local_path` | the project's own commentary ledger (a `wiki/project/state.md`, a `NOTES.md`) |
+| `assistant` | a workspace-relative repo name or `none` | the domain assistant the project's work enters through; named, never read |
+| `witness_file` | glob relative to the mirror | kept for the projects' own tooling; the Cortex no longer scores it |
+| `partition` | `gpu` \| `ral` \| `both` | which SLURM partition(s) the project runs on; `run` needs `--partition` on `both` |
+| `status` | `active` \| `dormant` \| `planned` \| `retired` | `retire` writes the last |
+| `note` | free text, **optional** | the only optional field; an empty `note:` is drift |
 
 ## Repository layout
 
 ```
-PyAutoCortex/
-├── README.md                ← short front page
-├── AGENTS.md                ← agent guidance (generated blocks: organism map, remote sessions, history)
-├── CLAUDE.md                ← GENERATED pointer (@AGENTS.md) — repos_sync --write
-├── REFERENCE.md             ← this file (schemas + grammars)
-├── LICENSE  .gitignore
-│
-├── projects.yaml            ← the science body map — CODE, not ledger (read with PyYAML)
-├── checkin.yaml             ← `refreshed: <UTC ISO>` — the last check-in stamp; LEDGER
-├── dashboard.md             ← GENERATED board — cortex conductor (`dashboard --apply`); LEDGER
-├── dashboard.html           ← GENERATED board, the Pages index; LEDGER
-│
-├── tasks/<project>/<slug>.md          ← one file per task (LEDGER)
-├── rulings/AGENTS.md                   ← the append-only rule
-├── rulings/<YYYY>/<MM>/R-<YYYYMMDD>-<nn>.md   ← the ledger of record (LEDGER, append-only)
-├── batches/AGENTS.md                   ← "closed history: never modified, only added"
-├── batches/<YYYY-MM-DD>-<slot>.md      ← the 2026-08/09 records (LEDGER, append-only)
-├── batches/reviews/{AGENTS.md,<slot>.md}   ← the human's verbatim reviews (LEDGER, append-only)
-│
-├── docs/schema_decisions.md ← every dated choice the epic did not fix
-├── policy/never_rewrite_history.md  policy/remote_sessions.md   ← copies of the Mind's; spliced into AGENTS.md
-│
-├── scripts/cortex.py        ← check · gates · rule · move · new · retire (stdlib + PyYAML)
-├── scripts/ledger_merge.py  ← the default-deny ledger classifier (+ append-only on rulings/, batches/)
-├── tests/test_cortex.py  tests/test_ledger_merge.py
-├── tests/fixtures/skeleton/ ← one project, one task per state, five rulings — the witness
-├── tests/fixtures/empty/    ← an empty map passes `check`
-│
-├── .github/workflows/cortex_check.yml       ← check + pytest on push/PR
-├── .github/workflows/ledger_merge.yml       ← lands ledger-only `claude/**` branches
-├── .github/workflows/dashboard_refresh.yml  ← renders the board; self-heals main
-├── .github/workflows/pages_dashboard.yml    ← publishes dashboard.html to Pages
-└── .claude/hooks/session-start.sh  .claude/settings.json   ← GENERATED — repos_sync --write
+projects.yaml            the body map (code)
+projects/<key>.md        one ledger per project (ledger)
+projects/AGENTS.md       doctrine for the folder (code)
+checkin.yaml             the last-check-in stamp (ledger)
+dashboard.md, .html      generated board (ledger; never hand-edited)
+archive/                 frozen 2026-08/09 tasks, rulings, batches (code)
+scripts/cortex.py        the lifecycle script
+scripts/ledger_merge.py  the auto-merge classifier
+tests/                   pytest; fixtures/skeleton and fixtures/empty
+docs/schema_decisions.md every dated choice
 ```
-
-No `skills/` — the Cortex exposes no commands of its own; the conductor that
-drives it lives in the Brain (`pyauto-brain cortex …`, AGENTS.md "Driving the
-Cortex"), and the workflows above are the only things that run it unattended.
-
----
-
-## Run lines (`## Runs`)
-
-SLURM notation, strict grammar. One line per job or per task set of an array;
-structured facts on **indented continuation lines**, never in the note.
-
-```
-- <stem>[_<task>|_[<a>-<b>,<c>]]: <run-state> — <partition> — submitted <YYYY-MM-DD> — wall <H+:MM>[ — <note>]
-    pulled_to: <path>   |  after: <run>  |  resumes: <run>  |  where: <path>  |  ruled: <id>
-```
-
-- `<stem>` — the SLURM job id, digits. `_<task>` — one array task.
-  `_[<set>]` — an array task set: comma-separated integers and `a-b` ranges,
-  ascending, no spaces (`342091_[0-8,10]`).
-- `<run-state>` ∈ `submitted | running | done | failed | timeout | void |
-  legacy | legacy_wrong`. `void` = cancelled or never produced a step.
-  `legacy` / `legacy_wrong` = quarantine (reusable / not) — **a run state,
-  never a task state**.
-- `<partition>` — the SLURM partition the job went to, a bare word
-  (`^[a-z][a-z0-9_-]*$`, e.g. `gpu`). The project's `partition:` row says
-  which it may use.
-- `submitted <YYYY-MM-DD>` — the submission date. `wall <H+:MM>` — wall time
-  used so far (`0:00` for a job that never ran).
-- `<note>` — free text after a fourth ` — `; never carries a structured fact.
-- Continuation lines — exactly four spaces then `<key>: <value>`, keys:
-  `pulled_to:` (laptop path the results were pulled to), `after:` (SLURM
-  `afterok` dependency), `resumes:` (a checkpoint resubmit of that run),
-  `where:` (the quarantine path of a `legacy*` run), `ruled:` (a ruling id
-  naming this run).
-- The em dash `—` is canonical; `--` is accepted for it (phone keyboards).
-  `check` reads both as the same separator; the writing verbs emit `—`.
-
-The regex, as `check` applies it (after `--` → `—` normalisation):
-
-```python
-RUN_LINE_RE = re.compile(
-    r"^- (?P<stem>\d+)"
-    r"(?:_(?P<task>\d+)|_\[(?P<tasks>\d+(?:-\d+)?(?:,\d+(?:-\d+)?)*)\])?"
-    r": (?P<state>submitted|running|done|failed|timeout|void|legacy|legacy_wrong)"
-    r" — (?P<partition>[a-z][a-z0-9_-]*)"
-    r" — submitted (?P<date>\d{4}-\d{2}-\d{2})"
-    r" — wall (?P<wall>\d+:\d{2})"
-    r"(?: — (?P<note>.+))?$"
-)
-RUN_CONT_RE = re.compile(
-    r"^    (?P<key>pulled_to|after|resumes|where|ruled): (?P<value>\S.*)$"
-)
-```
-
-`check` enforces:
-
-- every non-blank line under `## Runs` matches `RUN_LINE_RE` or `RUN_CONT_RE`;
-  a continuation line follows a run line;
-- task sets on one stem are **disjoint within a task** (job ids are unique
-  per task, not globally — one array may feed two tasks);
-- the `Runs:` header equals the set of body stems (both empty when the task
-  has no runs);
-- `State: pulled` ⇒ at least one `done | legacy` run carries `pulled_to:`;
-- a `legacy | legacy_wrong` run carries `where:`;
-- an `after:` / `resumes:` target is the identifier (the text before the
-  colon — `342091`, `342091_9` or `342091_[0-8,10]`) of another run line of
-  the **same task**;
-- a `ruled:` value resolves to a ruling file.
-
----
-
-## Rulings
-
-`rulings/<YYYY>/<MM>/R-<YYYYMMDD>-<nn>.md`. The id is `R-YYYYMMDD-nn` — a
-two-digit per-day sequence, global across projects; `rule` assigns it; the
-filename equals the id and so does the title line (`# <id>` or
-`# <id> — <one-line summary>`); `rule` generates
-`# <id> — <verb> <project> <slug>`.
-
-````markdown
-# R-20260901-02 — re-accept example 08_accepted with the corrected evidence pointer
-
-Project: example
-Task: tasks/example/08_accepted.md
-Runs: 342050
-Ruling: accept
-Supersedes: R-20260901-01
-Batch: 2026-09-01-pm
-Reviewed-at: 2026-09-01T17:20Z
-Review-minutes-actual: 6
-Follow-ups: PyAutoLens#901
-
-## Ruling
-
-The human's words, verbatim.
-
-## Evidence
-
-- pointers into the pulled results, the project ledger, figures
-````
-
-| Key | Value | Notes |
-|---|---|---|
-| `Project:` | project key | |
-| `Task:` | one task path | repo-relative, `tasks/<project>/<slug>.md` |
-| `Runs:` | comma-separated stems, or empty | ⊆ the task's `Runs:` |
-| `Ruling:` | `accept \| rerun \| drop \| leave-to-finish` | the verb |
-| `Supersedes:` | one ruling id | optional; see the chain rules |
-| `Batch:` | `<YYYY-MM-DD>-<slot>` | optional-**historical**; the 2026-08/09 rulings' join, nothing writes new ones |
-| `Reviewed-at:` | timestamp | |
-| `Review-minutes-actual:` | integer | |
-| `Follow-ups:` | comma-separated GitHub refs | `GATE_REF_RE`; **the issue is created before `rule` runs** |
-| `Migrated-from:` | source path or ledger anchor | the review file or project-ledger entry a backfilled ruling was transcribed from |
-
-Body: `## Ruling` — the human's words verbatim; `## Evidence` — pointers.
-
-**One ruling file per task.** A multi-task ruling (a REWIND) is N `rule`
-invocations with the same body — one per task.
-
-**Chain rules** (`check`):
-
-- the id is unique, equals the filename stem and the title, and its date is
-  the file's `<YYYY>/<MM>` directory; the body has `## Ruling` and
-  `## Evidence`;
-- `Supersedes:` resolves to an existing ruling, is not the ruling itself, is
-  lexically smaller (earlier), and names the same project **and** task;
-- **at most one successor per ruling** — a chain, not a tree: supersede the
-  head;
-- the task's `Ruling:` is a chain head (no ruling supersedes it) whose
-  `Task:` is that task;
-- the head's verb matches the task's state: `accept ⇒ accepted`,
-  `drop ⇒ dropped`, `rerun ⇒ rerun | ready | submitted | running | pulled |
-  awaiting-ruling` (the task has moved on), `leave-to-finish ⇒ any
-  non-terminal state`;
-- the ruling's `Runs:` ⊆ the task's runs;
-- `Batch:`, when present, names an existing `batches/<slot>.md`.
-
-A task may hold rulings that are not chained to each other — a
-`leave-to-finish` followed by an `accept` is two chains of one. `Supersedes:`
-is for replacing a verdict, not for sequencing.
-
-The rest of the rule — append-only, supersede-never-edit, *a verdict recorded
-only outside the Cortex does not exist* — is [rulings/AGENTS.md](rulings/AGENTS.md).
-
----
-
-## Batches — closed history
-
-`batches/<YYYY-MM-DD>-<slot>.md` and the human's verbatim reviews under
-`batches/reviews/` are read-only history: three records from 2026-08/09, cited
-by 13 rulings, kept because *a verdict recorded only outside the Cortex does
-not exist*. They are **append-only** for the merge gate — never modified, only
-added — and `check` no longer has a schema for them: the review-slot apparatus
-that produced them (the packet page, the scored members, the review-minute
-budget, the `-r<N>` sittings) was retired on 2026-09-03, and nothing writes a
-new record.
-
-A ruling's `Batch:` field is therefore **optional-historical**: where present
-it must still name an existing `batches/<slot>.md`, and nothing writes a new
-one.
-
----
-
-## `projects.yaml`
-
-Ordinary YAML, read with `yaml.safe_load` (PyYAML is `cortex.py`'s one
-dependency; the hand-rolled restricted-subset parser it replaced was retired
-on 2026-09-03, its own parity test having proved it equivalent). The document
-is a mapping of project key → field mapping:
-
-```yaml
-<key>:                        # ^[a-z][a-z0-9_]*$
-  <field>: <scalar>           # fixed field set, unknown field = error
-  sync_verbs: [pull, push]    # a list of bare words
-  note: "free text"           # the one optional field
-```
-
-What `check` validates is the **fields**, not the syntax: the document is a
-mapping of rows, every key matches the key grammar, every field is in the set
-below, `sync_verbs` is a list of bare words, and each value passes the rules
-listed here. A document PyYAML cannot read is reported as one problem.
-
-- Fields (required): `remote` (`owner/repo` | `none` — PyAutoLabs for active
-  projects; a personal remote is recorded as a fact with a `note:`),
-  `local_path` (absolute laptop path — the Cortex-only exception to the
-  workspace-paths rule), `ral_root`, `mirror` (path | `none`), `sync_cli`,
-  `sync_verbs`, `ledger`, `assistant`, `witness_file` (glob), `partition`
-  (`gpu | ral | both`), `status`
-  (`active | dormant | planned | retired`).
-- `assistant` is the domain assistant this project's work enters through — a
-  workspace-relative repo name such as `autolens_assistant`, or `none`; the
-  Cortex names it, never reads it. `check` accepts `none` or a bare directory
-  name (`^[A-Za-z0-9_.-]+$`: no `/`, never absolute) and stats nothing, so the
-  render does not need an assistant checkout.
-- `note` (free text) is the **one optional field**: a row may omit it, an
-  empty `note:` is drift, and any other field is still an unknown-field
-  error. A note holding `:` or `#` is quoted like any other scalar.
-- **Retiring a project.** `cortex.py retire <key> --why "<one line>"` is
-  the one verb that writes this file: it flips the row's `status:` to
-  `retired` and rewrites (or appends) its `note:` as
-  `"retired <today>: <why>"`. The **row stays** — it is the only record of
-  where that project's data lives — and no task or ruling is touched;
-  `rulings/` is append-only and a change of status is not a rewrite of
-  history. It refuses while the project holds a task in any state
-  outside `accepted | rerun | dropped | planned`, naming each one, so the
-  live questions are ruled or dropped first; `planned` tasks are unasked
-  questions and may stay. The edit is exactly those two lines — every
-  other byte of the file is preserved — and the result is re-parsed
-  before it is kept, the original bytes restored if it does not read
-  back clean.
-- Science repos are **not** added to `PyAutoMind/repos.yaml` — that map is the
-  workspace, this one is the science.
-- A file with no rows parses to an empty map (`{}`); PyYAML returns `None`
-  for a comment-only document, so the `yaml.safe_load(text) == parse(text)`
-  parity test runs on the fixture, which has a row.
-
----
 
 ## How the ledger lands (`ledger_merge.yml`)
 
-A push to a `claude/**` branch whose whole diff is **ledger** is merged into
-`main` by `.github/workflows/ledger_merge.yml` and the branch deleted — no PR,
-no session step. The line is drawn by `scripts/ledger_merge.py`, **default
-deny**:
-
-| Ledger — merged automatically | Code — always a human |
-|---|---|
-| `tasks/**`, `rulings/**`, `batches/**` | `scripts/`, `tests/`, `.github/`, `policy/`, `docs/` |
-| `checkin.yaml` | `projects.yaml`, `README.md`, `AGENTS.md`, `REFERENCE.md`, … |
-| `dashboard.md`, `dashboard.html` (generated) | **`AGENTS.md` / `TEMPLATE.md` inside a ledger dir** |
-| | anything unclassified — a new root file, a new top-level folder |
-| | **any modification or deletion under `rulings/` or `batches/`** (append-only) |
-
-Three exceptions inside the ledger dirs. Two are the Mind's: a **dot-path**
-anywhere, and a file pytest would **collect** (`conftest.py`, `test_*.py`,
-`*_test.py`). The third is the Cortex's own **doctrine carve-out** —
-`rulings/AGENTS.md`, `batches/AGENTS.md` and `batches/reviews/AGENTS.md` are
-ledger by location but instructional by content: they say what an entry may be and what
-every future entry is stamped from, so a change to one is a change to
-behaviour. Auto-merging a rewrite of `rulings/AGENTS.md` would let a branch
-edit the rule that governs its own merge.
-
-Pulling the other way, the two **generated** board pages are ledger: a branch
-that moves a task re-renders them in the same push, and
-`dashboard_refresh.yml`'s self-heal commit has to land without a human.
-
-And a fourth Cortex rule on *kind* rather than path: `ledger_merge.py`
-classifies via `git diff --name-status`, and an `M`, `D` or `R` entry under
-`rulings/**` or `batches/**` is code. `rulings/` because a ruling is
-superseded, never edited; `batches/` since 2026-09-03, when the review-slot
-apparatus was retired and its records became history — never modified, only
-added.
-
-The blocking check is `python3 scripts/cortex.py check` run on the **trial-merge
-tree** — after `git merge --no-ff`, before `git push` — which is what catches
-the ruling-id race (two branches both assign `R-…-03`: each passes alone, the
-merge fails). A failing check resets the trial merge and leaves the branch for
-a human. Predict the verdict before you push:
-
-```bash
-python3 scripts/ledger_merge.py classify --base origin/main   # exit 0 = will auto-merge
-python3 scripts/cortex.py check                               # exit 0 = will not block
-```
-
----
-
-## `scripts/cortex.py` — the verb reference
-
-Stdlib only; `main(argv)`; no import-time side effects; every verb takes
-`--root <dir>` (default: the repo root the script lives in). Every leg of
-`check` takes `root: Path`, so tests run it against a `tmp_path` copy.
-
-- **`check`** — every rule in this file: task headers and states, the witness
-  invariant, `## Where to look` naming somewhere past `planned`, run lines,
-  ruling ids and chains, the verb↔state agreement, every project named by a
-  task path is a `projects.yaml` key, and `projects.yaml`'s own fields. Hermetic (no network, no git). Output in `lifecycle.py`'s shape —
-  `cortex check: OK` or `cortex check: DRIFT` followed by one `  - …` line per
-  finding; exit 1 on drift.
-- **`gates`** — read-only and offline: every `gated` task, its refs and the
-  URL each ref resolves to (`GATE_REF_RE` → `gate_url`). Nothing polls GitHub
-  and nothing flips a state. Grading was retired on 2026-09-03 — in its whole
-  life it saw 2 gated refs and flipped 0, while schema decision 54 routes
-  sequencing through prose `Ready when:` lines. A human reads the listing,
-  opens the refs and types `move <task> ready`.
-- **`rule <task> <verb> --body <file> [--supersedes <id>] [--batch <slot>]
-  [--minutes n] [--follow-up <ref>]...`** — assigns the next id for today,
-  writes the ruling file, updates the task's `Ruling:` and `State:` per the
-  table (and appends `<id> — <verb>` to the task's
-  `## Ruling`); the ruling's `Runs:` is the task's, its `## Evidence` is the
-  task's `## Where to look`; refuses to touch an existing ruling; refuses a
-  verb the table does not allow from the task's state; validates everything
-  before writing anything.
-- **`move <task> <state> [--run <id>] [--reason ..]
-  [--partial] [--pulled-to <path>] [--partition ..] [--after <run>]
-  [--resumes <run>] [--note ..]`** — the table; refuses every ruling edge
-  with a message naming `rule`. `--run` on `submitted`/`running` appends a
-  run line and keeps the state; the appended line is
-  `- <id>: submitted — <partition> — submitted <today> — wall 0:00[ — <note>]`
-  with `after:` / `resumes:` continuations from the flags, and its
-  partition is the project's `partition:` row unless that is `both`, when
-  `--partition` is required. Every edit is an in-place header edit or an
-  appended run line; every other byte of the file is preserved.
-- **`new <project> <slug> --summary "<≤10 words>" [--gates ..] [--epic ..]
-  [--legacy-run <id>]... [--legacy-wrong <id>]... [--where <path>]
-  [--partition ..] [--witness ..] [--budget ..] [--minutes n] [--title ..]`**
-  — writes `tasks/<project>/<slug>.md` from the template in `planned` (or
-  `ready` when `--legacy-run` / `--legacy-wrong` is given and every run is
-  legacy); each legacy run line is written with today's date, `wall 0:00`
-  and the note `pre-Cortex run, migrated` — the human corrects the date and
-  wall by hand — and `--where` (required) as its `where:`; a legacy-born
-  task refuses `--gates`. `--summary` is required and held to the same ten
-  words `check` holds it to. Refuses an existing file (the slug is the
-  identity — there is nothing else to collide on) or an unknown project.
-- **`retire <project> --why "<one line>"`** — the only verb that writes
-  `projects.yaml`: `status: retired` plus a `note:` reading
-  `"retired <today>: <why>"`, two lines edited in place and every other
-  byte preserved. Refuses an unknown key, an already-retired row, and any
-  project still holding a task outside `accepted | rerun | dropped |
-  planned` (the message names each `<task> — <state>`). The row, its
-  tasks and its rulings all stay; see `projects.yaml` above.
-
----
+A push to `claude/**` whose whole diff is ledger — `projects/*.md` (not
+`AGENTS.md` / `TEMPLATE.md`), `checkin.yaml`, `dashboard.md`,
+`dashboard.html` — is merged into `main` with `--no-ff` and the branch
+deleted. Anything else waits for a human: `scripts/`, `tests/`, `.github/`,
+`policy/`, `docs/`, `projects.yaml`, the prose pages, anything under
+`archive/`, and anything unclassified (default deny). `cortex.py check` runs
+on the branch tip and again on the trial-merge tree, so two branches that
+each edited the same ledger are caught before either lands. `python3
+scripts/ledger_merge.py classify --base origin/main` predicts the verdict
+(exit 0 ledger · 1 code · 2 could not classify).
 
 ## Check-in
 
-**One command.** `pyauto-brain cortex checkin` is the door the human types when
-they want to know where their science is:
+`pyauto-brain cortex checkin` (the Brain's cortex conductor) is the one door:
 
 ```bash
-pyauto-brain cortex checkin --dry-run             # what it would pull and score
-pyauto-brain cortex checkin --apply               # pull, score, move, render, push
-pyauto-brain cortex checkin --apply --no-push     # ... without the push
+pyauto-brain cortex checkin --dry-run              # what it would pull; reaches nothing
+pyauto-brain cortex checkin --apply                # pull, show jobs, render, push
+pyauto-brain cortex checkin --apply --no-push
 pyauto-brain cortex checkin --apply --project subhalo_validation
-pyauto-brain cortex checkin --apply --skip-pull   # re-score what is already here
+pyauto-brain cortex checkin --apply --skip-pull
 ```
 
-It sweeps every `status: active` row of `projects.yaml`, plus any project that
-owns a task in `submitted | running`, and runs **that project's own**
-`<local_path>/<sync_cli> pull` — the verb all seven implement. Nothing else
-reaches a cluster; the conductor adds no SSH. A pull that exits non-zero is
-recorded against its project and the sweep continues. Then it scores every live
-task (the six legs below), moves `running → pulled → awaiting-ruling`,
-re-renders `dashboard.md` + `dashboard.html`, and prints a summary keyed **by
-project** — the last thing on screen, so a chat sees it first.
+It sweeps every `status: active` row plus any project whose ledger lists a
+run, runs **that project's own** `<local_path>/<sync_cli> pull` (a failing
+pull is recorded against its project and the sweep continues), runs its `jobs`
+verb where the row has one and prints the output verbatim, writes
+`checkin.yaml`, re-renders the two pages, pushes the ledger on
+`claude/checkin-<date>` when `gh` is logged in and the checkout is clean on
+`main`, and prints last a summary keyed by project: Now, the runs, the last
+five entries, and the `cortex.py` lines the human is likely to type next. It
+flips no state and writes no entry of its own — the jobs output is read by
+the human or the agent in the session and recorded with `running` / `done`.
 
-### `checkin.yaml` — the last-check-in stamp
-
-One key, one line, committed and pushed with the ledger:
+### `checkin.yaml`
 
 ```yaml
-refreshed: 2026-09-04T14:03:00Z
+refreshed: 2026-09-10T19:41Z
 ```
 
-It records the last **check-in**, not the last render: `checkin --apply` (and
-`collect --apply`) writes it from the same stamp it scored against, before the
-pages are rendered, so a doc-only push that re-renders the board cannot fake
-freshness. The board reads it back as "Last check-in"; the HTML twin computes
-the age on the *viewer's* clock and reddens it past sixty minutes, because a
-static page cannot know when it is being read. Absent, the board says "never
-checked in". The file is stable between renders, so `dashboard --check` needs
-no rule for it.
+Written by `checkin --apply` before the pages are rendered, so a doc-only
+push that re-renders the board cannot fake freshness. The HTML board reddens
+the stamp on the viewer's clock once it is an hour old.
 
-### The by-project view
+## The board
 
-The summary is a tree, and it is the same tree in three places: the
-`## By project` section of `dashboard.md` / `dashboard.html`, the text
-`pyauto-brain cortex census --by-project` prints from the checkout alone, and
-the closing summary of a real `checkin` (which is the only one of the three
-carrying pull results and six-leg health). One builder, three renderings — a
-prompt added to a state appears in all of them.
-
-Per project: the three folders it lives in (`local_path`, `mirror` when it has
-one, `ral_root`), what came of its pull, its task counts by state, then every
-task that is still **open** — awaiting a ruling, still out there, ready to
-submit, gated, planned — each with its state and health, its `## Where to look`
-bullets verbatim, and a copy chip per prompt its state carries. `accepted`,
-`rerun` and `dropped` tasks are history and appear only in the counts. A
-project gets a block when its `projects.yaml` row is `status: active`, or when
-it still holds an open task; every other project folds into one line.
-
-On the board `## By project` is the **first** section, above the state lists:
-those are cross-project, so every row has to be read to find out whose it is,
-while this one answers "where is everything" a screen per project. The counts
-table sits above it and keeps the urgency sections one tap away; the counts
-strip itself is unchanged (the Brain board reads it).
-
-### The five starting prompts
-
-Every task row hands the reader a command rather than a decision. Which
-prompts a task carries is its **state**, and nothing else:
-
-| Prompt | States | What it says |
-|---|---|---|
-| rule on it | `pulled`, `awaiting-ruling` | read the witness and the pulled evidence, draft the ruling body, `rule <task> <verb> --body <file>` |
-| the results are good — accept and open the next task | `pulled`, `awaiting-ruling` | `rule <task> accept --body <file>`, then open the next task (below) |
-| run it again | `pulled`, `awaiting-ruling`, `running` | `rule <task> rerun --body <file>`, `move <task> ready`, the project's own submit, `move <task> submitted --run <jobid>` |
-| where the jobs stand | `submitted`, `running` | the project's own `<sync_cli> jobs` |
-| submit it | `ready` | the task, the project's own submit verb, `move <task> submitted --run <jobid>` |
-
-(`gated` and `planned` tasks carry the one-line `gates` / `move … ready`
-command they always had.)
-
-**Accept and open the next task** is two commands in one prompt because they
-are one decision: an accept that opens nothing leaves the programme where it
-was. With the number gone there is no "N+1" to prefill — the tasks a project
-holds are unordered ideas, so the second half offers the project's `planned`
-and `gated` tasks to open (`move … ready` + the launch) and otherwise a `new`
-line for a task the human names with a slug and a `Summary:`. The `new` line
-carries the task's own `Epic:` and spells out the title rule: **`new` writes
-`# <Project> — ` in front of `--title` itself**, so `--title` takes the tail
-alone.
-
-**Run it again** is a ruling first: `rerun` is the only verb that puts a task
-back on the board, so the verdict on what came back is what makes the next
-submission a rerun rather than a repeat. Its `move … submitted --run` line
-carries the reminder that it is one run per call (`--after <run>` chains the
-next).
-
-The payloads are short on purpose. They are pasted into a fresh chat, not run
-as scripts: every one of them ends in a human's own reading, and the `<file>`,
-`<script>`, `<slug>` and `<jobid>` placeholders are where that reading lands.
-
-### `.cortex/pull.json` — the pull manifest
-
-After a successful pull the door writes the manifest at the top of that
-project's pull root (its `mirror` if it has one, else its `local_path`) —
-the same file `collect`'s checkpoint leg reads:
-
-| Key | Written by | Meaning |
-|---|---|---|
-| `project` | the check-in | the `projects.yaml` key this tree belongs to |
-| `pulled_at` | the check-in | UTC `YYYY-MM-DDTHH:MMZ` of the pull that just finished |
-| `cmd` | the check-in | the pull as a human would type it (`cd <local_path> && <sync_cli> pull`) |
-| `rc` | the check-in | that pull's exit code — `0`, or the manifest is not written |
-| `tasks_live` | the check-in | the task paths that were `submitted \| running` when it ran |
-| `schema` | a project's own CLI | `1` where the CLI writes the richer shape; absent = the older `runs`-only one |
-| `checkpoints` | a project's own CLI | `{"<run dir, relative to the pull root>": {"bytes": N, "mtime": ISO}}` |
-| `runs` | a project's own CLI | `{"<jobid|jobid_task>": {"checkpoint_bytes": N, "checkpoint_mtime": ISO}}` |
-
-**Merged, never clobbered.** `autolens_profiling`'s own `hpc/sync` already
-writes `checkpoints` / `runs` here — the only window onto the RAL-only
-`search_internal/checkpoint.hdf5`, which no pull mirrors. The check-in adds its
-five keys and leaves every other key exactly as it found it, so the richer
-manifest keeps making the checkpoint leg scorable. Without a manifest that leg
-is `UNOBSERVABLE`, not `FAIL`.
-
-The manifests live **outside** this repository, in the science trees, so
-`cortex.py check` says nothing about them; the check-in's own note line
-(`<project>: pulled → <path>`) is the record that one was written.
-
-### The push
-
-`--push` is allowed only when **`gh auth status` succeeds** *and* **this
-checkout is clean on `main`** — checked before anything is written, since
-"clean" stops being true the moment the tasks move. That is the cloud/laptop
-split and it is also the default: a laptop pushes without asking, a cloud
-session cannot and says so. The push cuts `claude/checkin-<YYYY-MM-DD>` from a
-fresh `origin/main`, commits the changed paths explicitly and pushes;
-`ledger_merge.yml` then merges it into `main` and deletes the branch (below).
-`scripts/ledger_merge.py classify` is asked **first** and a code-classified
-diff — `projects.yaml`, `scripts/`, the prose pages — is refused before the
-branch is cut. Never `main` directly, never `--force`.
-
-## Driving the Cortex — the conductor and the workflows
-
-The Cortex is state plus `cortex.py`. The reasoning over it — the board and the
-check-in — is the Brain's **cortex conductor**:
-
-```bash
-pyauto-brain cortex checkin [--dry-run|--apply] [--push|--no-push] [--project KEY] [--skip-pull] [--refreshed ISO]
-pyauto-brain cortex census [--json]                  # what is held, by state
-pyauto-brain cortex census --by-project              # ... by project: folders, open tasks, prompts
-pyauto-brain cortex dashboard --check | --apply      # render the two pages
-pyauto-brain cortex gates                            # the gated tasks and their refs
-pyauto-brain cortex collect [--task REL] [--pull] [--refreshed ISO] [--apply] [--out F]
-```
-
-`checkin` composes the others (above). `collect` with no `--task` scopes to
-**every** task in `submitted | running` — the scorer on its own.
-
-With no Brain install, or from a workflow:
-
-```bash
-python3 ../PyAutoBrain/agents/conductors/cortex/_cortex.py dashboard --cortex . --check
-```
-
-`--cortex` is a flag of the **subcommand**, not a global one: it follows the
-verb. (`--cortex . dashboard --check` exits 2.) The root is resolved
-`--cortex` → `$PYAUTO_CORTEX` → `PyAutoCortex` beside the Brain checkout.
-
-**Two spellings of the same flag.** The conductor writes with `--apply` (the
-Brain's house spelling); `scripts/cortex.py` writes with `--write`. Every edit
-to a task is `cortex.py`'s either way.
-
-**The `--check` exit-code contract** (`dashboard_refresh.yml` depends on it):
-
-| Code | Meaning | What the caller does |
-|---|---|---|
-| 0 | the committed pages match a fresh render | nothing |
-| 1 | **drift** — and nothing else | error on a PR, self-heal on main |
-| 2 | bad args — this Brain has no such verb/flag | report a renderer failure |
-| other | the renderer could not run (a Brain/Cortex skew) | report a renderer failure |
-
-Treating 2 as drift sends whoever reads the log to fix `dashboard.md` when the
-broken thing is the Brain: `dashboard_refresh.yml` wraps the call in `check()`
-for exactly that reason.
-
-### What each workflow may write
-
-| Workflow | Trigger | Writes |
-|---|---|---|
-| `cortex_check.yml` | push/PR on `tasks/ rulings/ batches/ projects.yaml checkin.yaml dashboard.* scripts/ tests/` | nothing (`cortex.py check` + pytest) |
-| `dashboard_refresh.yml` | push to main + PR on the ledger paths and the two pages, nightly **03:35 UTC**, dispatch | `dashboard.md`, `dashboard.html` on main (3-attempt fetch/reset/render/commit/push); a PR run errors instead of healing |
-| `pages_dashboard.yml` | push to `dashboard.html`, dispatch | nothing in git — publishes `dashboard.html` as the Pages index |
-| `ledger_merge.yml` | push to `claude/**`, dispatch | merges a ledger-only branch into main |
-
-**No scheduled job mutates the ledger.** A daily gate-grading cron did until
-2026-09-03; retiring gate grading retired it with no replacement.
-
-Every workflow that can push to main shares `concurrency: group:
-cortex-main-writers, cancel-in-progress: false` — `dashboard_refresh.yml` and
-`ledger_merge.yml` — so two bot writers never race for the tip.
-`pages_dashboard.yml` keeps its own `group: pages`.
-
-A push made with `GITHUB_TOKEN` triggers **no** workflow, so each writer
-re-dispatches by name what its push should have woken: `dashboard_refresh.yml`
-asks for `pages_dashboard.yml` (on both paths — fresh *and* healed; folding the
-fresh one away is the bug that stranded the Mind's published board), and
-`ledger_merge.yml` asks for `cortex_check.yml`.
-
-The board is published at **<https://pyautolabs.github.io/PyAutoCortex/>**.
-
----
+`dashboard.md` and `dashboard.html`, rendered by the conductor: a counts table
+(**Running**, **Open**, **Projects** — the Brain board reads these three
+rows), the check-in chip and stamp, a four-column **Summary** (`Project ·
+Running · Open · Last update` — deliberately no free text, so it fits a
+phone), then one card per project with a ledger: the facts line, **Now**, the
+**Runs**, the **Last 5** entries, and a single 📋 **resume** chip for an active
+project — the paste that has an agent read the ledger and the project's own
+state file and say where you left off. Retired projects fold into one line
+each; dormant rows with no ledger are a small table. No chip on the page
+submits, scores or decides anything.
 
 ## Bootstrap
 
 ```bash
-cd ~/Code/PyAutoLabs
-git clone https://github.com/PyAutoLabs/PyAutoCortex.git
-python3 PyAutoMind/scripts/repos_sync.py --write      # CLAUDE.md, .claude/, the AGENTS.md blocks
-python3 PyAutoCortex/scripts/cortex.py check           # OK on an empty tree
+python3 -m pip install pyyaml pytest
+python3 scripts/cortex.py check
+python3 -m pytest -q
 ```
-
-The checkout directory must be named `PyAutoCortex`; the organism's sync and
-drift scripts address it by that name.
