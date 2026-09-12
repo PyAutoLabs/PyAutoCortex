@@ -93,6 +93,7 @@ not re-derive them.
   - `issue <project>` — prints the concise block that sits at the top of the
     project's GitHub issue (Now, Runs, the last five entries) between two
     markers; the Brain's `cortex issue --apply` writes it there.
+  - `link <project> <Repo#N | URL | none>` — sets the ledger's `Issue:`.
   - `retire <project> --why "<one line>"` — the only verb that writes
     `projects.yaml`: the row's `status:` becomes `retired`, its `note:`
     records why, and the ledger logs it. It refuses while the ledger still

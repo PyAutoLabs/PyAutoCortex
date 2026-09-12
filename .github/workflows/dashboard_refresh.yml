@@ -77,6 +77,19 @@ jobs:
         with:
           repository: PyAutoLabs/PyAutoBrain
           path: PyAutoBrain
+      # A Cortex branch that changes the schema alongside its Brain conductor
+      # is rendered by the PyAutoBrain branch of the SAME NAME when one exists
+      # (the two land as a pair), and by Brain main otherwise.
+      - name: Prefer the same-named PyAutoBrain branch, if any
+        working-directory: PyAutoBrain
+        env:
+          BR: ${{ github.head_ref || github.ref_name }}
+        run: |
+          if [ "$BR" != "main" ] && git fetch --depth 1 origin "$BR" 2>/dev/null; then
+            git checkout -q FETCH_HEAD && echo "PyAutoBrain @ $BR"
+          else
+            echo "PyAutoBrain @ main"
+          fi
       # No setup-python: the runner's python3 is the interpreter the laptop
       # render is compared to. PyYAML is `cortex.py`'s one dependency (it reads
       # `projects.yaml`), and the conductor imports that script at runtime.

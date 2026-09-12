@@ -80,8 +80,7 @@ runs on the cluster, and the last `n` entries, fenced by
 The Brain's `cortex issue --apply` replaces exactly that span in the issue
 body (or prepends it when the markers are absent) and leaves everything under
 it — the detailed, agent-friendly run-through — untouched. The Cortex never
-creates an issue; `Issue:` is set by hand (`new --issue`, or an edit that
-`check` validates).
+creates an issue; `Issue:` is set with `new --issue` or `link`.
 
 ## `scripts/cortex.py` — the verb reference
 
@@ -95,6 +94,7 @@ creates an issue; `Issue:` is set by hand (`new --issue`, or an edit that
 | `log <project> "<text>" [--kind KIND]` | one entry at the head of the log | empty text; a `--today` earlier than the head entry |
 | `now <project> "<text>"` | the body of `## Now` | empty text |
 | `issue <project> [-n N]` | nothing (prints) | — |
+| `link <project> <ref>` | the `Issue:` header line | the ref is not `Repo#N`, an issue URL or `none` |
 | `retire <project> --why "…"` | `projects.yaml` (`status: retired`, `note:`), one `note` entry | the row is already retired; the ledger still lists a run; `--why` holds `"` |
 
 Every verb takes `--root <dir>` (default: this checkout) and every dated verb

@@ -31,6 +31,7 @@ Usage:
     python3 scripts/cortex.py log <project> "<text>" [--kind note|result|lesson]
     python3 scripts/cortex.py now <project> "<text>"
     python3 scripts/cortex.py issue <project> [-n 5]               # the issue-top block
+    python3 scripts/cortex.py link <project> <Repo#N | URL | none>  # set `Issue:`
     python3 scripts/cortex.py retire <project> --why "<one line>"   # a project's row
 
 Exit codes: 0 = done · 1 = drift or a refused edit · 2 = bad arguments.
@@ -709,6 +710,28 @@ def issue_block(led: Ledger, row: dict, n: int = LOG_WINDOW, home: str = "") -> 
     return "\n".join(out) + "\n"
 
 
+def link_issue(root: Path, key: str, ref: str) -> str:
+    """Set the ledger's `Issue:` — the one header edit there is. `none` unlinks."""
+    ref = (ref or "").strip()
+    if not ISSUE_RE.match(ref):
+        raise CortexError(f"the ref must be Repo#N, an issue URL or none, not {ref!r}")
+    led = _ledger_at(root, key)
+    raw = led.path.read_text(encoding="utf-8")
+    lines = raw.split("\n")
+    start, end = header_span(lines)
+    at = [i for i in range(start, end) if lines[i].startswith("Issue:")]
+    if len(at) != 1:
+        raise CortexError(f"{led.rel}: expected one `Issue:` header line, found {len(at)}")
+    lines[at[0]] = f"Issue: {ref}"
+    _write(led, "\n".join(lines))
+    return f"{led.rel}: issue {ref}"
+
+
+def cmd_link(args) -> int:
+    print(link_issue(args.root, args.project, args.ref))
+    return 0
+
+
 def cmd_issue(args) -> int:
     led = _ledger_at(args.root, args.project)
     projects, _ = load_projects(args.root)
@@ -888,6 +911,12 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("-n", type=int, default=LOG_WINDOW)
     _common(p)
     p.set_defaults(func=cmd_issue)
+
+    p = sub.add_parser("link", help="set the ledger's `Issue:` (Repo#N, an issue URL, or none)")
+    p.add_argument("project")
+    p.add_argument("ref")
+    _common(p)
+    p.set_defaults(func=cmd_link)
 
     p = sub.add_parser("retire", help="retire a project's row (the only verb that writes projects.yaml)")
     p.add_argument("project")

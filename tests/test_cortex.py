@@ -346,6 +346,19 @@ def test_issue_prints_the_concise_ledger_between_markers():
     assert "2026-08-31 — *result*" not in out  # the fourth entry is outside the window
 
 
+def test_link_sets_the_issue_ref_and_validates_it(tmp_path):
+    root = _copy(tmp_path)
+    r = _run("link", "single", "single#3", root=root)
+    assert r.returncode == 0, r.stderr
+    assert _ledger(root, "single").issue == "single#3"
+    assert _run("link", "single", "https://github.com/x/y/issues/9", root=root).returncode == 0
+    assert _run("link", "single", "none", root=root).returncode == 0
+    assert _ledger(root, "single").issue == "none"
+    r = _run("link", "single", "PyAutoLabs/x#1", root=root)
+    assert r.returncode == 1 and "must be Repo#N" in r.stderr
+    assert _problems(root) == []
+
+
 def test_issue_block_names_the_home_when_given():
     led = _ledger(SKELETON)
     block = cortex.issue_block(led, {"status": "active"}, 5, home="https://github.com/x/y")
@@ -388,7 +401,7 @@ def test_retire_preserves_every_other_byte_of_projects_yaml(tmp_path):
 def test_every_verb_is_registered():
     parser = cortex.build_parser()
     verbs = set(parser._subparsers._group_actions[0].choices)
-    assert verbs == {"check", "new", "run", "running", "done", "log", "now", "issue", "retire"}
+    assert verbs == {"check", "new", "run", "running", "done", "log", "now", "issue", "link", "retire"}
 
 
 def test_a_bad_root_is_a_usage_error(tmp_path):
