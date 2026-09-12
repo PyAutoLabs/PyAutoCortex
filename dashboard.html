@@ -227,11 +227,11 @@ a.go:hover{opacity:.9;text-decoration:none}
 </head>
 <body>
 <header class="hero"><span class="orb"><svg class="mark" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="24" cy="24" r="20.4"/><path d="M11.8,18.6 C14.4,14.8 17.8,14.4 20.1,17.1 C22.4,19.8 25.8,20.2 28.5,17.9 C31.2,15.6 34.4,16.2 36.1,19.1"/><path d="M11.6,24.6 C14.2,20.8 17.6,20.4 19.9,23.1 C22.2,25.8 25.6,26.2 28.3,23.9 C31.0,21.6 34.2,22.2 35.9,25.1"/><path d="M12.8,30.6 C15.3,27.2 18.4,26.8 20.5,29.4 C22.6,32.0 25.7,32.4 28.2,30.2"/><circle cx="32.6" cy="33.0" r="3.8"/><g fill="currentColor" stroke="none"><circle cx="32.6" cy="33.0" r="1.5"/><circle cx="11.7" cy="18.6" r="1.2"/><circle cx="11.5" cy="24.6" r="1.2"/></g></svg></span><h1>PyAuto<b>Cortex</b><span class="kind">Dashboard</span></h1><div class="rule"></div><p class="tag">Question. Run. Rule.</p></header><p class="lede">One ledger per science project: what is on the cluster right now, what the human said they would do next, and the last few things they wrote down. Nothing here is inferred from a result — the board hands you the check-in and the resume prompt; what a run meant is yours to log.</p>
-<ul class="stats"><li><b>1</b><span>Running</span></li><li><b>18</b><span>Open</span></li><li><b>7</b><span>Projects</span></li></ul>
+<ul class="stats"><li><b>1</b><span>Running</span></li><li><b>20</b><span>Open</span></li><li><b>7</b><span>Projects</span></li></ul>
 <div class="fresh"><p class="muted">Last updated 2026-09-12.</p></div>
 <p class="muted mdsrc"><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/dashboard.md">markdown version</a> · <a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/README.md">GitHub Page</a></p>
-<div class="task"><button class="copy" data-cmd="/cortex — check in on every active science project since the last check-in (2026-09-12T18:46Z): pull each through its sync CLI, show me where each run stands, re-render and push the board, then read me the by-project summary. Record nothing about results — I will tell you what to log." aria-label="Copy the Claude command">📋</button><p>check in since last time</p></div>
-<div class="checkin" id="checkin-box"><span class="mark" id="checkin-mark"></span><div><span class="label">Last check-in</span><time id="checkin" datetime="2026-09-12T18:46Z">2026-09-12T18:46Z</time><span class="note" id="checkin-note"></span></div></div>
+<div class="task"><button class="copy" data-cmd="/cortex — check in on every active science project since the last check-in (2026-09-12T18:57Z): pull each through its sync CLI, show me where each run stands, re-render and push the board, then read me the by-project summary. Record nothing about results — I will tell you what to log." aria-label="Copy the Claude command">📋</button><p>check in since last time</p></div>
+<div class="checkin" id="checkin-box"><span class="mark" id="checkin-mark"></span><div><span class="label">Last check-in</span><time id="checkin" datetime="2026-09-12T18:57Z">2026-09-12T18:57Z</time><span class="note" id="checkin-note"></span></div></div>
 <a id="summary"></a><h2>Summary</h2>
 <table class="map">
 <tr><th>Project</th><th>Running</th><th>Open</th><th>Last update</th></tr>
@@ -241,7 +241,7 @@ a.go:hover{opacity:.9;text-decoration:none}
 <tr><td><b>ep_toy_gaussian</b></td><td>0</td><td>2</td><td>2026-09-10</td></tr>
 <tr><td><b>slope_hierarchy_scale</b></td><td>0</td><td>4</td><td>2026-09-09</td></tr>
 <tr><td><b>ic50_workspace</b></td><td>0</td><td>4</td><td>2026-09-09</td></tr>
-<tr><td><b>autolens_inference</b></td><td>0</td><td>0</td><td>2026-09-11</td></tr>
+<tr><td><b>autolens_inference</b></td><td>0</td><td>2</td><td>2026-09-12</td></tr>
 </table>
 <a id="projects"></a><h2>Projects</h2>
 <section class="project">
@@ -379,9 +379,14 @@ a.go:hover{opacity:.9;text-decoration:none}
 <p><b>Now</b></p>
 <p>Born 2026-09-10 as the from-scratch restart of inference_programme; slam_hst_base is the first question and is ready to submit — nothing has run yet.<br>Next: hpc/sync submit the six backend legs on the HST SLaM dataset and record the job ids here.</p>
 <p><b>Runs</b></p>
-<p class="muted">nothing on the cluster</p>
+<ul>
+<li>342799_[0-1] — open — gpu — 2026-09-12 — slam_hst_base: A100 leg, dense inversion, seeds 0-1, hpc/batch_gpu/submit_slam_hst_jax_gpu_dense (config hpc_a100_jax_gpu_dense_fp64); the 09-12 ask: one hardw…</li>
+<li>342801_[0-1] — open — gpu — 2026-09-12 — slam_hst_base: A100 leg, sparse inversion, seeds 0-1, hpc/batch_gpu/submit_slam_hst_jax_gpu_sparse (config hpc_a100_jax_gpu_sparse_fp64); the 09-12 ask: one ha…</li>
+</ul>
 <p><b>Last 5</b></p>
 <ul>
+<li>2026-09-12 — <i>run</i> — 342801_[0-1] submitted: slam_hst_base: A100 leg, sparse inversion, seeds 0-1, hpc/batch_gpu/submit_slam_hst_jax_gpu_sparse (config hpc_a100_jax_gpu_sparse_fp64); the 09-12 ask: one hardware type first, GPU; rate-probe 342695 tree moved asi…</li>
+<li>2026-09-12 — <i>run</i> — 342799_[0-1] submitted: slam_hst_base: A100 leg, dense inversion, seeds 0-1, hpc/batch_gpu/submit_slam_hst_jax_gpu_dense (config hpc_a100_jax_gpu_dense_fp64); the 09-12 ask: one hardware type first, GPU; rate-probe 342695 tree moved aside…</li>
 <li>2026-09-11 — <i>note</i> — question: Do six backend legs agree on the HST SLaM posterior? — ready, never run [archive/tasks/autolens_inference/slam_hst_base.md]</li>
 </ul>
 <p class="muted"><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/autolens_inference.md">full log</a></p>

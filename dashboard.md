@@ -11,18 +11,18 @@ One ledger per science project: what is on the cluster right now, what the human
 | Where | Count |
 |-------|------:|
 | [Running](#projects) | 1 |
-| [Open](#projects) | 18 |
+| [Open](#projects) | 20 |
 | [Projects](#projects) | 7 |
 
 <details><summary>📋 check in since last time</summary>
 
 ```
-/cortex — check in on every active science project since the last check-in (2026-09-12T18:46Z): pull each through its sync CLI, show me where each run stands, re-render and push the board, then read me the by-project summary. Record nothing about results — I will tell you what to log.
+/cortex — check in on every active science project since the last check-in (2026-09-12T18:57Z): pull each through its sync CLI, show me where each run stands, re-render and push the board, then read me the by-project summary. Record nothing about results — I will tell you what to log.
 ```
 
 </details>
 
-### Last check-in: 2026-09-12T18:46Z
+### Last check-in: 2026-09-12T18:57Z
 
 ## Summary
 
@@ -34,7 +34,7 @@ One ledger per science project: what is on the cluster right now, what the human
 | ep_toy_gaussian | 0 | 2 | 2026-09-10 |
 | slope_hierarchy_scale | 0 | 4 | 2026-09-09 |
 | ic50_workspace | 0 | 4 | 2026-09-09 |
-| autolens_inference | 0 | 0 | 2026-09-11 |
+| autolens_inference | 0 | 2 | 2026-09-12 |
 
 ## Projects
 
@@ -246,10 +246,13 @@ Next: hpc/sync submit the six backend legs on the HST SLaM dataset and record th
 
 **Runs**
 
-- _nothing on the cluster_
+- 342799_[0-1] — open — gpu — 2026-09-12 — slam_hst_base: A100 leg, dense inversion, seeds 0-1, hpc/batch_gpu/submit_slam_hst_jax_gpu_dense (config hpc_a100_jax_gpu_dense_fp64); the 09-12 ask: one hardw…
+- 342801_[0-1] — open — gpu — 2026-09-12 — slam_hst_base: A100 leg, sparse inversion, seeds 0-1, hpc/batch_gpu/submit_slam_hst_jax_gpu_sparse (config hpc_a100_jax_gpu_sparse_fp64); the 09-12 ask: one ha…
 
 **Last 5**
 
+- 2026-09-12 — *run* — 342801_[0-1] submitted: slam_hst_base: A100 leg, sparse inversion, seeds 0-1, hpc/batch_gpu/submit_slam_hst_jax_gpu_sparse (config hpc_a100_jax_gpu_sparse_fp64); the 09-12 ask: one hardware type first, GPU; rate-probe 342695 tree moved asi…
+- 2026-09-12 — *run* — 342799_[0-1] submitted: slam_hst_base: A100 leg, dense inversion, seeds 0-1, hpc/batch_gpu/submit_slam_hst_jax_gpu_dense (config hpc_a100_jax_gpu_dense_fp64); the 09-12 ask: one hardware type first, GPU; rate-probe 342695 tree moved aside…
 - 2026-09-11 — *note* — question: Do six backend legs agree on the HST SLaM posterior? — ready, never run [archive/tasks/autolens_inference/slam_hst_base.md]
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/autolens_inference.md)
