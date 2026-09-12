@@ -1,7 +1,7 @@
 # ic50_workspace — EP against the graphical joint fit on IC50 dose-response data, scaling up
 
 Project: ic50_workspace
-Issue: none
+Issue: PyAutoCortex#36
 
 ## Now
 

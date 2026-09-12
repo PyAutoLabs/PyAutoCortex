@@ -40,7 +40,7 @@ One ledger per science project: what is on the cluster right now, what the human
 
 ### subhalo_validation — Do the SLaM subhalo pipelines false-detect on lenses with no subhalo
 
-active · ral · no issue yet · [projects/subhalo_validation.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/subhalo_validation.md) · local `/mnt/c/Users/Jammy/Science/subhalo_validation` · RAL `/mnt/ral/jnightin/subhalo_validation`
+active · ral · [subhalo_validation#2](https://github.com/PyAutoLabs/subhalo_validation/issues/2) · [projects/subhalo_validation.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/subhalo_validation.md) · local `/mnt/c/Users/Jammy/Science/subhalo_validation` · RAL `/mnt/ral/jnightin/subhalo_validation`
 
 **Now**
 
@@ -75,7 +75,7 @@ Next: pull when the numba chains land and read the evidence_increase of each; no
 
 ### euclid_dr1_prelim — Refit the ten DR1-prelim tiles and rebuild the catalogue on RAL
 
-active · both · no issue yet · [projects/euclid_dr1_prelim.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid_dr1_prelim.md) · local `/mnt/c/Users/Jammy/Science/euclid_dr1_prelim` · RAL `/mnt/ral/jnightin/euclid_dr1_prelim`
+active · both · [PyAutoCortex#35](https://github.com/PyAutoLabs/PyAutoCortex/issues/35) · [projects/euclid_dr1_prelim.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid_dr1_prelim.md) · local `/mnt/c/Users/Jammy/Science/euclid_dr1_prelim` · RAL `/mnt/ral/jnightin/euclid_dr1_prelim`
 
 **Now**
 
@@ -108,7 +108,7 @@ Next: pull, bundle with output_sed, compare magnitudes (µJy fluxes) against the
 
 ### analytic_gaussian — Graphical and EP against a closed-form Gaussian posterior, at ensemble scale
 
-active · ral · no issue yet · [projects/analytic_gaussian.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/analytic_gaussian.md) · local `/mnt/c/Users/Jammy/Science/analytic_gaussian` · RAL `/mnt/ral/jnightin/analytic_gaussian`
+active · ral · [PyAutoCortex#34](https://github.com/PyAutoLabs/PyAutoCortex/issues/34) · [projects/analytic_gaussian.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/analytic_gaussian.md) · local `/mnt/c/Users/Jammy/Science/analytic_gaussian` · RAL `/mnt/ral/jnightin/analytic_gaussian`
 
 **Now**
 
@@ -138,7 +138,7 @@ Next: settle whether criterion 2's mu threshold or the minimal-EP control is wro
 
 ### ep_toy_gaussian — NUTS versus three EP fits on the #1405 collapse toy at N=50
 
-active · ral · no issue yet · [projects/ep_toy_gaussian.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/ep_toy_gaussian.md) · local `/mnt/c/Users/Jammy/Science/ep_toy_gaussian` · RAL `/mnt/ral/jnightin/ep_toy_gaussian`
+active · ral · [ep_toy_gaussian#1](https://github.com/PyAutoLabs/ep_toy_gaussian/issues/1) · [projects/ep_toy_gaussian.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/ep_toy_gaussian.md) · local `/mnt/c/Users/Jammy/Science/ep_toy_gaussian` · RAL `/mnt/ral/jnightin/ep_toy_gaussian`
 
 **Now**
 
@@ -168,7 +168,7 @@ Next: pull and run scripts/compare.py --sample n50_seed42; settle first whether 
 
 ### slope_hierarchy_scale — Hierarchical slope recovery with graphical and EP at N=25 to 50
 
-active · both · no issue yet · [projects/slope_hierarchy_scale.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/slope_hierarchy_scale.md) · local `/mnt/c/Users/Jammy/Science/slope_hierarchy_scale` · RAL `/mnt/ral/jnightin/slope_hierarchy_scale`
+active · both · [slope_hierarchy_scale#2](https://github.com/PyAutoLabs/slope_hierarchy_scale/issues/2) · [projects/slope_hierarchy_scale.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/slope_hierarchy_scale.md) · local `/mnt/c/Users/Jammy/Science/slope_hierarchy_scale` · RAL `/mnt/ral/jnightin/slope_hierarchy_scale`
 
 **Now**
 
@@ -202,7 +202,7 @@ Next: pull wave 1 and compare EP against the NUTS parent sigma; then decide whet
 
 ### ic50_workspace — EP against the graphical joint fit on IC50 dose-response data, scaling up
 
-active · ral · no issue yet · [projects/ic50_workspace.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/ic50_workspace.md) · local `/mnt/c/Users/Jammy/Science/ic50_workspace` · RAL `/mnt/ral/jnightin/ic50_workspace`
+active · ral · [PyAutoCortex#36](https://github.com/PyAutoLabs/PyAutoCortex/issues/36) · [projects/ic50_workspace.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/ic50_workspace.md) · local `/mnt/c/Users/Jammy/Science/ic50_workspace` · RAL `/mnt/ral/jnightin/ic50_workspace`
 
 **Now**
 
@@ -236,7 +236,7 @@ Next: pull the ladder and see where EP's cost and hill_coef width go as N grows;
 
 ### autolens_inference — Do the PyAutoLens inference backends agree on the HST SLaM posterior
 
-active · both · no issue yet · [projects/autolens_inference.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/autolens_inference.md) · local `/home/jammy/Code/PyAutoLabs/autolens_inference` · RAL `/mnt/ral/jnightin/autolens_inference`
+active · both · [autolens_inference#4](https://github.com/PyAutoLabs/autolens_inference/issues/4) · [projects/autolens_inference.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/autolens_inference.md) · local `/home/jammy/Code/PyAutoLabs/autolens_inference` · RAL `/mnt/ral/jnightin/autolens_inference`
 
 **Now**
 

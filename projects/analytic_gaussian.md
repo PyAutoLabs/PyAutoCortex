@@ -1,7 +1,7 @@
 # analytic_gaussian — Graphical and EP against a closed-form Gaussian posterior, at ensemble scale
 
 Project: analytic_gaussian
-Issue: none
+Issue: PyAutoCortex#34
 
 ## Now
 

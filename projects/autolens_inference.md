@@ -1,7 +1,7 @@
 # autolens_inference — Do the PyAutoLens inference backends agree on the HST SLaM posterior
 
 Project: autolens_inference
-Issue: none
+Issue: autolens_inference#4
 
 ## Now
 

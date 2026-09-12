@@ -1,7 +1,7 @@
 # euclid_dr1_prelim — Refit the ten DR1-prelim tiles and rebuild the catalogue on RAL
 
 Project: euclid_dr1_prelim
-Issue: none
+Issue: PyAutoCortex#35
 
 ## Now
 

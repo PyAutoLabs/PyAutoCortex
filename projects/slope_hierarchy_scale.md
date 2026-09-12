@@ -1,7 +1,7 @@
 # slope_hierarchy_scale — Hierarchical slope recovery with graphical and EP at N=25 to 50
 
 Project: slope_hierarchy_scale
-Issue: none
+Issue: slope_hierarchy_scale#2
 
 ## Now
 

@@ -1,7 +1,7 @@
 # subhalo_validation — Do the SLaM subhalo pipelines false-detect on lenses with no subhalo
 
 Project: subhalo_validation
-Issue: none
+Issue: subhalo_validation#2
 
 ## Now
 

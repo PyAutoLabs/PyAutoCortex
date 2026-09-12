@@ -1,7 +1,7 @@
 # ep_toy_gaussian — NUTS versus three EP fits on the #1405 collapse toy at N=50
 
 Project: ep_toy_gaussian
-Issue: none
+Issue: ep_toy_gaussian#1
 
 ## Now
 
