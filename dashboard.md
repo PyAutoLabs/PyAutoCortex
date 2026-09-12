@@ -11,25 +11,25 @@ One ledger per science project: what is on the cluster right now, what the human
 | Where | Count |
 |-------|------:|
 | [Running](#projects) | 1 |
-| [Open](#projects) | 17 |
+| [Open](#projects) | 18 |
 | [Projects](#projects) | 7 |
 
 <details><summary>📋 check in since last time</summary>
 
 ```
-/cortex — check in on every active science project since the last check-in (2026-09-12T17:35Z): pull each through its sync CLI, show me where each run stands, re-render and push the board, then read me the by-project summary. Record nothing about results — I will tell you what to log.
+/cortex — check in on every active science project since the last check-in (2026-09-12T18:46Z): pull each through its sync CLI, show me where each run stands, re-render and push the board, then read me the by-project summary. Record nothing about results — I will tell you what to log.
 ```
 
 </details>
 
-### Last check-in: 2026-09-12T17:35Z
+### Last check-in: 2026-09-12T18:46Z
 
 ## Summary
 
 | Project | Running | Open | Last update |
 |---|---:|---:|---|
 | subhalo_validation | 0 | 5 | 2026-09-07 |
-| euclid_dr1_prelim | 1 | 2 | 2026-09-11 |
+| euclid_dr1_prelim | 1 | 3 | 2026-09-12 |
 | analytic_gaussian | 0 | 0 | 2026-09-10 |
 | ep_toy_gaussian | 0 | 2 | 2026-09-10 |
 | slope_hierarchy_scale | 0 | 4 | 2026-09-09 |
@@ -87,14 +87,15 @@ Next: pull, bundle with output_sed, compare magnitudes (µJy fluxes) against the
 - 342629_[0-9] — running — ral — 2026-09-10 — ordered_rerun_catalogue_parity: two-stage vis_lp(n_live=750)+vis_pix(n_live=300), array 0-9, ten dr1_prelim tiles; libraries refreshed BEFORE submit (PyAutoNer…
 - 342648_[0,2,4-9] — open — gpu — 2026-09-11 — ordered_rerun_catalogue_parity: SED chain `hpc/batch_gpu/submit_sersic_waveband_8tiles` (a copy of `submit_sersic_waveband` differing only in `--array=0,2,4-9`…
 - 342668_9 — open — ral — 2026-09-11 — ordered_rerun_catalogue_parity: CPU verification of the SED chain via hpc/batch_cpu/submit_sersic_waveband (pipeline PR #70, sbatch --array=9): tile 102008848,…
+- 342796_[1,3,8] — open — ral — 2026-09-12 — ordered_rerun_catalogue_parity: CPU SED chain for the three tiles still missing one, via a direct ssh sbatch --array=1,3,8 on hpc/batch_cpu/submit_sersic_waveb…
 
 **Last 5**
 
+- 2026-09-12 — *run* — 342796_[1,3,8] submitted: ordered_rerun_catalogue_parity: CPU SED chain for the three tiles still missing one, via a direct ssh sbatch --array=1,3,8 on hpc/batch_cpu/submit_sersic_waveband (md5 65db7d8b… on RAL = the clone's commit 88dda9d…
 - 2026-09-11 — *note* — **CPU verification PASSED and was faster than the GPU.** `342668_9` (ral, 8 CPU, JAX on the CPU backend) COMPLETED in **9:24** wall, exit 0, all eight `sersic_lens_model/{vis,nir_y,nir_j,nir_h,decam_g,decam_r,decam_i,decam_z}` searches wri…
 - 2026-09-11 — *note* — **342629 scored on the eight tiles that finished; all four 09-10 defects confirmed fixed; parity fails on rerun scatter, not ordering.** `sacct`: tasks 0,2,4,5,6,7,8,9 COMPLETED (walls 5:45–9:42, MaxRSS 7.6–10.9 GB); tasks 1 (`Tile10200729…
 - 2026-09-11 — *run* — 342668_9 submitted: ordered_rerun_catalogue_parity — CPU verification of the SED chain via hpc/batch_cpu/submit_sersic_waveband (pipeline PR #70, sbatch --array=9): tile 102008848, JAX on the CPU backend, 8 CPU; same seeded vis_lp zip as t…
 - 2026-09-11 — *run* — 342648_[0,2,4-9] submitted: ordered_rerun_catalogue_parity — SED chain `hpc/batch_gpu/submit_sersic_waveband_8tiles` (a copy of `submit_sersic_waveband` differing only in `--array=0,2,4-9`, because `hpc/sync submit` passes no sbatch argume…
-- 2026-09-10 — *result* — accepted dr1_prelim_10_lens_science_run (R-20260910-03): For euclid_dr1_prelim, I am content these 3 are success so wrap them up and then do the 4th task on the catalogue stuff
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid_dr1_prelim.md)
 

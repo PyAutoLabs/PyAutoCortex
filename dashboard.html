@@ -227,16 +227,16 @@ a.go:hover{opacity:.9;text-decoration:none}
 </head>
 <body>
 <header class="hero"><span class="orb"><svg class="mark" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="24" cy="24" r="20.4"/><path d="M11.8,18.6 C14.4,14.8 17.8,14.4 20.1,17.1 C22.4,19.8 25.8,20.2 28.5,17.9 C31.2,15.6 34.4,16.2 36.1,19.1"/><path d="M11.6,24.6 C14.2,20.8 17.6,20.4 19.9,23.1 C22.2,25.8 25.6,26.2 28.3,23.9 C31.0,21.6 34.2,22.2 35.9,25.1"/><path d="M12.8,30.6 C15.3,27.2 18.4,26.8 20.5,29.4 C22.6,32.0 25.7,32.4 28.2,30.2"/><circle cx="32.6" cy="33.0" r="3.8"/><g fill="currentColor" stroke="none"><circle cx="32.6" cy="33.0" r="1.5"/><circle cx="11.7" cy="18.6" r="1.2"/><circle cx="11.5" cy="24.6" r="1.2"/></g></svg></span><h1>PyAuto<b>Cortex</b><span class="kind">Dashboard</span></h1><div class="rule"></div><p class="tag">Question. Run. Rule.</p></header><p class="lede">One ledger per science project: what is on the cluster right now, what the human said they would do next, and the last few things they wrote down. Nothing here is inferred from a result — the board hands you the check-in and the resume prompt; what a run meant is yours to log.</p>
-<ul class="stats"><li><b>1</b><span>Running</span></li><li><b>17</b><span>Open</span></li><li><b>7</b><span>Projects</span></li></ul>
+<ul class="stats"><li><b>1</b><span>Running</span></li><li><b>18</b><span>Open</span></li><li><b>7</b><span>Projects</span></li></ul>
 <div class="fresh"><p class="muted">Last updated 2026-09-12.</p></div>
 <p class="muted mdsrc"><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/dashboard.md">markdown version</a> · <a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/README.md">GitHub Page</a></p>
-<div class="task"><button class="copy" data-cmd="/cortex — check in on every active science project since the last check-in (2026-09-12T17:35Z): pull each through its sync CLI, show me where each run stands, re-render and push the board, then read me the by-project summary. Record nothing about results — I will tell you what to log." aria-label="Copy the Claude command">📋</button><p>check in since last time</p></div>
-<div class="checkin" id="checkin-box"><span class="mark" id="checkin-mark"></span><div><span class="label">Last check-in</span><time id="checkin" datetime="2026-09-12T17:35Z">2026-09-12T17:35Z</time><span class="note" id="checkin-note"></span></div></div>
+<div class="task"><button class="copy" data-cmd="/cortex — check in on every active science project since the last check-in (2026-09-12T18:46Z): pull each through its sync CLI, show me where each run stands, re-render and push the board, then read me the by-project summary. Record nothing about results — I will tell you what to log." aria-label="Copy the Claude command">📋</button><p>check in since last time</p></div>
+<div class="checkin" id="checkin-box"><span class="mark" id="checkin-mark"></span><div><span class="label">Last check-in</span><time id="checkin" datetime="2026-09-12T18:46Z">2026-09-12T18:46Z</time><span class="note" id="checkin-note"></span></div></div>
 <a id="summary"></a><h2>Summary</h2>
 <table class="map">
 <tr><th>Project</th><th>Running</th><th>Open</th><th>Last update</th></tr>
 <tr><td><b>subhalo_validation</b></td><td>0</td><td>5</td><td>2026-09-07</td></tr>
-<tr><td><b>euclid_dr1_prelim</b></td><td>1</td><td>2</td><td>2026-09-11</td></tr>
+<tr><td><b>euclid_dr1_prelim</b></td><td>1</td><td>3</td><td>2026-09-12</td></tr>
 <tr><td><b>analytic_gaussian</b></td><td>0</td><td>0</td><td>2026-09-10</td></tr>
 <tr><td><b>ep_toy_gaussian</b></td><td>0</td><td>2</td><td>2026-09-10</td></tr>
 <tr><td><b>slope_hierarchy_scale</b></td><td>0</td><td>4</td><td>2026-09-09</td></tr>
@@ -278,14 +278,15 @@ a.go:hover{opacity:.9;text-decoration:none}
 <li>342629_[0-9] — running — ral — 2026-09-10 — ordered_rerun_catalogue_parity: two-stage vis_lp(n_live=750)+vis_pix(n_live=300), array 0-9, ten dr1_prelim tiles; libraries refreshed BEFORE submit (PyAutoNer…</li>
 <li>342648_[0,2,4-9] — open — gpu — 2026-09-11 — ordered_rerun_catalogue_parity: SED chain `hpc/batch_gpu/submit_sersic_waveband_8tiles` (a copy of `submit_sersic_waveband` differing only in `--array=0,2,4-9`…</li>
 <li>342668_9 — open — ral — 2026-09-11 — ordered_rerun_catalogue_parity: CPU verification of the SED chain via hpc/batch_cpu/submit_sersic_waveband (pipeline PR #70, sbatch --array=9): tile 102008848,…</li>
+<li>342796_[1,3,8] — open — ral — 2026-09-12 — ordered_rerun_catalogue_parity: CPU SED chain for the three tiles still missing one, via a direct ssh sbatch --array=1,3,8 on hpc/batch_cpu/submit_sersic_waveb…</li>
 </ul>
 <p><b>Last 5</b></p>
 <ul>
+<li>2026-09-12 — <i>run</i> — 342796_[1,3,8] submitted: ordered_rerun_catalogue_parity: CPU SED chain for the three tiles still missing one, via a direct ssh sbatch --array=1,3,8 on hpc/batch_cpu/submit_sersic_waveband (md5 65db7d8b… on RAL = the clone's commit 88dda9d…</li>
 <li>2026-09-11 — <i>note</i> — **CPU verification PASSED and was faster than the GPU.** `342668_9` (ral, 8 CPU, JAX on the CPU backend) COMPLETED in **9:24** wall, exit 0, all eight `sersic_lens_model/{vis,nir_y,nir_j,nir_h,decam_g,decam_r,decam_i,decam_z}` searches wri…</li>
 <li>2026-09-11 — <i>note</i> — **342629 scored on the eight tiles that finished; all four 09-10 defects confirmed fixed; parity fails on rerun scatter, not ordering.** `sacct`: tasks 0,2,4,5,6,7,8,9 COMPLETED (walls 5:45–9:42, MaxRSS 7.6–10.9 GB); tasks 1 (`Tile10200729…</li>
 <li>2026-09-11 — <i>run</i> — 342668_9 submitted: ordered_rerun_catalogue_parity — CPU verification of the SED chain via hpc/batch_cpu/submit_sersic_waveband (pipeline PR #70, sbatch --array=9): tile 102008848, JAX on the CPU backend, 8 CPU; same seeded vis_lp zip as t…</li>
 <li>2026-09-11 — <i>run</i> — 342648_[0,2,4-9] submitted: ordered_rerun_catalogue_parity — SED chain `hpc/batch_gpu/submit_sersic_waveband_8tiles` (a copy of `submit_sersic_waveband` differing only in `--array=0,2,4-9`, because `hpc/sync submit` passes no sbatch argume…</li>
-<li>2026-09-10 — <i>result</i> — accepted dr1_prelim_10_lens_science_run (R-20260910-03): For euclid_dr1_prelim, I am content these 3 are success so wrap them up and then do the 4th task on the catalogue stuff</li>
 </ul>
 <p class="muted"><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid_dr1_prelim.md">full log</a></p>
 <div class="task"><button class="copy" data-cmd="/cortex — resume euclid_dr1_prelim: read PyAutoCortex projects/euclid_dr1_prelim.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/euclid_dr1_prelim/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say." aria-label="Copy the Claude command">📋</button><p>resume euclid_dr1_prelim</p></div>
