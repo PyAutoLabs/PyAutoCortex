@@ -426,3 +426,40 @@ Choices made in phase 2 — the conductor, the board and the workflows
     inference — gradient-based fitting building on JAX knowledge") was not
     it. Mind **epics** keep their numbered phases: development work really is
     sequential, and `Epic:` on a task file is unchanged.
+
+60. **One ledger per project; tasks, witnesses, rulings and gates are
+    retired to `archive/`** (2026-09-12). The tree is `projects/<key>.md`,
+    one file per `projects.yaml` row that is doing anything, holding exactly
+    `## Now` (rewritten), `## Runs` (`open | running`; a finished run leaves
+    the list) and `## Log` (dated, newest-first, `run | result | lesson |
+    note`). The header is `Project:` and `Issue:`; the title carries a
+    ≤15-word summary. `scripts/cortex.py` keeps `check` and `retire`, gains
+    `new` / `run` / `running` / `done` / `log` / `now` / `issue`, and loses
+    `move`, `rule`, `gates`. The conductor keeps `checkin`, `census`,
+    `dashboard`, gains `issue`, and loses `collect`, `gates`, the six scoring
+    legs, the pull manifest, the work briefs and every task chip; the board
+    keeps one chip per active project (**resume**) and the check-in chip.
+    `tasks/`, `rulings/` and `batches/` moved under `archive/`, frozen: the
+    merge gate classifies any change there as code. Every task, run, ruling
+    and note was carried into its project's log on migration day, in the
+    words already on file, each question linking back to its archived task.
+    The organism table's Cortex role and the Brain's organ page say
+    "keeps track of what is true".
+    Why: the human's own account of how they do science, and the ledger's
+    evidence for it. In twelve days the task model produced 43 tasks of which
+    16 were dropped by ruling; 37 rulings were written around one- or
+    two-line human verdicts; the pre-registered witnesses were restated
+    after the data came in (euclid_dr1_prelim's parity clause "cannot be met
+    by any pair of these runs and needs restating"; analytic_gaussian was
+    accepted with 4 of 11 criteria missed). The one thing the human kept
+    coming back to was the dated `## Notes` journal that grew inside a task
+    file — what was run, what was found, what next — which is exactly the
+    shape the ledger now has. A task is a thing to finish and retire;
+    science is done by running, looking, thinking and organically deciding
+    where to go next. So the Cortex is a history of how each project unfolds
+    and a way to pick one up after time away, not a queue. Two consequences
+    are rules rather than schema: **nothing in a ledger is inferred from
+    results** (a `result` or `lesson` is the human's words on the human's
+    ask; the agent records only cluster facts), and the top of each project's
+    GitHub issue is the same concise ledger the board shows (the `issue`
+    block), with the detailed run-through underneath it.

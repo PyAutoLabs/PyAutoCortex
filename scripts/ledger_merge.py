@@ -7,9 +7,9 @@ a task move, a ruling, a batch record to a feature branch and nothing moves
 it: no workflow looks at a `claude/**` push. The branch sits there until a
 human writes an explicit "merge this" prompt.
 
-Almost all of what strands is *ledger*: a task file under `tasks/`, a ruling
-under `rulings/`, a batch record or review under `batches/`, a check-in stamp.
-It is the organism's own bookkeeping, it is template-shaped, its drift check
+Almost all of what strands is *ledger*: a project's ledger under `projects/`
+(a run recorded, an entry logged, `## Now` rewritten), a check-in stamp, the
+two generated pages. It is the organism's own bookkeeping, its drift check
 (`cortex.py check`) is already automated, and a human reviewing it adds
 nothing. The minority that is *code* — `scripts/`, `tests/`, `.github/`,
 `policy/`, `docs/`, `projects.yaml`, the prose pages — is exactly what review
@@ -23,12 +23,10 @@ DEFAULT DENY. A path is ledger only by matching a rule below; an unrecognised
 one — a new root file, a new top-level folder — is code. Getting that backwards
 would auto-merge the next thing nobody thought about.
 
-APPEND-ONLY. `rulings/` is the ledger of record and a ruling, once committed,
-is never modified or deleted (rulings/AGENTS.md). When the diff comes from git
-(`--base`), the classifier reads `git diff --name-status` and any entry under
-`rulings/**` whose status is not `A` (added) — `M`, `D`, `R*`, or anything
-else — is code, which leaves the branch for a human. Explicit-path and stdin
-inputs carry no status and stay path-only, as in the Mind.
+FROZEN. `archive/` holds the retired task, ruling and batch ledgers of
+2026-08/09 (the science repos cite their ids). Nothing writes there any more,
+so *any* change under it — an addition included — is code and waits for a
+human.
 
 Usage:
     python3 scripts/ledger_merge.py classify --base origin/main   # diff HEAD vs base
@@ -48,11 +46,9 @@ import subprocess
 import sys
 from pathlib import Path
 
-# Directories holding nothing but the run-and-ruling ledger: task files,
-# rulings of record, and the batch records and reviews kept as history. Their
-# whole contents are ledger (subject to the EXCLUDED_NAMES guard below, and to
-# the append-only leg for rulings/ and batches/ in classify_entries).
-LEDGER_DIRS = ("tasks/", "rulings/", "batches/")
+# The one directory holding nothing but ledger: one file per project. Its
+# whole contents are ledger, subject to the EXCLUDED_NAMES guard below.
+LEDGER_DIRS = ("projects/",)
 
 # Root files that are ledger state. Deliberately NOT here: README.md,
 # AGENTS.md, CLAUDE.md, REFERENCE.md — prose a human reads, changed rarely
@@ -76,12 +72,14 @@ LEDGER_FILES = ("checkin.yaml", "dashboard.md", "dashboard.html")
 # beside a batch record included.
 #
 # INSTRUCTIONAL BY CONTENT: `AGENTS.md` and `TEMPLATE.md` under a ledger dir
-# (`rulings/AGENTS.md`, `batches/AGENTS.md`, `batches/reviews/AGENTS.md`) are
-# not entries in the ledger — they are the doctrine that says what an entry may be, and the
+# (`projects/AGENTS.md`) are not entries in the ledger — they are the doctrine that says what an entry may be, and the
 # template every future entry is stamped from. They are read by agents as
 # instructions, so a change to one is a change to behaviour: it needs a human,
 # exactly as `scripts/` does. Auto-merging a rewrite of `rulings/AGENTS.md`
 # would let a branch edit the rule that governs its own merge.
+#
+# `archive/` is not in LEDGER_DIRS at all: it is frozen history (the retired
+# task / ruling / batch ledgers), so it falls to the default deny.
 EXCLUDED_NAMES = ("conftest.py", "test_*.py", "*_test.py", "AGENTS.md", "TEMPLATE.md")
 
 
@@ -117,29 +115,23 @@ def classify(paths):
     return ledger, blocked
 
 
-# The dirs where a change's KIND matters, not only its path: the ledger of
-# record is append-only, so only an added file under one is ledger.
-# `batches/` joined `rulings/` on 2026-09-03, when the review-slot apparatus
-# was retired: the batch records and the human's verbatim reviews stay as
-# history — never modified, only added — and 13 rulings cite them.
-APPEND_ONLY_DIRS = ("rulings/", "batches/")
+# Kept as the retired append-only dirs' name, now empty: `archive/` is frozen
+# outright (default deny), so no per-status rule is needed any more. A status
+# is still read from git so a rename's old path counts as a deletion.
+APPEND_ONLY_DIRS = ()
 
 
 def is_append_only_violation(status: str, path: str) -> bool:
     """True if a `git diff --name-status` entry edits, deletes, renames (or
-    does anything but add) a file under an append-only dir."""
+    does anything but add) a file under an append-only dir (none today)."""
     parts = [p for p in path.replace("\\", "/").split("/") if p not in ("", ".")]
     normalised = "/".join(parts)
     return status[:1] != "A" and any(normalised.startswith(d) for d in APPEND_ONLY_DIRS)
 
 
 def classify_entries(entries):
-    """Split `(status, path)` entries into (ledger, blocked) paths.
-
-    A path is blocked if it is not ledger material, or if it is a non-`A`
-    entry under an append-only dir (`rulings/`, `batches/` — an edited,
-    deleted or renamed ruling, batch record or review). A rename entry
-    carries both paths; the old one counts as a deletion."""
+    """Split `(status, path)` entries into (ledger, blocked) paths. A rename
+    entry carries both paths; the old one counts as a deletion."""
     ledger, blocked, seen = [], [], set()
     for status, path in entries:
         path = path.strip()

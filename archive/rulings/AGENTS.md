@@ -1,3 +1,5 @@
+> **Frozen 2026-09-12** — this folder is history under `archive/` (schema decision 60). Nothing writes here any more; the rules below describe how it was kept.
+
 # Rulings — the ledger of record
 
 `rulings/<YYYY>/<MM>/R-<YYYYMMDD>-<nn>.md`, one file per verdict per task.

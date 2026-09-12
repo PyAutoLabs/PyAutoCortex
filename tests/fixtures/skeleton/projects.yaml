@@ -1,15 +1,57 @@
-# Test fixture — the science body map with one fictional project.
-# Same restricted subset as the live projects.yaml (REFERENCE.md).
-
+# The skeleton fixture: one active project with a ledger, one active project
+# on one partition, one retired project whose ledger is closed history, and
+# one dormant row with no ledger at all. Every path is a placeholder.
 example:
-  remote: none
-  local_path: /mnt/c/Users/Jammy/Science/example
-  ral_root: /mnt/ral/jnightin/example
-  mirror: /mnt/c/Users/Jammy/Science/example/mirror   # the pull root
+  remote: PyAutoLabs/example
+  local_path: /tmp/example
+  ral_root: /mnt/ral/example
+  mirror: none
   sync_cli: hpc/sync
-  sync_verbs: [pull, submit, jobs, tail]
+  sync_verbs: [push, pull, submit, jobs, tail]
   ledger: wiki/project/state.md
-  assistant: none
-  witness_file: output/**/checkpoint.hdf5
-  partition: gpu
+  assistant: example_assistant
+  witness_file: results/**/*.json
+  partition: both
   status: active
+  note: "the fixture project"
+
+single:
+  remote: none
+  local_path: /tmp/single
+  ral_root: /mnt/ral/single
+  mirror: none
+  sync_cli: hpc/sync
+  sync_verbs: [pull]
+  ledger: NOTES.md
+  assistant: none
+  witness_file: results/**/*.json
+  partition: ral
+  status: active
+
+wound_down:
+  remote: none
+  local_path: /tmp/wound_down
+  ral_root: /mnt/ral/wound_down
+  mirror: none
+  sync_cli: hpc/sync
+  sync_verbs: [pull]
+  ledger: README.md
+  assistant: none
+  witness_file: results/**/*.json
+  partition: both
+  status: retired
+  note: "retired 2026-09-01: done"
+
+sleeping:
+  remote: none
+  local_path: /tmp/sleeping
+  ral_root: /mnt/ral/sleeping
+  mirror: none
+  sync_cli: hpc/sync
+  sync_verbs: [pull]
+  ledger: README.md
+  assistant: none
+  witness_file: results/**/*.json
+  partition: both
+  status: dormant
+  note: "no ledger yet"

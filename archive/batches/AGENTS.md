@@ -1,3 +1,5 @@
+> **Frozen 2026-09-12** — this folder is history under `archive/` (schema decision 60). Nothing writes here any more; the rules below describe how it was kept.
+
 # Batch records — closed history
 
 Read-only history: never modified, only added. Three 2026-08/09 batch records

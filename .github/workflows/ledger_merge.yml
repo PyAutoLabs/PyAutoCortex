@@ -3,7 +3,7 @@ name: Cortex Ledger Merge
 # Lands PyAutoCortex's own ledger work without anyone having to ask for it.
 #
 # THE PROBLEM. A branch-scoped session — the phone, claude.ai/code, any
-# `claude/**` flow — pushes a task move, a ruling, a batch record to a feature
+# `claude/**` flow — pushes a run recorded, an entry logged, a check-in to a feature
 # branch and it stops there: nothing downstream looks at a `claude/**` push.
 # The Mind learned this first (mind_ledger_merge.yml); the Cortex is born with
 # the answer.
@@ -15,21 +15,20 @@ name: Cortex Ledger Merge
 # pushed it ever comes back.
 #
 # WHAT IT WILL AND WILL NOT MERGE. Only a branch whose whole diff is *ledger*:
-# `tasks/`, `rulings/`, `batches/`, `checkin.yaml`. The line is drawn by
+# `projects/`, `checkin.yaml`, the two generated pages. The line is drawn by
 # scripts/ledger_merge.py — a script, so it is testable and a session can
 # predict the verdict — and it is DEFAULT DENY: anything under `scripts/`,
 # `tests/`, `.github/`, `policy/`, `docs/`, `projects.yaml`, the prose pages,
 # or any path nobody has classified, stops the merge and leaves the branch for
-# a human. So does a MODIFIED or DELETED file under `rulings/` — the ledger of
-# record is append-only, and the classifier reads `git diff --name-status` to
-# hold that line. This workflow's own file is on the code side, which is the
+# a human. So does ANY change under `archive/` — the frozen 2026-08/09 task,
+# ruling and batch ledgers, which nothing writes any more. This workflow's own file is on the code side, which is the
 # intended self-consistency: it cannot merge a change to itself.
 #
 # THE TRIAL-MERGE CHECK. `cortex.py check` is run on the branch tip (so audit
 # mode reports something) and AGAIN on the merged tree, after `git merge
 # --no-ff` and before `git push`. That second run is what catches the
-# ruling-id race: two branches that both assign `R-<date>-03` each pass alone
-# and fail merged. A failing check resets the trial merge and leaves the
+# same-ledger race: two branches that each edit one project's ledger pass
+# alone and can fail merged. A failing check resets the trial merge and leaves the
 # branch for a human.
 
 on:
@@ -148,14 +147,14 @@ jobs:
           if [ "$RC" -ne 0 ]; then
             echo "verdict=code" >> "$GITHUB_OUTPUT"
             echo "" >> "$GITHUB_STEP_SUMMARY"
-            echo "**Left for a human** — this branch changes code, or edits a ruling, not just the ledger." >> "$GITHUB_STEP_SUMMARY"
+            echo "**Left for a human** — this branch changes code, or touches the archive, not just the ledger." >> "$GITHUB_STEP_SUMMARY"
           else
             echo "verdict=ledger" >> "$GITHUB_OUTPUT"
           fi
 
-      # Structural drift on the branch tip BLOCKS. A task in a state its
-      # header contradicts, a dangling Supersedes:, a run line that does not
-      # parse — nothing heals that automatically, and merging it would put the
+      # Structural drift on the branch tip BLOCKS. A run line that does not
+      # parse, a log that is not newest-first, an active project with no
+      # ledger — nothing heals that automatically, and merging it would put the
       # contradiction on main. Also the only check audit mode gets to report.
       # `cortex.py` reads `projects.yaml` with PyYAML — its one dependency.
       - name: dependencies
@@ -205,12 +204,12 @@ jobs:
               exit 1
             fi
             # THE TRIAL-MERGE CHECK. The branch passed alone; does it pass
-            # merged? This is where two branches that both assigned the same
-            # ruling id, or both moved the same task, are caught.
+            # merged? This is where two branches that both wrote the same
+            # project's ledger are caught.
             if ! python3 scripts/cortex.py check; then
               git reset --hard origin/main
               echo "::error::'$BRANCH' merges cleanly but 'cortex.py check' fails on the merged tree — left for a human"
-              echo "**Blocked** — \`$BRANCH\` fails \`cortex.py check\` once merged with main (a ruling-id or task-state race?); left for a human." >> "$GITHUB_STEP_SUMMARY"
+              echo "**Blocked** — \`$BRANCH\` fails \`cortex.py check\` once merged with main (two branches wrote the same ledger?); left for a human." >> "$GITHUB_STEP_SUMMARY"
               exit 1
             fi
             if [ -n "$PR" ]; then
