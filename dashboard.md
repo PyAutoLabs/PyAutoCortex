@@ -11,7 +11,7 @@ One ledger per science project: what is on the cluster right now, what the human
 | Where | Count |
 |-------|------:|
 | [Running](#projects) | 1 |
-| [Open](#projects) | 20 |
+| [Open](#projects) | 21 |
 | [Projects](#projects) | 8 |
 
 <details><summary>📋 check in since last time</summary>
@@ -30,7 +30,7 @@ One ledger per science project: what is on the cluster right now, what the human
 |---|---:|---:|---|
 | subhalo_validation | 0 | 5 | 2026-09-07 |
 | euclid_dr1_prelim | 1 | 3 | 2026-09-12 |
-| euclid_sersics | 0 | 0 | 2026-09-12 |
+| euclid_sersics | 0 | 1 | 2026-09-13 |
 | analytic_gaussian | 0 | 0 | 2026-09-10 |
 | ep_toy_gaussian | 0 | 2 | 2026-09-10 |
 | slope_hierarchy_scale | 0 | 4 | 2026-09-09 |
@@ -115,15 +115,16 @@ active · ral · [euclid_strong_lens_modeling_pipeline#74](https://github.com/Py
 **Now**
 
 342696 fitted all 100 dr1_sep1_sersics lenses through vis_lp and vis_pix (100/100 tasks, walls 2:47 to 20:58) and the outputs are pulled to the local clone; that run is what the four Sersic-stage variants reuse rather than re-derive.
-The variants array — baseline, wide_n, central_noise and sersic_point, the four run sequentially inside each of 100 array tasks — is being submitted to the cluster now (4 cpu / 14 GB / 18 h, partition ral); its pipeline code is euclid_strong_lens_modeling_pipeline#75 (open, CI green, awaiting the human's merge) and the Mind task is sersic-variants.
+342808_[0-99] is on the cluster: the variants array — baseline, wide_n, central_noise and sersic_point, the four run sequentially inside each of 100 array tasks — submitted 2026-09-13 ~12:10 BST (4 cpu / 14 GB / 18 h, partition ral); its pipeline code is euclid_strong_lens_modeling_pipeline#75 (open, CI green, awaiting the human's merge) and the Mind task is sersic-variants.
 Next: pull, scrape each variant with catalogue/scripts/lens_sersic.py --unique_tag sersic_lens_model_<variant>, run the per-variant analysis script, and the human rules on the four n distributions.
 
 **Runs**
 
-- _nothing on the cluster_
+- 342808_[0-99] — open — ral — 2026-09-13 — euclid_sersics_variants: the Sersic stage rerun in four variants — baseline, wide_n, central_noise, sersic_point — run sequentially inside each of 100 array ta…
 
 **Last 5**
 
+- 2026-09-13 — *run* — 342808_[0-99] submitted: euclid_sersics_variants: the Sersic stage rerun in four variants — baseline, wide_n, central_noise, sersic_point — run sequentially inside each of 100 array tasks (one lens per task), array 0-99, 4 cpu / 14 GB / 18…
 - 2026-09-12 — *run* — 342696_[0-99] finished — wall 20:58: euclid_sersics_two_stage: the core two-stage fit (vis_lp then vis_pix) of the 100-lens dr1_sep1_sersics sample, array 0-99, one lens per task, 8 cpu / 64 GB / 36 h on partition ral, submitted 11:43 BST;…
 - 2026-09-11 — *run* — 342696_[0-99] submitted: euclid_sersics_two_stage: the core two-stage fit (vis_lp then vis_pix) of the 100-lens dr1_sep1_sersics sample, array 0-99, one lens per task, 8 cpu / 64 GB / 36 h on partition ral, submitted 11:43 BST; it is the r…
 - 2026-09-11 — *note* — project born ~11:45 BST once the human confirmed the euclid_dr1 sep1 results good: 100 unanimous-success lenses from the euclid inspection tables, remodelled on the sep1 Segmentation.zip data, to explain why the lens-light Sersic index pil…

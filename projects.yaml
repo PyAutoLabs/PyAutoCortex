@@ -110,7 +110,7 @@ euclid_sersics:
   sync_verbs: [push, pull, logs, sync, push-data-init, pull-full, status, submit, push-submit, jobs, sacct, cancel, wait-and-pull, tail, du, check, clear-logs]
   ledger: wiki/project/state.md
   assistant: autolens_assistant
-  witness_file: results/**/*.json
+  witness_file: catalogue/**/*.csv
   partition: ral
   status: active
   note: "born 2026-09-11: why the lens-light Sersic index piles up at the prior edge n = 5 in the June Euclid catalogue (61 % of 2983 fits above 4.5; 67 of the chosen 100); site copy of PyAutoLabs/euclid_strong_lens_modeling_pipeline, sample dataset/dr1_sep1_sersics (100 unanimous-success lenses on the sep1 Segmentation.zip data, join table sample/lens_map.csv); remote none until the human creates one"
