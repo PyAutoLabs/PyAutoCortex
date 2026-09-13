@@ -12,7 +12,7 @@ One ledger per science project: what is on the cluster right now, what the human
 |-------|------:|
 | [Running](#projects) | 1 |
 | [Open](#projects) | 20 |
-| [Projects](#projects) | 7 |
+| [Projects](#projects) | 8 |
 
 <details><summary>📋 check in since last time</summary>
 
@@ -30,6 +30,7 @@ One ledger per science project: what is on the cluster right now, what the human
 |---|---:|---:|---|
 | subhalo_validation | 0 | 5 | 2026-09-07 |
 | euclid_dr1_prelim | 1 | 3 | 2026-09-12 |
+| euclid_sersics | 0 | 0 | 2026-09-12 |
 | analytic_gaussian | 0 | 0 | 2026-09-10 |
 | ep_toy_gaussian | 0 | 2 | 2026-09-10 |
 | slope_hierarchy_scale | 0 | 4 | 2026-09-09 |
@@ -103,6 +104,37 @@ Next: pull, bundle with output_sed, compare magnitudes (µJy fluxes) against the
 
 ```
 /cortex — resume euclid_dr1_prelim: read PyAutoCortex projects/euclid_dr1_prelim.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/euclid_dr1_prelim/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
+```
+
+</details>
+
+### euclid_sersics — Why does the lens-light Sersic index pile up at the n=5 prior edge
+
+active · ral · [euclid_strong_lens_modeling_pipeline#74](https://github.com/PyAutoLabs/euclid_strong_lens_modeling_pipeline/issues/74) · [projects/euclid_sersics.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid_sersics.md) · local `/mnt/c/Users/Jammy/Science/euclid_sersics` · RAL `/mnt/ral/jnightin/euclid_sersics`
+
+**Now**
+
+342696 fitted all 100 dr1_sep1_sersics lenses through vis_lp and vis_pix (100/100 tasks, walls 2:47 to 20:58) and the outputs are pulled to the local clone; that run is what the four Sersic-stage variants reuse rather than re-derive.
+The variants array — baseline, wide_n, central_noise and sersic_point, the four run sequentially inside each of 100 array tasks — is being submitted to the cluster now (4 cpu / 14 GB / 18 h, partition ral); its pipeline code is euclid_strong_lens_modeling_pipeline#75 (open, CI green, awaiting the human's merge) and the Mind task is sersic-variants.
+Next: pull, scrape each variant with catalogue/scripts/lens_sersic.py --unique_tag sersic_lens_model_<variant>, run the per-variant analysis script, and the human rules on the four n distributions.
+
+**Runs**
+
+- _nothing on the cluster_
+
+**Last 5**
+
+- 2026-09-12 — *run* — 342696_[0-99] finished — wall 20:58: euclid_sersics_two_stage: the core two-stage fit (vis_lp then vis_pix) of the 100-lens dr1_sep1_sersics sample, array 0-99, one lens per task, 8 cpu / 64 GB / 36 h on partition ral, submitted 11:43 BST;…
+- 2026-09-11 — *run* — 342696_[0-99] submitted: euclid_sersics_two_stage: the core two-stage fit (vis_lp then vis_pix) of the 100-lens dr1_sep1_sersics sample, array 0-99, one lens per task, 8 cpu / 64 GB / 36 h on partition ral, submitted 11:43 BST; it is the r…
+- 2026-09-11 — *note* — project born ~11:45 BST once the human confirmed the euclid_dr1 sep1 results good: 100 unanimous-success lenses from the euclid inspection tables, remodelled on the sep1 Segmentation.zip data, to explain why the lens-light Sersic index pil…
+- 2026-09-11 — *note* — ledger opened
+
+[full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid_sersics.md)
+
+<details><summary>📋 resume euclid_sersics</summary>
+
+```
+/cortex — resume euclid_sersics: read PyAutoCortex projects/euclid_sersics.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/euclid_sersics/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
 ```
 
 </details>
