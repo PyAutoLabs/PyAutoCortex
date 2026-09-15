@@ -17,12 +17,12 @@ One ledger per science project: what is on the cluster right now, what the human
 <details><summary>📋 check in since last time</summary>
 
 ```
-/cortex — check in on every active science project since the last check-in (2026-09-15T12:55Z): pull each through its sync CLI, show me where each run stands, re-render and push the board, then read me the by-project summary. Record nothing about results — I will tell you what to log.
+/cortex — check in on every active science project since the last check-in (2026-09-15T18:14Z): pull each through its sync CLI, show me where each run stands, re-render and push the board, then read me the by-project summary. Record nothing about results — I will tell you what to log.
 ```
 
 </details>
 
-### Last check-in: 2026-09-15T12:55Z
+### Last check-in: 2026-09-15T18:14Z
 
 ## Summary
 
