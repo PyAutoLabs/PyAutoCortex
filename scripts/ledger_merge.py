@@ -28,6 +28,16 @@ FROZEN. `archive/` holds the retired task, ruling and batch ledgers of
 so *any* change under it — an addition included — is code and waits for a
 human.
 
+ONE EXCEPTION, A BIRTH. `projects.yaml` is code — `sync_cli` and `local_path`
+are paths a conductor executes under — but a diff that only ADDS rows, each
+paired with its new `projects/<key>.md` in the same diff, is a project being
+born, which is a ledger event: three birth PRs sat for six days from
+2026-09-11 because the gate could not tell a new row from an edited one. So a
+`--base` diff is judged on content: every row the base had byte-identical and
+every new key with its ledger added → ledger; anything else about the file →
+code. Explicit paths and stdin carry no content, so there `projects.yaml`
+stays code.
+
 Usage:
     python3 scripts/ledger_merge.py classify --base origin/main   # diff HEAD vs base
     python3 scripts/ledger_merge.py classify path/one path/two    # explicit paths
@@ -133,15 +143,64 @@ def is_append_only_violation(status: str, path: str) -> bool:
     return status[:1] != "A" and any(normalised.startswith(d) for d in APPEND_ONLY_DIRS)
 
 
-def classify_entries(entries):
+PROJECTS_YAML = "projects.yaml"
+
+
+def _show(ref: str, path: str, cwd) -> str | None:
+    proc = subprocess.run(["git", "show", f"{ref}:{path}"], capture_output=True,
+                          text=True, cwd=cwd or Path(__file__).resolve().parents[1])
+    return proc.stdout if proc.returncode == 0 else None
+
+
+def projects_yaml_is_a_birth(base: str, head: str, entries, cwd=None) -> bool:
+    """True if the diff's change to projects.yaml only ADDS rows, every one of
+    them paired with `projects/<key>.md` added in the same diff, and every row
+    the base already had is byte-for-byte unchanged. That is a project birth —
+    ledger — and nothing else about the file is."""
+    if ("M", PROJECTS_YAML) not in [(s[:1], p) for s, p in entries]:
+        return False
+    try:
+        import yaml  # PyYAML — the Cortex's one dependency (cortex.py needs it too)
+    except ImportError:
+        return False
+    root = cwd or Path(__file__).resolve().parents[1]
+    merge_base = subprocess.run(["git", "merge-base", base, head], capture_output=True,
+                                text=True, cwd=root)
+    if merge_base.returncode != 0:
+        return False
+    old_text = _show(merge_base.stdout.strip(), PROJECTS_YAML, root)
+    new_text = _show(head, PROJECTS_YAML, root)
+    if old_text is None or new_text is None:
+        return False
+    try:
+        old, new = yaml.safe_load(old_text) or {}, yaml.safe_load(new_text) or {}
+    except yaml.YAMLError:
+        return False
+    if not isinstance(old, dict) or not isinstance(new, dict):
+        return False
+    if any(key not in new or new[key] != value for key, value in old.items()):
+        return False  # an existing row edited or dropped
+    born = [key for key in new if key not in old]
+    if not born:
+        return False
+    added = {p for s, p in entries if s[:1] == "A"}
+    return all(f"projects/{key}.md" in added for key in born)
+
+
+def classify_entries(entries, birth: bool = False):
     """Split `(status, path)` entries into (ledger, blocked) paths. A rename
-    entry carries both paths; the old one counts as a deletion."""
+    entry carries both paths; the old one counts as a deletion. `birth` is
+    `projects_yaml_is_a_birth`'s verdict on this diff: with it, the
+    `projects.yaml` modification is ledger."""
     ledger, blocked, seen = [], [], set()
     for status, path in entries:
         path = path.strip()
         if not path or path in seen:
             continue
         seen.add(path)
+        if birth and path == PROJECTS_YAML and status[:1] == "M":
+            ledger.append(path)
+            continue
         if is_ledger_path(path) and not is_append_only_violation(status, path):
             ledger.append(path)
         else:
@@ -231,7 +290,13 @@ def main(argv=None) -> int:
 
     # Explicit paths and stdin carry no status, so they are judged on the path
     # alone; a git diff also carries the append-only leg for rulings/.
-    ledger, blocked = classify_entries(entries) if entries is not None else classify(paths)
+    if entries is not None:
+        birth = projects_yaml_is_a_birth(args.base, args.head, entries)
+        if birth:
+            print("projects.yaml: rows added with their ledgers — a birth, ledger")
+        ledger, blocked = classify_entries(entries, birth=birth)
+    else:
+        ledger, blocked = classify(paths)
     if blocked:
         print(f"code: {len(blocked)} of {len(ledger) + len(blocked)} path(s) need a human")
         for path in blocked:

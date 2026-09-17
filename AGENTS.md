@@ -61,8 +61,12 @@ not re-derive them.
 
 - **`projects.yaml`** — the science body map. One row per project. **This is
   code, not ledger**: `sync_cli` and `local_path` are paths a conductor will
-  execute under, so a change to it is always a human's turn. `cortex.py` reads
-  it with PyYAML and validates the fields (REFERENCE.md "projects.yaml").
+  execute under, so a change to it is a human's turn — with one exception, a
+  **birth**: a diff that only adds rows, each with its `projects/<key>.md` in
+  the same push, is ledger and lands by itself (three birth PRs sat six days
+  before the gate learned the difference, 2026-09-17). Editing or dropping a
+  row is still code. `cortex.py` reads it with PyYAML and validates the
+  fields (REFERENCE.md "projects.yaml").
 - **`projects/<key>.md`** — one ledger per project (REFERENCE.md "The
   ledger file"). Title `# <key> — <one-line summary>`; header `Project:` and
   `Issue:` (`Repo#N`, an issue URL, or `none`); then exactly three sections:
