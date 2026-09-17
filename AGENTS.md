@@ -61,8 +61,12 @@ not re-derive them.
 
 - **`projects.yaml`** — the science body map. One row per project. **This is
   code, not ledger**: `sync_cli` and `local_path` are paths a conductor will
-  execute under, so a change to it is always a human's turn. `cortex.py` reads
-  it with PyYAML and validates the fields (REFERENCE.md "projects.yaml").
+  execute under, so a change to it is a human's turn — with one exception, a
+  **birth**: a diff that only adds rows, each with its `projects/<key>.md` in
+  the same push, is ledger and lands by itself (three birth PRs sat six days
+  before the gate learned the difference, 2026-09-17). Editing or dropping a
+  row is still code. `cortex.py` reads it with PyYAML and validates the
+  fields (REFERENCE.md "projects.yaml").
 - **`projects/<key>.md`** — one ledger per project (REFERENCE.md "The
   ledger file"). Title `# <key> — <one-line summary>`; header `Project:` and
   `Issue:` (`Repo#N`, an issue URL, or `none`); then exactly three sections:
@@ -113,13 +117,16 @@ not re-derive them.
 The Cortex holds state and checks itself; it does not reason. The reasoning
 lives in the Brain's **cortex conductor** — `pyauto-brain cortex <verb>`, or
 `python3 PyAutoBrain/agents/conductors/cortex/_cortex.py <verb> --cortex
-<checkout>` with no Brain install. It is read-mostly: it pulls, it shows, it
-renders. The only bytes it writes of its own are the two generated pages and
+<checkout>` with no Brain install. It is read-mostly, and it splits where the
+machines split: `pull` shows what the cluster says (the laptop only — every
+`local_path` is a laptop path), `checkin` stamps, renders and pushes anywhere.
+The only bytes it writes of its own are the two generated pages and
 `checkin.yaml`; every change to a *ledger* goes through `scripts/cortex.py`.
 
 | Verb | What it does |
 |------|--------------|
-| `checkin [--dry-run \| --apply] [--push \| --no-push] [--project KEY] [--skip-pull]` | **the check-in** — the one door: pull every active project through its own `sync_cli`, run its `jobs` verb where it has one and show the output verbatim, re-render the board, push the ledger where the rule allows, and summarise **by project** (Now, runs, the last five entries, the commands you are likely to type next). `--dry-run` is the default and reaches nothing |
+| `pull [--project KEY] [--dry-run]` | **the laptop leg** — pull every active project through its own `sync_cli`, then run its `jobs` verb where it has one and show the output verbatim. It writes nothing. It runs on the laptop only: a project's `local_path` exists on one machine, so where none is present it exits **2**, names each missing root and says "this is not the laptop — run `checkin` here and `pull` on the laptop"; where some are present it pulls those and lists the rest as skipped. `--dry-run` reaches nothing |
+| `checkin [--dry-run \| --apply] [--push \| --no-push] [--project KEY]` | **the check-in** — the one door, on any surface: stamp `checkin.yaml`, re-render the board, push the ledger where the rule allows, and summarise **by project** (Now, the runs as the ledger holds them, the last five entries, the commands you are likely to type next). It shells out to no sync CLI. `--dry-run` is the default and writes nothing; `--skip-pull` is accepted and ignored with a notice |
 | `census [--json]` | what the Cortex is holding, by project — the one-screen answer |
 | `dashboard --check` \| `--apply` | render `dashboard.md` + `dashboard.html`; `--check` exits **1 on drift**, **2 on bad args**, anything else = the renderer could not run |
 | `issue [--project KEY] [--apply]` | the concise ledger block for each project's GitHub issue; `--apply` writes it into the issue body between the markers (needs `gh`) |
@@ -133,9 +140,10 @@ human's ask — by the human, or by the agent in the session — with the
 project's own `sync_cli submit` line, followed at once by `cortex.py run
 <project> <jobid> "<what>"`. `running` and `done` may be typed by the agent
 from what `jobs` printed, because those are cluster facts; `log --kind result`
-and `--kind lesson` are typed only for words the human said. `checkin` is the
+and `--kind lesson` are typed only for words the human said. `pull` is the
 only leg that shells out, and only to the project's own CLI — the conductor
-adds no SSH of its own.
+adds no SSH of its own. `checkin` reaches no cluster at all, which is why it
+runs on any surface while `pull` needs the laptop the science lives on.
 
 ### What runs by itself
 
@@ -205,48 +213,21 @@ Every Cortex project therefore runs from the laptop.
 <!-- repos_sync:remote:begin -->
 ## Remote sessions (Claude Code on web and mobile)
 
-Three facts, all measured in a web/mobile container, where this file is loaded
-and little else is. They ride in every organ because a session may hold any
-subset of them — and the session that needs this most is the one holding
-several, which is exactly the session no hook fires in.
+Three facts, measured in a web/mobile container. A session holding several
+organs is cwd'd at the repos' *parent*, where no project hook fires, so
+nothing has set it up — this block is what does.
 
 - **Bootstrap in the first turn, unconditionally** — before the first test
-  command, not as a remedy once something looks wrong:
-
-  ```
-  bash PyAutoMind/scripts/session_bootstrap.sh          # ~10s cold, ~1s warm
-  bash PyAutoMind/scripts/session_bootstrap.sh --check  # report only
-  ```
-
-  A session holding several organs registers no SessionStart hook — Claude Code
-  reads project hooks from the project directory, which in that layout is the
-  repos' *parent*, not a repo — so nothing has set this session up. It was once
-  phrased as a remedy keyed to `No module named pytest` or collection
-  `ImportError`s naming `yaml`; that symptom stopped appearing when the
-  container image moved to Python 3.12, while the environment is still wrong in
-  ways that read like a bad command rather than a stale session (`pytest -n
-  auto` → `unrecognized arguments: -n`). The bootstrap also **unshallows the
-  clones**: a remote session clones shallow, and `git merge-base --is-ancestor`
-  then answers "not an ancestor" for a commit whose ancestry is merely absent —
-  the answer the ship and close-out procedures act on when proving a branch
-  merged.
-
-- **Then run the suite in parallel.** 4 cores, subprocess-heavy suites, no
-  single slow test: about 3.5x. `python3 -m pytest -q -n auto`, with
-  `pytest-xdist` supplied by the bootstrap above.
-
-- **There is no `gh`, and installing one does not help.** A remote session
-  reaches GitHub through the `mcp__github__*` tools, already scoped to the
-  session's repos. `gh` installs in two seconds and is a trap: it authenticates,
-  then 403s every repo-scoped call, because the egress proxy serves neither the
-  REST repo paths nor GraphQL beyond a pinned set of PR-review operations — a
-  binary that looks healthy and fails everything that matters. It also defeats
-  the surface probe, which keys off `gh auth status`. Read
-  `PyAutoBrain/skills/GITHUB_ACCESS.md` at the top of any run that touches
-  GitHub; it maps each `gh` operation onto its MCP tool. Spell that path from
-  the workspace root, as written: a multi-organ session is cwd'd at the repos'
-  *parent*, so a bare `skills/…` reads as a missing file rather than a missing
-  repo prefix.
+  command, not as a remedy: `bash PyAutoMind/scripts/session_bootstrap.sh`
+  (`--check` reports only). It supplies pytest/PyYAML/xdist and **unshallows
+  the clones**, without which `git merge-base --is-ancestor` calls a merged
+  branch "not an ancestor" and the close-out acts on it.
+- **Run the suite in parallel**: `python3 -m pytest -q -n auto` (4 cores,
+  ~3.5x).
+- **There is no `gh`, and installing one does not help** — it authenticates,
+  then 403s every repo-scoped call through the egress proxy. GitHub is the
+  `mcp__github__*` tools; `PyAutoBrain/skills/GITHUB_ACCESS.md` maps each
+  `gh` operation onto its tool and is the one full page on the subject.
 <!-- repos_sync:remote:end -->
 ## When in doubt
 

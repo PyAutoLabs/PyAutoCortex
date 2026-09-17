@@ -147,6 +147,58 @@ def _git(cwd, *args):
     return subprocess.run(["git", *args], cwd=cwd, capture_output=True, text=True, check=True)
 
 
+# --- the one projects.yaml exception: a birth ---------------------------------
+
+BASE_YAML = "a:\n  status: active\n  note: x\n"
+
+
+def _repo_with_yaml(tmp_path):
+    repo = _repo(tmp_path)
+    _git(repo, "checkout", "-q", "main")
+    (repo / "projects.yaml").write_text(BASE_YAML)
+    _git(repo, "add", ".")
+    _git(repo, "commit", "-qm", "yaml")
+    _git(repo, "checkout", "-qb", "claude/birth")
+    return repo
+
+
+def test_a_new_row_with_its_ledger_is_a_birth_and_ledger(tmp_path):
+    repo = _repo_with_yaml(tmp_path)
+    (repo / "projects.yaml").write_text(BASE_YAML + "b:\n  status: active\n  note: y\n")
+    (repo / "projects" / "b.md").write_text("# b — born\n")
+    _git(repo, "add", ".")
+    _git(repo, "commit", "-qm", "birth")
+    entries = ledger_merge.changed_entries("main", cwd=repo)
+    assert ledger_merge.projects_yaml_is_a_birth("main", "HEAD", entries, cwd=repo)
+    ledger, blocked = ledger_merge.classify_entries(entries, birth=True)
+    assert not blocked and "projects.yaml" in ledger
+
+
+def test_a_new_row_without_its_ledger_is_code(tmp_path):
+    repo = _repo_with_yaml(tmp_path)
+    (repo / "projects.yaml").write_text(BASE_YAML + "b:\n  status: active\n")
+    _git(repo, "add", ".")
+    _git(repo, "commit", "-qm", "row only")
+    entries = ledger_merge.changed_entries("main", cwd=repo)
+    assert not ledger_merge.projects_yaml_is_a_birth("main", "HEAD", entries, cwd=repo)
+    assert "projects.yaml" in ledger_merge.classify_entries(entries)[1]
+
+
+def test_an_edited_row_is_code_even_beside_a_birth(tmp_path):
+    repo = _repo_with_yaml(tmp_path)
+    (repo / "projects.yaml").write_text("a:\n  status: retired\n  note: x\nb:\n  status: active\n")
+    (repo / "projects" / "b.md").write_text("# b — born\n")
+    _git(repo, "add", ".")
+    _git(repo, "commit", "-qm", "edit + birth")
+    entries = ledger_merge.changed_entries("main", cwd=repo)
+    assert not ledger_merge.projects_yaml_is_a_birth("main", "HEAD", entries, cwd=repo)
+
+
+def test_explicit_projects_yaml_path_stays_code():
+    # no content to judge → the default holds
+    assert ledger_merge.classify(["projects.yaml", "projects/b.md"])[1] == ["projects.yaml"]
+
+
 def _repo(tmp_path):
     repo = tmp_path / "repo"
     repo.mkdir()
