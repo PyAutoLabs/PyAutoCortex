@@ -149,7 +149,10 @@ deleted. Anything else waits for a human: `scripts/`, `tests/`, `.github/`,
 on the branch tip and again on the trial-merge tree, so two branches that
 each edited the same ledger are caught before either lands. `python3
 scripts/ledger_merge.py classify --base origin/main` predicts the verdict
-(exit 0 ledger · 1 code · 2 could not classify).
+(exit 0 ledger · 1 code · 2 could not classify). `--base` reads the diff from git and
+never stdin, so it is safe from a web/mobile session whose stdin is a harness
+socket that never closes; piped paths are read only when neither explicit
+paths nor `--base` is given.
 
 ## Check-in
 
