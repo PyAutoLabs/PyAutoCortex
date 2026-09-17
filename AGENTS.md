@@ -117,13 +117,16 @@ not re-derive them.
 The Cortex holds state and checks itself; it does not reason. The reasoning
 lives in the Brain's **cortex conductor** — `pyauto-brain cortex <verb>`, or
 `python3 PyAutoBrain/agents/conductors/cortex/_cortex.py <verb> --cortex
-<checkout>` with no Brain install. It is read-mostly: it pulls, it shows, it
-renders. The only bytes it writes of its own are the two generated pages and
+<checkout>` with no Brain install. It is read-mostly, and it splits where the
+machines split: `pull` shows what the cluster says (the laptop only — every
+`local_path` is a laptop path), `checkin` stamps, renders and pushes anywhere.
+The only bytes it writes of its own are the two generated pages and
 `checkin.yaml`; every change to a *ledger* goes through `scripts/cortex.py`.
 
 | Verb | What it does |
 |------|--------------|
-| `checkin [--dry-run \| --apply] [--push \| --no-push] [--project KEY] [--skip-pull]` | **the check-in** — the one door: pull every active project through its own `sync_cli`, run its `jobs` verb where it has one and show the output verbatim, re-render the board, push the ledger where the rule allows, and summarise **by project** (Now, runs, the last five entries, the commands you are likely to type next). `--dry-run` is the default and reaches nothing |
+| `pull [--project KEY] [--dry-run]` | **the laptop leg** — pull every active project through its own `sync_cli`, then run its `jobs` verb where it has one and show the output verbatim. It writes nothing. It runs on the laptop only: a project's `local_path` exists on one machine, so where none is present it exits **2**, names each missing root and says "this is not the laptop — run `checkin` here and `pull` on the laptop"; where some are present it pulls those and lists the rest as skipped. `--dry-run` reaches nothing |
+| `checkin [--dry-run \| --apply] [--push \| --no-push] [--project KEY]` | **the check-in** — the one door, on any surface: stamp `checkin.yaml`, re-render the board, push the ledger where the rule allows, and summarise **by project** (Now, the runs as the ledger holds them, the last five entries, the commands you are likely to type next). It shells out to no sync CLI. `--dry-run` is the default and writes nothing; `--skip-pull` is accepted and ignored with a notice |
 | `census [--json]` | what the Cortex is holding, by project — the one-screen answer |
 | `dashboard --check` \| `--apply` | render `dashboard.md` + `dashboard.html`; `--check` exits **1 on drift**, **2 on bad args**, anything else = the renderer could not run |
 | `issue [--project KEY] [--apply]` | the concise ledger block for each project's GitHub issue; `--apply` writes it into the issue body between the markers (needs `gh`) |
@@ -137,9 +140,10 @@ human's ask — by the human, or by the agent in the session — with the
 project's own `sync_cli submit` line, followed at once by `cortex.py run
 <project> <jobid> "<what>"`. `running` and `done` may be typed by the agent
 from what `jobs` printed, because those are cluster facts; `log --kind result`
-and `--kind lesson` are typed only for words the human said. `checkin` is the
+and `--kind lesson` are typed only for words the human said. `pull` is the
 only leg that shells out, and only to the project's own CLI — the conductor
-adds no SSH of its own.
+adds no SSH of its own. `checkin` reaches no cluster at all, which is why it
+runs on any surface while `pull` needs the laptop the science lives on.
 
 ### What runs by itself
 

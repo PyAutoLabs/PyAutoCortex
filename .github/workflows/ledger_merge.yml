@@ -60,6 +60,8 @@ permissions:
   contents: write
   pull-requests: write
   actions: write
+  # issues: write → a branch that cannot land is written on an issue.
+  issues: write
 
 # Every run of this workflow ends in a push to main, so runs must not overlap:
 # two branches merging concurrently would race, and the loser would spend its
@@ -195,19 +197,33 @@ jobs:
               exit 0
             fi
             git checkout -B _ledger_merge origin/main
-            if ! git merge --no-ff "$HEAD_SHA" \
-                -m "cortex: auto-merge ledger branch $BRANCH" \
-                -m "Ledger-only diff (scripts/ledger_merge.py), cortex check clean on the merged tree." ; then
-              git merge --abort || true
-              echo "::error::'$BRANCH' conflicts with main — resolve it by hand"
-              echo "**Conflict** — \`$BRANCH\` does not merge cleanly; left for a human." >> "$GITHUB_STEP_SUMMARY"
-              exit 1
+            # Built without committing: the two generated pages are the one
+            # conflict every ledger branch can produce (each re-renders them),
+            # and a render is never a reason to strand a ledger — take main's
+            # copy, let the merged tree be re-rendered on main by
+            # dashboard_refresh.yml. Anything else unmerged is a human's.
+            if ! git merge --no-ff --no-commit "$HEAD_SHA" >/dev/null 2>&1; then
+              UNMERGED=$(git diff --name-only --diff-filter=U)
+              OTHER=$(echo "$UNMERGED" | grep -vE '^(dashboard\.md|dashboard\.html)$' || true)
+              if [ -n "$OTHER" ]; then
+                git merge --abort || true
+                echo "'$BRANCH' conflicts with main on: $(echo $OTHER)" > /tmp/ledger_merge_reason
+                echo "::error::'$BRANCH' conflicts with main beyond the generated pages — resolve it by hand"
+                echo "**Conflict** — \`$BRANCH\` does not merge cleanly (\`$(echo $OTHER)\`); left for a human." >> "$GITHUB_STEP_SUMMARY"
+                exit 1
+              fi
+              for f in $UNMERGED; do git checkout --ours -- "$f" && git add -- "$f"; done
+              echo "generated pages conflicted — took main's copy; dashboard_refresh.yml re-renders on main"
             fi
+            git commit --quiet --no-verify \
+              -m "cortex: auto-merge ledger branch $BRANCH" \
+              -m "Ledger-only diff (scripts/ledger_merge.py), cortex check clean on the merged tree."
             # THE TRIAL-MERGE CHECK. The branch passed alone; does it pass
             # merged? This is where two branches that both wrote the same
             # project's ledger are caught.
             if ! python3 scripts/cortex.py check; then
               git reset --hard origin/main
+              echo "'$BRANCH' merges cleanly but 'cortex.py check' fails on the merged tree (two branches wrote the same ledger?)" > /tmp/ledger_merge_reason
               echo "::error::'$BRANCH' merges cleanly but 'cortex.py check' fails on the merged tree — left for a human"
               echo "**Blocked** — \`$BRANCH\` fails \`cortex.py check\` once merged with main (two branches wrote the same ledger?); left for a human." >> "$GITHUB_STEP_SUMMARY"
               exit 1
@@ -234,8 +250,11 @@ jobs:
       # delete head branches" on; a DIRECT merge has no such hook. Delete it
       # here, on the same proof branch_sweep uses — main must actually contain
       # the head sha — so a failed or partial merge never loses a branch.
+      # A branch found ALREADY in main gets the same treatment: 38 of them had
+      # accumulated by 2026-09-17, each merged by a run whose delete never
+      # fired, and every later push found "nothing to merge" and left it.
       - name: Delete the merged branch
-        if: steps.merge.outputs.via != '' && inputs.delete_branch != false
+        if: (steps.merge.outputs.via != '' || steps.ahead.outputs.merged == 'already') && inputs.delete_branch != false
         env:
           BRANCH: ${{ steps.target.outputs.branch }}
           HEAD_SHA: ${{ steps.ahead.outputs.head_sha }}
@@ -252,6 +271,40 @@ jobs:
             # and is not a failure.
             echo "::warning::could not delete '$BRANCH' — it may already be gone"
           fi
+
+      # A branch that cannot land is written down where a human looks: one
+      # open issue per branch, updated on every further attempt, closed by the
+      # run that finally lands it. A red run nobody is subscribed to is how
+      # the Mind lost six completion records (2026-09-17).
+      - name: Leave a note a human will see
+        if: failure() && steps.ahead.outputs.merged == 'no'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ steps.target.outputs.branch }}
+        run: |
+          REASON=$(cat /tmp/ledger_merge_reason 2>/dev/null || echo "a step failed — see the run log")
+          RUN="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          TITLE="ledger merge: \`$BRANCH\` needs a human"
+          BODY=$(printf '%s\n\nRun: %s\nBranch: https://github.com/%s/tree/%s\n\nMerge it by hand and push to main; this issue closes itself when the branch lands.' \
+            "$REASON" "$RUN" "${{ github.repository }}" "$BRANCH")
+          gh label create ledger-merge --color d93f0b --description "a ledger branch the auto-merge could not land" --force >/dev/null 2>&1 || true
+          N=$(gh issue list --state open --label ledger-merge --search "in:title \"$BRANCH\"" --json number --jq '.[0].number // empty')
+          if [ -n "$N" ]; then
+            gh issue comment "$N" --body "$BODY"
+          else
+            gh issue create --title "$TITLE" --label ledger-merge --body "$BODY"
+          fi
+
+      - name: Close the note once the branch has landed
+        if: steps.merge.outputs.via != '' || steps.ahead.outputs.merged == 'already'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ steps.target.outputs.branch }}
+        run: |
+          for N in $(gh issue list --state open --label ledger-merge --search "in:title \"$BRANCH\"" --json number --jq '.[].number'); do
+            gh issue close "$N" --comment "Landed: \`$BRANCH\` is in main." --reason completed
+          done
 
       # The merge push above was made with GITHUB_TOKEN, which triggers no
       # workflows, so main's check must be asked explicitly or the merge
