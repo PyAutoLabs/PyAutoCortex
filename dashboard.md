@@ -116,7 +116,7 @@ active · ral · no issue yet · [projects/euclid_dr1.md](https://github.com/PyA
 
 **Now**
 
-342650 refits the ten euclid_dr1_prelim lenses from the sep1 delivery (dataset/dr1_sep1/, two-stage CPU route from the euclid_dr1 clone). Next: pull it, build the per-tile side-by-side sheet against prelim run 342629 and the Einstein-radius table (name any tile off by more than 10 %); the human judges by eye whether the same lenses come back — numerical parity is not the question (prelim's rerun scatter is z ≈ 15).
+Submit the prepared DR1 sep1 top-1000 vis_lp run. Keep fields=field unchanged; no additional comment needed.
 
 **Runs**
 
@@ -124,11 +124,11 @@ active · ral · no issue yet · [projects/euclid_dr1.md](https://github.com/PyA
 
 **Last 5**
 
+- 2026-09-18 — *note* — Submission approved 2026-09-18. Empty squeue allowed shared source refresh via inspected HPCPullPyAuto. RAL Galaxy 33714b800b9239ada5e0531822883cf302703e1d -> 90e757d336e62b75790befacc77e2d6dde460879; Lens 7197380671c0a32be1a225d4de660b9e4…
+- 2026-09-18 — *note* — User approved submission of the prepared top-1000 vis_lp run: "ah you are right, then let us submit dont worry about the comment". Keep fields=field unchanged. The previous modelling-script submission hold is lifted for this run; deploymen…
 - 2026-09-18 — *note* — Flat-fields source repair and pipeline merged after all required CI passed: PyAutoGalaxy#623 at 90e757d336e62b75790befacc77e2d6dde460879, autogalaxy_workspace_test#123 at ae45e490f75260533d0f18bb3bc2ce951377a0d5, pipeline#90 at 9cdee7b10e9…
 - 2026-09-18 — *note* — Bare-field pipeline prepared as PR #90 at 7fbdbe5: 230 local tests and 9 smoke scripts passed, independent review CLEAN. Not merged or synced: CI unit legs fail in jax-zero-contour with JAX 0.11.2. Local science remains d53b9ce; RAL PyAuto…
 - 2026-09-11 — *run* — 342650 submitted: euclid_dr1 sep1 reproduction: the ten euclid_dr1_prelim lenses refitted from the sep1 delivery through prelim's route (hpc/batch_cpu/submit_initial_lens_model_two_stage: vis_lp then vis_pix), array 0-9, wall budget 36:00;…
-- 2026-09-11 — *note* — the delivery, and the ten tiles: Segmentation.zip (14.8 GB, three nested batch zips eclipse_catalogue_fits_sep1-segmentation_batch{1,2,3}, 15032 tile folders, every tile already in the pipeline dataset layout) was read in place with Python…
-- 2026-09-11 — *note* — ledger opened
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid_dr1.md)
 
