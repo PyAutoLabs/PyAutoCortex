@@ -10,7 +10,7 @@ One ledger per science project: what is on the cluster right now, what the human
 
 | Where | Count |
 |-------|------:|
-| [Running](#projects) | 1 |
+| [Running](#projects) | 2 |
 | [Open](#projects) | 22 |
 | [Projects](#projects) | 9 |
 
@@ -31,7 +31,7 @@ One ledger per science project: what is on the cluster right now, what the human
 |---|---:|---:|---|
 | subhalo_validation | 0 | 5 | 2026-09-07 |
 | euclid_dr1_prelim | 1 | 3 | 2026-09-17 |
-| euclid_dr1 | 0 | 1 | 2026-09-18 |
+| euclid_dr1 | 1 | 1 | 2026-09-18 |
 | analytic_gaussian | 0 | 0 | 2026-09-10 |
 | ep_toy_gaussian | 0 | 2 | 2026-09-10 |
 | slope_hierarchy_scale | 0 | 4 | 2026-09-15 |
@@ -116,19 +116,20 @@ active · ral · no issue yet · [projects/euclid_dr1.md](https://github.com/PyA
 
 **Now**
 
-Submit the prepared DR1 sep1 top-1000 vis_lp run. Keep fields=field unchanged; no additional comment needed.
+The approved top-1000 DR1 sep1 vis_lp CPU run is submitted as array 343480 (0-999). Keep fields=field unchanged.
 
 **Runs**
 
 - 342650 — open — ral — 2026-09-11 — euclid_dr1 sep1 reproduction: the ten euclid_dr1_prelim lenses refitted from the sep1 delivery through prelim's route (hpc/batch_cpu/submit_initial_lens_model_…
+- 343480 — running — ral — 2026-09-18 — DR1 sep1 top-1000 brightest: approved bare-field vis_lp-only CPU run; array 0-999; 8 CPUs, 64 GB and 18:00:00 per task; local science code 2430e4e, pipeline PR…
 
 **Last 5**
 
+- 2026-09-18 — *note* — Array 343480 submitted 2026-09-18 via hpc/sync submit cpu submit_initial_lens_model_vis_lp_top1000 and confirmed RUNNING (initial queue: 154 running, 846 pending). Production route is vis_lp only, 8 CPUs / 64 GB / 18 hours per task. Before…
+- 2026-09-18 — *run* — 343480 submitted: DR1 sep1 top-1000 brightest: approved bare-field vis_lp-only CPU run; array 0-999; 8 CPUs, 64 GB and 18:00:00 per task; local science code 2430e4e, pipeline PR #90 merged 9cdee7b1; 11000 inputs and 115 code/config hashes…
 - 2026-09-18 — *note* — Submission approved 2026-09-18. Empty squeue allowed shared source refresh via inspected HPCPullPyAuto. RAL Galaxy 33714b800b9239ada5e0531822883cf302703e1d -> 90e757d336e62b75790befacc77e2d6dde460879; Lens 7197380671c0a32be1a225d4de660b9e4…
 - 2026-09-18 — *note* — User approved submission of the prepared top-1000 vis_lp run: "ah you are right, then let us submit dont worry about the comment". Keep fields=field unchanged. The previous modelling-script submission hold is lifted for this run; deploymen…
 - 2026-09-18 — *note* — Flat-fields source repair and pipeline merged after all required CI passed: PyAutoGalaxy#623 at 90e757d336e62b75790befacc77e2d6dde460879, autogalaxy_workspace_test#123 at ae45e490f75260533d0f18bb3bc2ce951377a0d5, pipeline#90 at 9cdee7b10e9…
-- 2026-09-18 — *note* — Bare-field pipeline prepared as PR #90 at 7fbdbe5: 230 local tests and 9 smoke scripts passed, independent review CLEAN. Not merged or synced: CI unit legs fail in jax-zero-contour with JAX 0.11.2. Local science remains d53b9ce; RAL PyAuto…
-- 2026-09-11 — *run* — 342650 submitted: euclid_dr1 sep1 reproduction: the ten euclid_dr1_prelim lenses refitted from the sep1 delivery through prelim's route (hpc/batch_cpu/submit_initial_lens_model_two_stage: vis_lp then vis_pix), array 0-9, wall budget 36:00;…
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid_dr1.md)
 

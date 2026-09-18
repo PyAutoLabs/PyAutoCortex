@@ -227,7 +227,7 @@ a.go:hover{opacity:.9;text-decoration:none}
 </head>
 <body>
 <header class="hero"><span class="orb"><svg class="mark" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="24" cy="24" r="20.4"/><path d="M11.8,18.6 C14.4,14.8 17.8,14.4 20.1,17.1 C22.4,19.8 25.8,20.2 28.5,17.9 C31.2,15.6 34.4,16.2 36.1,19.1"/><path d="M11.6,24.6 C14.2,20.8 17.6,20.4 19.9,23.1 C22.2,25.8 25.6,26.2 28.3,23.9 C31.0,21.6 34.2,22.2 35.9,25.1"/><path d="M12.8,30.6 C15.3,27.2 18.4,26.8 20.5,29.4 C22.6,32.0 25.7,32.4 28.2,30.2"/><circle cx="32.6" cy="33.0" r="3.8"/><g fill="currentColor" stroke="none"><circle cx="32.6" cy="33.0" r="1.5"/><circle cx="11.7" cy="18.6" r="1.2"/><circle cx="11.5" cy="24.6" r="1.2"/></g></svg></span><h1>PyAuto<b>Cortex</b><span class="kind">Dashboard</span></h1><div class="rule"></div><p class="tag">Question. Run. Rule.</p></header><p class="lede">One ledger per science project: what is on the cluster right now, what the human said they would do next, and the last few things they wrote down. Nothing here is inferred from a result — the board hands you the check-in and the resume prompt; what a run meant is yours to log.</p>
-<ul class="stats"><li><b>1</b><span>Running</span></li><li><b>22</b><span>Open</span></li><li><b>9</b><span>Projects</span></li></ul>
+<ul class="stats"><li><b>2</b><span>Running</span></li><li><b>22</b><span>Open</span></li><li><b>9</b><span>Projects</span></li></ul>
 <div class="fresh"><p class="muted">Last updated 2026-09-18.</p></div>
 <p class="muted mdsrc"><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/dashboard.md">markdown version</a> · <a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/README.md">GitHub Page</a></p>
 <div class="task"><button class="copy" data-cmd="/cortex — on the laptop: `pyauto-brain cortex pull` — pull every active science project through its own sync CLI and show me where each run stands.
@@ -238,7 +238,7 @@ a.go:hover{opacity:.9;text-decoration:none}
 <tr><th>Project</th><th>Running</th><th>Open</th><th>Last update</th></tr>
 <tr><td><b>subhalo_validation</b></td><td>0</td><td>5</td><td>2026-09-07</td></tr>
 <tr><td><b>euclid_dr1_prelim</b></td><td>1</td><td>3</td><td>2026-09-17</td></tr>
-<tr><td><b>euclid_dr1</b></td><td>0</td><td>1</td><td>2026-09-18</td></tr>
+<tr><td><b>euclid_dr1</b></td><td>1</td><td>1</td><td>2026-09-18</td></tr>
 <tr><td><b>analytic_gaussian</b></td><td>0</td><td>0</td><td>2026-09-10</td></tr>
 <tr><td><b>ep_toy_gaussian</b></td><td>0</td><td>2</td><td>2026-09-10</td></tr>
 <tr><td><b>slope_hierarchy_scale</b></td><td>0</td><td>4</td><td>2026-09-15</td></tr>
@@ -298,18 +298,19 @@ a.go:hover{opacity:.9;text-decoration:none}
 <h3>euclid_dr1 — Does the sep1 DR1 delivery reproduce the ten prelim lenses by eye</h3>
 <p class="muted">active · ral · no issue yet · <a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid_dr1.md">projects/euclid_dr1.md</a> · local <span class="pathchip">/mnt/c/Users/Jammy/Science/euclid_dr1</span> · RAL <span class="pathchip">/mnt/ral/jnightin/euclid_dr1</span></p>
 <p><b>Now</b></p>
-<p>Submit the prepared DR1 sep1 top-1000 vis_lp run. Keep fields=field unchanged; no additional comment needed.</p>
+<p>The approved top-1000 DR1 sep1 vis_lp CPU run is submitted as array 343480 (0-999). Keep fields=field unchanged.</p>
 <p><b>Runs</b></p>
 <ul>
 <li>342650 — open — ral — 2026-09-11 — euclid_dr1 sep1 reproduction: the ten euclid_dr1_prelim lenses refitted from the sep1 delivery through prelim's route (hpc/batch_cpu/submit_initial_lens_model_…</li>
+<li>343480 — running — ral — 2026-09-18 — DR1 sep1 top-1000 brightest: approved bare-field vis_lp-only CPU run; array 0-999; 8 CPUs, 64 GB and 18:00:00 per task; local science code 2430e4e, pipeline PR…</li>
 </ul>
 <p><b>Last 5</b></p>
 <ul>
+<li>2026-09-18 — <i>note</i> — Array 343480 submitted 2026-09-18 via hpc/sync submit cpu submit_initial_lens_model_vis_lp_top1000 and confirmed RUNNING (initial queue: 154 running, 846 pending). Production route is vis_lp only, 8 CPUs / 64 GB / 18 hours per task. Before…</li>
+<li>2026-09-18 — <i>run</i> — 343480 submitted: DR1 sep1 top-1000 brightest: approved bare-field vis_lp-only CPU run; array 0-999; 8 CPUs, 64 GB and 18:00:00 per task; local science code 2430e4e, pipeline PR #90 merged 9cdee7b1; 11000 inputs and 115 code/config hashes…</li>
 <li>2026-09-18 — <i>note</i> — Submission approved 2026-09-18. Empty squeue allowed shared source refresh via inspected HPCPullPyAuto. RAL Galaxy 33714b800b9239ada5e0531822883cf302703e1d -&gt; 90e757d336e62b75790befacc77e2d6dde460879; Lens 7197380671c0a32be1a225d4de660b9e4…</li>
 <li>2026-09-18 — <i>note</i> — User approved submission of the prepared top-1000 vis_lp run: "ah you are right, then let us submit dont worry about the comment". Keep fields=field unchanged. The previous modelling-script submission hold is lifted for this run; deploymen…</li>
 <li>2026-09-18 — <i>note</i> — Flat-fields source repair and pipeline merged after all required CI passed: PyAutoGalaxy#623 at 90e757d336e62b75790befacc77e2d6dde460879, autogalaxy_workspace_test#123 at ae45e490f75260533d0f18bb3bc2ce951377a0d5, pipeline#90 at 9cdee7b10e9…</li>
-<li>2026-09-18 — <i>note</i> — Bare-field pipeline prepared as PR #90 at 7fbdbe5: 230 local tests and 9 smoke scripts passed, independent review CLEAN. Not merged or synced: CI unit legs fail in jax-zero-contour with JAX 0.11.2. Local science remains d53b9ce; RAL PyAuto…</li>
-<li>2026-09-11 — <i>run</i> — 342650 submitted: euclid_dr1 sep1 reproduction: the ten euclid_dr1_prelim lenses refitted from the sep1 delivery through prelim's route (hpc/batch_cpu/submit_initial_lens_model_two_stage: vis_lp then vis_pix), array 0-9, wall budget 36:00;…</li>
 </ul>
 <p class="muted"><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid_dr1.md">full log</a></p>
 <div class="task"><button class="copy" data-cmd="/cortex — resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say." aria-label="Copy the Claude command">📋</button><p>resume euclid_dr1</p></div>
