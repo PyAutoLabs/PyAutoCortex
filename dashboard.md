@@ -31,7 +31,7 @@ One ledger per science project: what is on the cluster right now, what the human
 |---|---:|---:|---|
 | subhalo_validation | 0 | 5 | 2026-09-07 |
 | euclid_dr1_prelim | 1 | 3 | 2026-09-17 |
-| euclid_dr1 | 0 | 1 | 2026-09-11 |
+| euclid_dr1 | 0 | 1 | 2026-09-18 |
 | analytic_gaussian | 0 | 0 | 2026-09-10 |
 | ep_toy_gaussian | 0 | 2 | 2026-09-10 |
 | slope_hierarchy_scale | 0 | 4 | 2026-09-15 |
@@ -124,6 +124,7 @@ active · ral · no issue yet · [projects/euclid_dr1.md](https://github.com/PyA
 
 **Last 5**
 
+- 2026-09-18 — *note* — Bare-field pipeline prepared as PR #90 at 7fbdbe5: 230 local tests and 9 smoke scripts passed, independent review CLEAN. Not merged or synced: CI unit legs fail in jax-zero-contour with JAX 0.11.2. Local science remains d53b9ce; RAL PyAuto…
 - 2026-09-11 — *run* — 342650 submitted: euclid_dr1 sep1 reproduction: the ten euclid_dr1_prelim lenses refitted from the sep1 delivery through prelim's route (hpc/batch_cpu/submit_initial_lens_model_two_stage: vis_lp then vis_pix), array 0-9, wall budget 36:00;…
 - 2026-09-11 — *note* — the delivery, and the ten tiles: Segmentation.zip (14.8 GB, three nested batch zips eclipse_catalogue_fits_sep1-segmentation_batch{1,2,3}, 15032 tile folders, every tile already in the pipeline dataset layout) was read in place with Python…
 - 2026-09-11 — *note* — ledger opened
