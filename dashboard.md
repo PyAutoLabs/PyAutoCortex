@@ -270,7 +270,7 @@ Next: pull the ladder and see where EP's cost and hill_coef width go as N grows;
 
 ### autolens_inference — Do the PyAutoLens inference backends agree on the HST SLaM posterior
 
-active · both · [autolens_inference#4](https://github.com/PyAutoLabs/autolens_inference/issues/4) · [projects/autolens_inference.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/autolens_inference.md) · local `/home/jammy/Code/PyAutoLabs/autolens_inference` · RAL `/mnt/ral/jnightin/autolens_inference`
+active · both · [autolens_inference#4](https://github.com/PyAutoLabs/autolens_inference/issues/4) · [projects/autolens_inference.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/autolens_inference.md) · local `/home/jammy/Code/PyAutoLabs/lens/autolens_inference` · RAL `/mnt/ral/jnightin/autolens_inference`
 
 **Now**
 
@@ -294,7 +294,7 @@ The four A100 base legs are done (dense and sparse, seeds 0-1, all five stages):
 <details><summary>📋 resume autolens_inference</summary>
 
 ```
-/cortex — resume autolens_inference: read PyAutoCortex projects/autolens_inference.md (Now, Runs, Log) and then /home/jammy/Code/PyAutoLabs/autolens_inference/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
+/cortex — resume autolens_inference: read PyAutoCortex projects/autolens_inference.md (Now, Runs, Log) and then /home/jammy/Code/PyAutoLabs/lens/autolens_inference/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
 ```
 
 </details>
