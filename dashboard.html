@@ -399,7 +399,7 @@ a.go:hover{opacity:.9;text-decoration:none}
 </section>
 <section class="project">
 <h3>autolens_inference — Do the PyAutoLens inference backends agree on the HST SLaM posterior</h3>
-<p class="muted">active · both · <a href="https://github.com/PyAutoLabs/autolens_inference/issues/4">autolens_inference#4</a> · <a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/autolens_inference.md">projects/autolens_inference.md</a> · local <span class="pathchip">/home/jammy/Code/PyAutoLabs/autolens_inference</span> · RAL <span class="pathchip">/mnt/ral/jnightin/autolens_inference</span></p>
+<p class="muted">active · both · <a href="https://github.com/PyAutoLabs/autolens_inference/issues/4">autolens_inference#4</a> · <a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/autolens_inference.md">projects/autolens_inference.md</a> · local <span class="pathchip">/home/jammy/Code/PyAutoLabs/lens/autolens_inference</span> · RAL <span class="pathchip">/mnt/ral/jnightin/autolens_inference</span></p>
 <p><b>Now</b></p>
 <p>The four A100 base legs are done (dense and sparse, seeds 0-1, all five stages): sparse costs 1.5x dense and buys nothing measurable, and at the same seed the two routes agree to 0.0-0.6 sigma while seeds of the SAME leg disagree by up to 0.9 sigma and ~3 nats — so the slam_hst_base witness bands (2 nats, 0.2 sigma) are tighter than Nautilus's own seed reproducibility on this cell, which is a finding about the bands. Running now: the same chain with a 1250-vertex Hilbert/Delaunay source (343143 dense, 343145 sparse, seeds 0-1) on the A100. Next: pull both, compare seed-paired against slam_base, and decide whether the parity bands need rewriting before the four CPU legs are submitted.</p>
 <p><b>Runs</b></p>
@@ -416,7 +416,7 @@ a.go:hover{opacity:.9;text-decoration:none}
 <li>2026-09-14 — <i>run</i> — 342799_[0-1] finished — wall 0:48: slam_hst_base: A100 leg, dense inversion, seeds 0-1, hpc/batch_gpu/submit_slam_hst_jax_gpu_dense (config hpc_a100_jax_gpu_dense_fp64); the 09-12 ask: one hardware type first, GPU; rate-probe 342695 tree m…</li>
 </ul>
 <p class="muted"><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/autolens_inference.md">full log</a></p>
-<div class="task"><button class="copy" data-cmd="/cortex — resume autolens_inference: read PyAutoCortex projects/autolens_inference.md (Now, Runs, Log) and then /home/jammy/Code/PyAutoLabs/autolens_inference/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say." aria-label="Copy the Claude command">📋</button><p>resume autolens_inference</p></div>
+<div class="task"><button class="copy" data-cmd="/cortex — resume autolens_inference: read PyAutoCortex projects/autolens_inference.md (Now, Runs, Log) and then /home/jammy/Code/PyAutoLabs/lens/autolens_inference/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say." aria-label="Copy the Claude command">📋</button><p>resume autolens_inference</p></div>
 </section>
 <section class="project">
 <h3>euclid_sersics — Why does the lens-light Sersic index pile up at the n=5 prior edge</h3>

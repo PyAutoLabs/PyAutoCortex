@@ -47,7 +47,7 @@
 # --------------------------------------------------------------------------- #
 inference_programme:
   remote: PyAutoLabs/autolens_profiling
-  local_path: /home/jammy/Code/PyAutoLabs/autolens_profiling
+  local_path: /home/jammy/Code/PyAutoLabs/lens/autolens_profiling
   ral_root: /mnt/ral/jnightin/autolens_profiling
   mirror: /mnt/c/Users/Jammy/Science/inference_programme
   sync_cli: hpc/sync
@@ -263,7 +263,7 @@ ic50_workspace:
 
 autolens_inference:
   remote: PyAutoLabs/autolens_inference
-  local_path: /home/jammy/Code/PyAutoLabs/autolens_inference
+  local_path: /home/jammy/Code/PyAutoLabs/lens/autolens_inference
   ral_root: /mnt/ral/jnightin/autolens_inference
   mirror: none
   sync_cli: hpc/sync
@@ -437,7 +437,7 @@ ic50_workspace:
 
 autolens_inference:
   remote: PyAutoLabs/autolens_inference
-  local_path: /home/jammy/Code/PyAutoLabs/autolens_inference
+  local_path: /home/jammy/Code/PyAutoLabs/lens/autolens_inference
   ral_root: /mnt/ral/jnightin/autolens_inference
   mirror: none
   sync_cli: hpc/sync
@@ -597,7 +597,7 @@ ic50_workspace:
 
 autolens_inference:
   remote: PyAutoLabs/autolens_inference
-  local_path: /home/jammy/Code/PyAutoLabs/autolens_inference
+  local_path: /home/jammy/Code/PyAutoLabs/lens/autolens_inference
   ral_root: /mnt/ral/jnightin/autolens_inference
   mirror: none
   sync_cli: hpc/sync
