@@ -227,24 +227,22 @@ a.go:hover{opacity:.9;text-decoration:none}
 </head>
 <body>
 <header class="hero"><span class="orb"><svg class="mark" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="24" cy="24" r="20.4"/><path d="M11.8,18.6 C14.4,14.8 17.8,14.4 20.1,17.1 C22.4,19.8 25.8,20.2 28.5,17.9 C31.2,15.6 34.4,16.2 36.1,19.1"/><path d="M11.6,24.6 C14.2,20.8 17.6,20.4 19.9,23.1 C22.2,25.8 25.6,26.2 28.3,23.9 C31.0,21.6 34.2,22.2 35.9,25.1"/><path d="M12.8,30.6 C15.3,27.2 18.4,26.8 20.5,29.4 C22.6,32.0 25.7,32.4 28.2,30.2"/><circle cx="32.6" cy="33.0" r="3.8"/><g fill="currentColor" stroke="none"><circle cx="32.6" cy="33.0" r="1.5"/><circle cx="11.7" cy="18.6" r="1.2"/><circle cx="11.5" cy="24.6" r="1.2"/></g></svg></span><h1>PyAuto<b>Cortex</b><span class="kind">Dashboard</span></h1><div class="rule"></div><p class="tag">Question. Run. Rule.</p></header><p class="lede">One ledger per science project: what is on the cluster right now, what the human said they would do next, and the last few things they wrote down. Nothing here is inferred from a result — the board hands you the check-in and the resume prompt; what a run meant is yours to log.</p>
-<ul class="stats"><li><b>8</b><span>Running</span></li><li><b>18</b><span>Open</span></li><li><b>9</b><span>Projects</span></li></ul>
+<ul class="stats"><li><b>7</b><span>Running</span></li><li><b>14</b><span>Open</span></li><li><b>7</b><span>Projects</span></li></ul>
 <div class="fresh"><p class="muted">Last updated 2026-09-25.</p></div>
 <p class="muted mdsrc"><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/dashboard.md">markdown version</a> · <a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/README.md">GitHub Page</a></p>
 <div class="task"><button class="copy" data-cmd="/cortex — on the laptop: `pyauto-brain cortex pull` — pull every active science project through its own sync CLI and show me where each run stands.
-/cortex — anywhere: `pyauto-brain cortex checkin --apply --push` — stamp, re-render and push the board since the last check-in (2026-09-19T10:31Z), then read me the by-project summary. Record nothing about results — I will tell you what to log." aria-label="Copy the Claude command">📋</button><p>check in since last time</p></div>
-<div class="checkin" id="checkin-box"><span class="mark" id="checkin-mark"></span><div><span class="label">Last check-in</span><time id="checkin" datetime="2026-09-19T10:31Z">2026-09-19T10:31Z</time><span class="note" id="checkin-note"></span></div></div>
+/cortex — anywhere: `pyauto-brain cortex checkin --apply --push` — stamp, re-render and push the board since the last check-in (2026-09-25T18:10Z), then read me the by-project summary. Record nothing about results — I will tell you what to log." aria-label="Copy the Claude command">📋</button><p>check in since last time</p></div>
+<div class="checkin" id="checkin-box"><span class="mark" id="checkin-mark"></span><div><span class="label">Last check-in</span><time id="checkin" datetime="2026-09-25T18:10Z">2026-09-25T18:10Z</time><span class="note" id="checkin-note"></span></div></div>
 <a id="summary"></a><h2>Summary</h2>
 <table class="map">
 <tr><th>Project</th><th>Running</th><th>Open</th><th>Last update</th></tr>
 <tr><td><b>subhalo_validation</b></td><td>0</td><td>5</td><td>2026-09-07</td></tr>
-<tr><td><b>euclid_dr1_prelim</b></td><td>1</td><td>3</td><td>2026-09-17</td></tr>
 <tr><td><b>euclid_dr1</b></td><td>1</td><td>2</td><td>2026-09-23</td></tr>
 <tr><td><b>analytic_gaussian</b></td><td>0</td><td>0</td><td>2026-09-10</td></tr>
 <tr><td><b>ep_toy_gaussian</b></td><td>0</td><td>0</td><td>2026-09-24</td></tr>
 <tr><td><b>slope_hierarchy_scale</b></td><td>0</td><td>3</td><td>2026-09-24</td></tr>
 <tr><td><b>ic50_workspace</b></td><td>0</td><td>4</td><td>2026-09-09</td></tr>
 <tr><td><b>autolens_inference</b></td><td>6</td><td>0</td><td>2026-09-24</td></tr>
-<tr><td><b>euclid_sersics</b></td><td>0</td><td>1</td><td>2026-09-14</td></tr>
 </table>
 <a id="projects"></a><h2>Projects</h2>
 <section class="project">
@@ -270,29 +268,6 @@ a.go:hover{opacity:.9;text-decoration:none}
 </ul>
 <p class="muted"><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/subhalo_validation.md">full log</a></p>
 <div class="task"><button class="copy" data-cmd="/cortex — resume subhalo_validation: read PyAutoCortex projects/subhalo_validation.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/subhalo_validation/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say." aria-label="Copy the Claude command">📋</button><p>resume subhalo_validation</p></div>
-</section>
-<section class="project">
-<h3>euclid_dr1_prelim — Refit the ten DR1-prelim tiles and rebuild the catalogue on RAL</h3>
-<p class="muted">active · both · <a href="https://github.com/PyAutoLabs/PyAutoCortex/issues/35">PyAutoCortex#35</a> · <a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid_dr1_prelim.md">projects/euclid_dr1_prelim.md</a> · local <span class="pathchip">/mnt/c/Users/Jammy/Science/euclid_dr1_prelim</span> · RAL <span class="pathchip">/mnt/ral/jnightin/euclid_dr1_prelim</span></p>
-<p><b>Now</b></p>
-<p>342629 reran the ten tiles on refreshed libraries; eight finished and confirmed all four 09-10 defects fixed, tiles 1 and 3 are still in vis_lp. The SED chain ran on GPU for the eight (342648) and the CPU verification on tile 9 (342668_9) passed in 9:24, faster than the GPU — the CPU route is the one the main experiment uses.<br>Next: pull, bundle with output_sed, compare magnitudes (µJy fluxes) against the 20260623 catalogue; then tiles 1/3 SED on the CPU script. The parity clause needs restating: rerun scatter, not ordering, is what fails it.</p>
-<p><b>Runs</b></p>
-<ul>
-<li>342629_[0-9] — running — ral — 2026-09-10 — ordered_rerun_catalogue_parity: two-stage vis_lp(n_live=750)+vis_pix(n_live=300), array 0-9, ten dr1_prelim tiles; libraries refreshed BEFORE submit (PyAutoNer…</li>
-<li>342648_[0,2,4-9] — open — gpu — 2026-09-11 — ordered_rerun_catalogue_parity: SED chain `hpc/batch_gpu/submit_sersic_waveband_8tiles` (a copy of `submit_sersic_waveband` differing only in `--array=0,2,4-9`…</li>
-<li>342668_9 — open — ral — 2026-09-11 — ordered_rerun_catalogue_parity: CPU verification of the SED chain via hpc/batch_cpu/submit_sersic_waveband (pipeline PR #70, sbatch --array=9): tile 102008848,…</li>
-<li>342796_[1,3,8] — open — ral — 2026-09-12 — ordered_rerun_catalogue_parity: CPU SED chain for the three tiles still missing one, via a direct ssh sbatch --array=1,3,8 on hpc/batch_cpu/submit_sersic_waveb…</li>
-</ul>
-<p><b>Last 5</b></p>
-<ul>
-<li>2026-09-17 — <i>result</i> — Witt–Wynne SIEP projection now a catalogue product (pipeline PR #86 merged 2026-09-17, stage 7 of the inspection bundle). Ran catalogue/scripts/witt_wynne.py on the ten pulled dr1_prelim_grade_ab tiles: 10/10 rows, 0 skips, source centre r…</li>
-<li>2026-09-12 — <i>run</i> — 342796_[1,3,8] submitted: ordered_rerun_catalogue_parity: CPU SED chain for the three tiles still missing one, via a direct ssh sbatch --array=1,3,8 on hpc/batch_cpu/submit_sersic_waveband (md5 65db7d8b… on RAL = the clone's commit 88dda9d…</li>
-<li>2026-09-11 — <i>note</i> — **CPU verification PASSED and was faster than the GPU.** `342668_9` (ral, 8 CPU, JAX on the CPU backend) COMPLETED in **9:24** wall, exit 0, all eight `sersic_lens_model/{vis,nir_y,nir_j,nir_h,decam_g,decam_r,decam_i,decam_z}` searches wri…</li>
-<li>2026-09-11 — <i>note</i> — **342629 scored on the eight tiles that finished; all four 09-10 defects confirmed fixed; parity fails on rerun scatter, not ordering.** `sacct`: tasks 0,2,4,5,6,7,8,9 COMPLETED (walls 5:45–9:42, MaxRSS 7.6–10.9 GB); tasks 1 (`Tile10200729…</li>
-<li>2026-09-11 — <i>run</i> — 342668_9 submitted: ordered_rerun_catalogue_parity — CPU verification of the SED chain via hpc/batch_cpu/submit_sersic_waveband (pipeline PR #70, sbatch --array=9): tile 102008848, JAX on the CPU backend, 8 CPU; same seeded vis_lp zip as t…</li>
-</ul>
-<p class="muted"><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid_dr1_prelim.md">full log</a></p>
-<div class="task"><button class="copy" data-cmd="/cortex — resume euclid_dr1_prelim: read PyAutoCortex projects/euclid_dr1_prelim.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/euclid_dr1_prelim/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say." aria-label="Copy the Claude command">📋</button><p>resume euclid_dr1_prelim</p></div>
 </section>
 <section class="project">
 <h3>euclid_dr1 — Does the sep1 DR1 delivery reproduce the ten prelim lenses by eye</h3>
@@ -422,26 +397,6 @@ a.go:hover{opacity:.9;text-decoration:none}
 <div class="task"><button class="copy" data-cmd="/cortex — resume autolens_inference: read PyAutoCortex projects/autolens_inference.md (Now, Runs, Log) and then /home/jammy/Code/PyAutoLabs/lens/autolens_inference/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say." aria-label="Copy the Claude command">📋</button><p>resume autolens_inference</p></div>
 </section>
 <section class="project">
-<h3>euclid_sersics — Why does the lens-light Sersic index pile up at the n=5 prior edge</h3>
-<p class="muted">active · ral · <a href="https://github.com/PyAutoLabs/euclid_strong_lens_modeling_pipeline/issues/74">euclid_strong_lens_modeling_pipeline#74</a> · <a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid_sersics.md">projects/euclid_sersics.md</a> · local <span class="pathchip">/mnt/c/Users/Jammy/Science/euclid_sersics</span> · RAL <span class="pathchip">/mnt/ral/jnightin/euclid_sersics</span></p>
-<p><b>Now</b></p>
-<p>The four Sersic-stage variants are done on the real sample (342808: 99 of 100 lenses with all four tags; task 72 lost its later variants to the walltime) and the simulated sample's vis_lp stage is done too (342911: 100 of 100). 343043 is now running the same four variants on the 100 mocks — the recovery test, where each fit's n can be read against the truth.json it was simulated from (49 of the 100 were simulated at n = 3.0 under the 4.95 prior-edge rule).<br>Next: when 343043 lands, pull it with the 342911 results, scrape all four variant tags on both samples with catalogue/scripts/lens_sersic.py --unique_tag sersic_lens_model_&lt;variant&gt;, and put the recovered n against truth side by side with the real sample's n distributions. The human rules on whether any variant clears the n = 5 pile-up.</p>
-<p><b>Runs</b></p>
-<ul>
-<li>343043_[0-99] — open — ral — 2026-09-14 — euclid_sersics_sim_variants: the same four Sersic-stage variants — baseline, wide_n, central_noise, sersic_point — run sequentially inside each of 100 array ta…</li>
-</ul>
-<p><b>Last 5</b></p>
-<ul>
-<li>2026-09-14 — <i>run</i> — 343043_[0-99] submitted: euclid_sersics_sim_variants: the same four Sersic-stage variants — baseline, wide_n, central_noise, sersic_point — run sequentially inside each of 100 array tasks on the simulated sample dataset/dr1_sep1_sersics_si…</li>
-<li>2026-09-14 — <i>run</i> — 342911_[0-99] finished — wall 1:59: euclid_sersics_sim_vis_lp: the vis_lp stage (initial_lens_model.py --stage=vis_lp, MGE lens + MGE source, 15 free parameters, identical to the real sample's stage 1) on the new simulated sample dataset/d…</li>
-<li>2026-09-14 — <i>run</i> — 342808_[0-99] finished — wall 18:00: euclid_sersics_variants: the Sersic stage rerun in four variants — baseline, wide_n, central_noise, sersic_point — run sequentially inside each of 100 array tasks (one lens per task), array 0-99, 4 cpu…</li>
-<li>2026-09-13 — <i>note</i> — the simulated sample behind 342911: scripts/simulator.py --from-result rebuilds each of the 100 lenses from its own sersic_lens_model_baseline/vis result of run 342808 (Sersic lens light + Sersic source), keeping that tile's real PSF stamp…</li>
-<li>2026-09-13 — <i>run</i> — 342911_[0-99] submitted: euclid_sersics_sim_vis_lp: the vis_lp stage (initial_lens_model.py --stage=vis_lp, MGE lens + MGE source, 15 free parameters, identical to the real sample's stage 1) on the new simulated sample dataset/dr1_sep1_ser…</li>
-</ul>
-<p class="muted"><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid_sersics.md">full log</a></p>
-<div class="task"><button class="copy" data-cmd="/cortex — resume euclid_sersics: read PyAutoCortex projects/euclid_sersics.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/euclid_sersics/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say." aria-label="Copy the Claude command">📋</button><p>resume euclid_sersics</p></div>
-</section>
-<section class="project">
 <h3>euclid — The original Euclid DR1 grade-AB catalogue project, superseded by euclid_dr1_prelim</h3>
 <p class="muted">dormant · both · no issue yet · <a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid.md">projects/euclid.md</a> · local <span class="pathchip">/mnt/c/Users/Jammy/Science/euclid</span> · RAL <span class="pathchip">/mnt/ral/jnightin/euclid_strong_lens_modeling_pipeline</span></p>
 <p><b>Now</b></p>
@@ -456,9 +411,11 @@ a.go:hover{opacity:.9;text-decoration:none}
 </ul>
 <p class="muted"><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid.md">full log</a></p>
 </section>
-<details><summary>2 retired</summary><ul>
+<details><summary>4 retired</summary><ul>
 <li><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/inference_programme.md">inference_programme</a> — The first inference programme, retired and restarted as autolens_inference — retired 2026-09-07: restarting from scratch: the project setup was unsatisfactory and it informed how the Cortex manages projects; RAL outputs stashed at /mnt/ral/jnightin/inference_programme_retired_2026-09-07</li>
+<li><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid_dr1_prelim.md">euclid_dr1_prelim</a> — Refit the ten DR1-prelim tiles and rebuild the catalogue on RAL — retired 2026-09-25: retire euclid_dr1_prelim; I will move it to z_vault manually but I don't want it to eat up download time</li>
 <li><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/slope_hierarchy.md">slope_hierarchy</a> — Hierarchical slope recovery at N=5, wrapped up and succeeded by slope_hierarchy_scale — retired 2026-09-08: wrapped up 2026-07-22 at N=5; succeeded by slope_hierarchy_scale; tree vaulted under z_projects_complete/</li>
+<li><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid_sersics.md">euclid_sersics</a> — Why does the lens-light Sersic index pile up at the n=5 prior edge — retired 2026-09-25: retire euclid_sersics as well</li>
 </ul></details>
 <h4>No ledger</h4>
 <table class="map">
