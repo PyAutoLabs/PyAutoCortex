@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "organ": "cortex",
+  "repo": "PyAutoCortex",
+  "status": "yellow",
+  "headline": "YELLOW \u2014 7 active \u00b7 7 running",
+  "updated": "2026-09-26T12:35:28Z",
+  "pages_url": "https://pyautolabs.github.io/PyAutoCortex/",
+  "items": [
+    {
+      "severity": "yellow",
+      "text": "check-in stale \u2014 last 2026-09-25T18:10Z",
+      "url": null,
+      "prompt": "/cortex \u2014 on the laptop: `pyauto-brain cortex pull` \u2014 pull every active science project through its own sync CLI and show me where each run stands.\n/cortex \u2014 anywhere: `pyauto-brain cortex checkin --apply --push` \u2014 stamp, re-render and push the board since the last check-in (2026-09-25T18:10Z), then read me the by-project summary. Record nothing about results \u2014 I will tell you what to log."
+    },
+    {
+      "severity": "info",
+      "text": "euclid_dr1: 343480 running (ral)",
+      "url": null,
+      "prompt": "/cortex \u2014 resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
+    },
+    {
+      "severity": "info",
+      "text": "autolens_inference: 350674_[0-1] running (gpu)",
+      "url": "https://github.com/PyAutoLabs/autolens_inference/issues/4",
+      "prompt": "/cortex \u2014 resume autolens_inference: read PyAutoCortex projects/autolens_inference.md (Now, Runs, Log) and then /home/jammy/Code/PyAutoLabs/lens/autolens_inference/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
+    },
+    {
+      "severity": "info",
+      "text": "autolens_inference: 350675_[0-1] running (gpu)",
+      "url": "https://github.com/PyAutoLabs/autolens_inference/issues/4",
+      "prompt": "/cortex \u2014 resume autolens_inference: read PyAutoCortex projects/autolens_inference.md (Now, Runs, Log) and then /home/jammy/Code/PyAutoLabs/lens/autolens_inference/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
+    },
+    {
+      "severity": "info",
+      "text": "autolens_inference: 350678_[0-1] running (gpu)",
+      "url": "https://github.com/PyAutoLabs/autolens_inference/issues/4",
+      "prompt": "/cortex \u2014 resume autolens_inference: read PyAutoCortex projects/autolens_inference.md (Now, Runs, Log) and then /home/jammy/Code/PyAutoLabs/lens/autolens_inference/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
+    },
+    {
+      "severity": "info",
+      "text": "autolens_inference: 350679_[0-1] running (gpu)",
+      "url": "https://github.com/PyAutoLabs/autolens_inference/issues/4",
+      "prompt": "/cortex \u2014 resume autolens_inference: read PyAutoCortex projects/autolens_inference.md (Now, Runs, Log) and then /home/jammy/Code/PyAutoLabs/lens/autolens_inference/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
+    },
+    {
+      "severity": "info",
+      "text": "autolens_inference: 350682_[0-1] running (ral)",
+      "url": "https://github.com/PyAutoLabs/autolens_inference/issues/4",
+      "prompt": "/cortex \u2014 resume autolens_inference: read PyAutoCortex projects/autolens_inference.md (Now, Runs, Log) and then /home/jammy/Code/PyAutoLabs/lens/autolens_inference/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
+    },
+    {
+      "severity": "info",
+      "text": "autolens_inference: 350684_[0-1] running (ral)",
+      "url": "https://github.com/PyAutoLabs/autolens_inference/issues/4",
+      "prompt": "/cortex \u2014 resume autolens_inference: read PyAutoCortex projects/autolens_inference.md (Now, Runs, Log) and then /home/jammy/Code/PyAutoLabs/lens/autolens_inference/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
+    }
+  ]
+}
