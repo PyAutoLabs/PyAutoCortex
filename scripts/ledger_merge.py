@@ -76,7 +76,9 @@ LEDGER_DIRS = ("projects/",)
 # push. If they were code, every ordinary ledger branch would stop for a human
 # on two files nobody wrote by hand. `checkin.yaml` is the same kind of thing:
 # one machine-written stamp, pushed by the check-in that earned it.
-LEDGER_FILES = ("checkin.yaml", "dashboard.md", "dashboard.html")
+# `state.json` is the third render of the same census — the organ-cockpit feed
+# (PyAutoBrain board/_state.py v1, PyAutoBrain#418) — so it rides with them.
+LEDGER_FILES = ("checkin.yaml", "dashboard.md", "dashboard.html", "state.json")
 
 # Names that are ledger by location but must not ride along, for two different
 # reasons.

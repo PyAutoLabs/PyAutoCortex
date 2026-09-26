@@ -17,12 +17,16 @@ name: Pages Dashboard
 # Only the uploaded files reach Pages — nothing else in the repo, and in
 # particular not `projects/` or `projects.yaml`, whose absolute laptop
 # paths are not for a public site.
+# The same render writes `state.json`, the organ-cockpit feed (PyAutoBrain
+# board/_state.py v1, PyAutoBrain#418); it is published at /state.json after
+# validating against the Brain's contract.
 
 on:
   push:
     branches: [main]
     paths:
       - "dashboard.html"
+      - "state.json"
   workflow_dispatch:
 
 permissions:
@@ -42,6 +46,12 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      # The cockpit-feed contract lives with the Brain (board/_state.py); the
+      # Cortex only publishes what the Brain's cortex renderer wrote.
+      - uses: actions/checkout@v4
+        with:
+          repository: PyAutoLabs/PyAutoBrain
+          path: PyAutoBrain
       # enablement: true creates the Pages site on first run, so no manual
       # Settings → Pages step is needed.
       - uses: actions/configure-pages@v5
@@ -51,6 +61,17 @@ jobs:
         run: |
           mkdir -p _site
           cp dashboard.html _site/index.html
+          # The organ-cockpit feed, when the renderer has written it.
+          if [ -f state.json ]; then cp state.json _site/state.json; fi
+      # A feed that has drifted from the contract fails the job here, before
+      # Pages publishes something the cockpit would reject.
+      - name: Validate the cockpit feed against the Brain contract
+        run: |
+          if [ -f _site/state.json ]; then
+            python3 PyAutoBrain/board/_state.py _site/state.json
+          else
+            echo "no state.json rendered yet — nothing to validate"
+          fi
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
