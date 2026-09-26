@@ -35,6 +35,7 @@ on:
       - "checkin.yaml"
       - "dashboard.md"
       - "dashboard.html"
+      - "state.json"
   pull_request:
     paths:
       - "projects/**"
@@ -43,6 +44,7 @@ on:
       - "checkin.yaml"
       - "dashboard.md"
       - "dashboard.html"
+      - "state.json"
   workflow_dispatch:
 
 # contents: write is needed by the self-heal push on main; PR runs never push.
@@ -156,6 +158,9 @@ jobs:
               exit 1
             fi
             git add dashboard.md dashboard.html
+            # state.json is the organ-cockpit feed rendered by the same run
+            # (PyAutoBrain#418); guarded because a missing pathspec is fatal.
+            if [ -f state.json ]; then git add state.json; fi
             git commit -m "cortex: self-heal stale dashboard pages"
             if git push origin HEAD:main; then
               echo "healed on attempt ${attempt}"

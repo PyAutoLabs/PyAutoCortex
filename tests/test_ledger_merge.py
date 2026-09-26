@@ -34,6 +34,8 @@ def test_ledger_dir_and_registry_files_are_ledger():
         # generated from the ledger, self-healed on main by dashboard_refresh.yml
         "dashboard.md",
         "dashboard.html",
+        # the organ-cockpit feed, rendered by the same run (PyAutoBrain#418)
+        "state.json",
     ):
         assert ledger_merge.is_ledger_path(path), path
 
@@ -341,4 +343,13 @@ def test_no_scheduled_job_mutates_the_ledger():
         if "schedule:" in text:
             assert p.name == "dashboard_refresh.yml", p.name
             assert "git add dashboard.md dashboard.html" in text
+            assert "then git add state.json; fi" in text
             assert "projects/" not in text.split("git add", 1)[1].split("\n")[0]
+
+
+def test_a_checkin_push_carrying_the_cockpit_feed_needs_no_human():
+    """`cortex checkin --push` stages state.json beside the pages it renders."""
+    ledger, blocked = ledger_merge.classify(
+        ["checkin.yaml", "dashboard.md", "dashboard.html", "state.json"])
+    assert blocked == [] and "state.json" in ledger
+    assert not ledger_merge.is_ledger_path("projects/state.json/../../scripts/x.py")

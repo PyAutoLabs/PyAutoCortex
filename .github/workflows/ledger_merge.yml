@@ -197,14 +197,15 @@ jobs:
               exit 0
             fi
             git checkout -B _ledger_merge origin/main
-            # Built without committing: the two generated pages are the one
+            # Built without committing: the generated renders (the two pages and
+            # the state.json cockpit feed, PyAutoBrain#418) are the one
             # conflict every ledger branch can produce (each re-renders them),
             # and a render is never a reason to strand a ledger — take main's
             # copy, let the merged tree be re-rendered on main by
             # dashboard_refresh.yml. Anything else unmerged is a human's.
             if ! git merge --no-ff --no-commit "$HEAD_SHA" >/dev/null 2>&1; then
               UNMERGED=$(git diff --name-only --diff-filter=U)
-              OTHER=$(echo "$UNMERGED" | grep -vE '^(dashboard\.md|dashboard\.html)$' || true)
+              OTHER=$(echo "$UNMERGED" | grep -vE '^(dashboard\.md|dashboard\.html|state\.json)$' || true)
               if [ -n "$OTHER" ]; then
                 git merge --abort || true
                 echo "'$BRANCH' conflicts with main on: $(echo $OTHER)" > /tmp/ledger_merge_reason
