@@ -10,13 +10,13 @@ Next: pull the ladder and see where EP's cost and hill_coef width go as N grows;
 
 ## Runs
 
-- 342408 — open — ral — 2026-09-09 — ep_scale_up: EP sim, nlive 150, max_steps 12
-- 342409 — open — ral — 2026-09-09 — ep_scale_up: graphical sim joint Dynesty, nlive 150
-- 342411 — open — ral — 2026-09-09 — ep_scale_up: EP scale ladder, sim rungs 5/10/25/50, nlive 150 max_steps 12
-- 342412 — open — ral — 2026-09-09 — ep_scale_up: graphical scale ladder, sim rungs 5/10/25/50, nlive 150
 
 ## Log
 
+- 2026-09-09 — run — 342411 failed — wall 0:38: ep_scale_up: EP scale ladder, sim rungs 5/10/25/50, nlive 150 max_steps 12 — finished 2026-09-09 23:19:29 BST (sacct COMPLETED 00:38:49, the ladder catches rung failures): rungs N=5/10/25 passed the global coef_mean assertions; rung N=50 FAILED — AssertionError: assert np.isfinite(suff_stats).all() in autofit/messages/abstract.py:316 project (via mapper/prior/abstract.py:237), error.342411.err
+- 2026-09-09 — run — 342412 finished — wall 0:07: ep_scale_up: graphical scale ladder, sim rungs 5/10/25/50, nlive 150 — COMPLETED 2026-09-09 22:48:42 BST (sacct 00:07:59): all four rungs N=5/10/25/50 passed the global coef_mean assertions (within 3σ); results/graphical_ladder_n*_summary.json
+- 2026-09-09 — run — 342408 finished — wall 0:01: ep_scale_up: EP sim, nlive 150, max_steps 12 — COMPLETED 2026-09-09 22:17:29 BST (sacct 00:01:03): N=5 EP parity, all global coef_mean assertions passed (within 3σ); results/ep_sim_summary.{txt,json}
+- 2026-09-09 — run — 342409 finished — wall 0:00: ep_scale_up: graphical sim joint Dynesty, nlive 150 — COMPLETED 2026-09-09 22:16:54 BST (sacct 00:00:24): N=5 graphical parity, all global coef_mean assertions passed (within 3σ); results/graphical_sim_summary.{txt,json}
 - 2026-09-09 — run — 342412 submitted: ep_scale_up — graphical scale ladder, sim rungs 5/10/25/50, nlive 150
 - 2026-09-09 — run — 342411 submitted: ep_scale_up — EP scale ladder, sim rungs 5/10/25/50, nlive 150 max_steps 12
 - 2026-09-09 — run — 342409 submitted: ep_scale_up — graphical sim joint Dynesty, nlive 150
