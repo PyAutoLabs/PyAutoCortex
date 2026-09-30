@@ -227,7 +227,7 @@ a.go:hover{opacity:.9;text-decoration:none}
 </head>
 <body>
 <header class="hero"><span class="orb"><svg class="mark" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="24" cy="24" r="20.4"/><path d="M11.8,18.6 C14.4,14.8 17.8,14.4 20.1,17.1 C22.4,19.8 25.8,20.2 28.5,17.9 C31.2,15.6 34.4,16.2 36.1,19.1"/><path d="M11.6,24.6 C14.2,20.8 17.6,20.4 19.9,23.1 C22.2,25.8 25.6,26.2 28.3,23.9 C31.0,21.6 34.2,22.2 35.9,25.1"/><path d="M12.8,30.6 C15.3,27.2 18.4,26.8 20.5,29.4 C22.6,32.0 25.7,32.4 28.2,30.2"/><circle cx="32.6" cy="33.0" r="3.8"/><g fill="currentColor" stroke="none"><circle cx="32.6" cy="33.0" r="1.5"/><circle cx="11.7" cy="18.6" r="1.2"/><circle cx="11.5" cy="24.6" r="1.2"/></g></svg></span><h1>PyAuto<b>Cortex</b><span class="kind">Dashboard</span></h1><div class="rule"></div><p class="tag">Question. Run. Rule.</p></header><p class="lede">One ledger per science project: what is on the cluster right now, what the human said they would do next, and the last few things they wrote down. Nothing here is inferred from a result — the board hands you the check-in and the resume prompt; what a run meant is yours to log.</p>
-<ul class="stats"><li><b>21</b><span>Running</span></li><li><b>25</b><span>Open</span></li><li><b>7</b><span>Projects</span></li></ul>
+<ul class="stats"><li><b>21</b><span>Running</span></li><li><b>29</b><span>Open</span></li><li><b>7</b><span>Projects</span></li></ul>
 <div class="fresh"><p class="muted">Last updated 2026-09-30.</p></div>
 <p class="muted mdsrc"><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/dashboard.md">markdown version</a> · <a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/README.md">GitHub Page</a></p>
 <div class="task"><button class="copy" data-cmd="/cortex — on the laptop: `pyauto-brain cortex pull` — pull every active science project through its own sync CLI and show me where each run stands.
@@ -237,7 +237,7 @@ a.go:hover{opacity:.9;text-decoration:none}
 <table class="map">
 <tr><th>Project</th><th>Running</th><th>Open</th><th>Last update</th></tr>
 <tr><td><b>subhalo_validation</b></td><td>0</td><td>5</td><td>2026-09-07</td></tr>
-<tr><td><b>euclid_dr1</b></td><td>15</td><td>20</td><td>2026-09-30</td></tr>
+<tr><td><b>euclid_dr1</b></td><td>15</td><td>24</td><td>2026-09-30</td></tr>
 <tr><td><b>analytic_gaussian</b></td><td>0</td><td>0</td><td>2026-09-30</td></tr>
 <tr><td><b>ep_toy_gaussian</b></td><td>0</td><td>0</td><td>2026-09-30</td></tr>
 <tr><td><b>slope_hierarchy_scale</b></td><td>0</td><td>0</td><td>2026-09-30</td></tr>
@@ -310,15 +310,19 @@ a.go:hover{opacity:.9;text-decoration:none}
 <li>367141 — running — ral — 2026-09-28 — DR1 dr1_sep1_rest v2-grade vis_lp batch 3/5 (euclid_dr1_vis_lp_v2g_p03): 1000 v2 Grade A, manifest vis_lp_v2grade_20260928_part03.txt, array 0-999%100, 4 CPU/1…</li>
 <li>367243 — running — ral — 2026-09-28 — DR1 dr1_sep1_rest v2-grade vis_lp batch 4/5 (euclid_dr1_vis_lp_v2g_p04): 410 v2 Grade A then 590 top-score Grade B, manifest vis_lp_v2grade_20260928_part04.txt…</li>
 <li>367244 — running — ral — 2026-09-28 — DR1 dr1_sep1_rest v2-grade vis_lp batch 5/5 (euclid_dr1_vis_lp_v2g_p05): 1000 top-score v2 Grade B (score 2.50-2.01), manifest vis_lp_v2grade_20260928_part05.t…</li>
-<li>374152 — open — ral — 2026-09-30 — image catalogue + mass (ral|gpu): incremental build_image_catalogue into inspect/dr1_sep1_rest_images, lens_mass into _images_mass_staging, slim mass.csv (effe…</li>
+<li>374848 — open — ral — 2026-09-30 — DR1 dr1_sep1_rest v2-grade SED chain batch 01/5 (euclid_dr1_sed_v2g), 998 tiles whose vis_lp 366938 completed, manifest hpc/run_manifests/sed_v2grade_20260930_…</li>
+<li>374849 — open — ral — 2026-09-30 — DR1 dr1_sep1_rest v2-grade SED chain batch 02/5 (euclid_dr1_sed_v2g), 998 tiles whose vis_lp 367039 completed, manifest hpc/run_manifests/sed_v2grade_20260930_…</li>
+<li>374850 — open — ral — 2026-09-30 — DR1 dr1_sep1_rest v2-grade SED chain batch 03/5 (euclid_dr1_sed_v2g), 995 tiles whose vis_lp 367141 completed, manifest hpc/run_manifests/sed_v2grade_20260930_…</li>
+<li>374851 — open — ral — 2026-09-30 — DR1 dr1_sep1_rest v2-grade SED chain batch 04/5 (euclid_dr1_sed_v2g), 995 tiles whose vis_lp 367243 completed, manifest hpc/run_manifests/sed_v2grade_20260930_…</li>
+<li>374852 — open — ral — 2026-09-30 — DR1 dr1_sep1_rest v2-grade SED chain batch 05/5 (euclid_dr1_sed_v2g), 996 tiles whose vis_lp 367244 completed, manifest hpc/run_manifests/sed_v2grade_20260930_…</li>
 </ul>
 <p><b>Last 5</b></p>
 <ul>
-<li>2026-09-30 — <i>run</i> — 374152 submitted: image catalogue + mass (ral|gpu): incremental build_image_catalogue into inspect/dr1_sep1_rest_images, lens_mass into _images_mass_staging, slim mass.csv (effective Einstein radius) + lens_mass.csv root/per-lens, tar rewr…</li>
-<li>2026-09-28 — <i>note</i> — Job 359162 (euclid_dr1_vis_pix_n5k_rerun36h) found on RAL, not previously in the ledger: vis_pix next5000 PART=03 rerun of 14 tasks at 16 GB / 36 h; 13 COMPLETED, task 71 running at 2026-09-28 22:05. Laptop-side edits not pushed: config/bu…</li>
-<li>2026-09-28 — <i>run</i> — 367244 submitted: DR1 dr1_sep1_rest v2-grade vis_lp batch 5/5 (euclid_dr1_vis_lp_v2g_p05): 1000 top-score v2 Grade B (score 2.50-2.01), manifest vis_lp_v2grade_20260928_part05.txt, array 0-999%100, 4 CPU/12 GB/18 h</li>
-<li>2026-09-28 — <i>run</i> — 367243 submitted: DR1 dr1_sep1_rest v2-grade vis_lp batch 4/5 (euclid_dr1_vis_lp_v2g_p04): 410 v2 Grade A then 590 top-score Grade B, manifest vis_lp_v2grade_20260928_part04.txt, array 0-999%100, 4 CPU/12 GB/18 h</li>
-<li>2026-09-28 — <i>run</i> — 367141 submitted: DR1 dr1_sep1_rest v2-grade vis_lp batch 3/5 (euclid_dr1_vis_lp_v2g_p03): 1000 v2 Grade A, manifest vis_lp_v2grade_20260928_part03.txt, array 0-999%100, 4 CPU/12 GB/18 h</li>
+<li>2026-09-30 — <i>run</i> — 374152 finished — wall 2:13: image catalogue + mass (ral|gpu): incremental build_image_catalogue into inspect/dr1_sep1_rest_images, lens_mass into _images_mass_staging, slim mass.csv (effective Einstein radius) + lens_mass.csv root/per-len…</li>
+<li>2026-09-30 — <i>run</i> — 374852 submitted: DR1 dr1_sep1_rest v2-grade SED chain batch 05/5 (euclid_dr1_sed_v2g), 996 tiles whose vis_lp 367244 completed, manifest hpc/run_manifests/sed_v2grade_20260930_part05.txt, 8 CPU/16 GB/3 h, %40, partitions ral+gpu; ~18% TIM…</li>
+<li>2026-09-30 — <i>run</i> — 374851 submitted: DR1 dr1_sep1_rest v2-grade SED chain batch 04/5 (euclid_dr1_sed_v2g), 995 tiles whose vis_lp 367243 completed, manifest hpc/run_manifests/sed_v2grade_20260930_part04.txt, 8 CPU/16 GB/3 h, %40, partitions ral+gpu; ~18% TIM…</li>
+<li>2026-09-30 — <i>run</i> — 374850 submitted: DR1 dr1_sep1_rest v2-grade SED chain batch 03/5 (euclid_dr1_sed_v2g), 995 tiles whose vis_lp 367141 completed, manifest hpc/run_manifests/sed_v2grade_20260930_part03.txt, 8 CPU/16 GB/3 h, %40, partitions ral+gpu; ~18% TIM…</li>
+<li>2026-09-30 — <i>run</i> — 374849 submitted: DR1 dr1_sep1_rest v2-grade SED chain batch 02/5 (euclid_dr1_sed_v2g), 998 tiles whose vis_lp 367039 completed, manifest hpc/run_manifests/sed_v2grade_20260930_part02.txt, 8 CPU/16 GB/3 h, %40, partitions ral+gpu; ~18% TIM…</li>
 </ul>
 <p class="muted"><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid_dr1.md">full log</a></p>
 <div class="task"><button class="copy" data-cmd="/cortex — resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say." aria-label="Copy the Claude command">📋</button><p>resume euclid_dr1</p></div>
