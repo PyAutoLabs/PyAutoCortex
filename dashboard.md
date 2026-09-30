@@ -18,12 +18,12 @@ One ledger per science project: what is on the cluster right now, what the human
 
 ```
 /cortex — on the laptop: `pyauto-brain cortex pull` — pull every active science project through its own sync CLI and show me where each run stands.
-/cortex — anywhere: `pyauto-brain cortex checkin --apply --push` — stamp, re-render and push the board since the last check-in (2026-09-25T18:10Z), then read me the by-project summary. Record nothing about results — I will tell you what to log.
+/cortex — anywhere: `pyauto-brain cortex checkin --apply --push` — stamp, re-render and push the board since the last check-in (2026-09-30T09:51Z), then read me the by-project summary. Record nothing about results — I will tell you what to log.
 ```
 
 </details>
 
-### Last check-in: 2026-09-25T18:10Z
+### Last check-in: 2026-09-30T09:51Z
 
 ## Summary
 
