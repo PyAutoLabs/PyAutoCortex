@@ -5,8 +5,7 @@ Issue: PyAutoCortex#34
 
 ## Now
 
-Wave 1 (342413, 200 seeds at N=5) is accepted as the baseline: autofit EP is exact on the Gaussian leg, leg B sigma misses as pre-registered (78/200), collapse rate 0/200. Follow-ups filed through /intake.
-Next: settle whether criterion 2's mu threshold or the minimal-EP control is wrong before any rerun; the N=25 rung is written but not submitted.
+Wave 1 (342413, 200 seeds at N=5) is accepted as the baseline: autofit EP is exact on the Gaussian leg, leg B sigma misses as pre-registered (78/200), collapse rate 0/200. On criterion 2, astra and an independent Opus review both favour an under-calibrated mu threshold (calibrated on five unrepresentative seeds) and found no defect in the minimal-EP control; both flag the per-site sigma>0 clip (analytic_ep_minimal.py:333) as the one audit target, and astra will not clear the control without an independent reconstruction of the EP fixed point. Next: run the planned diagnostic (archive/tasks/analytic_gaussian/minimal_ep_legb_mu_threshold.md) on a passing, an edge and the worst mu seed; the N=25 rung stays written but unsubmitted until it lands.
 
 ## Runs
 

@@ -5,7 +5,7 @@ Issue: ep_toy_gaussian#1
 
 ## Now
 
-Wave 1 (n50_seed42: 342639 + 342640_[0-2]) failed on infrastructure — NUTS OOM at the 8 GB cap, EP x3 EMFILE (fixed upstream by PyAutoFit#1632/#1634, RAL mirror now a73684012). The collapse question at N=50 is unanswered. Only n5_smoke speaks so far: EP RECOVER 3/3 (parent sigma 10.14/9.96/9.83 vs truth 10, no collapse, no BIASED-TIGHT), NUTS 49.89/11.14. Next: wave 2 needs a human go, a NEW sample name (e.g. n50_seed42_w2 — never re-run into an existing sample directory) and the NUTS SBATCH memory raised above 8 GB.
+Wave 1 (n50_seed42: 342639 + 342640_[0-2]) failed on infrastructure — EP x3 on EMFILE (fixed by PyAutoFit#1632/#1634, both in the RAL mirror at 404b3e5f7), NUTS on OOM at the 8 GB cap while XLA compiled the 50-factor window-adaptation scan, which grows with N (≥5.4 GB at N=20 locally). Wave 2 is prepared but not submitted: sample n50_seed42_w2 (free locally and on RAL; still needs its toy.SAMPLES entry), submit_nuts raised to 64 GB, submit_ep unchanged at 8 GB (peak ~590 MB). The collapse question at N=50 is unanswered; only n5_smoke speaks (EP RECOVER 3/3, NUTS 49.89/11.14). Next: human go, add the sample entry, push and submit NUTS then EP with SAMPLE=n50_seed42_w2 exported.
 
 ## Runs
 

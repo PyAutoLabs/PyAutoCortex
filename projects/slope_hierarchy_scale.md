@@ -5,7 +5,7 @@ Issue: slope_hierarchy_scale#2
 
 ## Now
 
-343299 (EP witness rerun, MAX_STEPS=2) completed: dataset factors all SUCCESS and JAX-vectorised with one compile per factor search, but the hierarchical factor never updated (0/50 SUCCESS: 27 BAD_PROJECTION + 23 FAILURE), so the parent came back as the prior. The EP arm cannot estimate the slope scatter with the Laplace projection; the moment-matching cure (draft/feature/autofit/ep_hierarchical_scatter_moment_matching.md) is the gate — human decision. Still open: graphical array 342348_[0-24], joint fit 342350_0, EP arm 342351_0.
+The N=25 graphical baselines are in. The per-lens fits (342348) give a naive parent of 1.999 / 0.089 (deconvolved 0.085), and the joint NUTS fit (342350_0) recovers mean 1.994 [1.976, 2.014] and sigma 0.087 [0.074, 0.104] with 0 divergences, against truth 2.0 / 0.1 (draws 1.992 / 0.086). Its OOM came after sampling, so samples.csv is good on RAL, but the summary JSON still needs pulling and writing. The EP arm is the gap: with the Laplace projection its hierarchical factor never updates (343299: 0/50 SUCCESS), so it returns the prior. The moment-matching cure (draft/feature/autofit/ep_hierarchical_scatter_moment_matching.md) is approved and starting through start_dev; until it lands EP cannot produce the scatter it is meant to be compared on.
 
 ## Runs
 

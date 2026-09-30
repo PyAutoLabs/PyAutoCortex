@@ -5,8 +5,7 @@ Issue: PyAutoCortex#36
 
 ## Now
 
-Parity at N=5 achieved on RAL (33/33 within 3σ for both methods, runs 342408 / 342409); the scale ladder runs 342411 and 342412 are submitted.
-Next: pull the ladder and see where EP's cost and hill_coef width go as N grows; ep_lbfgs_jax is the scale lever.
+The scale ladder is in. EP passes N=5/10/25 with coef_mean within 3σ and cost growing about linearly per sweep (26/50/140 s). It died at N=50 on a projection assert the library should have recovered from (Mind bug prompt draft/bug/autofit/ep_project_nonfinite_suff_stats_ic50_n50.md, approved for start_dev; a local rerun converged, so the trigger is stochastic). Graphical is cheaper but overconfident beyond N=25, and the EP hill_coef widths are not yet comparable because util.py reports factor-message widths. Next: land the projection fix, rerun the EP ladder with output on and a fixed seed, report hill_coef from the mean field, then give ep_lbfgs_jax a witness as the scale lever.
 
 ## Runs
 
