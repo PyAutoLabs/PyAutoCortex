@@ -3,8 +3,8 @@
   "organ": "cortex",
   "repo": "PyAutoCortex",
   "status": "yellow",
-  "headline": "YELLOW \u2014 7 active \u00b7 17 running",
-  "updated": "2026-09-29T10:05:11Z",
+  "headline": "YELLOW \u2014 7 active \u00b7 21 running",
+  "updated": "2026-09-30T08:56:40Z",
   "pages_url": "https://pyautolabs.github.io/PyAutoCortex/",
   "items": [
     {
@@ -75,7 +75,31 @@
     },
     {
       "severity": "info",
-      "text": "euclid_dr1: 366738 running (ral)",
+      "text": "euclid_dr1: 366938 running (ral)",
+      "url": null,
+      "prompt": "/cortex \u2014 resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
+    },
+    {
+      "severity": "info",
+      "text": "euclid_dr1: 367039 running (ral)",
+      "url": null,
+      "prompt": "/cortex \u2014 resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
+    },
+    {
+      "severity": "info",
+      "text": "euclid_dr1: 367141 running (ral)",
+      "url": null,
+      "prompt": "/cortex \u2014 resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
+    },
+    {
+      "severity": "info",
+      "text": "euclid_dr1: 367243 running (ral)",
+      "url": null,
+      "prompt": "/cortex \u2014 resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
+    },
+    {
+      "severity": "info",
+      "text": "euclid_dr1: 367244 running (ral)",
       "url": null,
       "prompt": "/cortex \u2014 resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
     },
@@ -100,18 +124,6 @@
     {
       "severity": "info",
       "text": "autolens_inference: 350679_[0-1] running (gpu)",
-      "url": "https://github.com/PyAutoLabs/autolens_inference/issues/4",
-      "prompt": "/cortex \u2014 resume autolens_inference: read PyAutoCortex projects/autolens_inference.md (Now, Runs, Log) and then /home/jammy/Code/PyAutoLabs/lens/autolens_inference/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
-    },
-    {
-      "severity": "info",
-      "text": "autolens_inference: 350682_[0-1] running (ral)",
-      "url": "https://github.com/PyAutoLabs/autolens_inference/issues/4",
-      "prompt": "/cortex \u2014 resume autolens_inference: read PyAutoCortex projects/autolens_inference.md (Now, Runs, Log) and then /home/jammy/Code/PyAutoLabs/lens/autolens_inference/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
-    },
-    {
-      "severity": "info",
-      "text": "autolens_inference: 350684_[0-1] running (ral)",
       "url": "https://github.com/PyAutoLabs/autolens_inference/issues/4",
       "prompt": "/cortex \u2014 resume autolens_inference: read PyAutoCortex projects/autolens_inference.md (Now, Runs, Log) and then /home/jammy/Code/PyAutoLabs/lens/autolens_inference/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
     }
