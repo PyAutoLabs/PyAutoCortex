@@ -11,7 +11,7 @@ One ledger per science project: what is on the cluster right now, what the human
 | Where | Count |
 |-------|------:|
 | [Running](#projects) | 21 |
-| [Open](#projects) | 32 |
+| [Open](#projects) | 25 |
 | [Projects](#projects) | 7 |
 
 <details><summary>📋 check in since last time</summary>
@@ -33,8 +33,8 @@ One ledger per science project: what is on the cluster right now, what the human
 | euclid_dr1 | 15 | 20 | 2026-09-30 |
 | analytic_gaussian | 0 | 0 | 2026-09-10 |
 | ep_toy_gaussian | 0 | 0 | 2026-09-24 |
-| slope_hierarchy_scale | 0 | 3 | 2026-09-24 |
-| ic50_workspace | 0 | 4 | 2026-09-09 |
+| slope_hierarchy_scale | 0 | 0 | 2026-09-30 |
+| ic50_workspace | 0 | 0 | 2026-09-09 |
 | autolens_inference | 6 | 0 | 2026-09-24 |
 
 ## Projects
@@ -208,17 +208,15 @@ active · both · [slope_hierarchy_scale#2](https://github.com/PyAutoLabs/slope_
 
 **Runs**
 
-- 342348_[0-24] — open — gpu — 2026-09-08 — n25_scale_up: one lens per array task, hpc/batch_gpu/submit_one_by_one, sample_n25_seed42
-- 342350_0 — open — gpu — 2026-09-08 — n25_scale_up: joint hierarchical NUTS fit, hpc/batch_gpu/submit_graphical
-- 342351_0 — open — ral — 2026-09-08 — n25_scale_up: EP arm on the CPU partition, hpc/batch_cpu/submit_ep, max_steps 12; RAL PyAutoFit mirror 68ff9bd57 predates PyAutoFit#1580, so this arm runs with…
+- _nothing on the cluster_
 
 **Last 5**
 
+- 2026-09-30 — *run* — 342351_0 failed — wall 27:41: n25_scale_up: EP arm on the CPU partition, hpc/batch_cpu/submit_ep, max_steps 12; RAL PyAutoFit mirror 68ff9bd57 predates PyAutoFit#1580, so this arm runs without the stale-mask fixed-point fix — CANCELLED 202…
+- 2026-09-30 — *run* — 342350_0 failed — wall 16:29: n25_scale_up: joint hierarchical NUTS fit, hpc/batch_gpu/submit_graphical — OUT_OF_MEMORY 2026-09-09 13:06:31 BST (sacct 0:125, cgroup oom-kill): NUTS warm-up 500 + sampling 1000 steps completed and samples.cs…
+- 2026-09-30 — *run* — 342348_[0-24] finished — wall 3:22: n25_scale_up: one lens per array task, hpc/batch_gpu/submit_one_by_one, sample_n25_seed42 — all 25 tasks COMPLETED 2026-09-08 17:14-20:37 BST (sacct, 6:54-8:50 per task, serial on the GPU): per-lens one_…
 - 2026-09-24 — *note* — 343299 finding: BAD_PROJECTION = Hessian at the mode not finite or not negative-definite (scale parameter driven to a limit); FAILURE = line search failed and the mean field was handed back unchanged. This is the Laplace-on-scatter caveat…
 - 2026-09-24 — *run* — 343299 finished — wall 5:20: n25_scale_up: EP witness rerun on the decoupled --use_cpu script (slope_hierarchy_scale#4), JAX vectorised likelihood on the CPU backend, no pool, MAX_STEPS=2 via sbatch --export; stale 342410 output parked as…
-- 2026-09-15 — *run* — 343299 submitted: n25_scale_up: EP witness rerun on the decoupled --use_cpu script (slope_hierarchy_scale#4), JAX vectorised likelihood on the CPU backend, no pool, MAX_STEPS=2 via sbatch --export; stale 342410 output parked as ep_dead_342…
-- 2026-09-15 — *run* — 342410 failed — wall 11:05: n25_scale_up: EP arm rerun on the JAX-on-CPU path (no multiprocessing pool); replaces 342351_0 — JAX-on-CPU path, no pool: 76 factor searches (~3 EP steps of 25) then LLVM JIT section memory exhausted 64 GB; abo…
-- 2026-09-09 — *run* — 342410 submitted: n25_scale_up — EP arm rerun on the JAX-on-CPU path (no multiprocessing pool); replaces 342351_0
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/slope_hierarchy_scale.md)
 
@@ -241,18 +239,15 @@ Next: pull the ladder and see where EP's cost and hill_coef width go as N grows;
 
 **Runs**
 
-- 342408 — open — ral — 2026-09-09 — ep_scale_up: EP sim, nlive 150, max_steps 12
-- 342409 — open — ral — 2026-09-09 — ep_scale_up: graphical sim joint Dynesty, nlive 150
-- 342411 — open — ral — 2026-09-09 — ep_scale_up: EP scale ladder, sim rungs 5/10/25/50, nlive 150 max_steps 12
-- 342412 — open — ral — 2026-09-09 — ep_scale_up: graphical scale ladder, sim rungs 5/10/25/50, nlive 150
+- _nothing on the cluster_
 
 **Last 5**
 
+- 2026-09-09 — *run* — 342411 failed — wall 0:38: ep_scale_up: EP scale ladder, sim rungs 5/10/25/50, nlive 150 max_steps 12 — finished 2026-09-09 23:19:29 BST (sacct COMPLETED 00:38:49, the ladder catches rung failures): rungs N=5/10/25 passed the global coef_m…
+- 2026-09-09 — *run* — 342412 finished — wall 0:07: ep_scale_up: graphical scale ladder, sim rungs 5/10/25/50, nlive 150 — COMPLETED 2026-09-09 22:48:42 BST (sacct 00:07:59): all four rungs N=5/10/25/50 passed the global coef_mean assertions (within 3σ); results…
+- 2026-09-09 — *run* — 342408 finished — wall 0:01: ep_scale_up: EP sim, nlive 150, max_steps 12 — COMPLETED 2026-09-09 22:17:29 BST (sacct 00:01:03): N=5 EP parity, all global coef_mean assertions passed (within 3σ); results/ep_sim_summary.{txt,json}
+- 2026-09-09 — *run* — 342409 finished — wall 0:00: ep_scale_up: graphical sim joint Dynesty, nlive 150 — COMPLETED 2026-09-09 22:16:54 BST (sacct 00:00:24): N=5 graphical parity, all global coef_mean assertions passed (within 3σ); results/graphical_sim_summary.…
 - 2026-09-09 — *run* — 342412 submitted: ep_scale_up — graphical scale ladder, sim rungs 5/10/25/50, nlive 150
-- 2026-09-09 — *run* — 342411 submitted: ep_scale_up — EP scale ladder, sim rungs 5/10/25/50, nlive 150 max_steps 12
-- 2026-09-09 — *run* — 342409 submitted: ep_scale_up — graphical sim joint Dynesty, nlive 150
-- 2026-09-09 — *run* — 342408 submitted: ep_scale_up — EP sim, nlive 150, max_steps 12
-- 2026-08-19 — *note* — question: Does EP match the graphical joint fit end to end [archive/tasks/ic50_workspace/ep_scale_up.md]
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/ic50_workspace.md)
 

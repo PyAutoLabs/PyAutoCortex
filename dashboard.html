@@ -227,7 +227,7 @@ a.go:hover{opacity:.9;text-decoration:none}
 </head>
 <body>
 <header class="hero"><span class="orb"><svg class="mark" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="24" cy="24" r="20.4"/><path d="M11.8,18.6 C14.4,14.8 17.8,14.4 20.1,17.1 C22.4,19.8 25.8,20.2 28.5,17.9 C31.2,15.6 34.4,16.2 36.1,19.1"/><path d="M11.6,24.6 C14.2,20.8 17.6,20.4 19.9,23.1 C22.2,25.8 25.6,26.2 28.3,23.9 C31.0,21.6 34.2,22.2 35.9,25.1"/><path d="M12.8,30.6 C15.3,27.2 18.4,26.8 20.5,29.4 C22.6,32.0 25.7,32.4 28.2,30.2"/><circle cx="32.6" cy="33.0" r="3.8"/><g fill="currentColor" stroke="none"><circle cx="32.6" cy="33.0" r="1.5"/><circle cx="11.7" cy="18.6" r="1.2"/><circle cx="11.5" cy="24.6" r="1.2"/></g></svg></span><h1>PyAuto<b>Cortex</b><span class="kind">Dashboard</span></h1><div class="rule"></div><p class="tag">Question. Run. Rule.</p></header><p class="lede">One ledger per science project: what is on the cluster right now, what the human said they would do next, and the last few things they wrote down. Nothing here is inferred from a result — the board hands you the check-in and the resume prompt; what a run meant is yours to log.</p>
-<ul class="stats"><li><b>21</b><span>Running</span></li><li><b>32</b><span>Open</span></li><li><b>7</b><span>Projects</span></li></ul>
+<ul class="stats"><li><b>21</b><span>Running</span></li><li><b>25</b><span>Open</span></li><li><b>7</b><span>Projects</span></li></ul>
 <div class="fresh"><p class="muted">Last updated 2026-09-30.</p></div>
 <p class="muted mdsrc"><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/dashboard.md">markdown version</a> · <a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/README.md">GitHub Page</a></p>
 <div class="task"><button class="copy" data-cmd="/cortex — on the laptop: `pyauto-brain cortex pull` — pull every active science project through its own sync CLI and show me where each run stands.
@@ -240,8 +240,8 @@ a.go:hover{opacity:.9;text-decoration:none}
 <tr><td><b>euclid_dr1</b></td><td>15</td><td>20</td><td>2026-09-30</td></tr>
 <tr><td><b>analytic_gaussian</b></td><td>0</td><td>0</td><td>2026-09-10</td></tr>
 <tr><td><b>ep_toy_gaussian</b></td><td>0</td><td>0</td><td>2026-09-24</td></tr>
-<tr><td><b>slope_hierarchy_scale</b></td><td>0</td><td>3</td><td>2026-09-24</td></tr>
-<tr><td><b>ic50_workspace</b></td><td>0</td><td>4</td><td>2026-09-09</td></tr>
+<tr><td><b>slope_hierarchy_scale</b></td><td>0</td><td>0</td><td>2026-09-30</td></tr>
+<tr><td><b>ic50_workspace</b></td><td>0</td><td>0</td><td>2026-09-09</td></tr>
 <tr><td><b>autolens_inference</b></td><td>6</td><td>0</td><td>2026-09-24</td></tr>
 </table>
 <a id="projects"></a><h2>Projects</h2>
@@ -364,18 +364,14 @@ a.go:hover{opacity:.9;text-decoration:none}
 <p><b>Now</b></p>
 <p>343299 (EP witness rerun, MAX_STEPS=2) completed: dataset factors all SUCCESS and JAX-vectorised with one compile per factor search, but the hierarchical factor never updated (0/50 SUCCESS: 27 BAD_PROJECTION + 23 FAILURE), so the parent came back as the prior. The EP arm cannot estimate the slope scatter with the Laplace projection; the moment-matching cure (draft/feature/autofit/ep_hierarchical_scatter_moment_matching.md) is the gate — human decision. Still open: graphical array 342348_[0-24], joint fit 342350_0, EP arm 342351_0.</p>
 <p><b>Runs</b></p>
-<ul>
-<li>342348_[0-24] — open — gpu — 2026-09-08 — n25_scale_up: one lens per array task, hpc/batch_gpu/submit_one_by_one, sample_n25_seed42</li>
-<li>342350_0 — open — gpu — 2026-09-08 — n25_scale_up: joint hierarchical NUTS fit, hpc/batch_gpu/submit_graphical</li>
-<li>342351_0 — open — ral — 2026-09-08 — n25_scale_up: EP arm on the CPU partition, hpc/batch_cpu/submit_ep, max_steps 12; RAL PyAutoFit mirror 68ff9bd57 predates PyAutoFit#1580, so this arm runs with…</li>
-</ul>
+<p class="muted">nothing on the cluster</p>
 <p><b>Last 5</b></p>
 <ul>
+<li>2026-09-30 — <i>run</i> — 342351_0 failed — wall 27:41: n25_scale_up: EP arm on the CPU partition, hpc/batch_cpu/submit_ep, max_steps 12; RAL PyAutoFit mirror 68ff9bd57 predates PyAutoFit#1580, so this arm runs without the stale-mask fixed-point fix — CANCELLED 202…</li>
+<li>2026-09-30 — <i>run</i> — 342350_0 failed — wall 16:29: n25_scale_up: joint hierarchical NUTS fit, hpc/batch_gpu/submit_graphical — OUT_OF_MEMORY 2026-09-09 13:06:31 BST (sacct 0:125, cgroup oom-kill): NUTS warm-up 500 + sampling 1000 steps completed and samples.cs…</li>
+<li>2026-09-30 — <i>run</i> — 342348_[0-24] finished — wall 3:22: n25_scale_up: one lens per array task, hpc/batch_gpu/submit_one_by_one, sample_n25_seed42 — all 25 tasks COMPLETED 2026-09-08 17:14-20:37 BST (sacct, 6:54-8:50 per task, serial on the GPU): per-lens one_…</li>
 <li>2026-09-24 — <i>note</i> — 343299 finding: BAD_PROJECTION = Hessian at the mode not finite or not negative-definite (scale parameter driven to a limit); FAILURE = line search failed and the mean field was handed back unchanged. This is the Laplace-on-scatter caveat…</li>
 <li>2026-09-24 — <i>run</i> — 343299 finished — wall 5:20: n25_scale_up: EP witness rerun on the decoupled --use_cpu script (slope_hierarchy_scale#4), JAX vectorised likelihood on the CPU backend, no pool, MAX_STEPS=2 via sbatch --export; stale 342410 output parked as…</li>
-<li>2026-09-15 — <i>run</i> — 343299 submitted: n25_scale_up: EP witness rerun on the decoupled --use_cpu script (slope_hierarchy_scale#4), JAX vectorised likelihood on the CPU backend, no pool, MAX_STEPS=2 via sbatch --export; stale 342410 output parked as ep_dead_342…</li>
-<li>2026-09-15 — <i>run</i> — 342410 failed — wall 11:05: n25_scale_up: EP arm rerun on the JAX-on-CPU path (no multiprocessing pool); replaces 342351_0 — JAX-on-CPU path, no pool: 76 factor searches (~3 EP steps of 25) then LLVM JIT section memory exhausted 64 GB; abo…</li>
-<li>2026-09-09 — <i>run</i> — 342410 submitted: n25_scale_up — EP arm rerun on the JAX-on-CPU path (no multiprocessing pool); replaces 342351_0</li>
 </ul>
 <p class="muted"><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/slope_hierarchy_scale.md">full log</a></p>
 <div class="task"><button class="copy" data-cmd="/cortex — resume slope_hierarchy_scale: read PyAutoCortex projects/slope_hierarchy_scale.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/slope_hierarchy_scale/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say." aria-label="Copy the Claude command">📋</button><p>resume slope_hierarchy_scale</p></div>
@@ -386,19 +382,14 @@ a.go:hover{opacity:.9;text-decoration:none}
 <p><b>Now</b></p>
 <p>Parity at N=5 achieved on RAL (33/33 within 3σ for both methods, runs 342408 / 342409); the scale ladder runs 342411 and 342412 are submitted.<br>Next: pull the ladder and see where EP's cost and hill_coef width go as N grows; ep_lbfgs_jax is the scale lever.</p>
 <p><b>Runs</b></p>
-<ul>
-<li>342408 — open — ral — 2026-09-09 — ep_scale_up: EP sim, nlive 150, max_steps 12</li>
-<li>342409 — open — ral — 2026-09-09 — ep_scale_up: graphical sim joint Dynesty, nlive 150</li>
-<li>342411 — open — ral — 2026-09-09 — ep_scale_up: EP scale ladder, sim rungs 5/10/25/50, nlive 150 max_steps 12</li>
-<li>342412 — open — ral — 2026-09-09 — ep_scale_up: graphical scale ladder, sim rungs 5/10/25/50, nlive 150</li>
-</ul>
+<p class="muted">nothing on the cluster</p>
 <p><b>Last 5</b></p>
 <ul>
+<li>2026-09-09 — <i>run</i> — 342411 failed — wall 0:38: ep_scale_up: EP scale ladder, sim rungs 5/10/25/50, nlive 150 max_steps 12 — finished 2026-09-09 23:19:29 BST (sacct COMPLETED 00:38:49, the ladder catches rung failures): rungs N=5/10/25 passed the global coef_m…</li>
+<li>2026-09-09 — <i>run</i> — 342412 finished — wall 0:07: ep_scale_up: graphical scale ladder, sim rungs 5/10/25/50, nlive 150 — COMPLETED 2026-09-09 22:48:42 BST (sacct 00:07:59): all four rungs N=5/10/25/50 passed the global coef_mean assertions (within 3σ); results…</li>
+<li>2026-09-09 — <i>run</i> — 342408 finished — wall 0:01: ep_scale_up: EP sim, nlive 150, max_steps 12 — COMPLETED 2026-09-09 22:17:29 BST (sacct 00:01:03): N=5 EP parity, all global coef_mean assertions passed (within 3σ); results/ep_sim_summary.{txt,json}</li>
+<li>2026-09-09 — <i>run</i> — 342409 finished — wall 0:00: ep_scale_up: graphical sim joint Dynesty, nlive 150 — COMPLETED 2026-09-09 22:16:54 BST (sacct 00:00:24): N=5 graphical parity, all global coef_mean assertions passed (within 3σ); results/graphical_sim_summary.…</li>
 <li>2026-09-09 — <i>run</i> — 342412 submitted: ep_scale_up — graphical scale ladder, sim rungs 5/10/25/50, nlive 150</li>
-<li>2026-09-09 — <i>run</i> — 342411 submitted: ep_scale_up — EP scale ladder, sim rungs 5/10/25/50, nlive 150 max_steps 12</li>
-<li>2026-09-09 — <i>run</i> — 342409 submitted: ep_scale_up — graphical sim joint Dynesty, nlive 150</li>
-<li>2026-09-09 — <i>run</i> — 342408 submitted: ep_scale_up — EP sim, nlive 150, max_steps 12</li>
-<li>2026-08-19 — <i>note</i> — question: Does EP match the graphical joint fit end to end [archive/tasks/ic50_workspace/ep_scale_up.md]</li>
 </ul>
 <p class="muted"><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/ic50_workspace.md">full log</a></p>
 <div class="task"><button class="copy" data-cmd="/cortex — resume ic50_workspace: read PyAutoCortex projects/ic50_workspace.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/ic50_workspace/NOTES.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say." aria-label="Copy the Claude command">📋</button><p>resume ic50_workspace</p></div>
