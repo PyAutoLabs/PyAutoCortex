@@ -77,6 +77,7 @@ PROJECT_STATUSES = ("active", "dormant", "planned", "retired")
 # grammars
 # --------------------------------------------------------------------------- #
 PROJECT_KEY_RE = re.compile(r"^[a-z][a-z0-9_]*$")
+PROJECT_KEY_LINE_RE = re.compile(r"^([a-z][a-z0-9_]*):\s*(#.*)?$")
 LEDGER_FILE_RE = re.compile(r"^projects/([a-z][a-z0-9_]*)\.md$")
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 WALL_RE = re.compile(r"^\d+:\d{2}$")
@@ -185,8 +186,22 @@ def _replace_section(text: str, name: str, body: "list[str]") -> str:
 # --------------------------------------------------------------------------- #
 # projects.yaml
 # --------------------------------------------------------------------------- #
+def _duplicate_key_problems(text: str) -> "list[str]":
+    """`yaml.safe_load` silently keeps the last of a repeated mapping key, so a
+    project row pasted twice would vanish from view: scan the raw column-0
+    keys first and name every repeat with its line numbers."""
+    seen: "dict[str, list[int]]" = {}
+    for n, line in enumerate(text.split("\n"), 1):
+        m = PROJECT_KEY_LINE_RE.match(line)
+        if m:
+            seen.setdefault(m.group(1), []).append(n)
+    return [f"projects.yaml: duplicate project key {key!r} "
+            f"(lines {', '.join(map(str, lines))})"
+            for key, lines in seen.items() if len(lines) > 1]
+
+
 def parse_projects(text: str) -> "tuple[dict[str, dict], list[str]]":
-    problems: "list[str]" = []
+    problems: "list[str]" = _duplicate_key_problems(text)
     try:
         doc = yaml.safe_load(text)
     except yaml.YAMLError as e:

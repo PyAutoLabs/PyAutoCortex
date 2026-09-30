@@ -106,7 +106,9 @@ writes nothing.
 
 The science body map. **Code, not ledger** — `sync_cli` and `local_path` are
 paths a conductor executes under. Real YAML read with `yaml.safe_load`; the
-shape is validated by `cortex.py`:
+shape is validated by `cortex.py`. A project key may appear only once — since
+`yaml.safe_load` silently keeps the last of a repeated key, `cortex.py check`
+scans the raw column-0 keys and reports every duplicate with its line numbers:
 
 | Field | Value | Notes |
 |---|---|---|

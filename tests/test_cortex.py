@@ -222,6 +222,24 @@ def test_projects_yaml_is_validated(tmp_path):
     assert any("unknown field `colour` on example" in p for p in _problems(root))
 
 
+def test_projects_yaml_rejects_duplicate_project_keys(tmp_path):
+    # yaml.safe_load keeps the last of a repeated key silently; the raw-line
+    # guard must name the repeat (25e0168 tripled 11 rows this way).
+    root = _copy(tmp_path)
+    path = root / "projects.yaml"
+    text = path.read_text()
+    lines = text.split("\n")
+    first = lines.index("example:") + 1
+    start = text.index("example:\n")
+    row = text[start:text.index("\n\n", start) + 1]
+    path.write_text(text.rstrip("\n") + "\n\n" + row)
+    second = len(text.rstrip("\n").split("\n")) + 2
+    problems = _problems(root)
+    assert f"projects.yaml: duplicate project key 'example' (lines {first}, {second})" in problems
+    assert not any("duplicate project key 'single'" in p for p in problems)
+    assert _problems(SKELETON) == []
+
+
 # --------------------------------------------------------------------------- #
 # the writing verbs
 # --------------------------------------------------------------------------- #
