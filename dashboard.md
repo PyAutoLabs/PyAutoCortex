@@ -144,8 +144,7 @@ active · ral · [PyAutoCortex#34](https://github.com/PyAutoLabs/PyAutoCortex/is
 
 **Now**
 
-Wave 1 (342413, 200 seeds at N=5) is accepted as the baseline: autofit EP is exact on the Gaussian leg, leg B sigma misses as pre-registered (78/200), collapse rate 0/200. Follow-ups filed through /intake.
-Next: settle whether criterion 2's mu threshold or the minimal-EP control is wrong before any rerun; the N=25 rung is written but not submitted.
+Wave 1 (342413, 200 seeds at N=5) is accepted as the baseline: autofit EP is exact on the Gaussian leg, leg B sigma misses as pre-registered (78/200), collapse rate 0/200. On criterion 2, astra and an independent Opus review both favour an under-calibrated mu threshold (calibrated on five unrepresentative seeds) and found no defect in the minimal-EP control; both flag the per-site sigma>0 clip (analytic_ep_minimal.py:333) as the one audit target, and astra will not clear the control without an independent reconstruction of the EP fixed point. Next: run the planned diagnostic (archive/tasks/analytic_gaussian/minimal_ep_legb_mu_threshold.md) on a passing, an edge and the worst mu seed; the N=25 rung stays written but unsubmitted until it lands.
 
 **Runs**
 
@@ -175,7 +174,7 @@ active · ral · [ep_toy_gaussian#1](https://github.com/PyAutoLabs/ep_toy_gaussi
 
 **Now**
 
-Wave 1 (n50_seed42: 342639 + 342640_[0-2]) failed on infrastructure — NUTS OOM at the 8 GB cap, EP x3 EMFILE (fixed upstream by PyAutoFit#1632/#1634, RAL mirror now a73684012). The collapse question at N=50 is unanswered. Only n5_smoke speaks so far: EP RECOVER 3/3 (parent sigma 10.14/9.96/9.83 vs truth 10, no collapse, no BIASED-TIGHT), NUTS 49.89/11.14. Next: wave 2 needs a human go, a NEW sample name (e.g. n50_seed42_w2 — never re-run into an existing sample directory) and the NUTS SBATCH memory raised above 8 GB.
+Wave 1 (n50_seed42: 342639 + 342640_[0-2]) failed on infrastructure — EP x3 on EMFILE (fixed by PyAutoFit#1632/#1634, both in the RAL mirror at 404b3e5f7), NUTS on OOM at the 8 GB cap while XLA compiled the 50-factor window-adaptation scan, which grows with N (≥5.4 GB at N=20 locally). Wave 2 is prepared but not submitted: sample n50_seed42_w2 (free locally and on RAL; still needs its toy.SAMPLES entry), submit_nuts raised to 64 GB, submit_ep unchanged at 8 GB (peak ~590 MB). The collapse question at N=50 is unanswered; only n5_smoke speaks (EP RECOVER 3/3, NUTS 49.89/11.14). Next: human go, add the sample entry, push and submit NUTS then EP with SAMPLE=n50_seed42_w2 exported.
 
 **Runs**
 
@@ -205,7 +204,7 @@ active · both · [slope_hierarchy_scale#2](https://github.com/PyAutoLabs/slope_
 
 **Now**
 
-343299 (EP witness rerun, MAX_STEPS=2) completed: dataset factors all SUCCESS and JAX-vectorised with one compile per factor search, but the hierarchical factor never updated (0/50 SUCCESS: 27 BAD_PROJECTION + 23 FAILURE), so the parent came back as the prior. The EP arm cannot estimate the slope scatter with the Laplace projection; the moment-matching cure (draft/feature/autofit/ep_hierarchical_scatter_moment_matching.md) is the gate — human decision. Still open: graphical array 342348_[0-24], joint fit 342350_0, EP arm 342351_0.
+The N=25 graphical baselines are in. The per-lens fits (342348) give a naive parent of 1.999 / 0.089 (deconvolved 0.085), and the joint NUTS fit (342350_0) recovers mean 1.994 [1.976, 2.014] and sigma 0.087 [0.074, 0.104] with 0 divergences, against truth 2.0 / 0.1 (draws 1.992 / 0.086). Its OOM came after sampling, so samples.csv is good on RAL, but the summary JSON still needs pulling and writing. The EP arm is the gap: with the Laplace projection its hierarchical factor never updates (343299: 0/50 SUCCESS), so it returns the prior. The moment-matching cure (draft/feature/autofit/ep_hierarchical_scatter_moment_matching.md) is approved and starting through start_dev; until it lands EP cannot produce the scatter it is meant to be compared on.
 
 **Runs**
 
@@ -235,8 +234,7 @@ active · ral · [PyAutoCortex#36](https://github.com/PyAutoLabs/PyAutoCortex/is
 
 **Now**
 
-Parity at N=5 achieved on RAL (33/33 within 3σ for both methods, runs 342408 / 342409); the scale ladder runs 342411 and 342412 are submitted.
-Next: pull the ladder and see where EP's cost and hill_coef width go as N grows; ep_lbfgs_jax is the scale lever.
+The scale ladder is in. EP passes N=5/10/25 with coef_mean within 3σ and cost growing about linearly per sweep (26/50/140 s). It died at N=50 on a projection assert the library should have recovered from (Mind bug prompt draft/bug/autofit/ep_project_nonfinite_suff_stats_ic50_n50.md, approved for start_dev; a local rerun converged, so the trigger is stochastic). Graphical is cheaper but overconfident beyond N=25, and the EP hill_coef widths are not yet comparable because util.py reports factor-message widths. Next: land the projection fix, rerun the EP ladder with output on and a fixed seed, report hill_coef from the mean field, then give ep_lbfgs_jax a witness as the scale lever.
 
 **Runs**
 
