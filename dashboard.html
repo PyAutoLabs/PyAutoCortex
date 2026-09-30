@@ -227,7 +227,7 @@ a.go:hover{opacity:.9;text-decoration:none}
 </head>
 <body>
 <header class="hero"><span class="orb"><svg class="mark" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="24" cy="24" r="20.4"/><path d="M11.8,18.6 C14.4,14.8 17.8,14.4 20.1,17.1 C22.4,19.8 25.8,20.2 28.5,17.9 C31.2,15.6 34.4,16.2 36.1,19.1"/><path d="M11.6,24.6 C14.2,20.8 17.6,20.4 19.9,23.1 C22.2,25.8 25.6,26.2 28.3,23.9 C31.0,21.6 34.2,22.2 35.9,25.1"/><path d="M12.8,30.6 C15.3,27.2 18.4,26.8 20.5,29.4 C22.6,32.0 25.7,32.4 28.2,30.2"/><circle cx="32.6" cy="33.0" r="3.8"/><g fill="currentColor" stroke="none"><circle cx="32.6" cy="33.0" r="1.5"/><circle cx="11.7" cy="18.6" r="1.2"/><circle cx="11.5" cy="24.6" r="1.2"/></g></svg></span><h1>PyAuto<b>Cortex</b><span class="kind">Dashboard</span></h1><div class="rule"></div><p class="tag">Question. Run. Rule.</p></header><p class="lede">One ledger per science project: what is on the cluster right now, what the human said they would do next, and the last few things they wrote down. Nothing here is inferred from a result — the board hands you the check-in and the resume prompt; what a run meant is yours to log.</p>
-<ul class="stats"><li><b>21</b><span>Running</span></li><li><b>33</b><span>Open</span></li><li><b>7</b><span>Projects</span></li></ul>
+<ul class="stats"><li><b>21</b><span>Running</span></li><li><b>38</b><span>Open</span></li><li><b>7</b><span>Projects</span></li></ul>
 <div class="fresh"><p class="muted">Last updated 2026-09-30.</p></div>
 <p class="muted mdsrc"><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/dashboard.md">markdown version</a> · <a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/README.md">GitHub Page</a></p>
 <div class="task"><button class="copy" data-cmd="/cortex — on the laptop: `pyauto-brain cortex pull` — pull every active science project through its own sync CLI and show me where each run stands.
@@ -237,7 +237,7 @@ a.go:hover{opacity:.9;text-decoration:none}
 <table class="map">
 <tr><th>Project</th><th>Running</th><th>Open</th><th>Last update</th></tr>
 <tr><td><b>subhalo_validation</b></td><td>0</td><td>5</td><td>2026-09-07</td></tr>
-<tr><td><b>euclid_dr1</b></td><td>15</td><td>28</td><td>2026-09-30</td></tr>
+<tr><td><b>euclid_dr1</b></td><td>15</td><td>33</td><td>2026-09-30</td></tr>
 <tr><td><b>analytic_gaussian</b></td><td>0</td><td>0</td><td>2026-09-30</td></tr>
 <tr><td><b>ep_toy_gaussian</b></td><td>0</td><td>0</td><td>2026-09-30</td></tr>
 <tr><td><b>slope_hierarchy_scale</b></td><td>0</td><td>0</td><td>2026-09-30</td></tr>
@@ -319,14 +319,19 @@ a.go:hover{opacity:.9;text-decoration:none}
 <li>375701 — open — ral — 2026-09-30 — DR1 dr1_sep1_rest remaining-lens vis_lp batch 02/4 (euclid_dr1_vis_lp_rest_p02), 945 tiles, v2 B, v2_score 1.983-&gt;1.899, manifest hpc/run_manifests/vis_lp_rest…</li>
 <li>375702 — open — ral — 2026-09-30 — DR1 dr1_sep1_rest remaining-lens vis_lp batch 03/4 (euclid_dr1_vis_lp_rest_p03), 945 tiles, v2 B, v2_score 1.898-&gt;1.649, manifest hpc/run_manifests/vis_lp_rest…</li>
 <li>375703 — open — ral — 2026-09-30 — DR1 dr1_sep1_rest remaining-lens vis_lp batch 04/4 (euclid_dr1_vis_lp_rest_p04), 944 tiles, v2 B 366 / C 577 / X 1, v2_score 1.648-&gt;0.247, manifest hpc/run_man…</li>
+<li>376091 — open — ral — 2026-09-30 — DR1 dr1_sep1_rest rest-batch vis_pix immediate array part 01/4 (euclid_dr1_vis_pix_rest_p01): tasks 0-1%60, the 2 indices whose vis_lp 375700 had COMPLETED at…</li>
+<li>376092 — open — ral — 2026-09-30 — DR1 rest-batch vis_pix part 01/4 dependent singles (euclid_dr1_vis_pix_rest_p01): 943 single-task jobs ids 376092-377037, each --array=N --dependency=afterok:3…</li>
+<li>377038 — open — ral — 2026-09-30 — DR1 rest-batch vis_pix part 02/4 dependent singles (euclid_dr1_vis_pix_rest_p02): 945 single-task jobs ids 377038-377987, afterok:375701_N each (indices 0-944)…</li>
+<li>377988 — open — ral — 2026-09-30 — DR1 rest-batch vis_pix part 03/4 dependent singles (euclid_dr1_vis_pix_rest_p03): 945 single-task jobs ids 377988-378936, afterok:375702_N each (indices 0-944)…</li>
+<li>378940 — open — ral — 2026-09-30 — DR1 rest-batch vis_pix part 04/4 dependent singles (euclid_dr1_vis_pix_rest_p04): 944 single-task jobs ids 378940-379889, afterok:375703_N each (indices 0-943)…</li>
 </ul>
 <p><b>Last 5</b></p>
 <ul>
-<li>2026-09-30 — <i>run</i> — 375703 submitted: DR1 dr1_sep1_rest remaining-lens vis_lp batch 04/4 (euclid_dr1_vis_lp_rest_p04), 944 tiles, v2 B 366 / C 577 / X 1, v2_score 1.648-&gt;0.247, manifest hpc/run_manifests/vis_lp_rest_20260930_part04.txt, 4 CPU/12 GB/18 h, find…</li>
-<li>2026-09-30 — <i>run</i> — 375702 submitted: DR1 dr1_sep1_rest remaining-lens vis_lp batch 03/4 (euclid_dr1_vis_lp_rest_p03), 945 tiles, v2 B, v2_score 1.898-&gt;1.649, manifest hpc/run_manifests/vis_lp_rest_20260930_part03.txt, 4 CPU/12 GB/18 h, finder-2.1 positions,…</li>
-<li>2026-09-30 — <i>run</i> — 375701 submitted: DR1 dr1_sep1_rest remaining-lens vis_lp batch 02/4 (euclid_dr1_vis_lp_rest_p02), 945 tiles, v2 B, v2_score 1.983-&gt;1.899, manifest hpc/run_manifests/vis_lp_rest_20260930_part02.txt, 4 CPU/12 GB/18 h, finder-2.1 positions,…</li>
-<li>2026-09-30 — <i>run</i> — 375700 submitted: DR1 dr1_sep1_rest remaining-lens vis_lp batch 01/4 (euclid_dr1_vis_lp_rest_p01), 945 tiles, v2 B, v2_score 2.040-&gt;1.983, manifest hpc/run_manifests/vis_lp_rest_20260930_part01.txt, 4 CPU/12 GB/18 h, finder-2.1 positions,…</li>
-<li>2026-09-30 — <i>run</i> — 374152 finished — wall 2:13: image catalogue + mass (ral|gpu): incremental build_image_catalogue into inspect/dr1_sep1_rest_images, lens_mass into _images_mass_staging, slim mass.csv (effective Einstein radius) + lens_mass.csv root/per-len…</li>
+<li>2026-09-30 — <i>run</i> — 378940 submitted: DR1 rest-batch vis_pix part 04/4 dependent singles (euclid_dr1_vis_pix_rest_p04): 944 single-task jobs ids 378940-379889, afterok:375703_N each (indices 0-943); 8 CPU/16 GB/24 h, partitions ral+gpu; driver submit_vis_pix_…</li>
+<li>2026-09-30 — <i>run</i> — 377988 submitted: DR1 rest-batch vis_pix part 03/4 dependent singles (euclid_dr1_vis_pix_rest_p03): 945 single-task jobs ids 377988-378936, afterok:375702_N each (indices 0-944); 8 CPU/16 GB/24 h, partitions ral+gpu; driver submit_vis_pix_…</li>
+<li>2026-09-30 — <i>run</i> — 377038 submitted: DR1 rest-batch vis_pix part 02/4 dependent singles (euclid_dr1_vis_pix_rest_p02): 945 single-task jobs ids 377038-377987, afterok:375701_N each (indices 0-944); 8 CPU/16 GB/24 h, partitions ral+gpu; driver submit_vis_pix_…</li>
+<li>2026-09-30 — <i>run</i> — 376092 submitted: DR1 rest-batch vis_pix part 01/4 dependent singles (euclid_dr1_vis_pix_rest_p01): 943 single-task jobs ids 376092-377037, each --array=N --dependency=afterok:375700_N --kill-on-invalid-dep=yes (indices 2-944); 8 CPU/16 GB…</li>
+<li>2026-09-30 — <i>run</i> — 376091 submitted: DR1 dr1_sep1_rest rest-batch vis_pix immediate array part 01/4 (euclid_dr1_vis_pix_rest_p01): tasks 0-1%60, the 2 indices whose vis_lp 375700 had COMPLETED at submit; Numba sparse CPU, 8 CPU/16 GB/24 h, partitions ral+gpu…</li>
 </ul>
 <p class="muted"><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid_dr1.md">full log</a></p>
 <div class="task"><button class="copy" data-cmd="/cortex — resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say." aria-label="Copy the Claude command">📋</button><p>resume euclid_dr1</p></div>
