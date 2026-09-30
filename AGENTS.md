@@ -89,6 +89,11 @@ not re-derive them.
     for a row of `projects.yaml`.
   - `run <project> <jobid> "<what>" [--partition P]` — records a submission:
     the run goes under `## Runs` as `open` and the log gets a `run` entry.
+    The partition is recorded, not chosen here — but CPU-only arrays go on
+    `ral` only, never `gpu`/`ral,gpu`/`gpu,ral` (human rule, 2026-09-30: they
+    filled both A100 nodes' CPUs and idled all 8 GPUs); a partition name is not
+    a device, so check `gres/gpu` in `scontrol show job` before calling a run
+    GPU. Rule and narrow timing-leg exemption: `REFERENCE.md` → `partition`.
   - `running <project> <jobid>` / `done <project> <jobid> [--failed] [--wall
     H:MM] [--note …]` — what the cluster said; `done` moves the run into the
     log.

@@ -125,6 +125,16 @@ scans the raw column-0 keys and reports every duplicate with its line numbers:
 | `status` | `active` \| `dormant` \| `planned` \| `retired` | `retire` writes the last |
 | `note` | free text, **optional** | the only optional field; an empty `note:` is drift |
 
+**Partition rule (human, 2026-09-30).** `both` means a project has GPU jobs *and*
+CPU jobs, each on its own partition — never a CPU-only array submitted as
+`ral,gpu`/`gpu,ral` or to `gpu`, even when `ral` is drained or busy (the jobs
+wait for `ral`). On 2026-09-30 euclid_dr1 CPU arrays on `ral,gpu` took all 124
+CPUs on euclid-ral-gpu-1/-2 and left all 8 A100s idle but unschedulable for
+hours. Only exemption: small CPU timing legs on `gpu` without `--gres` with ≤8
+CPUs/task, throttle ≤`%2` and no pending gres/gpu jobs (`squeue -p gpu -t PD`).
+Record a run as GPU only after `scontrol show job` shows `gres/gpu` in its TRES.
+Never reorder, hold or cancel another campaign's jobs without the human's OK.
+
 ## Repository layout
 
 ```
