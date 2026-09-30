@@ -31,10 +31,10 @@ One ledger per science project: what is on the cluster right now, what the human
 |---|---:|---:|---|
 | subhalo_validation | 0 | 5 | 2026-09-07 |
 | euclid_dr1 | 15 | 20 | 2026-09-30 |
-| analytic_gaussian | 0 | 0 | 2026-09-10 |
-| ep_toy_gaussian | 0 | 0 | 2026-09-24 |
+| analytic_gaussian | 0 | 0 | 2026-09-30 |
+| ep_toy_gaussian | 0 | 0 | 2026-09-30 |
 | slope_hierarchy_scale | 0 | 0 | 2026-09-30 |
-| ic50_workspace | 0 | 0 | 2026-09-09 |
+| ic50_workspace | 0 | 0 | 2026-09-30 |
 | autolens_inference | 6 | 0 | 2026-09-24 |
 
 ## Projects
@@ -153,6 +153,7 @@ Next: settle whether criterion 2's mu threshold or the minimal-EP control is wro
 
 **Last 5**
 
+- 2026-09-30 — *note* — astra (Codex gpt-6-astra) on criterion 2, verbatim: 'Neither is established as "wrong" by this result alone. I favour inadequate calibration of the threshold, with moderate confidence, but would not yet certify the control.' Decisive diagn…
 - 2026-09-10 — *result* — accepted ensemble_parity (R-20260910-04): ok accept and intake the things to address. we can do another run down the line so also achieve the results in the analytic_gaussian project for future comparison
 - 2026-09-10 — *note* — question: Is criterion 2's mu threshold or the minimal-EP control wrong — planned, never run [archive/tasks/analytic_gaussian/minimal_ep_legb_mu_threshold.md]
 - 2026-09-09 — *run* — 342413_[0-199] submitted (done, wall 0:05): ensemble_parity — the N=5 seed ensemble, 200 seeds, 50 concurrent, `hpc/batch_cpu/submit_ensemble_n5`, sample `ens_n5`. RAL PyAuto mirror verified at PyAutoFit `66f9f8d5d` before submission, whic…
@@ -182,11 +183,11 @@ Wave 1 (n50_seed42: 342639 + 342640_[0-2]) failed on infrastructure — NUTS OOM
 
 **Last 5**
 
+- 2026-09-30 — *note* — RAL mirror PyAutoFit now 404b3e5f7 (2026-09-27), contains #1632 (b82fb3f69) and #1634 (fa2d540ac); 5 commits behind origin/main, none in blackjax/graphical/dynesty; deps at floor except anesthetic 2.8.14 < 2.9.0 (plots only). Sample n50_se…
+- 2026-09-30 — *note* — wave-2 prep: 342639 NUTS OOM was XLA compilation of the vmapped window-adaptation scan, not sampling (sacct MaxRSS 8,180,536K at ReqMem 8G; py-spy on a local N=50 run sits in backend_compile_and_load; local probes N=10 3.2 GB peak / 132 s…
 - 2026-09-24 — *note* — per-search overhead profile on this toy (2026-09-24, laptop, N=5, max_steps=3): 2.45 s per Dynesty factor search, ~1.47 s dynesty run_nested + ~0.98 s autofit wrapper (plots, a redundant second run_nested pass, samples writes); inside run_…
 - 2026-09-24 — *run* — 342640 failed — wall 0:14: nuts_vs_ep_x3_n50: EP x3 on identical data, array 0-2 — all three array tasks [0-2] CRASH OSError [Errno 24] Too many open files after ~126 Dynesty factor fits each (wall ~860-880 s), no ep_history.csv; results/n…
 - 2026-09-24 — *run* — 342639 failed: nuts_vs_ep_x3_n50: one_by_one + BlackJAX NUTS, partition ral — one_by_one completed 50/50 in 319 s (naive parent 52.470 ± 1.260, deconvolved scatter 3.142); NUTS leg OUT_OF_MEMORY at the 8 GB SBATCH cap during window adaptat…
-- 2026-09-10 — *run* — 342640 submitted: nuts_vs_ep_x3_n50 — EP x3 on identical data, array 0-2
-- 2026-09-10 — *run* — 342639 submitted: nuts_vs_ep_x3_n50 — one_by_one + BlackJAX NUTS, partition ral
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/ep_toy_gaussian.md)
 
@@ -212,11 +213,11 @@ active · both · [slope_hierarchy_scale#2](https://github.com/PyAutoLabs/slope_
 
 **Last 5**
 
+- 2026-09-30 — *note* — graphical baselines recorded late at the 2026-09-30 check-in. 342348_[0-24] per-lens (one_by_one Nautilus, A100, 25/25, 6.9-8.8 min/task, 0 float32 truncations): naive parent mean 1.9992 +/- 0.0178 (SEM), std of medians 0.0889, deconvolved…
 - 2026-09-30 — *run* — 342351_0 failed — wall 27:41: n25_scale_up: EP arm on the CPU partition, hpc/batch_cpu/submit_ep, max_steps 12; RAL PyAutoFit mirror 68ff9bd57 predates PyAutoFit#1580, so this arm runs without the stale-mask fixed-point fix — CANCELLED 202…
 - 2026-09-30 — *run* — 342350_0 failed — wall 16:29: n25_scale_up: joint hierarchical NUTS fit, hpc/batch_gpu/submit_graphical — OUT_OF_MEMORY 2026-09-09 13:06:31 BST (sacct 0:125, cgroup oom-kill): NUTS warm-up 500 + sampling 1000 steps completed and samples.cs…
 - 2026-09-30 — *run* — 342348_[0-24] finished — wall 3:22: n25_scale_up: one lens per array task, hpc/batch_gpu/submit_one_by_one, sample_n25_seed42 — all 25 tasks COMPLETED 2026-09-08 17:14-20:37 BST (sacct, 6:54-8:50 per task, serial on the GPU): per-lens one_…
 - 2026-09-24 — *note* — 343299 finding: BAD_PROJECTION = Hessian at the mode not finite or not negative-definite (scale parameter driven to a limit); FAILURE = line search failed and the mean field was handed back unchanged. This is the Laplace-on-scatter caveat…
-- 2026-09-24 — *run* — 343299 finished — wall 5:20: n25_scale_up: EP witness rerun on the decoupled --use_cpu script (slope_hierarchy_scale#4), JAX vectorised likelihood on the CPU backend, no pool, MAX_STEPS=2 via sbatch --export; stale 342410 output parked as…
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/slope_hierarchy_scale.md)
 
@@ -243,11 +244,11 @@ Next: pull the ladder and see where EP's cost and hill_coef width go as N grows;
 
 **Last 5**
 
+- 2026-09-30 — *note* — Ladder read: EP s/sweep 26/50/140/~300 s at N=5/10/25/50 vs graphical wall 21/42/119/281 s. EP hill_coef widths flat at ~0.8 because util.py reports factor-message (likelihood) widths and the global factor freezes hill_coef; graphical widt…
+- 2026-09-30 — *note* — 342411 N=50 failure diagnosed: AssertionError at autofit/messages/abstract.py:316 while projecting the global factor after EP sweep 4 (mirror 66f9f8d5d); the 4th global search had max logL -337 (vs -69 at sweep 3) and logz +/- nan. Library…
 - 2026-09-09 — *run* — 342411 failed — wall 0:38: ep_scale_up: EP scale ladder, sim rungs 5/10/25/50, nlive 150 max_steps 12 — finished 2026-09-09 23:19:29 BST (sacct COMPLETED 00:38:49, the ladder catches rung failures): rungs N=5/10/25 passed the global coef_m…
 - 2026-09-09 — *run* — 342412 finished — wall 0:07: ep_scale_up: graphical scale ladder, sim rungs 5/10/25/50, nlive 150 — COMPLETED 2026-09-09 22:48:42 BST (sacct 00:07:59): all four rungs N=5/10/25/50 passed the global coef_mean assertions (within 3σ); results…
 - 2026-09-09 — *run* — 342408 finished — wall 0:01: ep_scale_up: EP sim, nlive 150, max_steps 12 — COMPLETED 2026-09-09 22:17:29 BST (sacct 00:01:03): N=5 EP parity, all global coef_mean assertions passed (within 3σ); results/ep_sim_summary.{txt,json}
-- 2026-09-09 — *run* — 342409 finished — wall 0:00: ep_scale_up: graphical sim joint Dynesty, nlive 150 — COMPLETED 2026-09-09 22:16:54 BST (sacct 00:00:24): N=5 graphical parity, all global coef_mean assertions passed (within 3σ); results/graphical_sim_summary.…
-- 2026-09-09 — *run* — 342412 submitted: ep_scale_up — graphical scale ladder, sim rungs 5/10/25/50, nlive 150
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/ic50_workspace.md)
 
