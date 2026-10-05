@@ -134,6 +134,31 @@ button.copy{flex:0 0 auto;width:2.6rem;height:2.6rem;font-size:1.1rem;
 button.copy:hover{border-color:var(--accent);color:var(--accent)}
 button.copy.ok{color:var(--ok);border-color:var(--ok);background:transparent}
 button.copy.term{font-size:.95rem}
+/* The owner supplies meaning and destinations; the family owns the controls. */
+.orchestration-panel{border:1px solid var(--line);border-radius:16px;padding:1.5rem;
+ margin:1.5rem 0;background:linear-gradient(120deg,var(--tint),var(--bg));min-width:0}
+.orchestration-head{display:flex;gap:1.25rem;justify-content:space-between;align-items:start}
+.orchestration-panel h2{margin:0;border:0;padding:0;font-size:1.45rem}
+.orchestration-panel h2:after{display:none}
+.orchestration-head p{margin:.5rem 0 1rem}
+.orchestration-links{display:flex;flex-wrap:wrap;gap:.5rem;max-width:100%}
+.orchestration-links a{display:inline-block;padding:.5rem .75rem;border:1px solid var(--line);
+ border-radius:8px;background:var(--bg);font-weight:600}
+.orchestration-controls{display:flex;gap:1rem;align-items:end;flex-wrap:wrap;margin:.75rem 0}
+.orchestration-direction{flex:1;min-width:min(100%,15rem)}
+.orchestration-panel label{display:block;font-weight:600;margin-bottom:.35rem}
+.orchestration-panel textarea{display:block;width:100%;max-width:100%;resize:vertical;
+ box-sizing:border-box;font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--line);
+ border-radius:8px;padding:.75rem;white-space:pre-wrap}
+.orchestration-panel [data-orchestration-prompt]{margin-top:.75rem;font-size:.9rem}
+.orchestration-copy{font:inherit;font-weight:650;background:var(--accent);color:var(--bg);
+ border:0;border-radius:8px;padding:.85rem 1rem;cursor:pointer;min-height:44px;max-width:100%}
+.orchestration-panel :focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.orchestration-status{margin:.5rem 0 0;color:var(--muted)}
+.orchestration-status:empty{display:none}
+@media(max-width:46rem){.orchestration-panel{padding:1rem}.orchestration-head{display:block}
+ .orchestration-copy{width:100%}.orchestration-links{margin-bottom:1rem}}
+
 /* A copy button with a WORDED face is a chip, not an icon. The rule above is
    a fixed 2.6rem square — right for a bare clipboard glyph, a trap for a
    label: the text wraps inside 42px into a one-word-per-line column and
@@ -239,11 +264,19 @@ a.go:hover{opacity:.9;text-decoration:none}
 .fresh{padding:.1rem .9rem;margin:1.2rem 0;background:var(--tint)}.fresh p{margin:.5rem 0}table.map{width:100%;border-collapse:collapse;font-size:.95em}table.map th{text-align:left;color:var(--muted);font-weight:600}table.map td,table.map th{border-bottom:1px solid var(--line);padding:.4rem .5rem .4rem 0;vertical-align:top}.checkin{display:flex;gap:.9rem;align-items:center;padding:.9rem 1.2rem;border:2px solid var(--line);border-radius:.6rem;margin:.2rem 0 1.4rem}.checkin .mark{font-size:2rem;line-height:1}.checkin .label{display:block;font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}.checkin time{font-size:1.6rem;font-weight:700;font-variant-numeric:tabular-nums;display:block}.checkin .note{font-size:.85rem;color:var(--muted)}.checkin.fresh-ok{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,transparent)}.checkin.fresh-ok .mark{color:var(--ok)}.checkin.fresh-bad{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 12%,transparent)}.checkin.fresh-bad .mark{color:var(--bad)}.project h3{font-size:1.35rem;font-weight:700;padding-bottom:.2rem;border-bottom:2px solid var(--accent);letter-spacing:.01em;margin-top:1.6rem}.pathchip{display:inline-block;background:var(--accent);color:#fff;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.88em;padding:.12em .5em;border-radius:.3rem;overflow-wrap:anywhere}@media(prefers-color-scheme:dark){.pathchip{background:color-mix(in srgb,var(--accent) 55%,#000)}}.stale{color:var(--bad);font-weight:600}</style>
 </head>
 <body>
-<header class="hero"><span class="orb"><svg class="mark" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="24" cy="24" r="20.4"/><path d="M11.8,18.6 C14.4,14.8 17.8,14.4 20.1,17.1 C22.4,19.8 25.8,20.2 28.5,17.9 C31.2,15.6 34.4,16.2 36.1,19.1"/><path d="M11.6,24.6 C14.2,20.8 17.6,20.4 19.9,23.1 C22.2,25.8 25.6,26.2 28.3,23.9 C31.0,21.6 34.2,22.2 35.9,25.1"/><path d="M12.8,30.6 C15.3,27.2 18.4,26.8 20.5,29.4 C22.6,32.0 25.7,32.4 28.2,30.2"/><circle cx="32.6" cy="33.0" r="3.8"/><g fill="currentColor" stroke="none"><circle cx="32.6" cy="33.0" r="1.5"/><circle cx="11.7" cy="18.6" r="1.2"/><circle cx="11.5" cy="24.6" r="1.2"/></g></svg></span><h1>PyAuto<b>Cortex</b><span class="kind">Dashboard</span></h1><div class="rule"></div><p class="tag">Question. Run. Rule.</p></header><nav class="board-nav" aria-label="Board sections"><a class="board-nav-card" href="#summary"><span class="board-nav-count">21</span><span class="board-nav-label">Running</span></a><a class="board-nav-card" href="#summary"><span class="board-nav-count">38</span><span class="board-nav-label">Open</span></a><a class="board-nav-card" href="#projects"><span class="board-nav-count">7</span><span class="board-nav-label">Projects</span></a><a class="board-nav-card" href="#checkin-box"><span class="board-nav-label">Check in</span></a></nav><p class="lede">One ledger per science project: what is on the cluster right now, what the human said they would do next, and the last few things they wrote down. Nothing here is inferred from a result — the board hands you the check-in and the resume prompt; what a run meant is yours to log.</p>
+<header class="hero"><span class="orb"><svg class="mark" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="24" cy="24" r="20.4"/><path d="M11.8,18.6 C14.4,14.8 17.8,14.4 20.1,17.1 C22.4,19.8 25.8,20.2 28.5,17.9 C31.2,15.6 34.4,16.2 36.1,19.1"/><path d="M11.6,24.6 C14.2,20.8 17.6,20.4 19.9,23.1 C22.2,25.8 25.6,26.2 28.3,23.9 C31.0,21.6 34.2,22.2 35.9,25.1"/><path d="M12.8,30.6 C15.3,27.2 18.4,26.8 20.5,29.4 C22.6,32.0 25.7,32.4 28.2,30.2"/><circle cx="32.6" cy="33.0" r="3.8"/><g fill="currentColor" stroke="none"><circle cx="32.6" cy="33.0" r="1.5"/><circle cx="11.7" cy="18.6" r="1.2"/><circle cx="11.5" cy="24.6" r="1.2"/></g></svg></span><h1>PyAuto<b>Cortex</b><span class="kind">Dashboard</span></h1><div class="rule"></div><p class="tag">Question. Run. Rule.</p></header><nav class="board-nav" aria-label="Board sections"><a class="board-nav-card" href="#summary"><span class="board-nav-count">21</span><span class="board-nav-label">Running</span></a><a class="board-nav-card" href="#summary"><span class="board-nav-count">38</span><span class="board-nav-label">Open</span></a><a class="board-nav-card" href="#projects"><span class="board-nav-count">7</span><span class="board-nav-label">Projects</span></a><a class="board-nav-card" href="#checkin-box"><span class="board-nav-label">Check in</span></a></nav>
+<section class="orchestration-panel" id="orchestration-cortex" aria-labelledby="orchestration-cortex-heading" data-orchestration-panel><div class="orchestration-head"><div><h2 id="orchestration-cortex-heading">Check in on the science</h2></div><nav class="orchestration-links" aria-label="Work on GitHub"><a href="https://github.com/PyAutoLabs/PyAutoCortex">Open Cortex repository</a><a href="https://github.com/PyAutoLabs/subhalo_validation">Open subhalo_validation</a><a href="https://github.com/PyAutoLabs/ep_toy_gaussian">Open ep_toy_gaussian</a><a href="https://github.com/PyAutoLabs/slope_hierarchy_scale">Open slope_hierarchy_scale</a><a href="https://github.com/Jammy2211/ic50_workspace">Open ic50_workspace</a><a href="https://github.com/PyAutoLabs/autolens_inference">Open autolens_inference</a></nav></div><div class="orchestration-controls"><div class="orchestration-direction"><label for="orchestration-cortex-direction">Optional direction</label><textarea id="orchestration-cortex-direction" rows="2" data-orchestration-direction placeholder="Focus on a task, project or question"></textarea></div><button type="button" class="orchestration-copy" data-orchestration-copy>check in since last time</button></div><details data-orchestration-preview><summary>Read the prompt</summary><label class="sr-only" for="orchestration-cortex-prompt">Exact prompt to copy</label><textarea id="orchestration-cortex-prompt" data-orchestration-prompt readonly rows="8">Use the cortex skill. — on the laptop: `pyauto-brain cortex pull` — pull every active science project through its own sync CLI and show me where each run stands.
+Use the cortex skill. — anywhere: `pyauto-brain cortex checkin --apply --push` — stamp, re-render and push the board since the last check-in (2026-09-30T09:51Z), then read me the by-project summary. Record nothing about results — I will tell you what to log.
+
+Work on GitHub:
+- Open Cortex repository: https://github.com/PyAutoLabs/PyAutoCortex
+- Open subhalo_validation: https://github.com/PyAutoLabs/subhalo_validation
+- Open ep_toy_gaussian: https://github.com/PyAutoLabs/ep_toy_gaussian
+- Open slope_hierarchy_scale: https://github.com/PyAutoLabs/slope_hierarchy_scale
+- Open ic50_workspace: https://github.com/Jammy2211/ic50_workspace
+- Open autolens_inference: https://github.com/PyAutoLabs/autolens_inference</textarea></details><p class="orchestration-status" role="status" aria-live="polite"></p></section>
 <div class="fresh"><p class="muted">Last updated 2026-10-05.</p></div>
 <p class="muted mdsrc"><a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/dashboard.md">markdown version</a> · <a href="https://github.com/PyAutoLabs/PyAutoCortex/blob/main/README.md">GitHub Page</a></p>
-<div class="task"><button class="copy" data-cmd="Use the cortex skill. — on the laptop: `pyauto-brain cortex pull` — pull every active science project through its own sync CLI and show me where each run stands.
-Use the cortex skill. — anywhere: `pyauto-brain cortex checkin --apply --push` — stamp, re-render and push the board since the last check-in (2026-09-30T09:51Z), then read me the by-project summary. Record nothing about results — I will tell you what to log." aria-label="Copy the AI command">📋</button><p>check in since last time</p></div>
 <div class="checkin" id="checkin-box"><span class="mark" id="checkin-mark"></span><div><span class="label">Last check-in</span><time id="checkin" datetime="2026-09-30T09:51Z">2026-09-30T09:51Z</time><span class="note" id="checkin-note"></span></div></div>
 <a id="summary"></a><h2>Summary</h2>
 <table class="map">
@@ -482,12 +515,14 @@ function promptFits(text){
   return true;
 }
 function guardPrompt(text, button){
-  let status=document.getElementById('prompt-budget-status');
+  const panel=button.closest('[data-orchestration-panel]');
+  const statusId=panel?panel.id+'-budget-status':'prompt-budget-status';
+  let status=document.getElementById(statusId);
   if(promptFits(text)){
     if(status){if(status.dataset.url)URL.revokeObjectURL(status.dataset.url);status.remove();}
     return true;
   }
-  if(!status){status=document.createElement('p');status.id='prompt-budget-status';
+  if(!status){status=document.createElement('p');status.id=statusId;
     status.setAttribute('role','status');status.setAttribute('aria-live','polite');
     button.insertAdjacentElement('afterend',status);}
   if(status.dataset.url)URL.revokeObjectURL(status.dataset.url);
@@ -515,6 +550,42 @@ async function copyCmd(b){
 document.addEventListener("click",e=>{
   const b=e.target.closest("button.copy");
   if(b && guardPrompt(b.dataset.cmd,b))copyCmd(b);});
+function orchestrationSync(panel){
+  const preview=panel.querySelector('[data-orchestration-prompt]');
+  const direction=panel.querySelector('[data-orchestration-direction]').value.trim();
+  preview.value=preview.defaultValue+(direction?'\n\nOptional direction (user context):\n'+direction:'');
+  panel.querySelector('.orchestration-status').textContent='';
+  return preview.value;
+}
+document.addEventListener('input',event=>{
+  if(event.target.matches('[data-orchestration-direction]')){
+    orchestrationSync(event.target.closest('[data-orchestration-panel]'));
+  }
+});
+document.addEventListener('click',async event=>{
+  const button=event.target.closest('[data-orchestration-copy]');
+  if(!button)return;
+  const panel=button.closest('[data-orchestration-panel]');
+  const text=orchestrationSync(panel);
+  const status=panel.querySelector('.orchestration-status');
+  if(!guardPrompt(text,button))return;
+  let copied=false;
+  try{await navigator.clipboard.writeText(text);copied=true;}
+  catch(error){
+    const preview=panel.querySelector('[data-orchestration-prompt]');
+    panel.querySelector('[data-orchestration-preview]').open=true;
+    preview.focus();preview.select();
+    try{copied=document.execCommand('copy')===true;}catch(error){copied=false;}
+  }
+  // A slow permission response must not claim a subsequently edited prompt was copied.
+  if(panel.querySelector('[data-orchestration-prompt]').value!==text){
+    status.textContent=copied?'The previous prompt was copied. Copy again to include your latest direction.':
+      'Copy unavailable. Open the preview and select the current prompt to copy manually.';
+  }else{
+    status.textContent=copied?'Prompt copied. Paste it into your coding chat.':
+      'Copy unavailable. The full prompt is selected below; copy it manually.';
+  }
+});
 </script>
 <script>(function(){var e=document.getElementById('checkin'),b=document.getElementById('checkin-box'),m=document.getElementById('checkin-mark'),n=document.getElementById('checkin-note');if(!e||!b)return;var t=e.getAttribute('datetime'),d=t?new Date(t):null;if(!d||isNaN(d.getTime())||(Date.now()-d.getTime())/60000>180){b.classList.add('fresh-bad');e.classList.add('stale');if(m)m.textContent='✗';if(n)n.textContent=t?'stale, paste the check-in':'never checked in';}else{b.classList.add('fresh-ok');if(m)m.textContent='✓';var a=Math.round((Date.now()-d.getTime())/60000);if(n)n.textContent='fresh · '+(a<60?a+' min':Math.round(a/60)+' h')+' ago';}})();</script>
 </body>
