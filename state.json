@@ -4,14 +4,14 @@
   "repo": "PyAutoCortex",
   "status": "yellow",
   "headline": "YELLOW \u2014 7 active \u00b7 21 running",
-  "updated": "2026-10-06T13:08:18Z",
+  "updated": "2026-10-07T08:09:28Z",
   "pages_url": "https://pyautolabs.github.io/PyAutoCortex/",
   "items": [
     {
       "severity": "yellow",
       "text": "check-in stale \u2014 last 2026-09-30T09:51Z",
       "url": null,
-      "prompt": "Use the cortex skill. \u2014 on the laptop: `pyauto-brain cortex pull` \u2014 pull every active science project through its own sync CLI and show me where each run stands.\nUse the cortex skill. \u2014 anywhere: `pyauto-brain cortex checkin --apply --push` \u2014 stamp, re-render and push the board since the last check-in (2026-09-30T09:51Z), then read me the by-project summary. Record nothing about results \u2014 I will tell you what to log."
+      "prompt": "Use the cortex skill and treat this chat as an ongoing place to review scientific projects, discuss results and decide what to investigate next. Read PyAutoCortex/AGENTS.md, its project registry and the relevant project ledgers. Follow project-specific instructions when working within a project.\n\nWhen I give no particular direction, check in across active projects. On the laptop, use the Cortex pull procedure to retrieve updates through each project\u2019s own sync CLI and report run status. Where that access is unavailable, use the available evidence and state what could not be checked. Follow the Cortex check-in procedure to refresh the board and read back each project\u2019s current position, recent activity, outstanding questions and recorded next steps.\n\nWhen I name a project, result, question or idea, make that the main focus. Help me recall where we left off, inspect available results, compare measured outputs and retrieve relevant records. Help develop scientific questions or explore explanations only when I ask. Bring in other projects where relevant; do not repeat the full project review on every follow-up.\n\nPresent factual results, run status and my previously recorded conclusions. Do not offer scientific interpretations, explanations or hypotheses unless I explicitly ask. When I request interpretation, distinguish evidence from speculation and keep proposed interpretations separate from my accepted conclusions. Record scientific conclusions only when I tell you what to preserve.\n\nRecord the observations, conclusions and decisions I ask you to preserve using the Cortex ledger procedures. Keep run records, dated discussion notes and next steps consistent, with links to supporting evidence. Keep scientific records in Cortex and bounded development tasks in Mind.\n\nHelp plan follow-up analyses or runs when requested, using the project\u2019s own execution workflow. Submit compute only when I explicitly ask, and preserve the applicable resource and approval requirements. Route implementation changes through the development workflow.\n\nContinue from decisions and authorizations already established in this conversation. After taking action, report what changed, what was recorded and what remains unresolved.\n\nLast check-in: 2026-09-30T09:51Z."
     },
     {
       "severity": "info",
