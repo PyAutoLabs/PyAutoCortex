@@ -357,6 +357,7 @@ Dormant since 2026-09-07: superseded by euclid_dr1_prelim. Three questions were 
 | subhalo_simulations | dormant | git init, zero commits, 21 GB; ral_root planned, sync_verbs unverified |
 | pj011646 | dormant | personal remote, recorded as a fact — not a PyAutoLabs repo; ral_root planned, sync_verbs unverified |
 | concr | dormant | personal remote Jammy2211/cosmology_and_cancer, recorded as a fact; ral_root planned, sync_verbs unverified |
+| autofit_inference | planned | born 2026-10-07 as search-extensibility B1 (PyAutoMind#492); harness B2, first runs (wave-1 pilot) B3 flip this to active via cortex.py new |
 
 ---
 
