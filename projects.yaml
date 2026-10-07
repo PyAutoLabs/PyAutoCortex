@@ -275,6 +275,20 @@ autolens_inference:
   status: active
   note: "born 2026-09-10 as the from-scratch restart of inference_programme (retired PyAutoCortex#22); nothing inherited; phase 1 = birth (PyAutoMind#399), first task slam_hst_base"
 
+autofit_inference:
+  remote: PyAutoLabs/autofit_inference
+  local_path: /home/jammy/Code/PyAutoLabs/fit/autofit_inference
+  ral_root: /mnt/ral/jnightin/autofit_inference
+  mirror: none
+  sync_cli: hpc/sync
+  sync_verbs: [pull, logs, status, submit, jobs, sacct, cancel, tail, du, check]
+  ledger: wiki/project/state.md
+  assistant: autofit_assistant
+  witness_file: results/**/*.json
+  partition: ral
+  status: planned
+  note: "born 2026-10-07 as search-extensibility B1 (PyAutoMind#492); harness B2, first runs (wave-1 pilot) B3 flip this to active via cortex.py new"
+
 euclid_sersics:
   remote: none
   local_path: /mnt/c/Users/Jammy/Science/euclid_sersics
