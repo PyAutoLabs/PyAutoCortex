@@ -12,7 +12,7 @@ One ledger per science project: what is on the cluster right now, what the human
 |-------|------:|
 | [Running](#projects) | 21 |
 | [Open](#projects) | 38 |
-| [Projects](#projects) | 7 |
+| [Projects](#projects) | 8 |
 
 <details><summary>📋 check in since last time</summary>
 
@@ -49,6 +49,7 @@ Last check-in: 2026-09-30T09:51Z.
 | slope_hierarchy_scale | 0 | 0 | 2026-09-30 |
 | ic50_workspace | 0 | 0 | 2026-09-30 |
 | autolens_inference | 6 | 0 | 2026-09-24 |
+| autofit_inference | 0 | 0 | 2026-10-08 |
 
 ## Projects
 
@@ -319,6 +320,33 @@ Use the cortex skill. — resume autolens_inference: read PyAutoCortex projects/
 
 </details>
 
+### autofit_inference — PyAutoFit search benchmark on gaussian_x3: which searches find the right answer fastest
+
+active · ral · [autofit_inference#4](https://github.com/PyAutoLabs/autofit_inference/issues/4) · [projects/autofit_inference.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/autofit_inference.md) · local `/home/jammy/Code/PyAutoLabs/fit/autofit_inference` · RAL `/mnt/ral/jnightin/autofit_inference`
+
+**Now**
+
+Wave-1 pilot stopped at 223 of 520 runs (B3 wrap-up); pilot ranks nothing. Deferred runs go to wave 2 on RAL --partition=ral after A2; NSS after A3b.
+
+**Runs**
+
+- _nothing on the cluster_
+
+**Last 5**
+
+- 2026-10-08 — *result* — wave-1 pilot (gaussian_x3@1, local CPU, PyAutoFit 0dbf258c4f5e pre-A2) stopped at 223 of 520 runs by the B3 wrap-up ruling; 297 deferred to wave 2 on RAL partition ral; ranks nothing — rows in autofit_inference results/searches/
+- 2026-10-08 — *note* — ledger opened
+
+[full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/autofit_inference.md)
+
+<details><summary>📋 resume autofit_inference</summary>
+
+```
+Use the cortex skill. — resume autofit_inference: read PyAutoCortex projects/autofit_inference.md (Now, Runs, Log) and then /home/jammy/Code/PyAutoLabs/fit/autofit_inference/wiki/project/state.md and the assistant autofit_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
+```
+
+</details>
+
 ### euclid — The original Euclid DR1 grade-AB catalogue project, superseded by euclid_dr1_prelim
 
 dormant · both · no issue yet · [projects/euclid.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid.md) · local `/mnt/c/Users/Jammy/Science/euclid` · RAL `/mnt/ral/jnightin/euclid_strong_lens_modeling_pipeline`
@@ -357,9 +385,8 @@ Dormant since 2026-09-07: superseded by euclid_dr1_prelim. Three questions were 
 | subhalo_simulations | dormant | git init, zero commits, 21 GB; ral_root planned, sync_verbs unverified |
 | pj011646 | dormant | personal remote, recorded as a fact — not a PyAutoLabs repo; ral_root planned, sync_verbs unverified |
 | concr | dormant | personal remote Jammy2211/cosmology_and_cancer, recorded as a fact; ral_root planned, sync_verbs unverified |
-| autofit_inference | planned | born 2026-10-07 as search-extensibility B1 (PyAutoMind#492); harness B2, first runs (wave-1 pilot) B3 flip this to active via cortex.py new |
 
 ---
 
-Boards: [Brain](https://pyautolabs.github.io/PyAutoBrain/) · [Mind](https://pyautolabs.github.io/PyAutoMind/) · [Memory](https://pyautolabs.github.io/PyAutoMemory/) · [Eyes](https://pyautolabs.github.io/PyAutoEyes/) · [Ears](https://pyautolabs.github.io/PyAutoEars/) · [Heart](https://pyautolabs.github.io/PyAutoHeart/) · [Hands](https://pyautolabs.github.io/PyAutoHands/) · [Pulse](https://pyautolabs.github.io/PyAutoPulse/) · [Insight](https://pyautolabs.github.io/PyAutoInsight/) · [Nerves](https://pyautolabs.github.io/PyAutoNerves/) · [Gut](https://pyautolabs.github.io/PyAutoGut/) · [Organism](https://pyautolabs.github.io/PyAutoScientist/)
+Boards: [Brain](https://pyautolabs.github.io/PyAutoBrain/) · [Mind](https://pyautolabs.github.io/PyAutoMind/) · [Broca](https://pyautolabs.github.io/PyAutoBroca/) · [Memory](https://pyautolabs.github.io/PyAutoMemory/) · [Eyes](https://pyautolabs.github.io/PyAutoEyes/) · [Ears](https://pyautolabs.github.io/PyAutoEars/) · [Heart](https://pyautolabs.github.io/PyAutoHeart/) · [Hands](https://pyautolabs.github.io/PyAutoHands/) · [Pulse](https://pyautolabs.github.io/PyAutoPulse/) · [Insight](https://pyautolabs.github.io/PyAutoInsight/) · [Dna](https://pyautolabs.github.io/PyAutoDNA/) · [Nerves](https://pyautolabs.github.io/PyAutoNerves/) · [Gut](https://pyautolabs.github.io/PyAutoGut/) · [Organism](https://pyautolabs.github.io/PyAutoScientist/)
 
