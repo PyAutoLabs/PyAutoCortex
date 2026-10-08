@@ -286,8 +286,8 @@ autofit_inference:
   assistant: autofit_assistant
   witness_file: results/**/*.json
   partition: ral
-  status: planned
-  note: "born 2026-10-07 as search-extensibility B1 (PyAutoMind#492); harness B2, first runs (wave-1 pilot) B3 flip this to active via cortex.py new"
+  status: active
+  note: "born 2026-10-07 as search-extensibility B1 (PyAutoMind#492); harness B2; B3 wave-1 pilot (autofit_inference#4) flipped this to active 2026-10-08"
 
 euclid_sersics:
   remote: none
