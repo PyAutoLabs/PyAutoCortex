@@ -10,8 +10,8 @@ One ledger per science project: what is on the cluster right now, what the human
 
 | Where | Count |
 |-------|------:|
-| [Running](#projects) | 22 |
-| [Open](#projects) | 47 |
+| [Running](#projects) | 25 |
+| [Open](#projects) | 53 |
 | [Projects](#projects) | 8 |
 
 <details><summary>📋 check in since last time</summary>
@@ -49,7 +49,7 @@ Last check-in: 2026-09-30T09:51Z.
 | slope_hierarchy_scale | 0 | 0 | 2026-10-14 |
 | ic50_workspace | 0 | 0 | 2026-10-14 |
 | autolens_inference | 6 | 0 | 2026-09-24 |
-| autofit_inference | 0 | 0 | 2026-10-08 |
+| autofit_inference | 3 | 6 | 2026-10-14 |
 
 ## Projects
 
@@ -332,20 +332,31 @@ Use the cortex skill. — resume autolens_inference: read PyAutoCortex projects/
 
 ### autofit_inference — PyAutoFit search benchmark on gaussian_x3: which searches find the right answer fastest
 
-active · ral · [autofit_inference#4](https://github.com/PyAutoLabs/autofit_inference/issues/4) · [projects/autofit_inference.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/autofit_inference.md) · local `/home/jammy/Code/PyAutoLabs/fit/autofit_inference` · RAL `/mnt/ral/jnightin/autofit_inference`
+active · ral · [autofit_inference#8](https://github.com/PyAutoLabs/autofit_inference/issues/8) · [projects/autofit_inference.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/autofit_inference.md) · local `/home/jammy/Code/PyAutoLabs/fit/autofit_inference` · RAL `/mnt/ral/jnightin/autofit_inference`
 
 **Now**
 
-Wave-1 pilot stopped at 223 of 520 runs (B3 wrap-up); pilot ranks nothing. Deferred runs go to wave 2 on RAL --partition=ral after A2; NSS after A3b.
+gaussian_x3@2 frozen in autofit_inference 72d6faaf1717 before any scored run (A2+A4 gate met: PyAutoFit df6d218f1). Scored wave 2 submitted 2026-10-14 on RAL ral (11,750 runs + 20-run probe; references first) against a private PyAutoFit pin df6d218f10cd (autofit_inference#9). Next: B5b pulls, builds the JAX blend realisation-1 reference on the laptop, judges under @2.
 
 **Runs**
 
-- _nothing on the cluster_
+- 408244_[0-49] — running — ral — 2026-10-14 — wave-2 blend references (gaussian_x3@2 freeze 72d6faaf1717): realisations 2-5 x numpy/jax x Nautilus n_live=2000 + DynestyStatic nlive=1000 seeds 0-2, + JAX Na…
+- 408245_[0-47] — running — ral — 2026-10-14 — wave-2 separated references: realisations 1,3,4,5 x numpy/jax x 6 runs; %48; submit_wave2_reference_gaussian_x3_separated; pin df6d218f10cd
+- 408246_[0-19] — running — ral — 2026-10-14 — wave-2 probe: Zeus JAX + NSS n_live_200_mcmc_steps_50, both datasets, realisation 1, seeds 0-4 (timeouts for probe-first cells); %20; submit_wave2_probe
+- 408346_[0-7] — open — ral — 2026-10-14 — wave-2 blend reference builds (MAP + build_reference), afterany 408244; %8
+- 408347_[0-7] — open — ral — 2026-10-14 — wave-2 separated reference builds, afterany 408245; %8
+- 408348_[0-379] — open — ral — 2026-10-14 — scored wave 2 (gaussian_x3@2) blend numpy: 2250 runs, 50 seeds x 5 realisations, %60, afterany 408346:408347; submit_wave2_scored_gaussian_x3_blend_numpy
+- 408365_[0-344] — open — ral — 2026-10-14 — scored wave 2 blend jax_cpu: 3500 runs, %60, afterany 408346:408347
+- 408366_[0-379] — open — ral — 2026-10-14 — scored wave 2 separated numpy: 2250 runs, %60, afterany 408346:408347
+- 408367_[0-389] — open — ral — 2026-10-14 — scored wave 2 separated jax_cpu: 3750 runs, %60, afterany 408346:408347
 
 **Last 5**
 
-- 2026-10-08 — *result* — wave-1 pilot (gaussian_x3@1, local CPU, PyAutoFit 0dbf258c4f5e pre-A2) stopped at 223 of 520 runs by the B3 wrap-up ruling; 297 deferred to wave 2 on RAL partition ral; ranks nothing — rows in autofit_inference results/searches/
-- 2026-10-08 — *note* — ledger opened
+- 2026-10-14 — *note* — gaussian_x3@2 frozen (autofit_inference 72d6faaf1717, protocol 11 A2) before any scored run; A4 gate met (PyAutoFit df6d218f1). Dry run 408236 on ral: pin imports, RAL 4-7x faster than the laptop pilot (laptop-derived timeouts are lenient)…
+- 2026-10-14 — *run* — 408367_[0-389] submitted: scored wave 2 separated jax_cpu: 3750 runs, %60, afterany 408346:408347
+- 2026-10-14 — *run* — 408366_[0-379] submitted: scored wave 2 separated numpy: 2250 runs, %60, afterany 408346:408347
+- 2026-10-14 — *run* — 408365_[0-344] submitted: scored wave 2 blend jax_cpu: 3500 runs, %60, afterany 408346:408347
+- 2026-10-14 — *run* — 408348_[0-379] submitted: scored wave 2 (gaussian_x3@2) blend numpy: 2250 runs, 50 seeds x 5 realisations, %60, afterany 408346:408347; submit_wave2_scored_gaussian_x3_blend_numpy
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/autofit_inference.md)
 
