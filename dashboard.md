@@ -522,7 +522,7 @@ active · both · [autolens_inference#4](https://github.com/PyAutoLabs/autolens_
 
 **Current position**
 
-B5c (2026-10-15, autofit_inference#14): a second model family, correlated_nd (correlated Gaussians D = 20/50/100, condition number 10^3, and a D = 20 hybrid Rosenbrock banana, exact posteriors and ln Z), pre-registered as correlated_nd@1 (first committed 9ec37795f404; amendment A1 before any row) with seeded datasets and eight exact references that pass the section 6 agreement test. Its 930-run pilot is RAL 409957 on --partition=ral at the pin df6d218f10cd; it ranks nothing and is catalogued apart from gaussian_x3 (nothing ranked across families). gaussian_x3 wave 2 stays closed and judged under gaussian_x3@2. Next: B5c-2 pulls the pilot (results/ only), judges it under @1, freezes correlated_nd@2 and submits the scored wave.
+B5c (2026-10-15, autofit_inference#14): a second model family, correlated_nd (correlated Gaussians D = 20/50/100, condition number 10^3, and a D = 20 hybrid Rosenbrock banana, exact posteriors and ln Z), pre-registered as correlated_nd@1 (first committed 9ec37795f404; amendment A1 before any row) with seeded datasets and eight exact references that pass the section 6 agreement test. Its 930-run pilot is RAL 410866 (pending at hand-back; 409957 failed at import on the disturbed shared clone and was cancelled) on --partition=ral from the private copy inference/autofit_inference_b5c at the pin df6d218f10cd; it ranks nothing and is catalogued apart from gaussian_x3 (nothing ranked across families). gaussian_x3 wave 2 stays closed and judged under gaussian_x3@2. Next: B5c-2 pulls the pilot (results/ only), judges it under @1, freezes correlated_nd@2 and submits the scored wave.
 
 <details><summary title="Copy resume prompt for autofit_inference">📋</summary>
 
@@ -536,21 +536,21 @@ Use the cortex skill. — resume autofit_inference: read PyAutoCortex projects/a
 
 | Job | State | Partition | Date | Description |
 |---|---|---|---|---|
-| `409957_[0-929]` | open | ral | 2026-10-15 | correlated_nd@1 pilot (B5c, second model family; protocol first committed 9ec37795f404, A1 before any row): 930 runs, 10 seeds x realisation 1 x 93 planned cel… |
+| `410866_[0-929]` | open | ral | 2026-10-15 | correlated_nd@1 pilot (B5c), resubmission of 409957 from the PRIVATE copy /mnt/ral/jnightin/inference/autofit_inference_b5c (delivered files sha256-verified fr… |
 
 <details><summary>Full descriptions (1 shortened above)</summary>
 
-- `409957_[0-929]` — correlated_nd@1 pilot (B5c, second model family; protocol first committed 9ec37795f404, A1 before any row): 930 runs, 10 seeds x realisation 1 x 93 planned cells over corr_gaussian_d20/d50/d100 + rosenbrock_d20, one run per task, 4 h process cap, %100; submit_correlated_nd_pilot; pin df6d218f10cd; pulled in B5c-2
+- `410866_[0-929]` — correlated_nd@1 pilot (B5c), resubmission of 409957 from the PRIVATE copy /mnt/ral/jnightin/inference/autofit_inference_b5c (delivered files sha256-verified from 245a3ef, own copy of the pin): 930 runs, 10 seeds x realisation 1 x 93 planned cells, one run per task, 4 h process cap, %100; pin df6d218f10cd; pull results/ from the private copy in B5c-2
 
 </details>
 
-<details><summary>Recent log — 5 of 24 entries</summary>
+<details><summary>Recent log — 5 of 26 entries</summary>
 
+- 2026-10-15 — *run* — 410866_[0-929] submitted: correlated_nd@1 pilot (B5c), resubmission of 409957 from the PRIVATE copy /mnt/ral/jnightin/inference/autofit_inference_b5c (delivered files sha256-verified from 245a3ef, own copy of the pin): 930 runs, 10 seeds x realisation 1 x 93 planned cells, one run per task, 4 h process cap, %100; pin df6d218f10cd; pull results/ from the private copy in B5c-2
+- 2026-10-15 — *run* — 409957_[0-929] failed — wall 0:06: correlated_nd@1 pilot (B5c, second model family; protocol first committed 9ec37795f404, A1 before any row): 930 runs, 10 seeds x realisation 1 x 93 planned cells over corr_gaussian_d20/d50/d100 + rosenbrock_d20, one run per task, 4 h process cap, %100; submit_correlated_nd_pilot; pin df6d218f10cd; pulled in B5c-2 — every task failed at import (ModuleNotFoundError _autofit_inference_cli): the shared RAL clone had been switched to an old main by another session (stash pre-main-switch 19:24 UTC) and lost the CLI and config/ as the array started; 800 tasks exited, the rest scancelled; no row written; resubmitted from the private copy inference/autofit_inference_b5c as 410866
 - 2026-10-15 — *run* — 409957_[0-929] submitted: correlated_nd@1 pilot (B5c, second model family; protocol first committed 9ec37795f404, A1 before any row): 930 runs, 10 seeds x realisation 1 x 93 planned cells over corr_gaussian_d20/d50/d100 + rosenbrock_d20, one run per task, 4 h process cap, %100; submit_correlated_nd_pilot; pin df6d218f10cd; pulled in B5c-2
 - 2026-10-15 — *run* — 409930_[0-19] finished — wall 1:30: wave-2 probe-first remainder (B5b): Zeus JAX + NSS n_live_200_mcmc_steps_50, both datasets, 980 runs after the probe under probe-derived @2 timeouts (NSS 600 s, Zeus 1168 s); %20; submit_wave2_remainder; pin df6d218f10cd; pulled in B5b-2 — 20/20 COMPLETED (16:08-17:38 UTC); 980 remainder rows pulled by per-directory tar (20 probe rows byte-identical); all admitted under gaussian_x3@2, 0 missing; judged B5b-2
 - 2026-10-15 — *run* — 408367_[0-389] finished — wall 1:57: scored wave 2 separated jax_cpu: 3750 runs, %60, afterany 408346:408347 — 390/390 COMPLETED; 3750 separated jax_cpu rows admitted; judged B5b
-- 2026-10-15 — *run* — 408366_[0-379] finished — wall 1:51: scored wave 2 separated numpy: 2250 runs, %60, afterany 408346:408347 — 380/380 COMPLETED; 2250 separated numpy rows admitted; judged B5b
-- 2026-10-15 — *run* — 408365_[0-344] finished — wall 1:46: scored wave 2 blend jax_cpu: 3500 runs, %60, afterany 408346:408347 — 345/345 COMPLETED; 3500 blend jax_cpu rows admitted; judged B5b
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/autofit_inference.md)
 
