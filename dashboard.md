@@ -56,14 +56,18 @@ Last check-in: 2026-09-30T09:51Z.
 
 <details id="project-subhalo_validation"><summary><b>subhalo_validation</b> — Do the SLaM subhalo pipelines false-detect on lenses with no subhalo · 0 running · 5 open · updated 2026-09-07</summary>
 
-active · ral · [subhalo_validation#2](https://github.com/PyAutoLabs/subhalo_validation/issues/2)
+**Registered:** not recorded
+
+**Local:** `` /mnt/c/Users/Jammy/Science/active/subhalo_validation ``
+
+**RAL:** `` /mnt/ral/jnightin/active/subhalo_validation ``
 
 **Current position**
 
 Five chains on RAL under the corrected adapt settings: rectangular_adapt on pl_eff_0 / pl_eff_1_outer (job A done, job B 342311 submitted) and the delaunay_adapt_split reruns plus rectangular_adapt on pl_sersic_0. pl_sersic_0 on delaunay_adapt_split is accepted (no false detection, +2.557).
 Next: pull when the numba chains land and read the evidence_increase of each; no more 1000-pixel runs.
 
-<details><summary>📋 resume subhalo_validation</summary>
+<details><summary title="Copy resume prompt for subhalo_validation">📋</summary>
 
 ```
 Use the cortex skill. — resume subhalo_validation: read PyAutoCortex projects/subhalo_validation.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/active/subhalo_validation/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
@@ -101,13 +105,7 @@ Use the cortex skill. — resume subhalo_validation: read PyAutoCortex projects/
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/subhalo_validation.md)
 
-</details>
-
-<details><summary>Locations</summary>
-
-- Ledger: [projects/subhalo_validation.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/subhalo_validation.md)
-- Local: `` /mnt/c/Users/Jammy/Science/active/subhalo_validation ``
-- RAL: `` /mnt/ral/jnightin/active/subhalo_validation ``
+active · ral · [subhalo_validation#2](https://github.com/PyAutoLabs/subhalo_validation/issues/2)
 
 </details>
 
@@ -115,13 +113,17 @@ Use the cortex skill. — resume subhalo_validation: read PyAutoCortex projects/
 
 <details id="project-subhalo"><summary><b>subhalo</b> — SLaM subhalo modelling of the SLACS lens sample · no runs recorded · updated 2026-10-15</summary>
 
-active · both · no issue yet
+**Registered:** 2026-10-15
+
+**Local:** `` /mnt/c/Users/Jammy/Science/active/subhalo ``
+
+**RAL:** `` /mnt/ral/jnightin/active/subhalo ``
 
 **Current position**
 
-Registered 2026-10-15 (PyAutoCortex#67): SLACS sample under dataset/, output/ empty, no runs yet; ral_root not yet created on RAL — the first hpc/sync push creates it.
+SLACS sample under dataset/, output/ empty, no runs yet; ral_root not yet created on RAL — the first hpc/sync push creates it.
 
-<details><summary>📋 resume subhalo</summary>
+<details><summary title="Copy resume prompt for subhalo">📋</summary>
 
 ```
 Use the cortex skill. — resume subhalo: read PyAutoCortex projects/subhalo.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/active/subhalo/README.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
@@ -139,13 +141,7 @@ _nothing on the cluster_
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/subhalo.md)
 
-</details>
-
-<details><summary>Locations</summary>
-
-- Ledger: [projects/subhalo.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/subhalo.md)
-- Local: `` /mnt/c/Users/Jammy/Science/active/subhalo ``
-- RAL: `` /mnt/ral/jnightin/active/subhalo ``
+active · both · no issue yet
 
 </details>
 
@@ -153,13 +149,17 @@ _nothing on the cluster_
 
 <details id="project-euclid_dr1"><summary><b>euclid_dr1</b> — Does the sep1 DR1 delivery reproduce the ten prelim lenses by eye · 16 running · 42 open · updated 2026-10-10</summary>
 
-active · ral · no issue yet
+**Registered:** 2026-09-11
+
+**Local:** `` /mnt/c/Users/Jammy/Science/euclid_dr1 ``
+
+**RAL:** `` /mnt/ral/jnightin/euclid_dr1 ``
 
 **Current position**
 
 The top-1000 DR1 sep1 vis_lp array finished 971 of 1000; 29 hit the 18-hour walltime. Array 344645 is now running vis_pix with the Numba CPU sparse route for those 971 completed lenses only.
 
-<details><summary>📋 resume euclid_dr1</summary>
+<details><summary title="Copy resume prompt for euclid_dr1">📋</summary>
 
 ```
 Use the cortex skill. — resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
@@ -288,13 +288,7 @@ Use the cortex skill. — resume euclid_dr1: read PyAutoCortex projects/euclid_d
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid_dr1.md)
 
-</details>
-
-<details><summary>Locations</summary>
-
-- Ledger: [projects/euclid_dr1.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid_dr1.md)
-- Local: `` /mnt/c/Users/Jammy/Science/euclid_dr1 ``
-- RAL: `` /mnt/ral/jnightin/euclid_dr1 ``
+active · ral · no issue yet
 
 </details>
 
@@ -302,13 +296,17 @@ Use the cortex skill. — resume euclid_dr1: read PyAutoCortex projects/euclid_d
 
 <details id="project-analytic_gaussian"><summary><b>analytic_gaussian</b> — Graphical and EP against a closed-form Gaussian posterior, at ensemble scale · no runs recorded · updated 2026-10-14</summary>
 
-active · ral · [PyAutoCortex#34](https://github.com/PyAutoLabs/PyAutoCortex/issues/34)
+**Registered:** not recorded
+
+**Local:** `` /mnt/c/Users/Jammy/Science/active/analytic_gaussian ``
+
+**RAL:** `` /mnt/ral/jnightin/active/analytic_gaussian ``
 
 **Current position**
 
 Wave 1 (342413, 200 seeds at N=5) is accepted as the baseline: autofit EP is exact on the Gaussian leg, leg B sigma misses as pre-registered (78/200), collapse rate 0/200. On criterion 2, astra and an independent Opus review both favour an under-calibrated mu threshold (calibrated on five unrepresentative seeds) and found no defect in the minimal-EP control; both flag the per-site sigma>0 clip (analytic_ep_minimal.py:333) as the one audit target, and astra will not clear the control without an independent reconstruction of the EP fixed point. Next: run the planned diagnostic (archive/tasks/analytic_gaussian/minimal_ep_legb_mu_threshold.md) on a passing, an edge and the worst mu seed; the N=25 rung stays written but unsubmitted until it lands.
 
-<details><summary>📋 resume analytic_gaussian</summary>
+<details><summary title="Copy resume prompt for analytic_gaussian">📋</summary>
 
 ```
 Use the cortex skill. — resume analytic_gaussian: read PyAutoCortex projects/analytic_gaussian.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/active/analytic_gaussian/wiki/project/state.md and the assistant autofit_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
@@ -330,13 +328,7 @@ _nothing on the cluster_
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/analytic_gaussian.md)
 
-</details>
-
-<details><summary>Locations</summary>
-
-- Ledger: [projects/analytic_gaussian.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/analytic_gaussian.md)
-- Local: `` /mnt/c/Users/Jammy/Science/active/analytic_gaussian ``
-- RAL: `` /mnt/ral/jnightin/active/analytic_gaussian ``
+active · ral · [PyAutoCortex#34](https://github.com/PyAutoLabs/PyAutoCortex/issues/34)
 
 </details>
 
@@ -344,13 +336,17 @@ _nothing on the cluster_
 
 <details id="project-ep_toy_gaussian"><summary><b>ep_toy_gaussian</b> — NUTS versus three EP fits on the #1405 collapse toy at N=50 · no runs recorded · updated 2026-10-14</summary>
 
-active · ral · [ep_toy_gaussian#1](https://github.com/PyAutoLabs/ep_toy_gaussian/issues/1)
+**Registered:** not recorded
+
+**Local:** `` /mnt/c/Users/Jammy/Science/active/ep_toy_gaussian ``
+
+**RAL:** `` /mnt/ral/jnightin/active/ep_toy_gaussian ``
 
 **Current position**
 
 Wave 1 (n50_seed42: 342639 + 342640_[0-2]) failed on infrastructure — EP x3 on EMFILE (fixed by PyAutoFit#1632/#1634, both in the RAL mirror at 404b3e5f7), NUTS on OOM at the 8 GB cap while XLA compiled the 50-factor window-adaptation scan, which grows with N (≥5.4 GB at N=20 locally). Wave 2 is prepared but not submitted: sample n50_seed42_w2 (free locally and on RAL; still needs its toy.SAMPLES entry), submit_nuts raised to 64 GB, submit_ep unchanged at 8 GB (peak ~590 MB). The collapse question at N=50 is unanswered; only n5_smoke speaks (EP RECOVER 3/3, NUTS 49.89/11.14). Next: human go, add the sample entry, push and submit NUTS then EP with SAMPLE=n50_seed42_w2 exported.
 
-<details><summary>📋 resume ep_toy_gaussian</summary>
+<details><summary title="Copy resume prompt for ep_toy_gaussian">📋</summary>
 
 ```
 Use the cortex skill. — resume ep_toy_gaussian: read PyAutoCortex projects/ep_toy_gaussian.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/active/ep_toy_gaussian/wiki/project/state.md and the assistant autofit_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
@@ -372,13 +368,7 @@ _nothing on the cluster_
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/ep_toy_gaussian.md)
 
-</details>
-
-<details><summary>Locations</summary>
-
-- Ledger: [projects/ep_toy_gaussian.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/ep_toy_gaussian.md)
-- Local: `` /mnt/c/Users/Jammy/Science/active/ep_toy_gaussian ``
-- RAL: `` /mnt/ral/jnightin/active/ep_toy_gaussian ``
+active · ral · [ep_toy_gaussian#1](https://github.com/PyAutoLabs/ep_toy_gaussian/issues/1)
 
 </details>
 
@@ -386,13 +376,17 @@ _nothing on the cluster_
 
 <details id="project-slope_hierarchy_scale"><summary><b>slope_hierarchy_scale</b> — Hierarchical slope recovery with graphical and EP at N=25 to 50 · no runs recorded · updated 2026-10-14</summary>
 
-active · both · [slope_hierarchy_scale#2](https://github.com/PyAutoLabs/slope_hierarchy_scale/issues/2)
+**Registered:** not recorded
+
+**Local:** `` /mnt/c/Users/Jammy/Science/active/slope_hierarchy_scale ``
+
+**RAL:** `` /mnt/ral/jnightin/active/slope_hierarchy_scale ``
 
 **Current position**
 
 The N=25 graphical baselines are in: per-lens fits (342348) give a naive parent of 1.999 / 0.089 (deconvolved 0.085), and the joint NUTS fit (342350_0) recovers mean 1.994 [1.976, 2.014] and sigma 0.087 [0.074, 0.104] against truth 2.0 / 0.1; its summary JSON still needs writing offline from samples.csv (now under z_vault/sample_n25_seed42). The EP arm returned the prior on the Laplace projection (343299: hierarchical factor 0/50 SUCCESS). The cure has landed: PyAutoFit#1656 (merged 2026-09-30, released 2026.10.7.1) adds af.LaplaceOptimiser(projection="moments"), which takes the tight toy from 0 to 3/3 SUCCESS. The shared RAL PyAutoFit mirror is still 404b3e5f7 (2026-09-27, kept frozen for euclid_dr1) and lacks both #1655 and #1656, so any rerun needs a private PyAutoFit checkout on RAL. All earlier output is vaulted in z_vault/ on laptop and RAL, output/ is empty for the rerun. Next: rerun the N=25 EP arm with projection="moments" on a private PyAutoFit checkout and compare its scatter against the NUTS baseline.
 
-<details><summary>📋 resume slope_hierarchy_scale</summary>
+<details><summary title="Copy resume prompt for slope_hierarchy_scale">📋</summary>
 
 ```
 Use the cortex skill. — resume slope_hierarchy_scale: read PyAutoCortex projects/slope_hierarchy_scale.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/active/slope_hierarchy_scale/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
@@ -414,13 +408,7 @@ _nothing on the cluster_
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/slope_hierarchy_scale.md)
 
-</details>
-
-<details><summary>Locations</summary>
-
-- Ledger: [projects/slope_hierarchy_scale.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/slope_hierarchy_scale.md)
-- Local: `` /mnt/c/Users/Jammy/Science/active/slope_hierarchy_scale ``
-- RAL: `` /mnt/ral/jnightin/active/slope_hierarchy_scale ``
+active · both · [slope_hierarchy_scale#2](https://github.com/PyAutoLabs/slope_hierarchy_scale/issues/2)
 
 </details>
 
@@ -428,13 +416,17 @@ _nothing on the cluster_
 
 <details id="project-ic50_workspace"><summary><b>ic50_workspace</b> — EP against the graphical joint fit on IC50 dose-response data, scaling up · no runs recorded · updated 2026-10-14</summary>
 
-active · ral · [PyAutoCortex#36](https://github.com/PyAutoLabs/PyAutoCortex/issues/36)
+**Registered:** not recorded
+
+**Local:** `` /mnt/c/Users/Jammy/Science/active/ic50_workspace ``
+
+**RAL:** `` /mnt/ral/jnightin/active/ic50_workspace ``
 
 **Current position**
 
 The scale ladder is in. EP passes N=5/10/25 with coef_mean within 3σ and cost growing about linearly per sweep (26/50/140 s); it died at N=50 on a projection assert. That fix has landed: PyAutoFit#1655 (merged 2026-09-30, released 2026.10.7.1) raises ProjectionException, which EP factor_step now recovers from instead of killing the run. Graphical is cheaper but overconfident beyond N=25, and EP hill_coef widths are not yet comparable because util.py reports factor-message widths. The shared RAL PyAutoFit mirror is still 404b3e5f7 (2026-09-27, kept frozen for euclid_dr1) and lacks both #1655 and #1656, so any rerun needs a private PyAutoFit checkout on RAL. All earlier output is vaulted in z_vault/ on laptop and RAL, output/ is empty for the rerun. Next: rerun the EP ladder on a private PyAutoFit checkout with output on and a fixed seed, report hill_coef from the mean field, then give ep_lbfgs_jax a witness as the scale lever.
 
-<details><summary>📋 resume ic50_workspace</summary>
+<details><summary title="Copy resume prompt for ic50_workspace">📋</summary>
 
 ```
 Use the cortex skill. — resume ic50_workspace: read PyAutoCortex projects/ic50_workspace.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/active/ic50_workspace/NOTES.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
@@ -456,13 +448,7 @@ _nothing on the cluster_
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/ic50_workspace.md)
 
-</details>
-
-<details><summary>Locations</summary>
-
-- Ledger: [projects/ic50_workspace.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/ic50_workspace.md)
-- Local: `` /mnt/c/Users/Jammy/Science/active/ic50_workspace ``
-- RAL: `` /mnt/ral/jnightin/active/ic50_workspace ``
+active · ral · [PyAutoCortex#36](https://github.com/PyAutoLabs/PyAutoCortex/issues/36)
 
 </details>
 
@@ -470,13 +456,17 @@ _nothing on the cluster_
 
 <details id="project-autolens_inference"><summary><b>autolens_inference</b> — Do the PyAutoLens inference backends agree on the HST SLaM posterior · 6 running · 0 open · updated 2026-09-24</summary>
 
-active · both · [autolens_inference#4](https://github.com/PyAutoLabs/autolens_inference/issues/4)
+**Registered:** not recorded
+
+**Local:** `` /home/jammy/Code/PyAutoLabs/lens/autolens_inference ``
+
+**RAL:** `` /mnt/ral/jnightin/inference/autolens_inference ``
 
 **Current position**
 
 All pre-likelihood-speedup SLaM HST rows (slam_base A100 dense/sparse, the 342695 rate probe, delaunay_1250 A100 dense/sparse 343143/343145) are archived under results|output/archive/2026-09-24_pre_likelihood_speedup/ (autolens_inference#12). Running since 2026-09-24 on today's library mains: slam_base A100 dense 350674 / sparse 350675, delaunay_1250 A100 dense 350678 / sparse 350679, and the first CPU leg, slam_base numba_cpu sparse 350682 on ral; seeds 0-1 each. Next: pull the rows, commit them live, and read the new-vs-archived per-stage walls as the inference-level speedup; then the fixed-lens-light variant resumes from these output trees.
 
-<details><summary>📋 resume autolens_inference</summary>
+<details><summary title="Copy resume prompt for autolens_inference">📋</summary>
 
 ```
 Use the cortex skill. — resume autolens_inference: read PyAutoCortex projects/autolens_inference.md (Now, Runs, Log) and then /home/jammy/Code/PyAutoLabs/lens/autolens_inference/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
@@ -516,13 +506,7 @@ Use the cortex skill. — resume autolens_inference: read PyAutoCortex projects/
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/autolens_inference.md)
 
-</details>
-
-<details><summary>Locations</summary>
-
-- Ledger: [projects/autolens_inference.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/autolens_inference.md)
-- Local: `` /home/jammy/Code/PyAutoLabs/lens/autolens_inference ``
-- RAL: `` /mnt/ral/jnightin/inference/autolens_inference ``
+active · both · [autolens_inference#4](https://github.com/PyAutoLabs/autolens_inference/issues/4)
 
 </details>
 
@@ -530,13 +514,17 @@ Use the cortex skill. — resume autolens_inference: read PyAutoCortex projects/
 
 <details id="project-autofit_inference"><summary><b>autofit_inference</b> — PyAutoFit search benchmark on gaussian_x3: which searches find the right answer fastest · no runs recorded · updated 2026-10-15</summary>
 
-active · ral · [autofit_inference#8](https://github.com/PyAutoLabs/autofit_inference/issues/8)
+**Registered:** 2026-10-08
+
+**Local:** `` /home/jammy/Code/PyAutoLabs/fit/autofit_inference ``
+
+**RAL:** `` /mnt/ral/jnightin/inference/autofit_inference ``
 
 **Current position**
 
 Wave 2 closed and judged under gaussian_x3@2 (B5b-2, 2026-10-15): all 12,750 pulled rows admitted at PyAutoFit pin df6d218f10cd; of the 13,000 expected runs, 11,580 rows + 1,170 failed + 0 missing + 250 deferred. The 409930 probe-first legs close: NSS 50-step leads both evidence rankings (blend 158/250, separated 210/250); Zeus JAX is 0/250 on the blend and 190/250 on the separated control (first among separated posterior legs). The catalogue ranks only legs with success rate >= 50 % over >= 20 attempts and lists the rest as unreliable (post-hoc presentation convention, protocol §8 note; autofit_inference#12 ruling 2). Summary records published as inference-summary@3 (101 record shards). Next: after the B5b-2 PRs merge, capture the Insight fit snapshot from main under @3 and run pyauto-insight check online; then B5c (a second model family).
 
-<details><summary>📋 resume autofit_inference</summary>
+<details><summary title="Copy resume prompt for autofit_inference">📋</summary>
 
 ```
 Use the cortex skill. — resume autofit_inference: read PyAutoCortex projects/autofit_inference.md (Now, Runs, Log) and then /home/jammy/Code/PyAutoLabs/fit/autofit_inference/wiki/project/state.md and the assistant autofit_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
@@ -558,13 +546,7 @@ _nothing on the cluster_
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/autofit_inference.md)
 
-</details>
-
-<details><summary>Locations</summary>
-
-- Ledger: [projects/autofit_inference.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/autofit_inference.md)
-- Local: `` /home/jammy/Code/PyAutoLabs/fit/autofit_inference ``
-- RAL: `` /mnt/ral/jnightin/inference/autofit_inference ``
+active · ral · [autofit_inference#8](https://github.com/PyAutoLabs/autofit_inference/issues/8)
 
 </details>
 
@@ -572,7 +554,11 @@ _nothing on the cluster_
 
 <details id="project-euclid"><summary><b>euclid</b> — The original Euclid DR1 grade-AB catalogue project, superseded by euclid_dr1 · dormant · no runs recorded · updated 2026-10-15</summary>
 
-dormant · both · no issue yet
+**Registered:** not recorded
+
+**Local:** `` /mnt/c/Users/Jammy/Science/active/euclid ``
+
+**RAL:** `` /mnt/ral/jnightin/active/euclid ``
 
 **Current position**
 
@@ -591,13 +577,7 @@ _nothing on the cluster_
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid.md)
 
-</details>
-
-<details><summary>Locations</summary>
-
-- Ledger: [projects/euclid.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid.md)
-- Local: `` /mnt/c/Users/Jammy/Science/active/euclid ``
-- RAL: `` /mnt/ral/jnightin/active/euclid ``
+dormant · both · no issue yet
 
 </details>
 
