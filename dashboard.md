@@ -177,7 +177,7 @@ Use the cortex skill. — resume euclid_dr1: read PyAutoCortex projects/euclid_d
 
 ### analytic_gaussian — Graphical and EP against a closed-form Gaussian posterior, at ensemble scale
 
-active · ral · [PyAutoCortex#34](https://github.com/PyAutoLabs/PyAutoCortex/issues/34) · [projects/analytic_gaussian.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/analytic_gaussian.md) · local `/mnt/c/Users/Jammy/Science/inference/analytic_gaussian` · RAL `/mnt/ral/jnightin/analytic_gaussian`
+active · ral · [PyAutoCortex#34](https://github.com/PyAutoLabs/PyAutoCortex/issues/34) · [projects/analytic_gaussian.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/analytic_gaussian.md) · local `/mnt/c/Users/Jammy/Science/active/analytic_gaussian` · RAL `/mnt/ral/jnightin/active/analytic_gaussian`
 
 **Now**
 
@@ -200,14 +200,14 @@ Wave 1 (342413, 200 seeds at N=5) is accepted as the baseline: autofit EP is exa
 <details><summary>📋 resume analytic_gaussian</summary>
 
 ```
-Use the cortex skill. — resume analytic_gaussian: read PyAutoCortex projects/analytic_gaussian.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/inference/analytic_gaussian/wiki/project/state.md and the assistant autofit_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
+Use the cortex skill. — resume analytic_gaussian: read PyAutoCortex projects/analytic_gaussian.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/active/analytic_gaussian/wiki/project/state.md and the assistant autofit_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
 ```
 
 </details>
 
 ### ep_toy_gaussian — NUTS versus three EP fits on the #1405 collapse toy at N=50
 
-active · ral · [ep_toy_gaussian#1](https://github.com/PyAutoLabs/ep_toy_gaussian/issues/1) · [projects/ep_toy_gaussian.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/ep_toy_gaussian.md) · local `/mnt/c/Users/Jammy/Science/inference/ep_toy_gaussian` · RAL `/mnt/ral/jnightin/ep_toy_gaussian`
+active · ral · [ep_toy_gaussian#1](https://github.com/PyAutoLabs/ep_toy_gaussian/issues/1) · [projects/ep_toy_gaussian.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/ep_toy_gaussian.md) · local `/mnt/c/Users/Jammy/Science/active/ep_toy_gaussian` · RAL `/mnt/ral/jnightin/active/ep_toy_gaussian`
 
 **Now**
 
@@ -230,7 +230,7 @@ Wave 1 (n50_seed42: 342639 + 342640_[0-2]) failed on infrastructure — EP x3 on
 <details><summary>📋 resume ep_toy_gaussian</summary>
 
 ```
-Use the cortex skill. — resume ep_toy_gaussian: read PyAutoCortex projects/ep_toy_gaussian.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/inference/ep_toy_gaussian/wiki/project/state.md and the assistant autofit_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
+Use the cortex skill. — resume ep_toy_gaussian: read PyAutoCortex projects/ep_toy_gaussian.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/active/ep_toy_gaussian/wiki/project/state.md and the assistant autofit_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
 ```
 
 </details>
