@@ -330,3 +330,17 @@ pj011646_final:
   partition: gpu
   status: retired
   note: "retired 2026-10-14: complete; tree moved to z_projects_complete 2026-10-14"
+
+euclid_detailed:
+  remote: none
+  local_path: /mnt/c/Users/Jammy/Science/active/euclid_detailed
+  ral_root: /mnt/ral/jnightin/active/euclid_detailed
+  mirror: none
+  sync_cli: hpc/sync
+  sync_verbs: [push, pull, logs, sync, push-data-init, pull-full, status, submit, push-submit, jobs, sacct, cancel, wait-and-pull, tail, du, check, clear-logs]
+  ledger: wiki/project/state.md
+  assistant: autolens_assistant
+  witness_file: results/**/*.json
+  partition: ral
+  status: active
+  note: "born 2026-10-15: advanced SLaM remodel (light[1] MGE 4x30 + point, 1250 source pixels, power-law mass[1]) of 31 euclid_dr1 grade-A threshold-100 success lenses flagged by eye — 20 source_residuals, 11 lens_light_residuals; euclid_dr1 fits pulled to output_dr1; source_lp JAX-CPU then numba-CPU like euclid_dr1; not yet submitted"
