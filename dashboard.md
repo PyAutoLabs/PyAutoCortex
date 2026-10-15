@@ -12,7 +12,7 @@ One ledger per science project: what is on the cluster right now, what the human
 |-------|------:|
 | [Running](#projects) | 22 |
 | [Open](#projects) | 48 |
-| [Projects](#projects) | 9 |
+| [Projects](#projects) | 11 |
 
 <details><summary>📋 check in since last time</summary>
 
@@ -51,6 +51,8 @@ Last check-in: 2026-09-30T09:51Z.
 | ic50_workspace | 0 | 0 | 2026-10-14 |
 | autolens_inference | 6 | 0 | 2026-09-24 |
 | autofit_inference | 0 | 1 | 2026-10-15 |
+| euclid_detailed | 0 | 0 | 2026-10-15 |
+| cowls | 0 | 0 | 2026-10-15 |
 
 ## Projects
 
@@ -555,6 +557,78 @@ Use the cortex skill. — resume autofit_inference: read PyAutoCortex projects/a
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/autofit_inference.md)
 
 active · ral · [autofit_inference#8](https://github.com/PyAutoLabs/autofit_inference/issues/8)
+
+</details>
+
+</details>
+
+<details id="project-euclid_detailed"><summary><b>euclid_detailed</b> — Advanced SLaM remodel of 31 euclid_dr1 lenses with residuals · no runs recorded · updated 2026-10-15</summary>
+
+**Registered:** 2026-10-15
+
+**Local:** `` /mnt/c/Users/Jammy/Science/active/euclid_detailed ``
+
+**RAL:** `` /mnt/ral/jnightin/active/euclid_detailed ``
+
+**Current position**
+
+Born 2026-10-15. Repo, 31 datasets, output_dr1 (euclid_dr1 fits) and scripts/slam.py ready; test mode passes both stages. Next: hpc/sync push, then submit_slam_chain.sh --sample=source_residuals and --sample=lens_light_residuals on RAL (partition ral).
+
+<details><summary title="Copy resume prompt for euclid_detailed">📋</summary>
+
+```
+Use the cortex skill. — resume euclid_detailed: read PyAutoCortex projects/euclid_detailed.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/active/euclid_detailed/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
+```
+
+</details>
+
+**Runs** (0)
+
+_nothing on the cluster_
+
+<details><summary>Recent log — 1 of 1 entry</summary>
+
+- 2026-10-15 — *note* — ledger opened
+
+[full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid_detailed.md)
+
+active · ral · no issue yet
+
+</details>
+
+</details>
+
+<details id="project-cowls"><summary><b>cowls</b> — euclid_detailed SLaM pipeline on COWLS JWST strong lenses, from COSJ100024+015334 · no runs recorded · updated 2026-10-15</summary>
+
+**Registered:** 2026-10-15
+
+**Local:** `` /mnt/c/Users/Jammy/Science/active/cowls ``
+
+**RAL:** `` /mnt/ral/jnightin/active/cowls ``
+
+**Current position**
+
+Born 2026-10-15. Repo PyAutoLabs/cowls (private), M25 COSJ100024+015334 dataset (4 bands) and scripts/slam.py ready; test mode passes both stages on F444W. Next, after the RAL PyAuto install is updated: hpc/sync push, then submit_slam_chain.sh --sample=M25 (F444W, partition ral).
+
+<details><summary title="Copy resume prompt for cowls">📋</summary>
+
+```
+Use the cortex skill. — resume cowls: read PyAutoCortex projects/cowls.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/active/cowls/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
+```
+
+</details>
+
+**Runs** (0)
+
+_nothing on the cluster_
+
+<details><summary>Recent log — 1 of 1 entry</summary>
+
+- 2026-10-15 — *note* — ledger opened
+
+[full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/cowls.md)
+
+active · ral · no issue yet
 
 </details>
 
