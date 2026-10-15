@@ -393,7 +393,7 @@ dormant · both · no issue yet · [projects/euclid.md](https://github.com/PyAut
 
 **Now**
 
-Reactivated 2026-10-14 by human decision; RAL tree now at the row's ral_root (category layout, 2026-10-15). No question is open yet: the next science task pre-registers one.
+Dormant: superseded by euclid_dr1 (euclid_dr1_prelim is defunct). The tree is kept under Science/active and RAL `active/euclid` (category layout, 2026-10-15); no question is open.
 
 **Runs**
 
