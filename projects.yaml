@@ -332,7 +332,7 @@ pj011646_final:
   note: "retired 2026-10-14: complete; tree moved to z_projects_complete 2026-10-14"
 
 euclid_detailed:
-  remote: none
+  remote: PyAutoLabs/euclid_detailed
   local_path: /mnt/c/Users/Jammy/Science/active/euclid_detailed
   ral_root: /mnt/ral/jnightin/active/euclid_detailed
   mirror: none
