@@ -98,8 +98,8 @@ euclid:
   assistant: none
   witness_file: catalogue/**/*.csv
   partition: both
-  status: active
-  note: "NO PyAutoLabs remote by ruling 2026-09-01: tracks DR1 tile-keyed catalogue CSV, personal remote Jammy2211/euclid-dr1-modeling, nested Overleaf paper repo, 34 GB; code half = PyAutoLabs/euclid_strong_lens_modeling_pipeline; witness undefined until a science task pre-registers one; dormant 2026-09-07: superseded by euclid_dr1_prelim, which phase 4 births; local output/ cleared 2026-09-07 (60 GB of May–June DR1 grade_ab runs, still on RAL under /mnt/ral/jnightin/euclid); reactivated 2026-10-14 by human decision; RAL tree moved to the category layout 2026-10-15"
+  status: dormant
+  note: "NO PyAutoLabs remote by ruling 2026-09-01: tracks DR1 tile-keyed catalogue CSV, personal remote Jammy2211/euclid-dr1-modeling, nested Overleaf paper repo, 34 GB; code half = PyAutoLabs/euclid_strong_lens_modeling_pipeline; witness undefined until a science task pre-registers one; dormant 2026-09-07: superseded by euclid_dr1_prelim, which phase 4 births; local output/ cleared 2026-09-07 (60 GB of May–June DR1 grade_ab runs, still on RAL under /mnt/ral/jnightin/euclid); superseded by euclid_dr1 (euclid_dr1_prelim defunct) per the human 2026-10-15; folder kept under Science/active and RAL active/ by human decision 2026-10-14; RAL tree moved to the category layout 2026-10-15"
 
 euclid_dr1_prelim:
   remote: none

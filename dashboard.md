@@ -12,7 +12,7 @@ One ledger per science project: what is on the cluster right now, what the human
 |-------|------:|
 | [Running](#projects) | 22 |
 | [Open](#projects) | 47 |
-| [Projects](#projects) | 10 |
+| [Projects](#projects) | 9 |
 
 <details><summary>📋 check in since last time</summary>
 
@@ -44,7 +44,6 @@ Last check-in: 2026-09-30T09:51Z.
 |---|---:|---:|---|
 | subhalo_validation | 0 | 5 | 2026-09-07 |
 | subhalo | 0 | 0 | 2026-10-15 |
-| euclid | 0 | 0 | 2026-10-15 |
 | euclid_dr1 | 16 | 42 | 2026-10-10 |
 | analytic_gaussian | 0 | 0 | 2026-10-14 |
 | ep_toy_gaussian | 0 | 0 | 2026-10-14 |
@@ -112,35 +111,6 @@ Registered 2026-10-15 (PyAutoCortex#67): SLACS sample under dataset/, output/ em
 
 ```
 Use the cortex skill. — resume subhalo: read PyAutoCortex projects/subhalo.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/active/subhalo/README.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
-```
-
-</details>
-
-### euclid — The original Euclid DR1 grade-AB catalogue project, superseded by euclid_dr1_prelim
-
-active · both · no issue yet · [projects/euclid.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid.md) · local `/mnt/c/Users/Jammy/Science/active/euclid` · RAL `/mnt/ral/jnightin/active/euclid`
-
-**Now**
-
-Reactivated 2026-10-14 by human decision; RAL tree now at the row's ral_root (category layout, 2026-10-15). No question is open yet: the next science task pre-registers one.
-
-**Runs**
-
-- _nothing on the cluster_
-
-**Last 5**
-
-- 2026-10-15 — *note* — reactivated by human decision 2026-10-14 (dormant → active); ral_root repointed to the category layout (PyAutoCortex#67)
-- 2026-08-28 — *note* — question: Do we recover Sersic indices or is prior pile-up artefact — planned, never run [archive/tasks/euclid/sersic_index_recovery.md]
-- 2026-08-28 — *note* — question: Can a fitted Euclid lens be resimulated and recovered — planned, never run [archive/tasks/euclid/resimulate_fitted_lens_simulator.md]
-- 2026-08-28 — *note* — question: How robust are magnification estimates under model match and mismatch — planned, never run [archive/tasks/euclid/magnification_robustness.md]
-
-[full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid.md)
-
-<details><summary>📋 resume euclid</summary>
-
-```
-Use the cortex skill. — resume euclid: read PyAutoCortex projects/euclid.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/active/euclid/CLAUDE.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
 ```
 
 </details>
@@ -416,6 +386,27 @@ Use the cortex skill. — resume autofit_inference: read PyAutoCortex projects/a
 ```
 
 </details>
+
+### euclid — The original Euclid DR1 grade-AB catalogue project, superseded by euclid_dr1
+
+dormant · both · no issue yet · [projects/euclid.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid.md) · local `/mnt/c/Users/Jammy/Science/active/euclid` · RAL `/mnt/ral/jnightin/active/euclid`
+
+**Now**
+
+Reactivated 2026-10-14 by human decision; RAL tree now at the row's ral_root (category layout, 2026-10-15). No question is open yet: the next science task pre-registers one.
+
+**Runs**
+
+- _nothing on the cluster_
+
+**Last 5**
+
+- 2026-10-15 — *note* — superseded by euclid_dr1 (euclid_dr1_prelim defunct) per the human; stays dormant; folder under Science/active and RAL active/; ral_root repointed to the category layout (PyAutoCortex#67)
+- 2026-08-28 — *note* — question: Do we recover Sersic indices or is prior pile-up artefact — planned, never run [archive/tasks/euclid/sersic_index_recovery.md]
+- 2026-08-28 — *note* — question: Can a fitted Euclid lens be resimulated and recovered — planned, never run [archive/tasks/euclid/resimulate_fitted_lens_simulator.md]
+- 2026-08-28 — *note* — question: How robust are magnification estimates under model match and mismatch — planned, never run [archive/tasks/euclid/magnification_robustness.md]
+
+[full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid.md)
 
 <details><summary>5 retired</summary>
 
