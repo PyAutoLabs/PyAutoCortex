@@ -17,7 +17,7 @@
 #     remote: <owner/repo | none> # the remote — PyAutoLabs for active projects; a
 #                                 # personal remote is recorded as a fact with a `note:`
 #     local_path: <abs path>      # the laptop checkout
-#     ral_root: <abs path>        # the project root on RAL (/mnt/ral/jnightin/<project>)
+#     ral_root: <abs path>        # the project root on RAL (/mnt/ral/jnightin/<category>/<project>)
 #     mirror: <abs path | none>   # the laptop pull root the sync CLI fills (holds data, not science)
 #     sync_cli: <path>            # the project's sync CLI, relative to local_path
 #     sync_verbs: [a, b, c]       # the verbs that CLI has — a flow list of bare words, the only list
@@ -48,7 +48,7 @@
 inference_programme:
   remote: PyAutoLabs/autolens_profiling
   local_path: /home/jammy/Code/PyAutoLabs/lens/autolens_profiling
-  ral_root: /mnt/ral/jnightin/autolens_profiling
+  ral_root: /mnt/ral/jnightin/profiling/autolens_profiling
   mirror: /mnt/c/Users/Jammy/Science/archive/inference_programme
   sync_cli: hpc/sync
   sync_verbs: [pull, logs, status, submit, jobs, sacct, cancel, tail, du, check]
@@ -62,7 +62,7 @@ inference_programme:
 subhalo_validation:
   remote: PyAutoLabs/subhalo_validation
   local_path: /mnt/c/Users/Jammy/Science/active/subhalo_validation
-  ral_root: /mnt/ral/jnightin/subhalo_validation
+  ral_root: /mnt/ral/jnightin/active/subhalo_validation
   mirror: none
   sync_cli: hpc/sync
   sync_verbs: [push, pull, logs, sync, push-data-init, pull-full, status, submit, push-submit, jobs, sacct, cancel, wait-and-pull, tail, du, check, clear-logs]
@@ -73,10 +73,24 @@ subhalo_validation:
   status: active
   note: "pulls land in the checkout (PULL_DIRS output results); run_chain.sh chains A→B afterok; witness evidence_increase < 5, subhalo_stage, test_mode"
 
+subhalo:
+  remote: none
+  local_path: /mnt/c/Users/Jammy/Science/active/subhalo
+  ral_root: /mnt/ral/jnightin/active/subhalo
+  mirror: none
+  sync_cli: hpc/sync
+  sync_verbs: [push, pull, sync, status]
+  ledger: README.md
+  assistant: autolens_assistant
+  witness_file: results/**/*.json
+  partition: both
+  status: active
+  note: "registered 2026-10-15 by human decision (PyAutoCortex#67), overriding schema decision 52(a) for this tree: not a git repo, so remote none; ledger is the generic PyAutoLens project-template README; SLACS sample under dataset/, output/ empty, no results/ yet; hpc/sync.conf targets HPC_BASE=/mnt/ral/jnightin/active; batch_cpu submits still say --partition=cpu (no such partition on RAL); ral_root not yet created on RAL; witness undefined until a science task pre-registers one"
+
 euclid:
   remote: none
   local_path: /mnt/c/Users/Jammy/Science/active/euclid
-  ral_root: /mnt/ral/jnightin/euclid_strong_lens_modeling_pipeline
+  ral_root: /mnt/ral/jnightin/active/euclid
   mirror: none
   sync_cli: hpc/sync
   sync_verbs: [push, pull, sync, status]
@@ -84,13 +98,13 @@ euclid:
   assistant: none
   witness_file: catalogue/**/*.csv
   partition: both
-  status: dormant
-  note: "NO PyAutoLabs remote by ruling 2026-09-01: tracks DR1 tile-keyed catalogue CSV, personal remote Jammy2211/euclid-dr1-modeling, nested Overleaf paper repo, 34 GB; code half = PyAutoLabs/euclid_strong_lens_modeling_pipeline; witness undefined until a science task pre-registers one; dormant 2026-09-07: superseded by euclid_dr1_prelim, which phase 4 births; local output/ cleared 2026-09-07 (60 GB of May–June DR1 grade_ab runs, still on RAL under /mnt/ral/jnightin/euclid)"
+  status: active
+  note: "NO PyAutoLabs remote by ruling 2026-09-01: tracks DR1 tile-keyed catalogue CSV, personal remote Jammy2211/euclid-dr1-modeling, nested Overleaf paper repo, 34 GB; code half = PyAutoLabs/euclid_strong_lens_modeling_pipeline; witness undefined until a science task pre-registers one; dormant 2026-09-07: superseded by euclid_dr1_prelim, which phase 4 births; local output/ cleared 2026-09-07 (60 GB of May–June DR1 grade_ab runs, still on RAL under /mnt/ral/jnightin/euclid); reactivated 2026-10-14 by human decision; RAL tree moved to the category layout 2026-10-15"
 
 euclid_dr1_prelim:
   remote: none
   local_path: /mnt/c/Users/Jammy/Science/archive/euclid_dr1_prelim
-  ral_root: /mnt/ral/jnightin/euclid_dr1_prelim
+  ral_root: /mnt/ral/jnightin/archive/euclid_dr1_prelim
   mirror: none
   sync_cli: hpc/sync
   sync_verbs: [push, pull, sync, status]
@@ -144,15 +158,15 @@ ep_toy_gaussian:
   note: "born 2026-09-10 as the graphical-ep campaign's confidence test on the PyAutoFit#1405 collapse toy at N=50: joint BlackJAX NUTS vs EP x3 on identical data; model and EP settings verbatim from complete/2026/07 ep_toy_diagnostic; CPU-only, data simulated in memory from its seed; remote PyAutoLabs/ep_toy_gaussian (private) created 2026-09-10"
 
 # --------------------------------------------------------------------------- #
-# dormant — git repos only. The non-git trees (subhalo, euclid_group, z_*) are
+# dormant — git repos only. The non-git trees (euclid_group, z_*) are
 # storage, not projects, and aris_PJ011646 is an assistant clone; none get a
-# row. `ral_root` is the planned path and `sync_verbs` is unverified on every
+# row (subhalo, non-git, is the one exception: registered active 2026-10-15). `ral_root` is the planned path and `sync_verbs` is unverified on every
 # row below — each note says so.
 # --------------------------------------------------------------------------- #
 profiling:
   remote: none
   local_path: /mnt/c/Users/Jammy/Science/archive/profiling
-  ral_root: /mnt/ral/jnightin/profiling
+  ral_root: /mnt/ral/jnightin/archive/profiling
   mirror: none
   sync_cli: hpc/sync
   sync_verbs: [pull]
@@ -166,7 +180,7 @@ profiling:
 cowls_diana:
   remote: none
   local_path: /mnt/c/Users/Jammy/Science/archive/cowls_diana
-  ral_root: /mnt/ral/jnightin/cowls_diana
+  ral_root: /mnt/ral/jnightin/archive/cowls_diana
   mirror: none
   sync_cli: hpc/sync
   sync_verbs: [pull]
@@ -180,7 +194,7 @@ cowls_diana:
 subhalo_simulations:
   remote: none
   local_path: /mnt/c/Users/Jammy/Science/archive/subhalo_simulations
-  ral_root: /mnt/ral/jnightin/subhalo_simulations
+  ral_root: /mnt/ral/jnightin/archive/subhalo_simulations
   mirror: none
   sync_cli: hpc/sync
   sync_verbs: [pull]
@@ -194,7 +208,7 @@ subhalo_simulations:
 slope_hierarchy:
   remote: Jammy2211/slope_hierarchy
   local_path: /mnt/c/Users/Jammy/Science/complete/slope_hierarchy
-  ral_root: /mnt/ral/jnightin/slope_hierarchy
+  ral_root: /mnt/ral/jnightin/complete/slope_hierarchy
   mirror: none
   sync_cli: hpc/sync
   sync_verbs: [pull]
@@ -208,7 +222,7 @@ slope_hierarchy:
 slope_hierarchy_scale:
   remote: PyAutoLabs/slope_hierarchy_scale
   local_path: /mnt/c/Users/Jammy/Science/active/slope_hierarchy_scale
-  ral_root: /mnt/ral/jnightin/slope_hierarchy_scale
+  ral_root: /mnt/ral/jnightin/active/slope_hierarchy_scale
   mirror: none
   sync_cli: hpc/sync
   sync_verbs: [push, pull, sync, status, submit, push-submit, jobs, tail, check]
@@ -222,7 +236,7 @@ slope_hierarchy_scale:
 pj011646:
   remote: Jammy2211/PJ011646
   local_path: /mnt/c/Users/Jammy/Science/archive/PJ011646
-  ral_root: /mnt/ral/jnightin/z_vault/PJ011646
+  ral_root: /mnt/ral/jnightin/archive/PJ011646
   mirror: none
   sync_cli: hpc/sync
   sync_verbs: [pull]
@@ -236,7 +250,7 @@ pj011646:
 concr:
   remote: Jammy2211/cosmology_and_cancer
   local_path: /mnt/c/Users/Jammy/Science/archive/concr
-  ral_root: /mnt/ral/jnightin/concr
+  ral_root: /mnt/ral/jnightin/archive/concr
   mirror: none
   sync_cli: hpc/sync
   sync_verbs: [pull]
@@ -250,7 +264,7 @@ concr:
 ic50_workspace:
   remote: Jammy2211/ic50_workspace
   local_path: /mnt/c/Users/Jammy/Science/active/ic50_workspace
-  ral_root: /mnt/ral/jnightin/ic50_workspace
+  ral_root: /mnt/ral/jnightin/active/ic50_workspace
   mirror: none
   sync_cli: hpc/sync
   sync_verbs: [push, pull, logs, sync, push-data-init, pull-full, status, submit, push-submit, jobs, sacct, cancel, wait-and-pull, tail, du, check, clear-logs]
@@ -264,7 +278,7 @@ ic50_workspace:
 autolens_inference:
   remote: PyAutoLabs/autolens_inference
   local_path: /home/jammy/Code/PyAutoLabs/lens/autolens_inference
-  ral_root: /mnt/ral/jnightin/autolens_inference
+  ral_root: /mnt/ral/jnightin/inference/autolens_inference
   mirror: none
   sync_cli: hpc/sync
   sync_verbs: [pull, logs, status, submit, jobs, sacct, cancel, tail, du, check]
@@ -278,7 +292,7 @@ autolens_inference:
 autofit_inference:
   remote: PyAutoLabs/autofit_inference
   local_path: /home/jammy/Code/PyAutoLabs/fit/autofit_inference
-  ral_root: /mnt/ral/jnightin/autofit_inference
+  ral_root: /mnt/ral/jnightin/inference/autofit_inference
   mirror: none
   sync_cli: hpc/sync
   sync_verbs: [pull, logs, status, submit, jobs, sacct, cancel, tail, du, check]
@@ -306,7 +320,7 @@ euclid_sersics:
 pj011646_final:
   remote: none
   local_path: /mnt/c/Users/Jammy/Science/complete/PJ011646_final
-  ral_root: /mnt/ral/jnightin/PJ011646_final
+  ral_root: /mnt/ral/jnightin/complete/PJ011646_final
   mirror: none
   sync_cli: hpc/sync
   sync_verbs: [push, pull, logs, status, submit, jobs, sacct, tail, du, check]

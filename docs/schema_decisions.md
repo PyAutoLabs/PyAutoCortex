@@ -463,3 +463,15 @@ Choices made in phase 2 — the conductor, the board and the workflows
     ask; the agent records only cluster facts), and the top of each project's
     GitHub issue is the same concise ledger the board shows (the `issue`
     block), with the detailed run-through underneath it.
+
+61. **`ral_root` follows the category layout, and `subhalo` gets a row**
+    (2026-10-15, PyAutoCortex#67). On 2026-10-15 the human moved the RAL
+    project trees under `/mnt/ral/jnightin/` into category folders mirroring
+    the laptop Science tree: `active/`, `archive/`, `complete/`, plus
+    `inference/` and `profiling/` for the repo-backed campaign roots;
+    `PyAuto/`, `euclid_dr1/` and `scratch/` stay top-level. Every row's
+    `ral_root` now mirrors its `local_path` category (a top-level laptop tree
+    keeps a top-level `ral_root`). The non-git `Science/active/subhalo` tree
+    is registered `active` by human decision, the one exception to 52(a): an
+    active project needs a ledger, and git is not what makes it science.
+    Why: one layout on both machines means a path is derived, never looked up.

@@ -12,7 +12,7 @@ One ledger per science project: what is on the cluster right now, what the human
 |-------|------:|
 | [Running](#projects) | 22 |
 | [Open](#projects) | 47 |
-| [Projects](#projects) | 8 |
+| [Projects](#projects) | 10 |
 
 <details><summary>📋 check in since last time</summary>
 
@@ -43,6 +43,8 @@ Last check-in: 2026-09-30T09:51Z.
 | Project | Running | Open | Last update |
 |---|---:|---:|---|
 | subhalo_validation | 0 | 5 | 2026-09-07 |
+| subhalo | 0 | 0 | 2026-10-15 |
+| euclid | 0 | 0 | 2026-10-15 |
 | euclid_dr1 | 16 | 42 | 2026-10-10 |
 | analytic_gaussian | 0 | 0 | 2026-10-14 |
 | ep_toy_gaussian | 0 | 0 | 2026-10-14 |
@@ -55,7 +57,7 @@ Last check-in: 2026-09-30T09:51Z.
 
 ### subhalo_validation — Do the SLaM subhalo pipelines false-detect on lenses with no subhalo
 
-active · ral · [subhalo_validation#2](https://github.com/PyAutoLabs/subhalo_validation/issues/2) · [projects/subhalo_validation.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/subhalo_validation.md) · local `/mnt/c/Users/Jammy/Science/active/subhalo_validation` · RAL `/mnt/ral/jnightin/subhalo_validation`
+active · ral · [subhalo_validation#2](https://github.com/PyAutoLabs/subhalo_validation/issues/2) · [projects/subhalo_validation.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/subhalo_validation.md) · local `/mnt/c/Users/Jammy/Science/active/subhalo_validation` · RAL `/mnt/ral/jnightin/active/subhalo_validation`
 
 **Now**
 
@@ -84,6 +86,61 @@ Next: pull when the numba chains land and read the evidence_increase of each; no
 
 ```
 Use the cortex skill. — resume subhalo_validation: read PyAutoCortex projects/subhalo_validation.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/active/subhalo_validation/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
+```
+
+</details>
+
+### subhalo — SLaM subhalo modelling of the SLACS lens sample
+
+active · both · no issue yet · [projects/subhalo.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/subhalo.md) · local `/mnt/c/Users/Jammy/Science/active/subhalo` · RAL `/mnt/ral/jnightin/active/subhalo`
+
+**Now**
+
+Registered 2026-10-15 (PyAutoCortex#67): SLACS sample under dataset/, output/ empty, no runs yet; ral_root not yet created on RAL — the first hpc/sync push creates it.
+
+**Runs**
+
+- _nothing on the cluster_
+
+**Last 5**
+
+- 2026-10-15 — *note* — ledger opened
+
+[full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/subhalo.md)
+
+<details><summary>📋 resume subhalo</summary>
+
+```
+Use the cortex skill. — resume subhalo: read PyAutoCortex projects/subhalo.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/active/subhalo/README.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
+```
+
+</details>
+
+### euclid — The original Euclid DR1 grade-AB catalogue project, superseded by euclid_dr1_prelim
+
+active · both · no issue yet · [projects/euclid.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid.md) · local `/mnt/c/Users/Jammy/Science/active/euclid` · RAL `/mnt/ral/jnightin/active/euclid`
+
+**Now**
+
+Reactivated 2026-10-14 by human decision; RAL tree now at the row's ral_root (category layout, 2026-10-15). No question is open yet: the next science task pre-registers one.
+
+**Runs**
+
+- _nothing on the cluster_
+
+**Last 5**
+
+- 2026-10-15 — *note* — reactivated by human decision 2026-10-14 (dormant → active); ral_root repointed to the category layout (PyAutoCortex#67)
+- 2026-08-28 — *note* — question: Do we recover Sersic indices or is prior pile-up artefact — planned, never run [archive/tasks/euclid/sersic_index_recovery.md]
+- 2026-08-28 — *note* — question: Can a fitted Euclid lens be resimulated and recovered — planned, never run [archive/tasks/euclid/resimulate_fitted_lens_simulator.md]
+- 2026-08-28 — *note* — question: How robust are magnification estimates under model match and mismatch — planned, never run [archive/tasks/euclid/magnification_robustness.md]
+
+[full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid.md)
+
+<details><summary>📋 resume euclid</summary>
+
+```
+Use the cortex skill. — resume euclid: read PyAutoCortex projects/euclid.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/active/euclid/CLAUDE.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
 ```
 
 </details>
@@ -237,7 +294,7 @@ Use the cortex skill. — resume ep_toy_gaussian: read PyAutoCortex projects/ep_
 
 ### slope_hierarchy_scale — Hierarchical slope recovery with graphical and EP at N=25 to 50
 
-active · both · [slope_hierarchy_scale#2](https://github.com/PyAutoLabs/slope_hierarchy_scale/issues/2) · [projects/slope_hierarchy_scale.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/slope_hierarchy_scale.md) · local `/mnt/c/Users/Jammy/Science/active/slope_hierarchy_scale` · RAL `/mnt/ral/jnightin/slope_hierarchy_scale`
+active · both · [slope_hierarchy_scale#2](https://github.com/PyAutoLabs/slope_hierarchy_scale/issues/2) · [projects/slope_hierarchy_scale.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/slope_hierarchy_scale.md) · local `/mnt/c/Users/Jammy/Science/active/slope_hierarchy_scale` · RAL `/mnt/ral/jnightin/active/slope_hierarchy_scale`
 
 **Now**
 
@@ -267,7 +324,7 @@ Use the cortex skill. — resume slope_hierarchy_scale: read PyAutoCortex projec
 
 ### ic50_workspace — EP against the graphical joint fit on IC50 dose-response data, scaling up
 
-active · ral · [PyAutoCortex#36](https://github.com/PyAutoLabs/PyAutoCortex/issues/36) · [projects/ic50_workspace.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/ic50_workspace.md) · local `/mnt/c/Users/Jammy/Science/active/ic50_workspace` · RAL `/mnt/ral/jnightin/ic50_workspace`
+active · ral · [PyAutoCortex#36](https://github.com/PyAutoLabs/PyAutoCortex/issues/36) · [projects/ic50_workspace.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/ic50_workspace.md) · local `/mnt/c/Users/Jammy/Science/active/ic50_workspace` · RAL `/mnt/ral/jnightin/active/ic50_workspace`
 
 **Now**
 
@@ -297,7 +354,7 @@ Use the cortex skill. — resume ic50_workspace: read PyAutoCortex projects/ic50
 
 ### autolens_inference — Do the PyAutoLens inference backends agree on the HST SLaM posterior
 
-active · both · [autolens_inference#4](https://github.com/PyAutoLabs/autolens_inference/issues/4) · [projects/autolens_inference.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/autolens_inference.md) · local `/home/jammy/Code/PyAutoLabs/lens/autolens_inference` · RAL `/mnt/ral/jnightin/autolens_inference`
+active · both · [autolens_inference#4](https://github.com/PyAutoLabs/autolens_inference/issues/4) · [projects/autolens_inference.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/autolens_inference.md) · local `/home/jammy/Code/PyAutoLabs/lens/autolens_inference` · RAL `/mnt/ral/jnightin/inference/autolens_inference`
 
 **Now**
 
@@ -332,7 +389,7 @@ Use the cortex skill. — resume autolens_inference: read PyAutoCortex projects/
 
 ### autofit_inference — PyAutoFit search benchmark on gaussian_x3: which searches find the right answer fastest
 
-active · ral · [autofit_inference#8](https://github.com/PyAutoLabs/autofit_inference/issues/8) · [projects/autofit_inference.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/autofit_inference.md) · local `/home/jammy/Code/PyAutoLabs/fit/autofit_inference` · RAL `/mnt/ral/jnightin/autofit_inference`
+active · ral · [autofit_inference#8](https://github.com/PyAutoLabs/autofit_inference/issues/8) · [projects/autofit_inference.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/autofit_inference.md) · local `/home/jammy/Code/PyAutoLabs/fit/autofit_inference` · RAL `/mnt/ral/jnightin/inference/autofit_inference`
 
 **Now**
 
@@ -359,26 +416,6 @@ Use the cortex skill. — resume autofit_inference: read PyAutoCortex projects/a
 ```
 
 </details>
-
-### euclid — The original Euclid DR1 grade-AB catalogue project, superseded by euclid_dr1_prelim
-
-dormant · both · no issue yet · [projects/euclid.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid.md) · local `/mnt/c/Users/Jammy/Science/active/euclid` · RAL `/mnt/ral/jnightin/euclid_strong_lens_modeling_pipeline`
-
-**Now**
-
-Dormant since 2026-09-07: superseded by euclid_dr1_prelim. Three questions were planned and never run (see the archive).
-
-**Runs**
-
-- _nothing on the cluster_
-
-**Last 5**
-
-- 2026-08-28 — *note* — question: Do we recover Sersic indices or is prior pile-up artefact — planned, never run [archive/tasks/euclid/sersic_index_recovery.md]
-- 2026-08-28 — *note* — question: Can a fitted Euclid lens be resimulated and recovered — planned, never run [archive/tasks/euclid/resimulate_fitted_lens_simulator.md]
-- 2026-08-28 — *note* — question: How robust are magnification estimates under model match and mismatch — planned, never run [archive/tasks/euclid/magnification_robustness.md]
-
-[full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid.md)
 
 <details><summary>5 retired</summary>
 
