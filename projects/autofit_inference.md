@@ -5,13 +5,15 @@ Issue: autofit_inference#8
 
 ## Now
 
-Wave 2 closed and judged under gaussian_x3@2 (B5b-2, 2026-10-15): all 12,750 pulled rows admitted at PyAutoFit pin df6d218f10cd; of the 13,000 expected runs, 11,580 rows + 1,170 failed + 0 missing + 250 deferred. The 409930 probe-first legs close: NSS 50-step leads both evidence rankings (blend 158/250, separated 210/250); Zeus JAX is 0/250 on the blend and 190/250 on the separated control (first among separated posterior legs). The catalogue ranks only legs with success rate >= 50 % over >= 20 attempts and lists the rest as unreliable (post-hoc presentation convention, protocol §8 note; autofit_inference#12 ruling 2). Summary records published as inference-summary@3 (101 record shards). Next: after the B5b-2 PRs merge, capture the Insight fit snapshot from main under @3 and run pyauto-insight check online; then B5c (a second model family).
+B5c (2026-10-15, autofit_inference#14): a second model family, correlated_nd (correlated Gaussians D = 20/50/100, condition number 10^3, and a D = 20 hybrid Rosenbrock banana, exact posteriors and ln Z), pre-registered as correlated_nd@1 (first committed 9ec37795f404; amendment A1 before any row) with seeded datasets and eight exact references that pass the section 6 agreement test. Its 930-run pilot is RAL 409957 on --partition=ral at the pin df6d218f10cd; it ranks nothing and is catalogued apart from gaussian_x3 (nothing ranked across families). gaussian_x3 wave 2 stays closed and judged under gaussian_x3@2. Next: B5c-2 pulls the pilot (results/ only), judges it under @1, freezes correlated_nd@2 and submits the scored wave.
 
 ## Runs
 
+- 409957_[0-929] — open — ral — 2026-10-15 — correlated_nd@1 pilot (B5c, second model family; protocol first committed 9ec37795f404, A1 before any row): 930 runs, 10 seeds x realisation 1 x 93 planned cells over corr_gaussian_d20/d50/d100 + rosenbrock_d20, one run per task, 4 h process cap, %100; submit_correlated_nd_pilot; pin df6d218f10cd; pulled in B5c-2
 
 ## Log
 
+- 2026-10-15 — run — 409957_[0-929] submitted: correlated_nd@1 pilot (B5c, second model family; protocol first committed 9ec37795f404, A1 before any row): 930 runs, 10 seeds x realisation 1 x 93 planned cells over corr_gaussian_d20/d50/d100 + rosenbrock_d20, one run per task, 4 h process cap, %100; submit_correlated_nd_pilot; pin df6d218f10cd; pulled in B5c-2
 - 2026-10-15 — run — 409930_[0-19] finished — wall 1:30: wave-2 probe-first remainder (B5b): Zeus JAX + NSS n_live_200_mcmc_steps_50, both datasets, 980 runs after the probe under probe-derived @2 timeouts (NSS 600 s, Zeus 1168 s); %20; submit_wave2_remainder; pin df6d218f10cd; pulled in B5b-2 — 20/20 COMPLETED (16:08-17:38 UTC); 980 remainder rows pulled by per-directory tar (20 probe rows byte-identical); all admitted under gaussian_x3@2, 0 missing; judged B5b-2
 - 2026-10-15 — run — 408367_[0-389] finished — wall 1:57: scored wave 2 separated jax_cpu: 3750 runs, %60, afterany 408346:408347 — 390/390 COMPLETED; 3750 separated jax_cpu rows admitted; judged B5b
 - 2026-10-15 — run — 408366_[0-379] finished — wall 1:51: scored wave 2 separated numpy: 2250 runs, %60, afterany 408346:408347 — 380/380 COMPLETED; 2250 separated numpy rows admitted; judged B5b
