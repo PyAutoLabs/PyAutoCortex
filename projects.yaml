@@ -344,3 +344,17 @@ euclid_detailed:
   partition: ral
   status: active
   note: "born 2026-10-15: advanced SLaM remodel (light[1] MGE 4x30 + point, 1250 source pixels, power-law mass[1]) of 31 euclid_dr1 grade-A threshold-100 success lenses flagged by eye — 20 source_residuals, 11 lens_light_residuals; euclid_dr1 fits pulled to output_dr1; source_lp JAX-CPU then numba-CPU like euclid_dr1; not yet submitted"
+
+cowls:
+  remote: PyAutoLabs/cowls
+  local_path: /mnt/c/Users/Jammy/Science/active/cowls
+  ral_root: /mnt/ral/jnightin/active/cowls
+  mirror: none
+  sync_cli: hpc/sync
+  sync_verbs: [push, pull, logs, sync, push-data-init, pull-full, status, submit, push-submit, jobs, sacct, cancel, wait-and-pull, tail, du, check, clear-logs]
+  ledger: wiki/project/state.md
+  assistant: autolens_assistant
+  witness_file: results/**/*.json
+  partition: ral
+  status: active
+  note: "born 2026-10-15: euclid_detailed SLaM pipeline (light[1] MGE 4x30 + point, 1250 source pixels, power-law mass) applied to COWLS JWST lenses, starting with M25 COSJ100024+015334 (F444W default, mask_extra_galaxies noise-scaled); source_lp JAX-CPU then numba-CPU; not yet submitted"
