@@ -10,8 +10,8 @@ One ledger per science project: what is on the cluster right now, what the human
 
 | Where | Count |
 |-------|------:|
-| [Running](#projects) | 22 |
-| [Open](#projects) | 48 |
+| [Running](#projects) | 25 |
+| [Open](#projects) | 53 |
 | [Projects](#projects) | 8 |
 
 <details><summary>📋 check in since last time</summary>
@@ -49,13 +49,13 @@ Last check-in: 2026-09-30T09:51Z.
 | slope_hierarchy_scale | 0 | 0 | 2026-10-14 |
 | ic50_workspace | 0 | 0 | 2026-10-14 |
 | autolens_inference | 6 | 0 | 2026-09-24 |
-| autofit_inference | 0 | 1 | 2026-10-15 |
+| autofit_inference | 3 | 6 | 2026-10-14 |
 
 ## Projects
 
 ### subhalo_validation — Do the SLaM subhalo pipelines false-detect on lenses with no subhalo
 
-active · ral · [subhalo_validation#2](https://github.com/PyAutoLabs/subhalo_validation/issues/2) · [projects/subhalo_validation.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/subhalo_validation.md) · local `/mnt/c/Users/Jammy/Science/subhalo_validation` · RAL `/mnt/ral/jnightin/subhalo_validation`
+active · ral · [subhalo_validation#2](https://github.com/PyAutoLabs/subhalo_validation/issues/2) · [projects/subhalo_validation.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/subhalo_validation.md) · local `/mnt/c/Users/Jammy/Science/active/subhalo_validation` · RAL `/mnt/ral/jnightin/subhalo_validation`
 
 **Now**
 
@@ -83,7 +83,7 @@ Next: pull when the numba chains land and read the evidence_increase of each; no
 <details><summary>📋 resume subhalo_validation</summary>
 
 ```
-Use the cortex skill. — resume subhalo_validation: read PyAutoCortex projects/subhalo_validation.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/subhalo_validation/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
+Use the cortex skill. — resume subhalo_validation: read PyAutoCortex projects/subhalo_validation.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/active/subhalo_validation/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
 ```
 
 </details>
@@ -177,7 +177,7 @@ Use the cortex skill. — resume euclid_dr1: read PyAutoCortex projects/euclid_d
 
 ### analytic_gaussian — Graphical and EP against a closed-form Gaussian posterior, at ensemble scale
 
-active · ral · [PyAutoCortex#34](https://github.com/PyAutoLabs/PyAutoCortex/issues/34) · [projects/analytic_gaussian.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/analytic_gaussian.md) · local `/mnt/c/Users/Jammy/Science/analytic_gaussian` · RAL `/mnt/ral/jnightin/analytic_gaussian`
+active · ral · [PyAutoCortex#34](https://github.com/PyAutoLabs/PyAutoCortex/issues/34) · [projects/analytic_gaussian.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/analytic_gaussian.md) · local `/mnt/c/Users/Jammy/Science/inference/analytic_gaussian` · RAL `/mnt/ral/jnightin/analytic_gaussian`
 
 **Now**
 
@@ -200,14 +200,14 @@ Wave 1 (342413, 200 seeds at N=5) is accepted as the baseline: autofit EP is exa
 <details><summary>📋 resume analytic_gaussian</summary>
 
 ```
-Use the cortex skill. — resume analytic_gaussian: read PyAutoCortex projects/analytic_gaussian.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/analytic_gaussian/wiki/project/state.md and the assistant autofit_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
+Use the cortex skill. — resume analytic_gaussian: read PyAutoCortex projects/analytic_gaussian.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/inference/analytic_gaussian/wiki/project/state.md and the assistant autofit_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
 ```
 
 </details>
 
 ### ep_toy_gaussian — NUTS versus three EP fits on the #1405 collapse toy at N=50
 
-active · ral · [ep_toy_gaussian#1](https://github.com/PyAutoLabs/ep_toy_gaussian/issues/1) · [projects/ep_toy_gaussian.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/ep_toy_gaussian.md) · local `/mnt/c/Users/Jammy/Science/ep_toy_gaussian` · RAL `/mnt/ral/jnightin/ep_toy_gaussian`
+active · ral · [ep_toy_gaussian#1](https://github.com/PyAutoLabs/ep_toy_gaussian/issues/1) · [projects/ep_toy_gaussian.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/ep_toy_gaussian.md) · local `/mnt/c/Users/Jammy/Science/inference/ep_toy_gaussian` · RAL `/mnt/ral/jnightin/ep_toy_gaussian`
 
 **Now**
 
@@ -230,14 +230,14 @@ Wave 1 (n50_seed42: 342639 + 342640_[0-2]) failed on infrastructure — EP x3 on
 <details><summary>📋 resume ep_toy_gaussian</summary>
 
 ```
-Use the cortex skill. — resume ep_toy_gaussian: read PyAutoCortex projects/ep_toy_gaussian.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/ep_toy_gaussian/wiki/project/state.md and the assistant autofit_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
+Use the cortex skill. — resume ep_toy_gaussian: read PyAutoCortex projects/ep_toy_gaussian.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/inference/ep_toy_gaussian/wiki/project/state.md and the assistant autofit_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
 ```
 
 </details>
 
 ### slope_hierarchy_scale — Hierarchical slope recovery with graphical and EP at N=25 to 50
 
-active · both · [slope_hierarchy_scale#2](https://github.com/PyAutoLabs/slope_hierarchy_scale/issues/2) · [projects/slope_hierarchy_scale.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/slope_hierarchy_scale.md) · local `/mnt/c/Users/Jammy/Science/slope_hierarchy_scale` · RAL `/mnt/ral/jnightin/slope_hierarchy_scale`
+active · both · [slope_hierarchy_scale#2](https://github.com/PyAutoLabs/slope_hierarchy_scale/issues/2) · [projects/slope_hierarchy_scale.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/slope_hierarchy_scale.md) · local `/mnt/c/Users/Jammy/Science/active/slope_hierarchy_scale` · RAL `/mnt/ral/jnightin/slope_hierarchy_scale`
 
 **Now**
 
@@ -260,14 +260,14 @@ The N=25 graphical baselines are in: per-lens fits (342348) give a naive parent 
 <details><summary>📋 resume slope_hierarchy_scale</summary>
 
 ```
-Use the cortex skill. — resume slope_hierarchy_scale: read PyAutoCortex projects/slope_hierarchy_scale.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/slope_hierarchy_scale/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
+Use the cortex skill. — resume slope_hierarchy_scale: read PyAutoCortex projects/slope_hierarchy_scale.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/active/slope_hierarchy_scale/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
 ```
 
 </details>
 
 ### ic50_workspace — EP against the graphical joint fit on IC50 dose-response data, scaling up
 
-active · ral · [PyAutoCortex#36](https://github.com/PyAutoLabs/PyAutoCortex/issues/36) · [projects/ic50_workspace.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/ic50_workspace.md) · local `/mnt/c/Users/Jammy/Science/ic50_workspace` · RAL `/mnt/ral/jnightin/ic50_workspace`
+active · ral · [PyAutoCortex#36](https://github.com/PyAutoLabs/PyAutoCortex/issues/36) · [projects/ic50_workspace.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/ic50_workspace.md) · local `/mnt/c/Users/Jammy/Science/active/ic50_workspace` · RAL `/mnt/ral/jnightin/ic50_workspace`
 
 **Now**
 
@@ -290,7 +290,7 @@ The scale ladder is in. EP passes N=5/10/25 with coef_mean within 3σ and cost g
 <details><summary>📋 resume ic50_workspace</summary>
 
 ```
-Use the cortex skill. — resume ic50_workspace: read PyAutoCortex projects/ic50_workspace.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/ic50_workspace/NOTES.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
+Use the cortex skill. — resume ic50_workspace: read PyAutoCortex projects/ic50_workspace.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/active/ic50_workspace/NOTES.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
 ```
 
 </details>
@@ -336,19 +336,27 @@ active · ral · [autofit_inference#8](https://github.com/PyAutoLabs/autofit_inf
 
 **Now**
 
-Scored wave 2 pulled and judged under gaussian_x3@2 (B5b, 2026-10-15): 11,770 rows at PyAutoFit pin df6d218f10cd all admitted; accounting 11,750 scored (10,580 rows, 1,170 failed) + 20 probe + 250 deferred; all 20 per-realisation references complete (Nautilus-only), JAX blend realisation-1 rebuilt locally. Catalogue gaussian_x3@2 section orders legs within task and dataset (autofit_inference results/accounting, catalogue). Probe-first remainder (980 runs) is 409930 on ral; next: B5b-2 pulls and judges it; wave-2 summary records withheld on size pending autofit_inference#10.
+gaussian_x3@2 frozen in autofit_inference 72d6faaf1717 before any scored run (A2+A4 gate met: PyAutoFit df6d218f1). Scored wave 2 submitted 2026-10-14 on RAL ral (11,750 runs + 20-run probe; references first) against a private PyAutoFit pin df6d218f10cd (autofit_inference#9). Next: B5b pulls, builds the JAX blend realisation-1 reference on the laptop, judges under @2.
 
 **Runs**
 
-- 409930_[0-19] — open — ral — 2026-10-15 — wave-2 probe-first remainder (B5b): Zeus JAX + NSS n_live_200_mcmc_steps_50, both datasets, 980 runs after the probe under probe-derived @2 timeouts (NSS 600 s…
+- 408244_[0-49] — running — ral — 2026-10-14 — wave-2 blend references (gaussian_x3@2 freeze 72d6faaf1717): realisations 2-5 x numpy/jax x Nautilus n_live=2000 + DynestyStatic nlive=1000 seeds 0-2, + JAX Na…
+- 408245_[0-47] — running — ral — 2026-10-14 — wave-2 separated references: realisations 1,3,4,5 x numpy/jax x 6 runs; %48; submit_wave2_reference_gaussian_x3_separated; pin df6d218f10cd
+- 408246_[0-19] — running — ral — 2026-10-14 — wave-2 probe: Zeus JAX + NSS n_live_200_mcmc_steps_50, both datasets, realisation 1, seeds 0-4 (timeouts for probe-first cells); %20; submit_wave2_probe
+- 408346_[0-7] — open — ral — 2026-10-14 — wave-2 blend reference builds (MAP + build_reference), afterany 408244; %8
+- 408347_[0-7] — open — ral — 2026-10-14 — wave-2 separated reference builds, afterany 408245; %8
+- 408348_[0-379] — open — ral — 2026-10-14 — scored wave 2 (gaussian_x3@2) blend numpy: 2250 runs, 50 seeds x 5 realisations, %60, afterany 408346:408347; submit_wave2_scored_gaussian_x3_blend_numpy
+- 408365_[0-344] — open — ral — 2026-10-14 — scored wave 2 blend jax_cpu: 3500 runs, %60, afterany 408346:408347
+- 408366_[0-379] — open — ral — 2026-10-14 — scored wave 2 separated numpy: 2250 runs, %60, afterany 408346:408347
+- 408367_[0-389] — open — ral — 2026-10-14 — scored wave 2 separated jax_cpu: 3750 runs, %60, afterany 408346:408347
 
 **Last 5**
 
-- 2026-10-15 — *run* — 408367_[0-389] finished — wall 1:57: scored wave 2 separated jax_cpu: 3750 runs, %60, afterany 408346:408347 — 390/390 COMPLETED; 3750 separated jax_cpu rows admitted; judged B5b
-- 2026-10-15 — *run* — 408366_[0-379] finished — wall 1:51: scored wave 2 separated numpy: 2250 runs, %60, afterany 408346:408347 — 380/380 COMPLETED; 2250 separated numpy rows admitted; judged B5b
-- 2026-10-15 — *run* — 408365_[0-344] finished — wall 1:46: scored wave 2 blend jax_cpu: 3500 runs, %60, afterany 408346:408347 — 345/345 COMPLETED; 3500 blend jax_cpu rows admitted; judged B5b
-- 2026-10-15 — *run* — 408348_[0-379] finished — wall 1:53: scored wave 2 (gaussian_x3@2) blend numpy: 2250 runs, 50 seeds x 5 realisations, %60, afterany 408346:408347; submit_wave2_scored_gaussian_x3_blend_numpy — 380/380 COMPLETED; 2250 blend numpy rows admit…
-- 2026-10-15 — *run* — 408347_[0-7] finished — wall 0:01: wave-2 separated reference builds, afterany 408245; %8 — 8/8 COMPLETED; separated reference builds
+- 2026-10-14 — *note* — gaussian_x3@2 frozen (autofit_inference 72d6faaf1717, protocol 11 A2) before any scored run; A4 gate met (PyAutoFit df6d218f1). Dry run 408236 on ral: pin imports, RAL 4-7x faster than the laptop pilot (laptop-derived timeouts are lenient)…
+- 2026-10-14 — *run* — 408367_[0-389] submitted: scored wave 2 separated jax_cpu: 3750 runs, %60, afterany 408346:408347
+- 2026-10-14 — *run* — 408366_[0-379] submitted: scored wave 2 separated numpy: 2250 runs, %60, afterany 408346:408347
+- 2026-10-14 — *run* — 408365_[0-344] submitted: scored wave 2 blend jax_cpu: 3500 runs, %60, afterany 408346:408347
+- 2026-10-14 — *run* — 408348_[0-379] submitted: scored wave 2 (gaussian_x3@2) blend numpy: 2250 runs, 50 seeds x 5 realisations, %60, afterany 408346:408347; submit_wave2_scored_gaussian_x3_blend_numpy
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/autofit_inference.md)
 
@@ -362,7 +370,7 @@ Use the cortex skill. — resume autofit_inference: read PyAutoCortex projects/a
 
 ### euclid — The original Euclid DR1 grade-AB catalogue project, superseded by euclid_dr1_prelim
 
-dormant · both · no issue yet · [projects/euclid.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid.md) · local `/mnt/c/Users/Jammy/Science/euclid` · RAL `/mnt/ral/jnightin/euclid_strong_lens_modeling_pipeline`
+dormant · both · no issue yet · [projects/euclid.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid.md) · local `/mnt/c/Users/Jammy/Science/active/euclid` · RAL `/mnt/ral/jnightin/euclid_strong_lens_modeling_pipeline`
 
 **Now**
 
