@@ -54,32 +54,14 @@ Last check-in: 2026-09-30T09:51Z.
 
 ## Projects
 
-### subhalo_validation — Do the SLaM subhalo pipelines false-detect on lenses with no subhalo
+<details id="project-subhalo_validation"><summary><b>subhalo_validation</b> — Do the SLaM subhalo pipelines false-detect on lenses with no subhalo · 0 running · 5 open · updated 2026-09-07</summary>
 
-active · ral · [subhalo_validation#2](https://github.com/PyAutoLabs/subhalo_validation/issues/2) · [projects/subhalo_validation.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/subhalo_validation.md) · local `/mnt/c/Users/Jammy/Science/active/subhalo_validation` · RAL `/mnt/ral/jnightin/active/subhalo_validation`
+active · ral · [subhalo_validation#2](https://github.com/PyAutoLabs/subhalo_validation/issues/2)
 
-**Now**
+**Current position**
 
 Five chains on RAL under the corrected adapt settings: rectangular_adapt on pl_eff_0 / pl_eff_1_outer (job A done, job B 342311 submitted) and the delaunay_adapt_split reruns plus rectangular_adapt on pl_sersic_0. pl_sersic_0 on delaunay_adapt_split is accepted (no false detection, +2.557).
 Next: pull when the numba chains land and read the evidence_increase of each; no more 1000-pixel runs.
-
-**Runs**
-
-- 342299_1 — open — ral — 2026-09-07 — delaunay_adapt_split_pl_eff_0: job B, numba chain at the standard 1250-pixel Delaunay mesh (8c / 96gb / 48 h); reloads job A 342231_1; the 09-07 ruling: run al…
-- 342299_2 — open — ral — 2026-09-07 — delaunay_adapt_split_pl_eff_1_outer: job B, numba chain at the standard 1250-pixel Delaunay mesh (8c / 96gb / 48 h); reloads job A 342231_2; the 09-07 ruling:…
-- 342311_1 — open — ral — 2026-09-07 — rectangular_adapt_pl_eff_0: job B, numba chain (8c / 96gb / 48 h) at the standard 1250-pixel mesh under PIPELINE=rectangular_adapt; reloads job A 342237_1; the…
-- 342311_2 — open — ral — 2026-09-07 — rectangular_adapt_pl_eff_1_outer: job B, numba chain (8c / 96gb / 48 h) at the standard 1250-pixel mesh under PIPELINE=rectangular_adapt; reloads job A 342237_…
-- 342311_0 — open — ral — 2026-09-07 — rectangular_adapt_pl_sersic_0: job B, numba chain (8c / 96gb / 48 h) at the standard 1250-pixel mesh under PIPELINE=rectangular_adapt; reloads job A 342237_0;…
-
-**Last 5**
-
-- 2026-09-07 — *result* — accepted delaunay_adapt_split_pl_sersic_0 (R-20260907-01): Accepted. The numba delaunay_adapt_split chain on pl_sersic_0 (job 342273_0, 22 h 08 m, 1250 Hilbert / 1310 Delaunay pixels) lands evidence_increase +2.557 (< 5): no false detectio…
-- 2026-09-07 — *run* — 342311_0 submitted: rectangular_adapt_pl_sersic_0 — job B, numba chain (8c / 96gb / 48 h) at the standard 1250-pixel mesh under PIPELINE=rectangular_adapt; reloads job A 342237_0; the 09-07 ask: submit the rectangular runs too
-- 2026-09-07 — *run* — 342311_2 submitted: rectangular_adapt_pl_eff_1_outer — job B, numba chain (8c / 96gb / 48 h) at the standard 1250-pixel mesh under PIPELINE=rectangular_adapt; reloads job A 342237_2; the 09-07 ask: submit the rectangular runs too
-- 2026-09-07 — *run* — 342311_1 submitted: rectangular_adapt_pl_eff_0 — job B, numba chain (8c / 96gb / 48 h) at the standard 1250-pixel mesh under PIPELINE=rectangular_adapt; reloads job A 342237_1; the 09-07 ask: submit the rectangular runs too
-- 2026-09-07 — *run* — 342299_2 submitted: delaunay_adapt_split_pl_eff_1_outer — job B, numba chain at the standard 1250-pixel Delaunay mesh (8c / 96gb / 48 h); reloads job A 342231_2; the 09-07 ruling: run all datasets at 1250, no more pix1000
-
-[full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/subhalo_validation.md)
 
 <details><summary>📋 resume subhalo_validation</summary>
 
@@ -89,23 +71,55 @@ Use the cortex skill. — resume subhalo_validation: read PyAutoCortex projects/
 
 </details>
 
-### subhalo — SLaM subhalo modelling of the SLACS lens sample
+**Runs** (5)
 
-active · both · no issue yet · [projects/subhalo.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/subhalo.md) · local `/mnt/c/Users/Jammy/Science/active/subhalo` · RAL `/mnt/ral/jnightin/active/subhalo`
+| Job | State | Partition | Date | Description |
+|---|---|---|---|---|
+| `342299_1` | open | ral | 2026-09-07 | delaunay_adapt_split_pl_eff_0: job B, numba chain at the standard 1250-pixel Delaunay mesh (8c / 96gb / 48 h); reloads job A 342231_1; the 09-07 ruling: run al… |
+| `342299_2` | open | ral | 2026-09-07 | delaunay_adapt_split_pl_eff_1_outer: job B, numba chain at the standard 1250-pixel Delaunay mesh (8c / 96gb / 48 h); reloads job A 342231_2; the 09-07 ruling:… |
+| `342311_1` | open | ral | 2026-09-07 | rectangular_adapt_pl_eff_0: job B, numba chain (8c / 96gb / 48 h) at the standard 1250-pixel mesh under PIPELINE=rectangular_adapt; reloads job A 342237_1; the… |
+| `342311_2` | open | ral | 2026-09-07 | rectangular_adapt_pl_eff_1_outer: job B, numba chain (8c / 96gb / 48 h) at the standard 1250-pixel mesh under PIPELINE=rectangular_adapt; reloads job A 342237_… |
+| `342311_0` | open | ral | 2026-09-07 | rectangular_adapt_pl_sersic_0: job B, numba chain (8c / 96gb / 48 h) at the standard 1250-pixel mesh under PIPELINE=rectangular_adapt; reloads job A 342237_0;… |
 
-**Now**
+<details><summary>Full descriptions (5 shortened above)</summary>
+
+- `342299_1` — delaunay_adapt_split_pl_eff_0: job B, numba chain at the standard 1250-pixel Delaunay mesh (8c / 96gb / 48 h); reloads job A 342231_1; the 09-07 ruling: run all datasets at 1250, no more pix1000
+- `342299_2` — delaunay_adapt_split_pl_eff_1_outer: job B, numba chain at the standard 1250-pixel Delaunay mesh (8c / 96gb / 48 h); reloads job A 342231_2; the 09-07 ruling: run all datasets at 1250, no more pix1000
+- `342311_1` — rectangular_adapt_pl_eff_0: job B, numba chain (8c / 96gb / 48 h) at the standard 1250-pixel mesh under PIPELINE=rectangular_adapt; reloads job A 342237_1; the 09-07 ask: submit the rectangular runs too
+- `342311_2` — rectangular_adapt_pl_eff_1_outer: job B, numba chain (8c / 96gb / 48 h) at the standard 1250-pixel mesh under PIPELINE=rectangular_adapt; reloads job A 342237_2; the 09-07 ask: submit the rectangular runs too
+- `342311_0` — rectangular_adapt_pl_sersic_0: job B, numba chain (8c / 96gb / 48 h) at the standard 1250-pixel mesh under PIPELINE=rectangular_adapt; reloads job A 342237_0; the 09-07 ask: submit the rectangular runs too
+
+</details>
+
+<details><summary>Recent log — 5 of 40 entries</summary>
+
+- 2026-09-07 — *result* — accepted delaunay_adapt_split_pl_sersic_0 (R-20260907-01): Accepted. The numba delaunay_adapt_split chain on pl_sersic_0 (job 342273_0, 22 h 08 m, 1250 Hilbert / 1310 Delaunay pixels) lands evidence_increase +2.557 (&lt; 5): no false detection. The best cell parks a 1.6e6 Msun nuisance subhalo at (-1.43, -2.36)", outside the ring. The shift from the legacy -0.30 comes with the S/N-3 adapt cap, adaptive over-sampling and the numba pool, not a code fault. Results are good; run the remaining datasets at 1250 pixels; no more 1000-pixel runs.
+- 2026-09-07 — *run* — 342311_0 submitted: rectangular_adapt_pl_sersic_0 — job B, numba chain (8c / 96gb / 48 h) at the standard 1250-pixel mesh under PIPELINE=rectangular_adapt; reloads job A 342237_0; the 09-07 ask: submit the rectangular runs too
+- 2026-09-07 — *run* — 342311_2 submitted: rectangular_adapt_pl_eff_1_outer — job B, numba chain (8c / 96gb / 48 h) at the standard 1250-pixel mesh under PIPELINE=rectangular_adapt; reloads job A 342237_2; the 09-07 ask: submit the rectangular runs too
+- 2026-09-07 — *run* — 342311_1 submitted: rectangular_adapt_pl_eff_0 — job B, numba chain (8c / 96gb / 48 h) at the standard 1250-pixel mesh under PIPELINE=rectangular_adapt; reloads job A 342237_1; the 09-07 ask: submit the rectangular runs too
+- 2026-09-07 — *run* — 342299_2 submitted: delaunay_adapt_split_pl_eff_1_outer — job B, numba chain at the standard 1250-pixel Delaunay mesh (8c / 96gb / 48 h); reloads job A 342231_2; the 09-07 ruling: run all datasets at 1250, no more pix1000
+
+[full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/subhalo_validation.md)
+
+</details>
+
+<details><summary>Locations</summary>
+
+- Ledger: [projects/subhalo_validation.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/subhalo_validation.md)
+- Local: `` /mnt/c/Users/Jammy/Science/active/subhalo_validation ``
+- RAL: `` /mnt/ral/jnightin/active/subhalo_validation ``
+
+</details>
+
+</details>
+
+<details id="project-subhalo"><summary><b>subhalo</b> — SLaM subhalo modelling of the SLACS lens sample · no runs recorded · updated 2026-10-15</summary>
+
+active · both · no issue yet
+
+**Current position**
 
 Registered 2026-10-15 (PyAutoCortex#67): SLACS sample under dataset/, output/ empty, no runs yet; ral_root not yet created on RAL — the first hpc/sync push creates it.
-
-**Runs**
-
-- _nothing on the cluster_
-
-**Last 5**
-
-- 2026-10-15 — *note* — ledger opened
-
-[full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/subhalo.md)
 
 <details><summary>📋 resume subhalo</summary>
 
@@ -115,84 +129,35 @@ Use the cortex skill. — resume subhalo: read PyAutoCortex projects/subhalo.md 
 
 </details>
 
-### euclid_dr1 — Does the sep1 DR1 delivery reproduce the ten prelim lenses by eye
+**Runs** (0)
 
-active · ral · no issue yet · [projects/euclid_dr1.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid_dr1.md) · local `/mnt/c/Users/Jammy/Science/euclid_dr1` · RAL `/mnt/ral/jnightin/euclid_dr1`
+_nothing on the cluster_
 
-**Now**
+<details><summary>Recent log — 1 of 1 entry</summary>
+
+- 2026-10-15 — *note* — ledger opened
+
+[full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/subhalo.md)
+
+</details>
+
+<details><summary>Locations</summary>
+
+- Ledger: [projects/subhalo.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/subhalo.md)
+- Local: `` /mnt/c/Users/Jammy/Science/active/subhalo ``
+- RAL: `` /mnt/ral/jnightin/active/subhalo ``
+
+</details>
+
+</details>
+
+<details id="project-euclid_dr1"><summary><b>euclid_dr1</b> — Does the sep1 DR1 delivery reproduce the ten prelim lenses by eye · 16 running · 42 open · updated 2026-10-10</summary>
+
+active · ral · no issue yet
+
+**Current position**
 
 The top-1000 DR1 sep1 vis_lp array finished 971 of 1000; 29 hit the 18-hour walltime. Array 344645 is now running vis_pix with the Numba CPU sparse route for those 971 completed lenses only.
-
-**Runs**
-
-- 342650 — open — ral — 2026-09-11 — euclid_dr1 sep1 reproduction: the ten euclid_dr1_prelim lenses refitted from the sep1 delivery through prelim's route (hpc/batch_cpu/submit_initial_lens_model_…
-- 345279 — running — ral — 2026-09-20 — VIS-LP JAX CPU pilot for the nine remainder tiles completing the first ten sorted DR1 lenses; single RGB thumbnails uploaded
-- 345305 — running — ral — 2026-09-20 — DR1 full vis_lp production batch 1/5: rest_01, 1000 lenses, output root dr1_full
-- 345669 — open — ral — 2026-09-20 — DR1 full vis_lp production batch 2/5: rest_02, 1000 lenses, output root dr1_full
-- 345670 — open — ral — 2026-09-20 — DR1 full vis_lp production batch 3/5: rest_03, 1000 lenses, output root dr1_full
-- 345671 — open — ral — 2026-09-20 — DR1 full vis_lp production batch 4/5: rest_04, 1000 lenses, output root dr1_full
-- 345672 — open — ral — 2026-09-20 — DR1 full vis_lp production batch 5/5: rest_05, 1000 lenses, output root dr1_full
-- 349353 — open — ral — 2026-09-21 — 100-tile dr1_sep1_rest SED array: Sersic VIS with lens-light n~Uniform(0.5,10.0), then NIR Y/J/H and EXT DECam g/r/i/z; output_sed; max 20 concurrent
-- 350581 — open — ral — 2026-09-23 — vis_lp-only inspection bundle over 4,912 completed dr1_sep1_rest tiles (vislp_full_20260923, OUTPUT_DIR=dr1_full, single 24 h CPU job)
-- 350804 — running — ral — 2026-09-25 — DR1 dr1_sep1_rest priority-250 vis_lp array (euclid_dr1_vis_lp_prio250), 0-249, manifest hpc/run_manifests/positions_priority_250.txt, positions finder 2.1 pos…
-- 351085 — running — ral — 2026-09-25 — DR1 dr1_sep1_rest next-5000 vis_lp batch 1/5 (euclid_dr1_vis_lp_n5k_p01), 1000 lenses, manifest hpc/run_manifests/vis_lp_next5000_20260925_part01.txt
-- 351086 — running — ral — 2026-09-25 — DR1 dr1_sep1_rest next-5000 vis_lp batch 2/5 (euclid_dr1_vis_lp_n5k_p02), 1000 lenses, manifest hpc/run_manifests/vis_lp_next5000_20260925_part02.txt
-- 351087 — running — ral — 2026-09-25 — DR1 dr1_sep1_rest next-5000 vis_lp batch 3/5 (euclid_dr1_vis_lp_n5k_p03), 1000 lenses, manifest hpc/run_manifests/vis_lp_next5000_20260925_part03.txt
-- 351088 — running — ral — 2026-09-25 — DR1 dr1_sep1_rest next-5000 vis_lp batch 4/5 (euclid_dr1_vis_lp_n5k_p04), 1000 lenses, manifest hpc/run_manifests/vis_lp_next5000_20260925_part04.txt
-- 351089 — running — ral — 2026-09-25 — DR1 dr1_sep1_rest next-5000 vis_lp batch 5/5 (euclid_dr1_vis_lp_n5k_p05), 1000 lenses, manifest hpc/run_manifests/vis_lp_next5000_20260925_part05.txt
-- 351090 — open — ral — 2026-09-25 — DR1 priority-250 vis_pix array (euclid_dr1_vis_pix_prio250), 0-249, dependency afterany:350804
-- 351091 — open — ral — 2026-09-25 — DR1 priority-250 SED array (euclid_dr1_sed_prio250), 0-249 max 60 concurrent, output_sed, dependency afterany:351090
-- 356227 — running — ral — 2026-09-26 — DR1 priority-250 vis_pix by-eye test: tasks 0-9 of submit_initial_lens_model_vis_pix_priority250 (euclid_dr1_vis_pix_prio250_test10), no dependency; full array…
-- 356319 — running — ral — 2026-09-26 — DR1 priority-250 SED rerun, tasks 0-9: the ten tiles with no EXT/DECam imaging, VIS + NIR Y/J/H only (euclid_dr1_sed_prio250_nironly); SED scripts no longer re…
-- 356390 — open — ral — 2026-09-26 — DR1 next-5000 vis_pix part 01/05 (euclid_dr1_vis_pix_n5k, PART=01): 992 lenses whose 351085 vis_lp log ended Finished vis_lp, manifest hpc/run_manifests/vis_pi…
-- 356447 — open — ral — 2026-09-26 — DR1 next-5000 vis_pix part 02/05 (euclid_dr1_vis_pix_n5k, PART=02): 996 lenses whose 351086 vis_lp log ended Finished vis_lp, manifest hpc/run_manifests/vis_pi…
-- 356448 — open — ral — 2026-09-26 — DR1 next-5000 vis_pix part 03/05 (euclid_dr1_vis_pix_n5k, PART=03): 997 lenses whose 351087 vis_lp log ended Finished vis_lp, manifest hpc/run_manifests/vis_pi…
-- 356449 — open — ral — 2026-09-26 — DR1 next-5000 vis_pix part 04/05 (euclid_dr1_vis_pix_n5k, PART=04): 996 lenses whose 351088 vis_lp log ended Finished vis_lp, manifest hpc/run_manifests/vis_pi…
-- 356450 — open — ral — 2026-09-26 — DR1 next-5000 vis_pix part 05/05 (euclid_dr1_vis_pix_n5k, PART=05): 994 lenses whose 351089 vis_lp log ended Finished vis_lp, manifest hpc/run_manifests/vis_pi…
-- 356451 — open — ral — 2026-09-26 — DR1 next-5000 SED part 01/05 (euclid_dr1_sed_n5k, PART=01): same 992-lens manifest vis_pix_sed_next5000_20260926_part01.txt, vis_lp seed from output/, output_s…
-- 356452 — open — ral — 2026-09-26 — DR1 next-5000 SED part 02/05 (euclid_dr1_sed_n5k, PART=02): same 996-lens manifest vis_pix_sed_next5000_20260926_part02.txt, vis_lp seed from output/, output_s…
-- 356453 — open — ral — 2026-09-26 — DR1 next-5000 SED part 03/05 (euclid_dr1_sed_n5k, PART=03): same 997-lens manifest vis_pix_sed_next5000_20260926_part03.txt, vis_lp seed from output/, output_s…
-- 356555 — open — ral — 2026-09-26 — DR1 next-5000 SED part 04/05 (euclid_dr1_sed_n5k, PART=04): same 996-lens manifest vis_pix_sed_next5000_20260926_part04.txt, vis_lp seed from output/, output_s…
-- 356556 — open — ral — 2026-09-26 — DR1 next-5000 SED part 05/05 (euclid_dr1_sed_n5k, PART=05): same 994-lens manifest vis_pix_sed_next5000_20260926_part05.txt, vis_lp seed from output/, output_s…
-- 374848 — open — ral — 2026-09-30 — DR1 dr1_sep1_rest v2-grade SED chain batch 01/5 (euclid_dr1_sed_v2g), 998 tiles whose vis_lp 366938 completed, manifest hpc/run_manifests/sed_v2grade_20260930_…
-- 374849 — open — ral — 2026-09-30 — DR1 dr1_sep1_rest v2-grade SED chain batch 02/5 (euclid_dr1_sed_v2g), 998 tiles whose vis_lp 367039 completed, manifest hpc/run_manifests/sed_v2grade_20260930_…
-- 374850 — open — ral — 2026-09-30 — DR1 dr1_sep1_rest v2-grade SED chain batch 03/5 (euclid_dr1_sed_v2g), 995 tiles whose vis_lp 367141 completed, manifest hpc/run_manifests/sed_v2grade_20260930_…
-- 374851 — open — ral — 2026-09-30 — DR1 dr1_sep1_rest v2-grade SED chain batch 04/5 (euclid_dr1_sed_v2g), 995 tiles whose vis_lp 367243 completed, manifest hpc/run_manifests/sed_v2grade_20260930_…
-- 374852 — open — ral — 2026-09-30 — DR1 dr1_sep1_rest v2-grade SED chain batch 05/5 (euclid_dr1_sed_v2g), 996 tiles whose vis_lp 367244 completed, manifest hpc/run_manifests/sed_v2grade_20260930_…
-- 377038 — open — ral — 2026-09-30 — DR1 rest-batch vis_pix part 02/4 dependent singles (euclid_dr1_vis_pix_rest_p02): 945 single-task jobs ids 377038-377987, afterok:375701_N each (indices 0-944)…
-- 377988 — open — ral — 2026-09-30 — DR1 rest-batch vis_pix part 03/4 dependent singles (euclid_dr1_vis_pix_rest_p03): 945 single-task jobs ids 377988-378936, afterok:375702_N each (indices 0-944)…
-- 378940 — open — ral — 2026-09-30 — DR1 rest-batch vis_pix part 04/4 dependent singles (euclid_dr1_vis_pix_rest_p04): 944 single-task jobs ids 378940-379889, afterok:375703_N each (indices 0-943)…
-- 384040 — running — ral — 2026-10-01 — DR1 dr1_v2_new sep28 eclipse new_ab vis_lp (euclid_dr1_vis_lp_sep28_p01), 987 tiles (942 dr1_v2_new_cutouts_needed + 45 re-centred cut-outs; 48+21 dr1_sep1 dup…
-- 384046 — running — ral — 2026-10-01 — DR1 dr1_v2_new sep28 vis_pix dependent singles (euclid_dr1_vis_pix_sep28_p01): 987 single-task jobs ids 384046-385042, each --array=N --dependency=afterok:3840…
-- 388367 — open — ral — 2026-10-03 — DR1 missing-SED sweep rest part 01/4 (euclid_dr1_sed_miss_r01): 944 dr1_sep1_rest tiles, vis_lp 375700-375703 done, no SED yet, manifest hpc/run_manifests/sed_…
-- 388368 — open — ral — 2026-10-03 — DR1 missing-SED sweep rest part 02/4 (euclid_dr1_sed_miss_r02): 938 dr1_sep1_rest tiles, vis_lp 375700-375703 done, no SED yet, manifest hpc/run_manifests/sed_…
-- 388369 — open — ral — 2026-10-03 — DR1 missing-SED sweep rest part 03/4 (euclid_dr1_sed_miss_r03): 943 dr1_sep1_rest tiles, vis_lp 375700-375703 done, no SED yet, manifest hpc/run_manifests/sed_…
-- 388370 — open — ral — 2026-10-03 — DR1 missing-SED sweep rest part 04/4 (euclid_dr1_sed_miss_r04): 939 dr1_sep1_rest tiles, vis_lp 375700-375703 done, no SED yet, manifest hpc/run_manifests/sed_…
-- 388371 — open — ral — 2026-10-03 — DR1 missing-SED sweep dr1_v2_new (euclid_dr1_sed_miss_v2new): 303 sep28 tiles with completed vis_lp 384040 — first SED on non-DECam ground bands (HSC/MegaCam/P…
-- 388372 — open — ral — 2026-10-03 — DR1 missing-SED retry probe (euclid_dr1_sed_miss_retry): tasks 0-49 of 1,252 earlier SED TIMEOUT/FAILED/partial tiles, manifest sed_missing_20261003_retry.txt,…
-- 398270 — open — ral — 2026-10-08 — DR1 dr1_sep1 ex-top1000 vis_pix chained on vis_lp 397467 (euclid_dr1_vis_pix_ex_top1000_p01): immediate array 398270 over 256 lenses whose vis_lp had completed…
-- 400282 — open — ral — 2026-10-09 — DR1 dr1_sep1 SED fill 3 pass 1 part 01/4 (euclid_dr1_sed_fill3_p01): submit_sersic_waveband_sed_fill_20261009 = 10-05 fill + 20-min stall watchdog (kill, move…
-- 400308 — open — ral — 2026-10-09 — DR1 dr1_sep1 SED fill 3 pass 1 part 02/4 (euclid_dr1_sed_fill3_p02): submit_sersic_waveband_sed_fill_20261009 = 10-05 fill + 20-min stall watchdog (kill, move…
-- 400309 — open — ral — 2026-10-09 — DR1 dr1_sep1 SED fill 3 pass 1 part 03/4 (euclid_dr1_sed_fill3_p03): submit_sersic_waveband_sed_fill_20261009 = 10-05 fill + 20-min stall watchdog (kill, move…
-- 400310 — open — ral — 2026-10-09 — DR1 dr1_sep1 SED fill 3 pass 1 part 04/4 (euclid_dr1_sed_fill3_p04): submit_sersic_waveband_sed_fill_20261009 = 10-05 fill + 20-min stall watchdog (kill, move…
-- 402719 — running — ral — 2026-10-10 — DR1 dr1_sep1 SED fill 4 pass 1 part 01/4 (euclid_dr1_sed_fill4_p01): indices 697-999 of sed_fill_20261009/part01.txt, replacing 400282's cancelled pending task…
-- 402720 — running — ral — 2026-10-10 — DR1 dr1_sep1 SED fill 4 pass 1 part 02/4 (euclid_dr1_sed_fill4_p02): indices 527-999 of sed_fill_20261009/part02.txt, replacing 400308's cancelled pending task…
-- 402721 — running — ral — 2026-10-10 — DR1 dr1_sep1 SED fill 4 pass 1 part 03/4 (euclid_dr1_sed_fill4_p03): indices 363-999 of sed_fill_20261009/part03.txt, replacing 400309's cancelled pending task…
-- 402722 — running — ral — 2026-10-10 — DR1 dr1_sep1 SED fill 4 pass 1 part 04/4 (euclid_dr1_sed_fill4_p04): indices 803-862 of sed_fill_20261009/part04.txt, replacing 400310's cancelled pending task…
-- 402909 — open — ral — 2026-10-10 — DR1 SED fill 4 pass 2 (retry) part 01/4 (euclid_dr1_sed_fill4_retry_p01): indices 0-999 of sed_fill_20261009/part01.txt; same script submit_sersic_waveband_sed…
-- 402910 — open — ral — 2026-10-10 — DR1 SED fill 4 pass 2 (retry) part 02/4 (euclid_dr1_sed_fill4_retry_p02): indices 0-999 of sed_fill_20261009/part02.txt; same script submit_sersic_waveband_sed…
-- 402911 — open — ral — 2026-10-10 — DR1 SED fill 4 pass 2 (retry) part 03/4 (euclid_dr1_sed_fill4_retry_p03): indices 0-999 of sed_fill_20261009/part03.txt; same script submit_sersic_waveband_sed…
-- 402912 — open — ral — 2026-10-10 — DR1 SED fill 4 pass 2 (retry) part 04/4 (euclid_dr1_sed_fill4_retry_p04): indices 0-862 of sed_fill_20261009/part04.txt; same script submit_sersic_waveband_sed…
-
-**Last 5**
-
-- 2026-10-10 — *run* — 402912 submitted: DR1 SED fill 4 pass 2 (retry) part 04/4 (euclid_dr1_sed_fill4_retry_p04): indices 0-862 of sed_fill_20261009/part04.txt; same script submit_sersic_waveband_sed_fill_20261010 and manifest; afterany on pass 1 400282/400308/…
-- 2026-10-10 — *run* — 402911 submitted: DR1 SED fill 4 pass 2 (retry) part 03/4 (euclid_dr1_sed_fill4_retry_p03): indices 0-999 of sed_fill_20261009/part03.txt; same script submit_sersic_waveband_sed_fill_20261010 and manifest; afterany on pass 1 400282/400308/…
-- 2026-10-10 — *run* — 402910 submitted: DR1 SED fill 4 pass 2 (retry) part 02/4 (euclid_dr1_sed_fill4_retry_p02): indices 0-999 of sed_fill_20261009/part02.txt; same script submit_sersic_waveband_sed_fill_20261010 and manifest; afterany on pass 1 400282/400308/…
-- 2026-10-10 — *run* — 402909 submitted: DR1 SED fill 4 pass 2 (retry) part 01/4 (euclid_dr1_sed_fill4_retry_p01): indices 0-999 of sed_fill_20261009/part01.txt; same script submit_sersic_waveband_sed_fill_20261010 and manifest; afterany on pass 1 400282/400308/…
-- 2026-10-10 — *run* — 400314 failed: DR1 SED fill 3 pass 2 (retry) part 04/4 (euclid_dr1_sed_fill3_retry_p04): same script and manifest part04.txt, afterany on pass 1 400282/400308/400309/400310 and the old fill 397469/70/71/74; complete tiles exit at once, so…
-
-[full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid_dr1.md)
 
 <details><summary>📋 resume euclid_dr1</summary>
 
@@ -202,27 +167,146 @@ Use the cortex skill. — resume euclid_dr1: read PyAutoCortex projects/euclid_d
 
 </details>
 
-### analytic_gaussian — Graphical and EP against a closed-form Gaussian posterior, at ensemble scale
+**Runs** (58)
 
-active · ral · [PyAutoCortex#34](https://github.com/PyAutoLabs/PyAutoCortex/issues/34) · [projects/analytic_gaussian.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/analytic_gaussian.md) · local `/mnt/c/Users/Jammy/Science/active/analytic_gaussian` · RAL `/mnt/ral/jnightin/active/analytic_gaussian`
+| Job | State | Partition | Date | Description |
+|---|---|---|---|---|
+| `342650` | open | ral | 2026-09-11 | euclid_dr1 sep1 reproduction: the ten euclid_dr1_prelim lenses refitted from the sep1 delivery through prelim's route (hpc/batch_cpu/submit_initial_lens_model_… |
+| `345279` | running | ral | 2026-09-20 | VIS-LP JAX CPU pilot for the nine remainder tiles completing the first ten sorted DR1 lenses; single RGB thumbnails uploaded |
+| `345305` | running | ral | 2026-09-20 | DR1 full vis_lp production batch 1/5: rest_01, 1000 lenses, output root dr1_full |
+| `345669` | open | ral | 2026-09-20 | DR1 full vis_lp production batch 2/5: rest_02, 1000 lenses, output root dr1_full |
+| `345670` | open | ral | 2026-09-20 | DR1 full vis_lp production batch 3/5: rest_03, 1000 lenses, output root dr1_full |
+| `345671` | open | ral | 2026-09-20 | DR1 full vis_lp production batch 4/5: rest_04, 1000 lenses, output root dr1_full |
+| `345672` | open | ral | 2026-09-20 | DR1 full vis_lp production batch 5/5: rest_05, 1000 lenses, output root dr1_full |
+| `349353` | open | ral | 2026-09-21 | 100-tile dr1_sep1_rest SED array: Sersic VIS with lens-light n~Uniform(0.5,10.0), then NIR Y/J/H and EXT DECam g/r/i/z; output_sed; max 20 concurrent |
+| `350581` | open | ral | 2026-09-23 | vis_lp-only inspection bundle over 4,912 completed dr1_sep1_rest tiles (vislp_full_20260923, OUTPUT_DIR=dr1_full, single 24 h CPU job) |
+| `350804` | running | ral | 2026-09-25 | DR1 dr1_sep1_rest priority-250 vis_lp array (euclid_dr1_vis_lp_prio250), 0-249, manifest hpc/run_manifests/positions_priority_250.txt, positions finder 2.1 pos… |
+| `351085` | running | ral | 2026-09-25 | DR1 dr1_sep1_rest next-5000 vis_lp batch 1/5 (euclid_dr1_vis_lp_n5k_p01), 1000 lenses, manifest hpc/run_manifests/vis_lp_next5000_20260925_part01.txt |
+| `351086` | running | ral | 2026-09-25 | DR1 dr1_sep1_rest next-5000 vis_lp batch 2/5 (euclid_dr1_vis_lp_n5k_p02), 1000 lenses, manifest hpc/run_manifests/vis_lp_next5000_20260925_part02.txt |
+| `351087` | running | ral | 2026-09-25 | DR1 dr1_sep1_rest next-5000 vis_lp batch 3/5 (euclid_dr1_vis_lp_n5k_p03), 1000 lenses, manifest hpc/run_manifests/vis_lp_next5000_20260925_part03.txt |
+| `351088` | running | ral | 2026-09-25 | DR1 dr1_sep1_rest next-5000 vis_lp batch 4/5 (euclid_dr1_vis_lp_n5k_p04), 1000 lenses, manifest hpc/run_manifests/vis_lp_next5000_20260925_part04.txt |
+| `351089` | running | ral | 2026-09-25 | DR1 dr1_sep1_rest next-5000 vis_lp batch 5/5 (euclid_dr1_vis_lp_n5k_p05), 1000 lenses, manifest hpc/run_manifests/vis_lp_next5000_20260925_part05.txt |
+| `351090` | open | ral | 2026-09-25 | DR1 priority-250 vis_pix array (euclid_dr1_vis_pix_prio250), 0-249, dependency afterany:350804 |
+| `351091` | open | ral | 2026-09-25 | DR1 priority-250 SED array (euclid_dr1_sed_prio250), 0-249 max 60 concurrent, output_sed, dependency afterany:351090 |
+| `356227` | running | ral | 2026-09-26 | DR1 priority-250 vis_pix by-eye test: tasks 0-9 of submit_initial_lens_model_vis_pix_priority250 (euclid_dr1_vis_pix_prio250_test10), no dependency; full array… |
+| `356319` | running | ral | 2026-09-26 | DR1 priority-250 SED rerun, tasks 0-9: the ten tiles with no EXT/DECam imaging, VIS + NIR Y/J/H only (euclid_dr1_sed_prio250_nironly); SED scripts no longer re… |
+| `356390` | open | ral | 2026-09-26 | DR1 next-5000 vis_pix part 01/05 (euclid_dr1_vis_pix_n5k, PART=01): 992 lenses whose 351085 vis_lp log ended Finished vis_lp, manifest hpc/run_manifests/vis_pi… |
+| `356447` | open | ral | 2026-09-26 | DR1 next-5000 vis_pix part 02/05 (euclid_dr1_vis_pix_n5k, PART=02): 996 lenses whose 351086 vis_lp log ended Finished vis_lp, manifest hpc/run_manifests/vis_pi… |
+| `356448` | open | ral | 2026-09-26 | DR1 next-5000 vis_pix part 03/05 (euclid_dr1_vis_pix_n5k, PART=03): 997 lenses whose 351087 vis_lp log ended Finished vis_lp, manifest hpc/run_manifests/vis_pi… |
+| `356449` | open | ral | 2026-09-26 | DR1 next-5000 vis_pix part 04/05 (euclid_dr1_vis_pix_n5k, PART=04): 996 lenses whose 351088 vis_lp log ended Finished vis_lp, manifest hpc/run_manifests/vis_pi… |
+| `356450` | open | ral | 2026-09-26 | DR1 next-5000 vis_pix part 05/05 (euclid_dr1_vis_pix_n5k, PART=05): 994 lenses whose 351089 vis_lp log ended Finished vis_lp, manifest hpc/run_manifests/vis_pi… |
+| `356451` | open | ral | 2026-09-26 | DR1 next-5000 SED part 01/05 (euclid_dr1_sed_n5k, PART=01): same 992-lens manifest vis_pix_sed_next5000_20260926_part01.txt, vis_lp seed from output/, output_s… |
+| `356452` | open | ral | 2026-09-26 | DR1 next-5000 SED part 02/05 (euclid_dr1_sed_n5k, PART=02): same 996-lens manifest vis_pix_sed_next5000_20260926_part02.txt, vis_lp seed from output/, output_s… |
+| `356453` | open | ral | 2026-09-26 | DR1 next-5000 SED part 03/05 (euclid_dr1_sed_n5k, PART=03): same 997-lens manifest vis_pix_sed_next5000_20260926_part03.txt, vis_lp seed from output/, output_s… |
+| `356555` | open | ral | 2026-09-26 | DR1 next-5000 SED part 04/05 (euclid_dr1_sed_n5k, PART=04): same 996-lens manifest vis_pix_sed_next5000_20260926_part04.txt, vis_lp seed from output/, output_s… |
+| `356556` | open | ral | 2026-09-26 | DR1 next-5000 SED part 05/05 (euclid_dr1_sed_n5k, PART=05): same 994-lens manifest vis_pix_sed_next5000_20260926_part05.txt, vis_lp seed from output/, output_s… |
+| `374848` | open | ral | 2026-09-30 | DR1 dr1_sep1_rest v2-grade SED chain batch 01/5 (euclid_dr1_sed_v2g), 998 tiles whose vis_lp 366938 completed, manifest hpc/run_manifests/sed_v2grade_20260930_… |
+| `374849` | open | ral | 2026-09-30 | DR1 dr1_sep1_rest v2-grade SED chain batch 02/5 (euclid_dr1_sed_v2g), 998 tiles whose vis_lp 367039 completed, manifest hpc/run_manifests/sed_v2grade_20260930_… |
+| `374850` | open | ral | 2026-09-30 | DR1 dr1_sep1_rest v2-grade SED chain batch 03/5 (euclid_dr1_sed_v2g), 995 tiles whose vis_lp 367141 completed, manifest hpc/run_manifests/sed_v2grade_20260930_… |
+| `374851` | open | ral | 2026-09-30 | DR1 dr1_sep1_rest v2-grade SED chain batch 04/5 (euclid_dr1_sed_v2g), 995 tiles whose vis_lp 367243 completed, manifest hpc/run_manifests/sed_v2grade_20260930_… |
+| `374852` | open | ral | 2026-09-30 | DR1 dr1_sep1_rest v2-grade SED chain batch 05/5 (euclid_dr1_sed_v2g), 996 tiles whose vis_lp 367244 completed, manifest hpc/run_manifests/sed_v2grade_20260930_… |
+| `377038` | open | ral | 2026-09-30 | DR1 rest-batch vis_pix part 02/4 dependent singles (euclid_dr1_vis_pix_rest_p02): 945 single-task jobs ids 377038-377987, afterok:375701_N each (indices 0-944)… |
+| `377988` | open | ral | 2026-09-30 | DR1 rest-batch vis_pix part 03/4 dependent singles (euclid_dr1_vis_pix_rest_p03): 945 single-task jobs ids 377988-378936, afterok:375702_N each (indices 0-944)… |
+| `378940` | open | ral | 2026-09-30 | DR1 rest-batch vis_pix part 04/4 dependent singles (euclid_dr1_vis_pix_rest_p04): 944 single-task jobs ids 378940-379889, afterok:375703_N each (indices 0-943)… |
+| `384040` | running | ral | 2026-10-01 | DR1 dr1_v2_new sep28 eclipse new_ab vis_lp (euclid_dr1_vis_lp_sep28_p01), 987 tiles (942 dr1_v2_new_cutouts_needed + 45 re-centred cut-outs; 48+21 dr1_sep1 dup… |
+| `384046` | running | ral | 2026-10-01 | DR1 dr1_v2_new sep28 vis_pix dependent singles (euclid_dr1_vis_pix_sep28_p01): 987 single-task jobs ids 384046-385042, each --array=N --dependency=afterok:3840… |
+| `388367` | open | ral | 2026-10-03 | DR1 missing-SED sweep rest part 01/4 (euclid_dr1_sed_miss_r01): 944 dr1_sep1_rest tiles, vis_lp 375700-375703 done, no SED yet, manifest hpc/run_manifests/sed_… |
+| `388368` | open | ral | 2026-10-03 | DR1 missing-SED sweep rest part 02/4 (euclid_dr1_sed_miss_r02): 938 dr1_sep1_rest tiles, vis_lp 375700-375703 done, no SED yet, manifest hpc/run_manifests/sed_… |
+| `388369` | open | ral | 2026-10-03 | DR1 missing-SED sweep rest part 03/4 (euclid_dr1_sed_miss_r03): 943 dr1_sep1_rest tiles, vis_lp 375700-375703 done, no SED yet, manifest hpc/run_manifests/sed_… |
+| `388370` | open | ral | 2026-10-03 | DR1 missing-SED sweep rest part 04/4 (euclid_dr1_sed_miss_r04): 939 dr1_sep1_rest tiles, vis_lp 375700-375703 done, no SED yet, manifest hpc/run_manifests/sed_… |
+| `388371` | open | ral | 2026-10-03 | DR1 missing-SED sweep dr1_v2_new (euclid_dr1_sed_miss_v2new): 303 sep28 tiles with completed vis_lp 384040 — first SED on non-DECam ground bands (HSC/MegaCam/P… |
+| `388372` | open | ral | 2026-10-03 | DR1 missing-SED retry probe (euclid_dr1_sed_miss_retry): tasks 0-49 of 1,252 earlier SED TIMEOUT/FAILED/partial tiles, manifest sed_missing_20261003_retry.txt,… |
+| `398270` | open | ral | 2026-10-08 | DR1 dr1_sep1 ex-top1000 vis_pix chained on vis_lp 397467 (euclid_dr1_vis_pix_ex_top1000_p01): immediate array 398270 over 256 lenses whose vis_lp had completed… |
+| `400282` | open | ral | 2026-10-09 | DR1 dr1_sep1 SED fill 3 pass 1 part 01/4 (euclid_dr1_sed_fill3_p01): submit_sersic_waveband_sed_fill_20261009 = 10-05 fill + 20-min stall watchdog (kill, move… |
+| `400308` | open | ral | 2026-10-09 | DR1 dr1_sep1 SED fill 3 pass 1 part 02/4 (euclid_dr1_sed_fill3_p02): submit_sersic_waveband_sed_fill_20261009 = 10-05 fill + 20-min stall watchdog (kill, move… |
+| `400309` | open | ral | 2026-10-09 | DR1 dr1_sep1 SED fill 3 pass 1 part 03/4 (euclid_dr1_sed_fill3_p03): submit_sersic_waveband_sed_fill_20261009 = 10-05 fill + 20-min stall watchdog (kill, move… |
+| `400310` | open | ral | 2026-10-09 | DR1 dr1_sep1 SED fill 3 pass 1 part 04/4 (euclid_dr1_sed_fill3_p04): submit_sersic_waveband_sed_fill_20261009 = 10-05 fill + 20-min stall watchdog (kill, move… |
+| `402719` | running | ral | 2026-10-10 | DR1 dr1_sep1 SED fill 4 pass 1 part 01/4 (euclid_dr1_sed_fill4_p01): indices 697-999 of sed_fill_20261009/part01.txt, replacing 400282's cancelled pending task… |
+| `402720` | running | ral | 2026-10-10 | DR1 dr1_sep1 SED fill 4 pass 1 part 02/4 (euclid_dr1_sed_fill4_p02): indices 527-999 of sed_fill_20261009/part02.txt, replacing 400308's cancelled pending task… |
+| `402721` | running | ral | 2026-10-10 | DR1 dr1_sep1 SED fill 4 pass 1 part 03/4 (euclid_dr1_sed_fill4_p03): indices 363-999 of sed_fill_20261009/part03.txt, replacing 400309's cancelled pending task… |
+| `402722` | running | ral | 2026-10-10 | DR1 dr1_sep1 SED fill 4 pass 1 part 04/4 (euclid_dr1_sed_fill4_p04): indices 803-862 of sed_fill_20261009/part04.txt, replacing 400310's cancelled pending task… |
+| `402909` | open | ral | 2026-10-10 | DR1 SED fill 4 pass 2 (retry) part 01/4 (euclid_dr1_sed_fill4_retry_p01): indices 0-999 of sed_fill_20261009/part01.txt; same script submit_sersic_waveband_sed… |
+| `402910` | open | ral | 2026-10-10 | DR1 SED fill 4 pass 2 (retry) part 02/4 (euclid_dr1_sed_fill4_retry_p02): indices 0-999 of sed_fill_20261009/part02.txt; same script submit_sersic_waveband_sed… |
+| `402911` | open | ral | 2026-10-10 | DR1 SED fill 4 pass 2 (retry) part 03/4 (euclid_dr1_sed_fill4_retry_p03): indices 0-999 of sed_fill_20261009/part03.txt; same script submit_sersic_waveband_sed… |
+| `402912` | open | ral | 2026-10-10 | DR1 SED fill 4 pass 2 (retry) part 04/4 (euclid_dr1_sed_fill4_retry_p04): indices 0-862 of sed_fill_20261009/part04.txt; same script submit_sersic_waveband_sed… |
 
-**Now**
+<details><summary>Full descriptions (43 shortened above)</summary>
+
+- `342650` — euclid_dr1 sep1 reproduction: the ten euclid_dr1_prelim lenses refitted from the sep1 delivery through prelim's route (hpc/batch_cpu/submit_initial_lens_model_two_stage: vis_lp then vis_pix), array 0-9, wall budget 36:00; the by-eye reference is prelim run 342629
+- `350804` — DR1 dr1_sep1_rest priority-250 vis_lp array (euclid_dr1_vis_lp_prio250), 0-249, manifest hpc/run_manifests/positions_priority_250.txt, positions finder 2.1 positions
+- `356227` — DR1 priority-250 vis_pix by-eye test: tasks 0-9 of submit_initial_lens_model_vis_pix_priority250 (euclid_dr1_vis_pix_prio250_test10), no dependency; full array 351090 put on scontrol hold until the human has looked
+- `356319` — DR1 priority-250 SED rerun, tasks 0-9: the ten tiles with no EXT/DECam imaging, VIS + NIR Y/J/H only (euclid_dr1_sed_prio250_nironly); SED scripts no longer refuse no-EXT tiles
+- `356390` — DR1 next-5000 vis_pix part 01/05 (euclid_dr1_vis_pix_n5k, PART=01): 992 lenses whose 351085 vis_lp log ended Finished vis_lp, manifest hpc/run_manifests/vis_pix_sed_next5000_20260926_part01.txt, array 0-991%100, 8 CPU/64 GB/18 h, no dependency
+- `356447` — DR1 next-5000 vis_pix part 02/05 (euclid_dr1_vis_pix_n5k, PART=02): 996 lenses whose 351086 vis_lp log ended Finished vis_lp, manifest hpc/run_manifests/vis_pix_sed_next5000_20260926_part02.txt, array 0-995%100, 8 CPU/64 GB/18 h, no dependency
+- `356448` — DR1 next-5000 vis_pix part 03/05 (euclid_dr1_vis_pix_n5k, PART=03): 997 lenses whose 351087 vis_lp log ended Finished vis_lp, manifest hpc/run_manifests/vis_pix_sed_next5000_20260926_part03.txt, array 0-996%100, 8 CPU/64 GB/18 h, no dependency
+- `356449` — DR1 next-5000 vis_pix part 04/05 (euclid_dr1_vis_pix_n5k, PART=04): 996 lenses whose 351088 vis_lp log ended Finished vis_lp, manifest hpc/run_manifests/vis_pix_sed_next5000_20260926_part04.txt, array 0-995%100, 8 CPU/64 GB/18 h, no dependency
+- `356450` — DR1 next-5000 vis_pix part 05/05 (euclid_dr1_vis_pix_n5k, PART=05): 994 lenses whose 351089 vis_lp log ended Finished vis_lp, manifest hpc/run_manifests/vis_pix_sed_next5000_20260926_part05.txt, array 0-993%100, 8 CPU/64 GB/18 h, no dependency
+- `356451` — DR1 next-5000 SED part 01/05 (euclid_dr1_sed_n5k, PART=01): same 992-lens manifest vis_pix_sed_next5000_20260926_part01.txt, vis_lp seed from output/, output_sed, array 0-991%60, 6 h, independent of vis_pix; no-EXT tiles fit VIS + NIR only
+- `356452` — DR1 next-5000 SED part 02/05 (euclid_dr1_sed_n5k, PART=02): same 996-lens manifest vis_pix_sed_next5000_20260926_part02.txt, vis_lp seed from output/, output_sed, array 0-995%60, 6 h, independent of vis_pix; no-EXT tiles fit VIS + NIR only
+- `356453` — DR1 next-5000 SED part 03/05 (euclid_dr1_sed_n5k, PART=03): same 997-lens manifest vis_pix_sed_next5000_20260926_part03.txt, vis_lp seed from output/, output_sed, array 0-996%60, 6 h, independent of vis_pix; no-EXT tiles fit VIS + NIR only
+- `356555` — DR1 next-5000 SED part 04/05 (euclid_dr1_sed_n5k, PART=04): same 996-lens manifest vis_pix_sed_next5000_20260926_part04.txt, vis_lp seed from output/, output_sed, array 0-995%60, 6 h, independent of vis_pix; no-EXT tiles fit VIS + NIR only
+- `356556` — DR1 next-5000 SED part 05/05 (euclid_dr1_sed_n5k, PART=05): same 994-lens manifest vis_pix_sed_next5000_20260926_part05.txt, vis_lp seed from output/, output_sed, array 0-993%60, 6 h, independent of vis_pix; no-EXT tiles fit VIS + NIR only
+- `374848` — DR1 dr1_sep1_rest v2-grade SED chain batch 01/5 (euclid_dr1_sed_v2g), 998 tiles whose vis_lp 366938 completed, manifest hpc/run_manifests/sed_v2grade_20260930_part01.txt, 8 CPU/16 GB/3 h, %40, partitions ral+gpu; ~18% TIMEOUT expected (Nautilus band hang)
+- `374849` — DR1 dr1_sep1_rest v2-grade SED chain batch 02/5 (euclid_dr1_sed_v2g), 998 tiles whose vis_lp 367039 completed, manifest hpc/run_manifests/sed_v2grade_20260930_part02.txt, 8 CPU/16 GB/3 h, %40, partitions ral+gpu; ~18% TIMEOUT expected (Nautilus band hang)
+- `374850` — DR1 dr1_sep1_rest v2-grade SED chain batch 03/5 (euclid_dr1_sed_v2g), 995 tiles whose vis_lp 367141 completed, manifest hpc/run_manifests/sed_v2grade_20260930_part03.txt, 8 CPU/16 GB/3 h, %40, partitions ral+gpu; ~18% TIMEOUT expected (Nautilus band hang)
+- `374851` — DR1 dr1_sep1_rest v2-grade SED chain batch 04/5 (euclid_dr1_sed_v2g), 995 tiles whose vis_lp 367243 completed, manifest hpc/run_manifests/sed_v2grade_20260930_part04.txt, 8 CPU/16 GB/3 h, %40, partitions ral+gpu; ~18% TIMEOUT expected (Nautilus band hang)
+- `374852` — DR1 dr1_sep1_rest v2-grade SED chain batch 05/5 (euclid_dr1_sed_v2g), 996 tiles whose vis_lp 367244 completed, manifest hpc/run_manifests/sed_v2grade_20260930_part05.txt, 8 CPU/16 GB/3 h, %40, partitions ral+gpu; ~18% TIMEOUT expected (Nautilus band hang)
+- `377038` — DR1 rest-batch vis_pix part 02/4 dependent singles (euclid_dr1_vis_pix_rest_p02): 945 single-task jobs ids 377038-377987, afterok:375701_N each (indices 0-944); 8 CPU/16 GB/24 h, partitions ral+gpu; driver submit_vis_pix_rest_chain.sh
+- `377988` — DR1 rest-batch vis_pix part 03/4 dependent singles (euclid_dr1_vis_pix_rest_p03): 945 single-task jobs ids 377988-378936, afterok:375702_N each (indices 0-944); 8 CPU/16 GB/24 h, partitions ral+gpu; driver submit_vis_pix_rest_chain.sh
+- `378940` — DR1 rest-batch vis_pix part 04/4 dependent singles (euclid_dr1_vis_pix_rest_p04): 944 single-task jobs ids 378940-379889, afterok:375703_N each (indices 0-943); 8 CPU/16 GB/24 h, partitions ral+gpu; driver submit_vis_pix_rest_chain.sh
+- `384040` — DR1 dr1_v2_new sep28 eclipse new_ab vis_lp (euclid_dr1_vis_lp_sep28_p01), 987 tiles (942 dr1_v2_new_cutouts_needed + 45 re-centred cut-outs; 48+21 dr1_sep1 duplicates excluded), v2 A 114 / B 873, v2_score 3.000->1.500, manifest hpc/run_manifests/vis_lp_sep28_20261001.txt, 4 CPU/12 GB/18 h, finder-2.1 positions (n_lt_2 279), --array=0-986%100, partition ral only; output/dr1_v2_new
+- `384046` — DR1 dr1_v2_new sep28 vis_pix dependent singles (euclid_dr1_vis_pix_sep28_p01): 987 single-task jobs ids 384046-385042, each --array=N --dependency=afterok:384040_N --kill-on-invalid-dep=yes (indices 0-986); Numba sparse CPU, 8 CPU/16 GB/24 h, partition ral only; driver hpc/batch_cpu/submit_vis_pix_rest_chain.sh --batch=sep28 (idempotent, re-run to catch stragglers)
+- `388367` — DR1 missing-SED sweep rest part 01/4 (euclid_dr1_sed_miss_r01): 944 dr1_sep1_rest tiles, vis_lp 375700-375703 done, no SED yet, manifest hpc/run_manifests/sed_missing_20261003_rest_part01.txt, %40, 8 CPU/16 GB/3 h, partition ral only, script hpc/batch_cpu/submit_sersic_waveband_missing (skips complete tiles)
+- `388368` — DR1 missing-SED sweep rest part 02/4 (euclid_dr1_sed_miss_r02): 938 dr1_sep1_rest tiles, vis_lp 375700-375703 done, no SED yet, manifest hpc/run_manifests/sed_missing_20261003_rest_part02.txt, %40, 8 CPU/16 GB/3 h, partition ral only, script hpc/batch_cpu/submit_sersic_waveband_missing (skips complete tiles)
+- `388369` — DR1 missing-SED sweep rest part 03/4 (euclid_dr1_sed_miss_r03): 943 dr1_sep1_rest tiles, vis_lp 375700-375703 done, no SED yet, manifest hpc/run_manifests/sed_missing_20261003_rest_part03.txt, %40, 8 CPU/16 GB/3 h, partition ral only, script hpc/batch_cpu/submit_sersic_waveband_missing (skips complete tiles)
+- `388370` — DR1 missing-SED sweep rest part 04/4 (euclid_dr1_sed_miss_r04): 939 dr1_sep1_rest tiles, vis_lp 375700-375703 done, no SED yet, manifest hpc/run_manifests/sed_missing_20261003_rest_part04.txt, %40, 8 CPU/16 GB/3 h, partition ral only, script hpc/batch_cpu/submit_sersic_waveband_missing (skips complete tiles)
+- `388371` — DR1 missing-SED sweep dr1_v2_new (euclid_dr1_sed_miss_v2new): 303 sep28 tiles with completed vis_lp 384040 — first SED on non-DECam ground bands (HSC/MegaCam/PS1), manifest sed_missing_20261003_v2new.txt, %10, 8 CPU/16 GB/3 h, partition ral only, script hpc/batch_cpu/submit_sersic_waveband_missing (skips complete tiles)
+- `388372` — DR1 missing-SED retry probe (euclid_dr1_sed_miss_retry): tasks 0-49 of 1,252 earlier SED TIMEOUT/FAILED/partial tiles, manifest sed_missing_20261003_retry.txt, %10; send 50-1251 only if the probe does not mostly hang, 8 CPU/16 GB/3 h, partition ral only, script hpc/batch_cpu/submit_sersic_waveband_missing (skips complete tiles)
+- `398270` — DR1 dr1_sep1 ex-top1000 vis_pix chained on vis_lp 397467 (euclid_dr1_vis_pix_ex_top1000_p01): immediate array 398270 over 256 lenses whose vis_lp had completed (%60) + 741 single-task jobs 398271-399020 each afterok:397467_N --kill-on-invalid-dep=yes; manifest vis_lp_ex_top1000_tonight_20261007.txt, Numba sparse CPU 8 CPU/16 GB/24 h, partition ral only, --exclude=euclid-ral-compute-[1-4] (left for another user's 252-CPU whole-node jobs) and --nice=500 so it never outranks pending work; driver submit_vis_pix_rest_chain.sh --batch=ex_top1000 (idempotent, re-run to catch stragglers)
+- `400282` — DR1 dr1_sep1 SED fill 3 pass 1 part 01/4 (euclid_dr1_sed_fill3_p01): submit_sersic_waveband_sed_fill_20261009 = 10-05 fill + 20-min stall watchdog (kill, move hung band aside, restart; band given up after 2 hangs via SED_SKIP_BANDS), manifest sed_fill_20261009/part01.txt (3,863 tiles over 4 parts: incomplete partial tiles fewest-missing-first, then none, then ex-top1000 with vis_lp; tiles still running in 397469/70/71/74 excluded), %25, 8 CPU/16 GB/6 h, partition ral only, --nice=100
+- `400308` — DR1 dr1_sep1 SED fill 3 pass 1 part 02/4 (euclid_dr1_sed_fill3_p02): submit_sersic_waveband_sed_fill_20261009 = 10-05 fill + 20-min stall watchdog (kill, move hung band aside, restart; band given up after 2 hangs via SED_SKIP_BANDS), manifest sed_fill_20261009/part02.txt (3,863 tiles over 4 parts: incomplete partial tiles fewest-missing-first, then none, then ex-top1000 with vis_lp; tiles still running in 397469/70/71/74 excluded), %25, 8 CPU/16 GB/6 h, partition ral only, --nice=100
+- `400309` — DR1 dr1_sep1 SED fill 3 pass 1 part 03/4 (euclid_dr1_sed_fill3_p03): submit_sersic_waveband_sed_fill_20261009 = 10-05 fill + 20-min stall watchdog (kill, move hung band aside, restart; band given up after 2 hangs via SED_SKIP_BANDS), manifest sed_fill_20261009/part03.txt (3,863 tiles over 4 parts: incomplete partial tiles fewest-missing-first, then none, then ex-top1000 with vis_lp; tiles still running in 397469/70/71/74 excluded), %25, 8 CPU/16 GB/6 h, partition ral only, --nice=100
+- `400310` — DR1 dr1_sep1 SED fill 3 pass 1 part 04/4 (euclid_dr1_sed_fill3_p04): submit_sersic_waveband_sed_fill_20261009 = 10-05 fill + 20-min stall watchdog (kill, move hung band aside, restart; band given up after 2 hangs via SED_SKIP_BANDS), manifest sed_fill_20261009/part04.txt (3,863 tiles over 4 parts: incomplete partial tiles fewest-missing-first, then none, then ex-top1000 with vis_lp; tiles still running in 397469/70/71/74 excluded), %25, 8 CPU/16 GB/6 h, partition ral only, --nice=100
+- `402719` — DR1 dr1_sep1 SED fill 4 pass 1 part 01/4 (euclid_dr1_sed_fill4_p01): indices 697-999 of sed_fill_20261009/part01.txt, replacing 400282's cancelled pending tasks; submit_sersic_waveband_sed_fill_20261010 = 10-09 fill + VIS given up after two hangs (exit 3, logged to sed_fill_20261009/given_up_bands.txt) and tiles already given up for vis skipped; %25, 8 CPU/16 GB/6 h, partition ral only, --nice=100
+- `402720` — DR1 dr1_sep1 SED fill 4 pass 1 part 02/4 (euclid_dr1_sed_fill4_p02): indices 527-999 of sed_fill_20261009/part02.txt, replacing 400308's cancelled pending tasks; submit_sersic_waveband_sed_fill_20261010 = 10-09 fill + VIS given up after two hangs (exit 3, logged to sed_fill_20261009/given_up_bands.txt) and tiles already given up for vis skipped; %25, 8 CPU/16 GB/6 h, partition ral only, --nice=100
+- `402721` — DR1 dr1_sep1 SED fill 4 pass 1 part 03/4 (euclid_dr1_sed_fill4_p03): indices 363-999 of sed_fill_20261009/part03.txt, replacing 400309's cancelled pending tasks; submit_sersic_waveband_sed_fill_20261010 = 10-09 fill + VIS given up after two hangs (exit 3, logged to sed_fill_20261009/given_up_bands.txt) and tiles already given up for vis skipped; %25, 8 CPU/16 GB/6 h, partition ral only, --nice=100
+- `402722` — DR1 dr1_sep1 SED fill 4 pass 1 part 04/4 (euclid_dr1_sed_fill4_p04): indices 803-862 of sed_fill_20261009/part04.txt, replacing 400310's cancelled pending tasks; submit_sersic_waveband_sed_fill_20261010 = 10-09 fill + VIS given up after two hangs (exit 3, logged to sed_fill_20261009/given_up_bands.txt) and tiles already given up for vis skipped; %25, 8 CPU/16 GB/6 h, partition ral only, --nice=100
+- `402909` — DR1 SED fill 4 pass 2 (retry) part 01/4 (euclid_dr1_sed_fill4_retry_p01): indices 0-999 of sed_fill_20261009/part01.txt; same script submit_sersic_waveband_sed_fill_20261010 and manifest; afterany on pass 1 400282/400308/400309/400310 (old, running tasks) and 402719-402722; complete tiles exit at once and tiles with vis given up are skipped, so it reruns only what is still incomplete; %25, 6 h, partition ral only, --nice=100
+- `402910` — DR1 SED fill 4 pass 2 (retry) part 02/4 (euclid_dr1_sed_fill4_retry_p02): indices 0-999 of sed_fill_20261009/part02.txt; same script submit_sersic_waveband_sed_fill_20261010 and manifest; afterany on pass 1 400282/400308/400309/400310 (old, running tasks) and 402719-402722; complete tiles exit at once and tiles with vis given up are skipped, so it reruns only what is still incomplete; %25, 6 h, partition ral only, --nice=100
+- `402911` — DR1 SED fill 4 pass 2 (retry) part 03/4 (euclid_dr1_sed_fill4_retry_p03): indices 0-999 of sed_fill_20261009/part03.txt; same script submit_sersic_waveband_sed_fill_20261010 and manifest; afterany on pass 1 400282/400308/400309/400310 (old, running tasks) and 402719-402722; complete tiles exit at once and tiles with vis given up are skipped, so it reruns only what is still incomplete; %25, 6 h, partition ral only, --nice=100
+- `402912` — DR1 SED fill 4 pass 2 (retry) part 04/4 (euclid_dr1_sed_fill4_retry_p04): indices 0-862 of sed_fill_20261009/part04.txt; same script submit_sersic_waveband_sed_fill_20261010 and manifest; afterany on pass 1 400282/400308/400309/400310 (old, running tasks) and 402719-402722; complete tiles exit at once and tiles with vis given up are skipped, so it reruns only what is still incomplete; %25, 6 h, partition ral only, --nice=100
+
+</details>
+
+<details><summary>Recent log — 5 of 136 entries</summary>
+
+- 2026-10-10 — *run* — 402912 submitted: DR1 SED fill 4 pass 2 (retry) part 04/4 (euclid_dr1_sed_fill4_retry_p04): indices 0-862 of sed_fill_20261009/part04.txt; same script submit_sersic_waveband_sed_fill_20261010 and manifest; afterany on pass 1 400282/400308/400309/400310 (old, running tasks) and 402719-402722; complete tiles exit at once and tiles with vis given up are skipped, so it reruns only what is still incomplete; %25, 6 h, partition ral only, --nice=100
+- 2026-10-10 — *run* — 402911 submitted: DR1 SED fill 4 pass 2 (retry) part 03/4 (euclid_dr1_sed_fill4_retry_p03): indices 0-999 of sed_fill_20261009/part03.txt; same script submit_sersic_waveband_sed_fill_20261010 and manifest; afterany on pass 1 400282/400308/400309/400310 (old, running tasks) and 402719-402722; complete tiles exit at once and tiles with vis given up are skipped, so it reruns only what is still incomplete; %25, 6 h, partition ral only, --nice=100
+- 2026-10-10 — *run* — 402910 submitted: DR1 SED fill 4 pass 2 (retry) part 02/4 (euclid_dr1_sed_fill4_retry_p02): indices 0-999 of sed_fill_20261009/part02.txt; same script submit_sersic_waveband_sed_fill_20261010 and manifest; afterany on pass 1 400282/400308/400309/400310 (old, running tasks) and 402719-402722; complete tiles exit at once and tiles with vis given up are skipped, so it reruns only what is still incomplete; %25, 6 h, partition ral only, --nice=100
+- 2026-10-10 — *run* — 402909 submitted: DR1 SED fill 4 pass 2 (retry) part 01/4 (euclid_dr1_sed_fill4_retry_p01): indices 0-999 of sed_fill_20261009/part01.txt; same script submit_sersic_waveband_sed_fill_20261010 and manifest; afterany on pass 1 400282/400308/400309/400310 (old, running tasks) and 402719-402722; complete tiles exit at once and tiles with vis given up are skipped, so it reruns only what is still incomplete; %25, 6 h, partition ral only, --nice=100
+- 2026-10-10 — *run* — 400314 failed: DR1 SED fill 3 pass 2 (retry) part 04/4 (euclid_dr1_sed_fill3_retry_p04): same script and manifest part04.txt, afterany on pass 1 400282/400308/400309/400310 and the old fill 397469/70/71/74; complete tiles exit at once, so it reruns only what is still incomplete; %25, 6 h, partition ral only
+
+[full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid_dr1.md)
+
+</details>
+
+<details><summary>Locations</summary>
+
+- Ledger: [projects/euclid_dr1.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid_dr1.md)
+- Local: `` /mnt/c/Users/Jammy/Science/euclid_dr1 ``
+- RAL: `` /mnt/ral/jnightin/euclid_dr1 ``
+
+</details>
+
+</details>
+
+<details id="project-analytic_gaussian"><summary><b>analytic_gaussian</b> — Graphical and EP against a closed-form Gaussian posterior, at ensemble scale · no runs recorded · updated 2026-10-14</summary>
+
+active · ral · [PyAutoCortex#34](https://github.com/PyAutoLabs/PyAutoCortex/issues/34)
+
+**Current position**
 
 Wave 1 (342413, 200 seeds at N=5) is accepted as the baseline: autofit EP is exact on the Gaussian leg, leg B sigma misses as pre-registered (78/200), collapse rate 0/200. On criterion 2, astra and an independent Opus review both favour an under-calibrated mu threshold (calibrated on five unrepresentative seeds) and found no defect in the minimal-EP control; both flag the per-site sigma>0 clip (analytic_ep_minimal.py:333) as the one audit target, and astra will not clear the control without an independent reconstruction of the EP fixed point. Next: run the planned diagnostic (archive/tasks/analytic_gaussian/minimal_ep_legb_mu_threshold.md) on a passing, an edge and the worst mu seed; the N=25 rung stays written but unsubmitted until it lands.
-
-**Runs**
-
-- _nothing on the cluster_
-
-**Last 5**
-
-- 2026-10-14 — *note* — PyAutoFit#1656 (merged 2026-09-30, released 2026.10.7.1) ports the minimal-EP referee's moment matching as LaplaceOptimiser(projection="moments"); on analytic_gaussian.py leg B autofit EP sigma 6.3401 ± 2.4609 vs closed form 6.5667 ± 2.883…
-- 2026-10-14 — *note* — output/ vaulted to z_vault/ on laptop and RAL (mv, nothing deleted), anticipating reruns; output/ left empty, results/ untouched; z_vault/ gitignored locally
-- 2026-09-30 — *note* — astra (Codex gpt-6-astra) on criterion 2, verbatim: 'Neither is established as "wrong" by this result alone. I favour inadequate calibration of the threshold, with moderate confidence, but would not yet certify the control.' Decisive diagn…
-- 2026-09-10 — *result* — accepted ensemble_parity (R-20260910-04): ok accept and intake the things to address. we can do another run down the line so also achieve the results in the analytic_gaussian project for future comparison
-- 2026-09-10 — *note* — question: Is criterion 2's mu threshold or the minimal-EP control wrong — planned, never run [archive/tasks/analytic_gaussian/minimal_ep_legb_mu_threshold.md]
-
-[full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/analytic_gaussian.md)
 
 <details><summary>📋 resume analytic_gaussian</summary>
 
@@ -232,27 +316,39 @@ Use the cortex skill. — resume analytic_gaussian: read PyAutoCortex projects/a
 
 </details>
 
-### ep_toy_gaussian — NUTS versus three EP fits on the #1405 collapse toy at N=50
+**Runs** (0)
 
-active · ral · [ep_toy_gaussian#1](https://github.com/PyAutoLabs/ep_toy_gaussian/issues/1) · [projects/ep_toy_gaussian.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/ep_toy_gaussian.md) · local `/mnt/c/Users/Jammy/Science/active/ep_toy_gaussian` · RAL `/mnt/ral/jnightin/active/ep_toy_gaussian`
+_nothing on the cluster_
 
-**Now**
+<details><summary>Recent log — 5 of 7 entries</summary>
+
+- 2026-10-14 — *note* — PyAutoFit#1656 (merged 2026-09-30, released 2026.10.7.1) ports the minimal-EP referee's moment matching as LaplaceOptimiser(projection="moments"); on analytic_gaussian.py leg B autofit EP sigma 6.3401 ± 2.4609 vs closed form 6.5667 ± 2.8832 (mode path 9.3722, BAD_PROJECTION=19). A wave-2 ensemble on the moments path needs a private PyAutoFit checkout on RAL: the shared mirror is 404b3e5f7 and lacks it. The criterion-2 mu-threshold diagnostic is still unrun.
+- 2026-10-14 — *note* — output/ vaulted to z_vault/ on laptop and RAL (mv, nothing deleted), anticipating reruns; output/ left empty, results/ untouched; z_vault/ gitignored locally
+- 2026-09-30 — *note* — astra (Codex gpt-6-astra) on criterion 2, verbatim: 'Neither is established as "wrong" by this result alone. I favour inadequate calibration of the threshold, with moderate confidence, but would not yet certify the control.' Decisive diagnostic: independently reconstruct the same EP factorisation at the fixed point on a passing, an edge and the worst mu seed and compare tilted vs q moments; audit the per-site sigma>0 clip (analytic_ep_minimal.py:333). Opus reviewer concurs independently (a_mu = 0.041*(E_ref[mu]-m0)/std_ref over 200 seeds, corr 0.98; calibration seeds 0-4 had |a_mu| 0.002-0.020 vs 95th pct 0.077). Full answer: PyAutoCortex#50 comment https://github.com/PyAutoLabs/PyAutoCortex/issues/50#issuecomment-5908448194
+- 2026-09-10 — *result* — accepted ensemble_parity (R-20260910-04): ok accept and intake the things to address. we can do another run down the line so also achieve the results in the analytic_gaussian project for future comparison
+- 2026-09-10 — *note* — question: Is criterion 2's mu threshold or the minimal-EP control wrong — planned, never run [archive/tasks/analytic_gaussian/minimal_ep_legb_mu_threshold.md]
+
+[full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/analytic_gaussian.md)
+
+</details>
+
+<details><summary>Locations</summary>
+
+- Ledger: [projects/analytic_gaussian.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/analytic_gaussian.md)
+- Local: `` /mnt/c/Users/Jammy/Science/active/analytic_gaussian ``
+- RAL: `` /mnt/ral/jnightin/active/analytic_gaussian ``
+
+</details>
+
+</details>
+
+<details id="project-ep_toy_gaussian"><summary><b>ep_toy_gaussian</b> — NUTS versus three EP fits on the #1405 collapse toy at N=50 · no runs recorded · updated 2026-10-14</summary>
+
+active · ral · [ep_toy_gaussian#1](https://github.com/PyAutoLabs/ep_toy_gaussian/issues/1)
+
+**Current position**
 
 Wave 1 (n50_seed42: 342639 + 342640_[0-2]) failed on infrastructure — EP x3 on EMFILE (fixed by PyAutoFit#1632/#1634, both in the RAL mirror at 404b3e5f7), NUTS on OOM at the 8 GB cap while XLA compiled the 50-factor window-adaptation scan, which grows with N (≥5.4 GB at N=20 locally). Wave 2 is prepared but not submitted: sample n50_seed42_w2 (free locally and on RAL; still needs its toy.SAMPLES entry), submit_nuts raised to 64 GB, submit_ep unchanged at 8 GB (peak ~590 MB). The collapse question at N=50 is unanswered; only n5_smoke speaks (EP RECOVER 3/3, NUTS 49.89/11.14). Next: human go, add the sample entry, push and submit NUTS then EP with SAMPLE=n50_seed42_w2 exported.
-
-**Runs**
-
-- _nothing on the cluster_
-
-**Last 5**
-
-- 2026-10-14 — *note* — Wave 2 still unsubmitted. RAL shared mirror 404b3e5f7 already carries the EMFILE fixes (#1632/#1634) wave 2 needs; it lacks #1655 (ProjectionException recovery), so a private PyAutoFit checkout is optional here but advisable.
-- 2026-10-14 — *note* — output/ vaulted to z_vault/ on laptop and RAL (mv, nothing deleted), anticipating reruns; output/ left empty, results/ untouched; z_vault/ gitignored locally
-- 2026-09-30 — *note* — RAL mirror PyAutoFit now 404b3e5f7 (2026-09-27), contains #1632 (b82fb3f69) and #1634 (fa2d540ac); 5 commits behind origin/main, none in blackjax/graphical/dynesty; deps at floor except anesthetic 2.8.14 < 2.9.0 (plots only). Sample n50_se…
-- 2026-09-30 — *note* — wave-2 prep: 342639 NUTS OOM was XLA compilation of the vmapped window-adaptation scan, not sampling (sacct MaxRSS 8,180,536K at ReqMem 8G; py-spy on a local N=50 run sits in backend_compile_and_load; local probes N=10 3.2 GB peak / 132 s…
-- 2026-09-24 — *note* — per-search overhead profile on this toy (2026-09-24, laptop, N=5, max_steps=3): 2.45 s per Dynesty factor search, ~1.47 s dynesty run_nested + ~0.98 s autofit wrapper (plots, a redundant second run_nested pass, samples writes); inside run_…
-
-[full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/ep_toy_gaussian.md)
 
 <details><summary>📋 resume ep_toy_gaussian</summary>
 
@@ -262,27 +358,39 @@ Use the cortex skill. — resume ep_toy_gaussian: read PyAutoCortex projects/ep_
 
 </details>
 
-### slope_hierarchy_scale — Hierarchical slope recovery with graphical and EP at N=25 to 50
+**Runs** (0)
 
-active · both · [slope_hierarchy_scale#2](https://github.com/PyAutoLabs/slope_hierarchy_scale/issues/2) · [projects/slope_hierarchy_scale.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/slope_hierarchy_scale.md) · local `/mnt/c/Users/Jammy/Science/active/slope_hierarchy_scale` · RAL `/mnt/ral/jnightin/active/slope_hierarchy_scale`
+_nothing on the cluster_
 
-**Now**
+<details><summary>Recent log — 5 of 10 entries</summary>
+
+- 2026-10-14 — *note* — Wave 2 still unsubmitted. RAL shared mirror 404b3e5f7 already carries the EMFILE fixes (#1632/#1634) wave 2 needs; it lacks #1655 (ProjectionException recovery), so a private PyAutoFit checkout is optional here but advisable.
+- 2026-10-14 — *note* — output/ vaulted to z_vault/ on laptop and RAL (mv, nothing deleted), anticipating reruns; output/ left empty, results/ untouched; z_vault/ gitignored locally
+- 2026-09-30 — *note* — RAL mirror PyAutoFit now 404b3e5f7 (2026-09-27), contains #1632 (b82fb3f69) and #1634 (fa2d540ac); 5 commits behind origin/main, none in blackjax/graphical/dynesty; deps at floor except anesthetic 2.8.14 &lt; 2.9.0 (plots only). Sample n50_seed42_w2 is free locally and on RAL but must be added to toy.SAMPLES (scripts/toy.py) before submission, and SAMPLE must be exported to the job (hpc/sync submit does not forward laptop env)
+- 2026-09-30 — *note* — wave-2 prep: 342639 NUTS OOM was XLA compilation of the vmapped window-adaptation scan, not sampling (sacct MaxRSS 8,180,536K at ReqMem 8G; py-spy on a local N=50 run sits in backend_compile_and_load; local probes N=10 3.2 GB peak / 132 s warmup compile, N=20 >=5.4 GB / 247 s, N=50 still compiling at 5 min) — submit_nuts --mem raised 8gb -> 64gb locally, uncommitted (est. peak 15-25 GB on RAL; ral nodes ~921 GB); EP peak ~590 MB, submit_ep stays 8gb
+- 2026-09-24 — *note* — per-search overhead profile on this toy (2026-09-24, laptop, N=5, max_steps=3): 2.45 s per Dynesty factor search, ~1.47 s dynesty run_nested + ~0.98 s autofit wrapper (plots, a redundant second run_nested pass, samples writes); inside run_nested instance_from_vector is 57 % of the likelihood callback for a 1-parameter model. Speed-up prompt filed in the Mind: draft/refactor/autofit/ep_factor_search_wrapper_overhead.md
+
+[full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/ep_toy_gaussian.md)
+
+</details>
+
+<details><summary>Locations</summary>
+
+- Ledger: [projects/ep_toy_gaussian.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/ep_toy_gaussian.md)
+- Local: `` /mnt/c/Users/Jammy/Science/active/ep_toy_gaussian ``
+- RAL: `` /mnt/ral/jnightin/active/ep_toy_gaussian ``
+
+</details>
+
+</details>
+
+<details id="project-slope_hierarchy_scale"><summary><b>slope_hierarchy_scale</b> — Hierarchical slope recovery with graphical and EP at N=25 to 50 · no runs recorded · updated 2026-10-14</summary>
+
+active · both · [slope_hierarchy_scale#2](https://github.com/PyAutoLabs/slope_hierarchy_scale/issues/2)
+
+**Current position**
 
 The N=25 graphical baselines are in: per-lens fits (342348) give a naive parent of 1.999 / 0.089 (deconvolved 0.085), and the joint NUTS fit (342350_0) recovers mean 1.994 [1.976, 2.014] and sigma 0.087 [0.074, 0.104] against truth 2.0 / 0.1; its summary JSON still needs writing offline from samples.csv (now under z_vault/sample_n25_seed42). The EP arm returned the prior on the Laplace projection (343299: hierarchical factor 0/50 SUCCESS). The cure has landed: PyAutoFit#1656 (merged 2026-09-30, released 2026.10.7.1) adds af.LaplaceOptimiser(projection="moments"), which takes the tight toy from 0 to 3/3 SUCCESS. The shared RAL PyAutoFit mirror is still 404b3e5f7 (2026-09-27, kept frozen for euclid_dr1) and lacks both #1655 and #1656, so any rerun needs a private PyAutoFit checkout on RAL. All earlier output is vaulted in z_vault/ on laptop and RAL, output/ is empty for the rerun. Next: rerun the N=25 EP arm with projection="moments" on a private PyAutoFit checkout and compare its scatter against the NUTS baseline.
-
-**Runs**
-
-- _nothing on the cluster_
-
-**Last 5**
-
-- 2026-10-14 — *note* — output/ vaulted to z_vault/ on laptop and RAL (mv, nothing deleted), anticipating reruns; output/ left empty, results/ untouched; z_vault/ gitignored locally
-- 2026-09-30 — *note* — graphical baselines recorded late at the 2026-09-30 check-in. 342348_[0-24] per-lens (one_by_one Nautilus, A100, 25/25, 6.9-8.8 min/task, 0 float32 truncations): naive parent mean 1.9992 +/- 0.0178 (SEM), std of medians 0.0889, deconvolved…
-- 2026-09-30 — *run* — 342351_0 failed — wall 27:41: n25_scale_up: EP arm on the CPU partition, hpc/batch_cpu/submit_ep, max_steps 12; RAL PyAutoFit mirror 68ff9bd57 predates PyAutoFit#1580, so this arm runs without the stale-mask fixed-point fix — CANCELLED 202…
-- 2026-09-30 — *run* — 342350_0 failed — wall 16:29: n25_scale_up: joint hierarchical NUTS fit, hpc/batch_gpu/submit_graphical — OUT_OF_MEMORY 2026-09-09 13:06:31 BST (sacct 0:125, cgroup oom-kill): NUTS warm-up 500 + sampling 1000 steps completed and samples.cs…
-- 2026-09-30 — *run* — 342348_[0-24] finished — wall 3:22: n25_scale_up: one lens per array task, hpc/batch_gpu/submit_one_by_one, sample_n25_seed42 — all 25 tasks COMPLETED 2026-09-08 17:14-20:37 BST (sacct, 6:54-8:50 per task, serial on the GPU): per-lens one_…
-
-[full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/slope_hierarchy_scale.md)
 
 <details><summary>📋 resume slope_hierarchy_scale</summary>
 
@@ -292,27 +400,39 @@ Use the cortex skill. — resume slope_hierarchy_scale: read PyAutoCortex projec
 
 </details>
 
-### ic50_workspace — EP against the graphical joint fit on IC50 dose-response data, scaling up
+**Runs** (0)
 
-active · ral · [PyAutoCortex#36](https://github.com/PyAutoLabs/PyAutoCortex/issues/36) · [projects/ic50_workspace.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/ic50_workspace.md) · local `/mnt/c/Users/Jammy/Science/active/ic50_workspace` · RAL `/mnt/ral/jnightin/active/ic50_workspace`
+_nothing on the cluster_
 
-**Now**
-
-The scale ladder is in. EP passes N=5/10/25 with coef_mean within 3σ and cost growing about linearly per sweep (26/50/140 s); it died at N=50 on a projection assert. That fix has landed: PyAutoFit#1655 (merged 2026-09-30, released 2026.10.7.1) raises ProjectionException, which EP factor_step now recovers from instead of killing the run. Graphical is cheaper but overconfident beyond N=25, and EP hill_coef widths are not yet comparable because util.py reports factor-message widths. The shared RAL PyAutoFit mirror is still 404b3e5f7 (2026-09-27, kept frozen for euclid_dr1) and lacks both #1655 and #1656, so any rerun needs a private PyAutoFit checkout on RAL. All earlier output is vaulted in z_vault/ on laptop and RAL, output/ is empty for the rerun. Next: rerun the EP ladder on a private PyAutoFit checkout with output on and a fixed seed, report hill_coef from the mean field, then give ep_lbfgs_jax a witness as the scale lever.
-
-**Runs**
-
-- _nothing on the cluster_
-
-**Last 5**
+<details><summary>Recent log — 5 of 14 entries</summary>
 
 - 2026-10-14 — *note* — output/ vaulted to z_vault/ on laptop and RAL (mv, nothing deleted), anticipating reruns; output/ left empty, results/ untouched; z_vault/ gitignored locally
-- 2026-09-30 — *note* — Ladder read: EP s/sweep 26/50/140/~300 s at N=5/10/25/50 vs graphical wall 21/42/119/281 s. EP hill_coef widths flat at ~0.8 because util.py reports factor-message (likelihood) widths and the global factor freezes hill_coef; graphical widt…
-- 2026-09-30 — *note* — 342411 N=50 failure diagnosed: AssertionError at autofit/messages/abstract.py:316 while projecting the global factor after EP sweep 4 (mirror 66f9f8d5d); the 4th global search had max logL -337 (vs -69 at sweep 3) and logz +/- nan. Library…
-- 2026-09-09 — *run* — 342411 failed — wall 0:38: ep_scale_up: EP scale ladder, sim rungs 5/10/25/50, nlive 150 max_steps 12 — finished 2026-09-09 23:19:29 BST (sacct COMPLETED 00:38:49, the ladder catches rung failures): rungs N=5/10/25 passed the global coef_m…
-- 2026-09-09 — *run* — 342412 finished — wall 0:07: ep_scale_up: graphical scale ladder, sim rungs 5/10/25/50, nlive 150 — COMPLETED 2026-09-09 22:48:42 BST (sacct 00:07:59): all four rungs N=5/10/25/50 passed the global coef_mean assertions (within 3σ); results…
+- 2026-09-30 — *note* — graphical baselines recorded late at the 2026-09-30 check-in. 342348_[0-24] per-lens (one_by_one Nautilus, A100, 25/25, 6.9-8.8 min/task, 0 float32 truncations): naive parent mean 1.9992 +/- 0.0178 (SEM), std of medians 0.0889, deconvolved scatter 0.0852 (rms 1-sigma half-width 0.0255); truth inside the 1-sigma interval for 17/25 lenses; per-lens JSONs on RAL at results/one_by_one_sample_n25_seed42/dataset_*.json (not pulled; aggregate never written by the array). 342350_0 joint hierarchical NUTS: science completed despite the post-processing OOM — 500 warm-up (8h08m) + 1000 samples (7h17m), 1 chain, 0 divergences, acceptance 0.84, rhat_max 1.012, ess_min 133/302 params; parent mean 1.9936 [1.9761, 2.0136] 68%, sigma 0.0871 [0.0744, 0.1041] 68% (95% [0.0636, 0.1190]) vs truth 2.0/0.1 and realised draws 1.9917/0.0864 — the N=5 high-scatter bias (0.143) is gone at N=25. Computed from RAL samples.csv (graphical_nuts/f16c32e17f570603a1dc061f95792798/files); results/graphical_nuts_sample_n25_seed42.json never written (killed at 64 GB in latent/arviz post-processing) — pull samples.csv and write the summary offline
+- 2026-09-30 — *run* — 342351_0 failed — wall 27:41: n25_scale_up: EP arm on the CPU partition, hpc/batch_cpu/submit_ep, max_steps 12; RAL PyAutoFit mirror 68ff9bd57 predates PyAutoFit#1580, so this arm runs without the stale-mask fixed-point fix — CANCELLED 2026-09-09 20:56:19 BST (sacct 1-03:41:06): log stops at the first Nautilus status line 2026-09-08 17:15:36, no factor finished; superseded by 342410 then 343299, output parked as ep_dead_342351; recorded late at the 2026-09-30 check-in
+- 2026-09-30 — *run* — 342350_0 failed — wall 16:29: n25_scale_up: joint hierarchical NUTS fit, hpc/batch_gpu/submit_graphical — OUT_OF_MEMORY 2026-09-09 13:06:31 BST (sacct 0:125, cgroup oom-kill): NUTS warm-up 500 + sampling 1000 steps completed and samples.csv was written 12:14 (output/sample_n25_seed42/graphical/graphical_nuts/f16c32e17f570603a1dc061f95792798/files/samples.csv), then killed during latent samples / arviz post-processing; recorded late at the 2026-09-30 check-in
+- 2026-09-30 — *run* — 342348_[0-24] finished — wall 3:22: n25_scale_up: one lens per array task, hpc/batch_gpu/submit_one_by_one, sample_n25_seed42 — all 25 tasks COMPLETED 2026-09-08 17:14-20:37 BST (sacct, 6:54-8:50 per task, serial on the GPU): per-lens one_by_one slopes are the baseline, e.g. dataset_0 2.0417 [2.0130, 2.0730] (truth 2.0305), dataset_24 2.0333 [2.0205, 2.0463] (truth 2.0439); recorded late at the 2026-09-30 check-in
 
-[full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/ic50_workspace.md)
+[full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/slope_hierarchy_scale.md)
+
+</details>
+
+<details><summary>Locations</summary>
+
+- Ledger: [projects/slope_hierarchy_scale.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/slope_hierarchy_scale.md)
+- Local: `` /mnt/c/Users/Jammy/Science/active/slope_hierarchy_scale ``
+- RAL: `` /mnt/ral/jnightin/active/slope_hierarchy_scale ``
+
+</details>
+
+</details>
+
+<details id="project-ic50_workspace"><summary><b>ic50_workspace</b> — EP against the graphical joint fit on IC50 dose-response data, scaling up · no runs recorded · updated 2026-10-14</summary>
+
+active · ral · [PyAutoCortex#36](https://github.com/PyAutoLabs/PyAutoCortex/issues/36)
+
+**Current position**
+
+The scale ladder is in. EP passes N=5/10/25 with coef_mean within 3σ and cost growing about linearly per sweep (26/50/140 s); it died at N=50 on a projection assert. That fix has landed: PyAutoFit#1655 (merged 2026-09-30, released 2026.10.7.1) raises ProjectionException, which EP factor_step now recovers from instead of killing the run. Graphical is cheaper but overconfident beyond N=25, and EP hill_coef widths are not yet comparable because util.py reports factor-message widths. The shared RAL PyAutoFit mirror is still 404b3e5f7 (2026-09-27, kept frozen for euclid_dr1) and lacks both #1655 and #1656, so any rerun needs a private PyAutoFit checkout on RAL. All earlier output is vaulted in z_vault/ on laptop and RAL, output/ is empty for the rerun. Next: rerun the EP ladder on a private PyAutoFit checkout with output on and a fixed seed, report hill_coef from the mean field, then give ep_lbfgs_jax a witness as the scale lever.
 
 <details><summary>📋 resume ic50_workspace</summary>
 
@@ -322,32 +442,39 @@ Use the cortex skill. — resume ic50_workspace: read PyAutoCortex projects/ic50
 
 </details>
 
-### autolens_inference — Do the PyAutoLens inference backends agree on the HST SLaM posterior
+**Runs** (0)
 
-active · both · [autolens_inference#4](https://github.com/PyAutoLabs/autolens_inference/issues/4) · [projects/autolens_inference.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/autolens_inference.md) · local `/home/jammy/Code/PyAutoLabs/lens/autolens_inference` · RAL `/mnt/ral/jnightin/inference/autolens_inference`
+_nothing on the cluster_
 
-**Now**
+<details><summary>Recent log — 5 of 12 entries</summary>
+
+- 2026-10-14 — *note* — output/ vaulted to z_vault/ on laptop and RAL (mv, nothing deleted), anticipating reruns; output/ left empty, results/ untouched; z_vault/ gitignored locally
+- 2026-09-30 — *note* — Ladder read: EP s/sweep 26/50/140/~300 s at N=5/10/25/50 vs graphical wall 21/42/119/281 s. EP hill_coef widths flat at ~0.8 because util.py reports factor-message (likelihood) widths and the global factor freezes hill_coef; graphical widths shrink but fall to 56/75 and 65/150 within 3 sigma at N=25/50 (overconfident). coef_mean passes 3 sigma for both methods on every completed rung.
+- 2026-09-30 — *note* — 342411 N=50 failure diagnosed: AssertionError at autofit/messages/abstract.py:316 while projecting the global factor after EP sweep 4 (mirror 66f9f8d5d); the 4th global search had max logL -337 (vs -69 at sweep 3) and logz +/- nan. Library defect: project asserts on non-finite suff_stats and factor_step (optimiser.py:150) does not catch AssertionError, so one bad projection kills the run; no later commit touches the path. A local rerun at 66f9f8d5d converged in sweep 3 without failing (unseeded Dynesty, non-deterministic). Mind bug prompt draft/bug/autofit/ep_project_nonfinite_suff_stats_ic50_n50.md
+- 2026-09-09 — *run* — 342411 failed — wall 0:38: ep_scale_up: EP scale ladder, sim rungs 5/10/25/50, nlive 150 max_steps 12 — finished 2026-09-09 23:19:29 BST (sacct COMPLETED 00:38:49, the ladder catches rung failures): rungs N=5/10/25 passed the global coef_mean assertions; rung N=50 FAILED — AssertionError: assert np.isfinite(suff_stats).all() in autofit/messages/abstract.py:316 project (via mapper/prior/abstract.py:237), error.342411.err
+- 2026-09-09 — *run* — 342412 finished — wall 0:07: ep_scale_up: graphical scale ladder, sim rungs 5/10/25/50, nlive 150 — COMPLETED 2026-09-09 22:48:42 BST (sacct 00:07:59): all four rungs N=5/10/25/50 passed the global coef_mean assertions (within 3σ); results/graphical_ladder_n*_summary.json
+
+[full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/ic50_workspace.md)
+
+</details>
+
+<details><summary>Locations</summary>
+
+- Ledger: [projects/ic50_workspace.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/ic50_workspace.md)
+- Local: `` /mnt/c/Users/Jammy/Science/active/ic50_workspace ``
+- RAL: `` /mnt/ral/jnightin/active/ic50_workspace ``
+
+</details>
+
+</details>
+
+<details id="project-autolens_inference"><summary><b>autolens_inference</b> — Do the PyAutoLens inference backends agree on the HST SLaM posterior · 6 running · 0 open · updated 2026-09-24</summary>
+
+active · both · [autolens_inference#4](https://github.com/PyAutoLabs/autolens_inference/issues/4)
+
+**Current position**
 
 All pre-likelihood-speedup SLaM HST rows (slam_base A100 dense/sparse, the 342695 rate probe, delaunay_1250 A100 dense/sparse 343143/343145) are archived under results|output/archive/2026-09-24_pre_likelihood_speedup/ (autolens_inference#12). Running since 2026-09-24 on today's library mains: slam_base A100 dense 350674 / sparse 350675, delaunay_1250 A100 dense 350678 / sparse 350679, and the first CPU leg, slam_base numba_cpu sparse 350682 on ral; seeds 0-1 each. Next: pull the rows, commit them live, and read the new-vs-archived per-stage walls as the inference-level speedup; then the fixed-lens-light variant resumes from these output trees.
-
-**Runs**
-
-- 350674_[0-1] — running — gpu — 2026-09-24 — slam_hst_base: A100 leg, dense inversion, seeds 0-1, hpc/batch_gpu/submit_slam_hst_jax_gpu_dense (config hpc_a100_jax_gpu_dense_fp64, variant slam_base) — re-r…
-- 350675_[0-1] — running — gpu — 2026-09-24 — slam_hst_base: A100 leg, sparse inversion, seeds 0-1, hpc/batch_gpu/submit_slam_hst_jax_gpu_sparse (config hpc_a100_jax_gpu_sparse_fp64, variant slam_base) — r…
-- 350678_[0-1] — running — gpu — 2026-09-24 — slam_hst_delaunay_1250: A100 leg, dense inversion, seeds 0-1, hpc/batch_gpu/submit_slam_delaunay1250_hst_jax_gpu_dense (config hpc_a100_jax_gpu_dense_fp64, var…
-- 350679_[0-1] — running — gpu — 2026-09-24 — slam_hst_delaunay_1250: A100 leg, sparse inversion, seeds 0-1, hpc/batch_gpu/submit_slam_delaunay1250_hst_jax_gpu_sparse (config hpc_a100_jax_gpu_sparse_fp64,…
-- 350682_[0-1] — running — ral — 2026-09-24 — slam_hst_base: numba_cpu leg, sparse inversion, seeds 0-1, 8 cpus, hpc/batch_cpu/submit_slam_hst_numba_cpu_sparse (config hpc_a100_numba_cpu_sparse_fp64, varia…
-- 350684_[0-1] — running — ral — 2026-09-24 — slam_hst_delaunay_1250: numba_cpu leg, sparse inversion, seeds 0-1, hpc/batch_cpu/submit_slam_delaunay1250_hst_numba_cpu_sparse (config hpc_a100_numba_cpu_spar…
-
-**Last 5**
-
-- 2026-09-24 — *run* — 350684_[0-1] submitted: slam_hst_delaunay_1250: numba_cpu leg, sparse inversion, seeds 0-1, hpc/batch_cpu/submit_slam_delaunay1250_hst_numba_cpu_sparse (config hpc_a100_numba_cpu_sparse_fp64, variant delaunay_1250) on the post-speedup libr…
-- 2026-09-24 — *run* — 350682_[0-1] submitted: slam_hst_base: numba_cpu leg, sparse inversion, seeds 0-1, 8 cpus, hpc/batch_cpu/submit_slam_hst_numba_cpu_sparse (config hpc_a100_numba_cpu_sparse_fp64, variant slam_base), 5-day containment — first CPU leg of the…
-- 2026-09-24 — *run* — 350679_[0-1] submitted: slam_hst_delaunay_1250: A100 leg, sparse inversion, seeds 0-1, hpc/batch_gpu/submit_slam_delaunay1250_hst_jax_gpu_sparse (config hpc_a100_jax_gpu_sparse_fp64, variant delaunay_1250) — re-run on the post-speedup libr…
-- 2026-09-24 — *run* — 350678_[0-1] submitted: slam_hst_delaunay_1250: A100 leg, dense inversion, seeds 0-1, hpc/batch_gpu/submit_slam_delaunay1250_hst_jax_gpu_dense (config hpc_a100_jax_gpu_dense_fp64, variant delaunay_1250) — re-run on the post-speedup library…
-- 2026-09-24 — *run* — 350675_[0-1] submitted: slam_hst_base: A100 leg, sparse inversion, seeds 0-1, hpc/batch_gpu/submit_slam_hst_jax_gpu_sparse (config hpc_a100_jax_gpu_sparse_fp64, variant slam_base) — re-run on the post-speedup library mains (Array 3de624b5,…
-
-[full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/autolens_inference.md)
 
 <details><summary>📋 resume autolens_inference</summary>
 
@@ -357,27 +484,57 @@ Use the cortex skill. — resume autolens_inference: read PyAutoCortex projects/
 
 </details>
 
-### autofit_inference — PyAutoFit search benchmark on gaussian_x3: which searches find the right answer fastest
+**Runs** (6)
 
-active · ral · [autofit_inference#8](https://github.com/PyAutoLabs/autofit_inference/issues/8) · [projects/autofit_inference.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/autofit_inference.md) · local `/home/jammy/Code/PyAutoLabs/fit/autofit_inference` · RAL `/mnt/ral/jnightin/inference/autofit_inference`
+| Job | State | Partition | Date | Description |
+|---|---|---|---|---|
+| `350674_[0-1]` | running | gpu | 2026-09-24 | slam_hst_base: A100 leg, dense inversion, seeds 0-1, hpc/batch_gpu/submit_slam_hst_jax_gpu_dense (config hpc_a100_jax_gpu_dense_fp64, variant slam_base) — re-r… |
+| `350675_[0-1]` | running | gpu | 2026-09-24 | slam_hst_base: A100 leg, sparse inversion, seeds 0-1, hpc/batch_gpu/submit_slam_hst_jax_gpu_sparse (config hpc_a100_jax_gpu_sparse_fp64, variant slam_base) — r… |
+| `350678_[0-1]` | running | gpu | 2026-09-24 | slam_hst_delaunay_1250: A100 leg, dense inversion, seeds 0-1, hpc/batch_gpu/submit_slam_delaunay1250_hst_jax_gpu_dense (config hpc_a100_jax_gpu_dense_fp64, var… |
+| `350679_[0-1]` | running | gpu | 2026-09-24 | slam_hst_delaunay_1250: A100 leg, sparse inversion, seeds 0-1, hpc/batch_gpu/submit_slam_delaunay1250_hst_jax_gpu_sparse (config hpc_a100_jax_gpu_sparse_fp64,… |
+| `350682_[0-1]` | running | ral | 2026-09-24 | slam_hst_base: numba_cpu leg, sparse inversion, seeds 0-1, 8 cpus, hpc/batch_cpu/submit_slam_hst_numba_cpu_sparse (config hpc_a100_numba_cpu_sparse_fp64, varia… |
+| `350684_[0-1]` | running | ral | 2026-09-24 | slam_hst_delaunay_1250: numba_cpu leg, sparse inversion, seeds 0-1, hpc/batch_cpu/submit_slam_delaunay1250_hst_numba_cpu_sparse (config hpc_a100_numba_cpu_spar… |
 
-**Now**
+<details><summary>Full descriptions (6 shortened above)</summary>
+
+- `350674_[0-1]` — slam_hst_base: A100 leg, dense inversion, seeds 0-1, hpc/batch_gpu/submit_slam_hst_jax_gpu_dense (config hpc_a100_jax_gpu_dense_fp64, variant slam_base) — re-run on the post-speedup library mains (Array 3de624b5, Lens 86054bbc1, Fit dd9fbe0aa, Galaxy 70a61e26, Nerves 1fa613a); old tree archived so nothing resumes; kept at the normal path for the fixed-lens-light resume variant
+- `350675_[0-1]` — slam_hst_base: A100 leg, sparse inversion, seeds 0-1, hpc/batch_gpu/submit_slam_hst_jax_gpu_sparse (config hpc_a100_jax_gpu_sparse_fp64, variant slam_base) — re-run on the post-speedup library mains (Array 3de624b5, Lens 86054bbc1, Fit dd9fbe0aa, Galaxy 70a61e26, Nerves 1fa613a); old tree archived so nothing resumes; kept at the normal path for the fixed-lens-light resume variant
+- `350678_[0-1]` — slam_hst_delaunay_1250: A100 leg, dense inversion, seeds 0-1, hpc/batch_gpu/submit_slam_delaunay1250_hst_jax_gpu_dense (config hpc_a100_jax_gpu_dense_fp64, variant delaunay_1250) — re-run on the post-speedup library mains (Array 3de624b5, Lens 86054bbc1, Fit dd9fbe0aa, Galaxy 70a61e26, Nerves 1fa613a); old tree archived so nothing resumes; kept at the normal path for the fixed-lens-light resume variant
+- `350679_[0-1]` — slam_hst_delaunay_1250: A100 leg, sparse inversion, seeds 0-1, hpc/batch_gpu/submit_slam_delaunay1250_hst_jax_gpu_sparse (config hpc_a100_jax_gpu_sparse_fp64, variant delaunay_1250) — re-run on the post-speedup library mains (Array 3de624b5, Lens 86054bbc1, Fit dd9fbe0aa, Galaxy 70a61e26, Nerves 1fa613a); old tree archived so nothing resumes; kept at the normal path for the fixed-lens-light resume variant
+- `350682_[0-1]` — slam_hst_base: numba_cpu leg, sparse inversion, seeds 0-1, 8 cpus, hpc/batch_cpu/submit_slam_hst_numba_cpu_sparse (config hpc_a100_numba_cpu_sparse_fp64, variant slam_base), 5-day containment — first CPU leg of the parity row; re-run on the post-speedup library mains (Array 3de624b5, Lens 86054bbc1, Fit dd9fbe0aa, Galaxy 70a61e26, Nerves 1fa613a); old tree archived so nothing resumes; kept at the normal path for the fixed-lens-light resume variant
+- `350684_[0-1]` — slam_hst_delaunay_1250: numba_cpu leg, sparse inversion, seeds 0-1, hpc/batch_cpu/submit_slam_delaunay1250_hst_numba_cpu_sparse (config hpc_a100_numba_cpu_sparse_fp64, variant delaunay_1250) on the post-speedup library mains; euclid test-mode witness passed 2026-09-24
+
+</details>
+
+<details><summary>Recent log — 5 of 16 entries</summary>
+
+- 2026-09-24 — *run* — 350684_[0-1] submitted: slam_hst_delaunay_1250: numba_cpu leg, sparse inversion, seeds 0-1, hpc/batch_cpu/submit_slam_delaunay1250_hst_numba_cpu_sparse (config hpc_a100_numba_cpu_sparse_fp64, variant delaunay_1250) on the post-speedup library mains; euclid test-mode witness passed 2026-09-24
+- 2026-09-24 — *run* — 350682_[0-1] submitted: slam_hst_base: numba_cpu leg, sparse inversion, seeds 0-1, 8 cpus, hpc/batch_cpu/submit_slam_hst_numba_cpu_sparse (config hpc_a100_numba_cpu_sparse_fp64, variant slam_base), 5-day containment — first CPU leg of the parity row; re-run on the post-speedup library mains (Array 3de624b5, Lens 86054bbc1, Fit dd9fbe0aa, Galaxy 70a61e26, Nerves 1fa613a); old tree archived so nothing resumes; kept at the normal path for the fixed-lens-light resume variant
+- 2026-09-24 — *run* — 350679_[0-1] submitted: slam_hst_delaunay_1250: A100 leg, sparse inversion, seeds 0-1, hpc/batch_gpu/submit_slam_delaunay1250_hst_jax_gpu_sparse (config hpc_a100_jax_gpu_sparse_fp64, variant delaunay_1250) — re-run on the post-speedup library mains (Array 3de624b5, Lens 86054bbc1, Fit dd9fbe0aa, Galaxy 70a61e26, Nerves 1fa613a); old tree archived so nothing resumes; kept at the normal path for the fixed-lens-light resume variant
+- 2026-09-24 — *run* — 350678_[0-1] submitted: slam_hst_delaunay_1250: A100 leg, dense inversion, seeds 0-1, hpc/batch_gpu/submit_slam_delaunay1250_hst_jax_gpu_dense (config hpc_a100_jax_gpu_dense_fp64, variant delaunay_1250) — re-run on the post-speedup library mains (Array 3de624b5, Lens 86054bbc1, Fit dd9fbe0aa, Galaxy 70a61e26, Nerves 1fa613a); old tree archived so nothing resumes; kept at the normal path for the fixed-lens-light resume variant
+- 2026-09-24 — *run* — 350675_[0-1] submitted: slam_hst_base: A100 leg, sparse inversion, seeds 0-1, hpc/batch_gpu/submit_slam_hst_jax_gpu_sparse (config hpc_a100_jax_gpu_sparse_fp64, variant slam_base) — re-run on the post-speedup library mains (Array 3de624b5, Lens 86054bbc1, Fit dd9fbe0aa, Galaxy 70a61e26, Nerves 1fa613a); old tree archived so nothing resumes; kept at the normal path for the fixed-lens-light resume variant
+
+[full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/autolens_inference.md)
+
+</details>
+
+<details><summary>Locations</summary>
+
+- Ledger: [projects/autolens_inference.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/autolens_inference.md)
+- Local: `` /home/jammy/Code/PyAutoLabs/lens/autolens_inference ``
+- RAL: `` /mnt/ral/jnightin/inference/autolens_inference ``
+
+</details>
+
+</details>
+
+<details id="project-autofit_inference"><summary><b>autofit_inference</b> — PyAutoFit search benchmark on gaussian_x3: which searches find the right answer fastest · no runs recorded · updated 2026-10-15</summary>
+
+active · ral · [autofit_inference#8](https://github.com/PyAutoLabs/autofit_inference/issues/8)
+
+**Current position**
 
 Wave 2 closed and judged under gaussian_x3@2 (B5b-2, 2026-10-15): all 12,750 pulled rows admitted at PyAutoFit pin df6d218f10cd; of the 13,000 expected runs, 11,580 rows + 1,170 failed + 0 missing + 250 deferred. The 409930 probe-first legs close: NSS 50-step leads both evidence rankings (blend 158/250, separated 210/250); Zeus JAX is 0/250 on the blend and 190/250 on the separated control (first among separated posterior legs). The catalogue ranks only legs with success rate >= 50 % over >= 20 attempts and lists the rest as unreliable (post-hoc presentation convention, protocol §8 note; autofit_inference#12 ruling 2). Summary records published as inference-summary@3 (101 record shards). Next: after the B5b-2 PRs merge, capture the Insight fit snapshot from main under @3 and run pyauto-insight check online; then B5c (a second model family).
-
-**Runs**
-
-- _nothing on the cluster_
-
-**Last 5**
-
-- 2026-10-15 — *run* — 409930_[0-19] finished — wall 1:30: wave-2 probe-first remainder (B5b): Zeus JAX + NSS n_live_200_mcmc_steps_50, both datasets, 980 runs after the probe under probe-derived @2 timeouts (NSS 600 s, Zeus 1168 s); %20; submit_wave2_remainder;…
-- 2026-10-15 — *run* — 408367_[0-389] finished — wall 1:57: scored wave 2 separated jax_cpu: 3750 runs, %60, afterany 408346:408347 — 390/390 COMPLETED; 3750 separated jax_cpu rows admitted; judged B5b
-- 2026-10-15 — *run* — 408366_[0-379] finished — wall 1:51: scored wave 2 separated numpy: 2250 runs, %60, afterany 408346:408347 — 380/380 COMPLETED; 2250 separated numpy rows admitted; judged B5b
-- 2026-10-15 — *run* — 408365_[0-344] finished — wall 1:46: scored wave 2 blend jax_cpu: 3500 runs, %60, afterany 408346:408347 — 345/345 COMPLETED; 3500 blend jax_cpu rows admitted; judged B5b
-- 2026-10-15 — *run* — 408348_[0-379] finished — wall 1:53: scored wave 2 (gaussian_x3@2) blend numpy: 2250 runs, 50 seeds x 5 realisations, %60, afterany 408346:408347; submit_wave2_scored_gaussian_x3_blend_numpy — 380/380 COMPLETED; 2250 blend numpy rows admit…
-
-[full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/autofit_inference.md)
 
 <details><summary>📋 resume autofit_inference</summary>
 
@@ -387,19 +544,45 @@ Use the cortex skill. — resume autofit_inference: read PyAutoCortex projects/a
 
 </details>
 
-### euclid — The original Euclid DR1 grade-AB catalogue project, superseded by euclid_dr1
+**Runs** (0)
 
-dormant · both · no issue yet · [projects/euclid.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid.md) · local `/mnt/c/Users/Jammy/Science/active/euclid` · RAL `/mnt/ral/jnightin/active/euclid`
+_nothing on the cluster_
 
-**Now**
+<details><summary>Recent log — 5 of 23 entries</summary>
+
+- 2026-10-15 — *run* — 409930_[0-19] finished — wall 1:30: wave-2 probe-first remainder (B5b): Zeus JAX + NSS n_live_200_mcmc_steps_50, both datasets, 980 runs after the probe under probe-derived @2 timeouts (NSS 600 s, Zeus 1168 s); %20; submit_wave2_remainder; pin df6d218f10cd; pulled in B5b-2 — 20/20 COMPLETED (16:08-17:38 UTC); 980 remainder rows pulled by per-directory tar (20 probe rows byte-identical); all admitted under gaussian_x3@2, 0 missing; judged B5b-2
+- 2026-10-15 — *run* — 408367_[0-389] finished — wall 1:57: scored wave 2 separated jax_cpu: 3750 runs, %60, afterany 408346:408347 — 390/390 COMPLETED; 3750 separated jax_cpu rows admitted; judged B5b
+- 2026-10-15 — *run* — 408366_[0-379] finished — wall 1:51: scored wave 2 separated numpy: 2250 runs, %60, afterany 408346:408347 — 380/380 COMPLETED; 2250 separated numpy rows admitted; judged B5b
+- 2026-10-15 — *run* — 408365_[0-344] finished — wall 1:46: scored wave 2 blend jax_cpu: 3500 runs, %60, afterany 408346:408347 — 345/345 COMPLETED; 3500 blend jax_cpu rows admitted; judged B5b
+- 2026-10-15 — *run* — 408348_[0-379] finished — wall 1:53: scored wave 2 (gaussian_x3@2) blend numpy: 2250 runs, 50 seeds x 5 realisations, %60, afterany 408346:408347; submit_wave2_scored_gaussian_x3_blend_numpy — 380/380 COMPLETED; 2250 blend numpy rows admitted under gaussian_x3@2; judged B5b
+
+[full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/autofit_inference.md)
+
+</details>
+
+<details><summary>Locations</summary>
+
+- Ledger: [projects/autofit_inference.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/autofit_inference.md)
+- Local: `` /home/jammy/Code/PyAutoLabs/fit/autofit_inference ``
+- RAL: `` /mnt/ral/jnightin/inference/autofit_inference ``
+
+</details>
+
+</details>
+
+<details id="project-euclid"><summary><b>euclid</b> — The original Euclid DR1 grade-AB catalogue project, superseded by euclid_dr1 · dormant · no runs recorded · updated 2026-10-15</summary>
+
+dormant · both · no issue yet
+
+**Current position**
 
 Dormant: superseded by euclid_dr1 (euclid_dr1_prelim is defunct). The tree is kept under Science/active and RAL `active/euclid` (category layout, 2026-10-15); no question is open.
 
-**Runs**
+**Runs** (0)
 
-- _nothing on the cluster_
+_nothing on the cluster_
 
-**Last 5**
+<details><summary>Recent log — 4 of 4 entries</summary>
 
 - 2026-10-15 — *note* — superseded by euclid_dr1 (euclid_dr1_prelim defunct) per the human; stays dormant; folder under Science/active and RAL active/; ral_root repointed to the category layout (PyAutoCortex#67)
 - 2026-08-28 — *note* — question: Do we recover Sersic indices or is prior pile-up artefact — planned, never run [archive/tasks/euclid/sersic_index_recovery.md]
@@ -407,6 +590,18 @@ Dormant: superseded by euclid_dr1 (euclid_dr1_prelim is defunct). The tree is ke
 - 2026-08-28 — *note* — question: How robust are magnification estimates under model match and mismatch — planned, never run [archive/tasks/euclid/magnification_robustness.md]
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid.md)
+
+</details>
+
+<details><summary>Locations</summary>
+
+- Ledger: [projects/euclid.md](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid.md)
+- Local: `` /mnt/c/Users/Jammy/Science/active/euclid ``
+- RAL: `` /mnt/ral/jnightin/active/euclid ``
+
+</details>
+
+</details>
 
 <details><summary>5 retired</summary>
 
