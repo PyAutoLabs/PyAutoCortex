@@ -336,7 +336,7 @@ active · ral · [autofit_inference#8](https://github.com/PyAutoLabs/autofit_inf
 
 **Now**
 
-Wave 2 closed and judged under gaussian_x3@2 (B5b-2, 2026-10-15): 12,750 rows at PyAutoFit pin df6d218f10cd all admitted (11,580 rows + 1,170 failed + 0 missing + 250 deferred = 13,000); the 409930 probe-first legs close: NSS 50-step leads both evidence rankings (blend 158/250, separated 210/250), Zeus JAX 0/250 blend and 190/250 separated (first among separated posterior legs). Catalogue ranks only legs with success rate >= 50 % over >= 20 attempts, the rest listed unreliable (post-hoc presentation convention, protocol §8 note; autofit_inference#12 ruling 2). Summary records published as inference-summary@3 (101 record shards). Next: after the B5b-2 PRs merge, capture the Insight fit snapshot from main under @3 and run pyauto-insight check online; then B5c (a second model family).
+Wave 2 closed and judged under gaussian_x3@2 (B5b-2, 2026-10-15): all 12,750 pulled rows admitted at PyAutoFit pin df6d218f10cd; of the 13,000 expected runs, 11,580 rows + 1,170 failed + 0 missing + 250 deferred. The 409930 probe-first legs close: NSS 50-step leads both evidence rankings (blend 158/250, separated 210/250); Zeus JAX is 0/250 on the blend and 190/250 on the separated control (first among separated posterior legs). The catalogue ranks only legs with success rate >= 50 % over >= 20 attempts and lists the rest as unreliable (post-hoc presentation convention, protocol §8 note; autofit_inference#12 ruling 2). Summary records published as inference-summary@3 (101 record shards). Next: after the B5b-2 PRs merge, capture the Insight fit snapshot from main under @3 and run pyauto-insight check online; then B5c (a second model family).
 
 **Runs**
 
