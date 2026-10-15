@@ -5,14 +5,14 @@ Issue: autofit_inference#8
 
 ## Now
 
-Scored wave 2 pulled and judged under gaussian_x3@2 (B5b, 2026-10-15): 11,770 rows at PyAutoFit pin df6d218f10cd all admitted; accounting 11,750 scored (10,580 rows, 1,170 failed) + 20 probe + 250 deferred; all 20 per-realisation references complete (Nautilus-only), JAX blend realisation-1 rebuilt locally. Catalogue gaussian_x3@2 section orders legs within task and dataset (autofit_inference results/accounting, catalogue). Probe-first remainder (980 runs) is 409930 on ral; next: B5b-2 pulls and judges it; wave-2 summary records withheld on size pending autofit_inference#10.
+Wave 2 closed and judged under gaussian_x3@2 (B5b-2, 2026-10-15): 12,750 rows at PyAutoFit pin df6d218f10cd all admitted (11,580 rows + 1,170 failed + 0 missing + 250 deferred = 13,000); the 409930 probe-first legs close: NSS 50-step leads both evidence rankings (blend 158/250, separated 210/250), Zeus JAX 0/250 blend and 190/250 separated (first among separated posterior legs). Catalogue ranks only legs with success rate >= 50 % over >= 20 attempts, the rest listed unreliable (post-hoc presentation convention, protocol §8 note; autofit_inference#12 ruling 2). Summary records published as inference-summary@3 (101 record shards). Next: after the B5b-2 PRs merge, capture the Insight fit snapshot from main under @3 and run pyauto-insight check online; then B5c (a second model family).
 
 ## Runs
 
-- 409930_[0-19] — open — ral — 2026-10-15 — wave-2 probe-first remainder (B5b): Zeus JAX + NSS n_live_200_mcmc_steps_50, both datasets, 980 runs after the probe under probe-derived @2 timeouts (NSS 600 s, Zeus 1168 s); %20; submit_wave2_remainder; pin df6d218f10cd; pulled in B5b-2
 
 ## Log
 
+- 2026-10-15 — run — 409930_[0-19] finished — wall 1:30: wave-2 probe-first remainder (B5b): Zeus JAX + NSS n_live_200_mcmc_steps_50, both datasets, 980 runs after the probe under probe-derived @2 timeouts (NSS 600 s, Zeus 1168 s); %20; submit_wave2_remainder; pin df6d218f10cd; pulled in B5b-2 — 20/20 COMPLETED (16:08-17:38 UTC); 980 remainder rows pulled by per-directory tar (20 probe rows byte-identical); all admitted under gaussian_x3@2, 0 missing; judged B5b-2
 - 2026-10-15 — run — 408367_[0-389] finished — wall 1:57: scored wave 2 separated jax_cpu: 3750 runs, %60, afterany 408346:408347 — 390/390 COMPLETED; 3750 separated jax_cpu rows admitted; judged B5b
 - 2026-10-15 — run — 408366_[0-379] finished — wall 1:51: scored wave 2 separated numpy: 2250 runs, %60, afterany 408346:408347 — 380/380 COMPLETED; 2250 separated numpy rows admitted; judged B5b
 - 2026-10-15 — run — 408365_[0-344] finished — wall 1:46: scored wave 2 blend jax_cpu: 3500 runs, %60, afterany 408346:408347 — 345/345 COMPLETED; 3500 blend jax_cpu rows admitted; judged B5b
