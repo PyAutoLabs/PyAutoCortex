@@ -11,7 +11,7 @@ One ledger per science project: what is on the cluster right now, what the human
 | Where | Count |
 |-------|------:|
 | [Running](#projects) | 22 |
-| [Open](#projects) | 48 |
+| [Open](#projects) | 47 |
 | [Projects](#projects) | 8 |
 
 <details><summary>📋 check in since last time</summary>
@@ -49,7 +49,7 @@ Last check-in: 2026-09-30T09:51Z.
 | slope_hierarchy_scale | 0 | 0 | 2026-10-14 |
 | ic50_workspace | 0 | 0 | 2026-10-14 |
 | autolens_inference | 6 | 0 | 2026-09-24 |
-| autofit_inference | 0 | 1 | 2026-10-15 |
+| autofit_inference | 0 | 0 | 2026-10-15 |
 
 ## Projects
 
@@ -336,19 +336,19 @@ active · ral · [autofit_inference#8](https://github.com/PyAutoLabs/autofit_inf
 
 **Now**
 
-Scored wave 2 pulled and judged under gaussian_x3@2 (B5b, 2026-10-15): 11,770 rows at PyAutoFit pin df6d218f10cd all admitted; accounting 11,750 scored (10,580 rows, 1,170 failed) + 20 probe + 250 deferred; all 20 per-realisation references complete (Nautilus-only), JAX blend realisation-1 rebuilt locally. Catalogue gaussian_x3@2 section orders legs within task and dataset (autofit_inference results/accounting, catalogue). Probe-first remainder (980 runs) is 409930 on ral; next: B5b-2 pulls and judges it; wave-2 summary records withheld on size pending autofit_inference#10.
+Wave 2 closed and judged under gaussian_x3@2 (B5b-2, 2026-10-15): 12,750 rows at PyAutoFit pin df6d218f10cd all admitted (11,580 rows + 1,170 failed + 0 missing + 250 deferred = 13,000); the 409930 probe-first legs close: NSS 50-step leads both evidence rankings (blend 158/250, separated 210/250), Zeus JAX 0/250 blend and 190/250 separated (first among separated posterior legs). Catalogue ranks only legs with success rate >= 50 % over >= 20 attempts, the rest listed unreliable (post-hoc presentation convention, protocol §8 note; autofit_inference#12 ruling 2). Summary records published as inference-summary@3 (101 record shards). Next: after the B5b-2 PRs merge, capture the Insight fit snapshot from main under @3 and run pyauto-insight check online; then B5c (a second model family).
 
 **Runs**
 
-- 409930_[0-19] — open — ral — 2026-10-15 — wave-2 probe-first remainder (B5b): Zeus JAX + NSS n_live_200_mcmc_steps_50, both datasets, 980 runs after the probe under probe-derived @2 timeouts (NSS 600 s…
+- _nothing on the cluster_
 
 **Last 5**
 
+- 2026-10-15 — *run* — 409930_[0-19] finished — wall 1:30: wave-2 probe-first remainder (B5b): Zeus JAX + NSS n_live_200_mcmc_steps_50, both datasets, 980 runs after the probe under probe-derived @2 timeouts (NSS 600 s, Zeus 1168 s); %20; submit_wave2_remainder;…
 - 2026-10-15 — *run* — 408367_[0-389] finished — wall 1:57: scored wave 2 separated jax_cpu: 3750 runs, %60, afterany 408346:408347 — 390/390 COMPLETED; 3750 separated jax_cpu rows admitted; judged B5b
 - 2026-10-15 — *run* — 408366_[0-379] finished — wall 1:51: scored wave 2 separated numpy: 2250 runs, %60, afterany 408346:408347 — 380/380 COMPLETED; 2250 separated numpy rows admitted; judged B5b
 - 2026-10-15 — *run* — 408365_[0-344] finished — wall 1:46: scored wave 2 blend jax_cpu: 3500 runs, %60, afterany 408346:408347 — 345/345 COMPLETED; 3500 blend jax_cpu rows admitted; judged B5b
 - 2026-10-15 — *run* — 408348_[0-379] finished — wall 1:53: scored wave 2 (gaussian_x3@2) blend numpy: 2250 runs, 50 seeds x 5 realisations, %60, afterany 408346:408347; submit_wave2_scored_gaussian_x3_blend_numpy — 380/380 COMPLETED; 2250 blend numpy rows admit…
-- 2026-10-15 — *run* — 408347_[0-7] finished — wall 0:01: wave-2 separated reference builds, afterany 408245; %8 — 8/8 COMPLETED; separated reference builds
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/autofit_inference.md)
 
