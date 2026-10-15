@@ -5,22 +5,24 @@ Issue: autofit_inference#8
 
 ## Now
 
-gaussian_x3@2 frozen in autofit_inference 72d6faaf1717 before any scored run (A2+A4 gate met: PyAutoFit df6d218f1). Scored wave 2 submitted 2026-10-14 on RAL ral (11,750 runs + 20-run probe; references first) against a private PyAutoFit pin df6d218f10cd (autofit_inference#9). Next: B5b pulls, builds the JAX blend realisation-1 reference on the laptop, judges under @2.
+Scored wave 2 pulled and judged under gaussian_x3@2 (B5b, 2026-10-15): 11,770 rows at PyAutoFit pin df6d218f10cd all admitted; accounting 11,750 scored (10,580 rows, 1,170 failed) + 20 probe + 250 deferred; all 20 per-realisation references complete (Nautilus-only), JAX blend realisation-1 rebuilt locally. Catalogue gaussian_x3@2 section orders legs within task and dataset (autofit_inference results/accounting, catalogue). Probe-first remainder (980 runs) is 409930 on ral; next: B5b-2 pulls and judges it; wave-2 summary records withheld on size pending autofit_inference#10.
 
 ## Runs
 
-- 408244_[0-49] — running — ral — 2026-10-14 — wave-2 blend references (gaussian_x3@2 freeze 72d6faaf1717): realisations 2-5 x numpy/jax x Nautilus n_live=2000 + DynestyStatic nlive=1000 seeds 0-2, + JAX Nautilus seed 1 realisation 1, + NSS ln 3!; %50; submit_wave2_reference_gaussian_x3_blend; pin PyAutoFit df6d218f10cd
-- 408245_[0-47] — running — ral — 2026-10-14 — wave-2 separated references: realisations 1,3,4,5 x numpy/jax x 6 runs; %48; submit_wave2_reference_gaussian_x3_separated; pin df6d218f10cd
-- 408246_[0-19] — running — ral — 2026-10-14 — wave-2 probe: Zeus JAX + NSS n_live_200_mcmc_steps_50, both datasets, realisation 1, seeds 0-4 (timeouts for probe-first cells); %20; submit_wave2_probe
-- 408346_[0-7] — open — ral — 2026-10-14 — wave-2 blend reference builds (MAP + build_reference), afterany 408244; %8
-- 408347_[0-7] — open — ral — 2026-10-14 — wave-2 separated reference builds, afterany 408245; %8
-- 408348_[0-379] — open — ral — 2026-10-14 — scored wave 2 (gaussian_x3@2) blend numpy: 2250 runs, 50 seeds x 5 realisations, %60, afterany 408346:408347; submit_wave2_scored_gaussian_x3_blend_numpy
-- 408365_[0-344] — open — ral — 2026-10-14 — scored wave 2 blend jax_cpu: 3500 runs, %60, afterany 408346:408347
-- 408366_[0-379] — open — ral — 2026-10-14 — scored wave 2 separated numpy: 2250 runs, %60, afterany 408346:408347
-- 408367_[0-389] — open — ral — 2026-10-14 — scored wave 2 separated jax_cpu: 3750 runs, %60, afterany 408346:408347
+- 409930_[0-19] — open — ral — 2026-10-15 — wave-2 probe-first remainder (B5b): Zeus JAX + NSS n_live_200_mcmc_steps_50, both datasets, 980 runs after the probe under probe-derived @2 timeouts (NSS 600 s, Zeus 1168 s); %20; submit_wave2_remainder; pin df6d218f10cd; pulled in B5b-2
 
 ## Log
 
+- 2026-10-15 — run — 408367_[0-389] finished — wall 1:57: scored wave 2 separated jax_cpu: 3750 runs, %60, afterany 408346:408347 — 390/390 COMPLETED; 3750 separated jax_cpu rows admitted; judged B5b
+- 2026-10-15 — run — 408366_[0-379] finished — wall 1:51: scored wave 2 separated numpy: 2250 runs, %60, afterany 408346:408347 — 380/380 COMPLETED; 2250 separated numpy rows admitted; judged B5b
+- 2026-10-15 — run — 408365_[0-344] finished — wall 1:46: scored wave 2 blend jax_cpu: 3500 runs, %60, afterany 408346:408347 — 345/345 COMPLETED; 3500 blend jax_cpu rows admitted; judged B5b
+- 2026-10-15 — run — 408348_[0-379] finished — wall 1:53: scored wave 2 (gaussian_x3@2) blend numpy: 2250 runs, 50 seeds x 5 realisations, %60, afterany 408346:408347; submit_wave2_scored_gaussian_x3_blend_numpy — 380/380 COMPLETED; 2250 blend numpy rows admitted under gaussian_x3@2; judged B5b
+- 2026-10-15 — run — 408347_[0-7] finished — wall 0:01: wave-2 separated reference builds, afterany 408245; %8 — 8/8 COMPLETED; separated reference builds
+- 2026-10-15 — run — 408346_[0-7] finished — wall 0:01: wave-2 blend reference builds (MAP + build_reference), afterany 408244; %8 — 8/8 COMPLETED; blend reference builds
+- 2026-10-15 — run — 408246_[0-19] finished — wall 0:03: wave-2 probe: Zeus JAX + NSS n_live_200_mcmc_steps_50, both datasets, realisation 1, seeds 0-4 (timeouts for probe-first cells); %20; submit_wave2_probe — 20/20 COMPLETED; probe rows -> @2 timeouts NSS 50-step 600 s (median 26.6 s), Zeus JAX 1168 s (median 116.8 s); pulled B5b
+- 2026-10-15 — run — 408245_[0-47] finished — wall 0:26: wave-2 separated references: realisations 1,3,4,5 x numpy/jax x 6 runs; %48; submit_wave2_reference_gaussian_x3_separated; pin df6d218f10cd — 48/48 COMPLETED; separated references realisations 1,3,4,5 complete (Nautilus-only); pulled B5b
+- 2026-10-15 — run — 408244_[0-49] finished — wall 1:04: wave-2 blend references (gaussian_x3@2 freeze 72d6faaf1717): realisations 2-5 x numpy/jax x Nautilus n_live=2000 + DynestyStatic nlive=1000 seeds 0-2, + JAX Nautilus seed 1 realisation 1, + NSS ln 3!; %50; submit_wave2_reference_gaussian_x3_blend; pin PyAutoFit df6d218f10cd — 50/50 COMPLETED exit 0; blend references realisations 2-5 complete (Nautilus-only: DynestyStatic ln Z disagrees 2.2-7.3 nat), JAX Nautilus seed 1 realisation 1 pulled, NSS ln 3! validated (-1.728); pulled B5b
+- 2026-10-15 — run — 409930_[0-19] submitted: wave-2 probe-first remainder (B5b): Zeus JAX + NSS n_live_200_mcmc_steps_50, both datasets, 980 runs after the probe under probe-derived @2 timeouts (NSS 600 s, Zeus 1168 s); %20; submit_wave2_remainder; pin df6d218f10cd; pulled in B5b-2
 - 2026-10-14 — note — gaussian_x3@2 frozen (autofit_inference 72d6faaf1717, protocol 11 A2) before any scored run; A4 gate met (PyAutoFit df6d218f1). Dry run 408236 on ral: pin imports, RAL 4-7x faster than the laptop pilot (laptop-derived timeouts are lenient); zeus missing from shared venv, carried in the private pin. Survey correction: separated committed realisation is data_seed 2.
 - 2026-10-14 — run — 408367_[0-389] submitted: scored wave 2 separated jax_cpu: 3750 runs, %60, afterany 408346:408347
 - 2026-10-14 — run — 408366_[0-379] submitted: scored wave 2 separated numpy: 2250 runs, %60, afterany 408346:408347
