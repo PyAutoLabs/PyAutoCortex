@@ -10,7 +10,7 @@ One ledger per science project: what is on the cluster right now, what the human
 
 | Where | Count |
 |-------|------:|
-| [Running](#projects) | 17 |
+| [Running](#projects) | 16 |
 | [Open](#projects) | 47 |
 | [Projects](#projects) | 11 |
 
@@ -49,7 +49,7 @@ Last check-in: 2026-10-17T11:18Z.
 | ep_toy_gaussian | 0 | 0 | 2026-10-14 |
 | slope_hierarchy_scale | 0 | 0 | 2026-10-14 |
 | ic50_workspace | 0 | 0 | 2026-10-14 |
-| autolens_inference | 1 | 0 | 2026-10-19 |
+| autolens_inference | 0 | 0 | 2026-10-19 |
 | autofit_inference | 0 | 0 | 2026-10-16 |
 | euclid_detailed | 0 | 0 | 2026-10-15 |
 | cowls | 0 | 0 | 2026-10-15 |
@@ -456,7 +456,7 @@ active · ral · [PyAutoCortex#36](https://github.com/PyAutoLabs/PyAutoCortex/is
 
 </details>
 
-<details id="project-autolens_inference"><summary><b>autolens_inference</b> — Do the PyAutoLens inference backends agree on the HST SLaM posterior · 1 running · 0 open · updated 2026-10-19</summary>
+<details id="project-autolens_inference"><summary><b>autolens_inference</b> — Do the PyAutoLens inference backends agree on the HST SLaM posterior · no runs recorded · updated 2026-10-19</summary>
 
 **Registered:** not recorded
 
@@ -476,25 +476,17 @@ Use the cortex skill. — resume autolens_inference: read PyAutoCortex projects/
 
 </details>
 
-**Runs** (1)
+**Runs** (0)
 
-| Job | State | Partition | Date | Description |
-|---|---|---|---|---|
-| `412543` | running | gpu | 2026-10-17 | hst-imaging-mass-samplers wave 1 (cleanslate_2026_10_17_wave1, submit_hst_cleanslate_mass_samplers_jax_gpu_dense): 24-arm slice nautilus/emcee/nuts/smc x sampl… |
+_nothing on the cluster_
 
-<details><summary>Full descriptions (1 shortened above)</summary>
+<details><summary>Recent log — 5 of 45 entries</summary>
 
-- `412543` — hst-imaging-mass-samplers wave 1 (cleanslate_2026_10_17_wave1, submit_hst_cleanslate_mass_samplers_jax_gpu_dense): 24-arm slice nautilus/emcee/nuts/smc x sampler seeds 0-2 x both light modes on the base-seed-0 prepared problems of hpc_a100_jax_gpu_dense_fp64, array 0-23%4, 6 h containment, --dependency afterok:412535_0, pin 2026.10.17.1; human-authorised 2026-10-17
-
-</details>
-
-<details><summary>Recent log — 5 of 43 entries</summary>
-
+- 2026-10-19 — *note* — 412539 (jax_cpu dense) elapsed from sacct, read 2026-10-19 ~17:25Z by the session architect: 412539_0 1-05:59:53 (ended 2026-10-18T23:46:01), 412539_1 1-02:57:03 (ended 2026-10-18T20:43:11). This supplements the 2026-10-19 finished entry, which carries no wall. Its rows have still not been read.
+- 2026-10-19 — *run* — 412543 failed — wall 0:47: hst-imaging-mass-samplers wave 1 (cleanslate_2026_10_17_wave1, submit_hst_cleanslate_mass_samplers_jax_gpu_dense): 24-arm slice nautilus/emcee/nuts/smc x sampler seeds 0-2 x both light modes on the base-seed-0 prepared problems of hpc_a100_jax_gpu_dense_fp64, array 0-23%4, 6 h containment, --dependency afterok:412535_0, pin 2026.10.17.1; human-authorised 2026-10-17 — sacct read 2026-10-19 ~17:25Z by the session architect: tasks _0.._17 all FAILED on 2026-10-17 (ends 18:51:38-20:32:26Z, elapsed 00:04:15-00:47:10; wall given is the longest task); _18 CANCELLED after 00:04:00; _[19-23] CANCELLED unstarted 2026-10-17T20:01:03Z. Failure classes as in the 2026-10-17 note (NUTS/SMC A100 OOM; nautilus/emcee row-writer TypeError). Its output and the 8 failed NUTS/SMC rows were moved aside on 2026-10-19 to aside/autolens_inference_cleanslate_wave1_attempt1/ (RAL and laptop)
 - 2026-10-19 — *note* — HUMAN DECISION 2026-10-19, verbatim: "I want us to check the on going inference campaign on RAL, but I am ready for us to update folder structures on RAL and locally and clean things up so cancel on going jobs and we'll work on the clean up". Scheduler read 15:49:05Z: only 412541 and 412565 running; both scancelled ~15:51Z, queue empty; 412539 had COMPLETED. On "yes, go", autolens_inference#36 (flatten, closes #35) merged 15:53:33Z as c3ca4de; the RAL checkout fast-forwarded b91ce9c -> c3ca4de and the laptop to c3ca4de, after a full hpc/sync pull. flatten_cleanslate.py --apply: RAL 28 moves, 55 rewrites; laptop mirror 28 moves, 38 rewrites; both EXIT 0. New layout: output/autolens/imaging/hst/slam/&lt;variant>/&lt;config>/seed_&lt;n>/&lt;stage>/, output/autolens/prepared/&lt;config>/seed_&lt;n>/&lt;variant>/, rows at results/slam/imaging/hst/&lt;variant>/&lt;config>/ (no __cleanslate_2026_10_17 suffix). RAL and laptop each hold 1974 files with identical paths and sizes; hpc/sync status dry run transfers 0. Human, verbatim: "check some older chats, think we dont need prepared, experiments and experiment_sources to exist anymore? Can we archive them somewhere separate to makr things easier to follow. Then do the apply". The wave-1 attempt-1 material (output/experiments 341M, output/experiment_sources 76M, results/searches/experiments with 8 failed NUTS/SMC rows) moved to /mnt/ral/jnightin/inference/aside/autolens_inference_cleanslate_wave1_attempt1/ on RAL and /mnt/c/Users/Jammy/Science/inference/aside/autolens_inference_cleanslate_wave1_attempt1/ on the laptop. prepared/ KEPT as the agent's proposal, not yet confirmed by the human: wave.py needs its manifests, and so does the sparse fixed-light repro. Partial stage dirs of the cancelled legs remain; they are not failures. Execution completion only. No compute submitted.
 - 2026-10-19 — *run* — 412565 failed — wall 44:52: hst-imaging-mass-samplers clean slate: numba_cpu sparse SLaM base (64gb, 8 CPUs), --lens-light both, seeds 0-1, from autolens_inference main b91ce9c (PR #32), pin 2026.10.17.1, output root output/cleanslate_2026_10_17, results tag cleanslate_2026_10_17, prepared export; --stages-from hpc_a100_jax_cpu_dense_fp64:source_lp shares source_lp[1] from the jax_cpu dense chain with an in-job wait (hpc/wait_for_stage.sh); rows mark that stage shared and exclude its wall from the numba chain wall; submitted 2026-10-17T18:58Z by the architect; human decisions 2026-10-17 (8 CPUs, shared stage, submit now) — CANCELLED by scancel ~15:51Z on the human's decision, not a run failure (sacct CANCELLED, elapsed 1-20:52:11). Complete at cancel (.completed markers): seeds 0 and 1 slam_base light[1], source_pix[1], source_pix[2], mass_total[1] (source_lp[1] shared from jax_cpu dense via --stages-from). Incomplete: slam_base_lightfixed mass_total[1] on both seeds (running). Partial stage dirs left on disk under output/autolens/imaging/hst/slam/&lt;variant>/hpc_a100_numba_cpu_sparse_fp64/seed_&lt;n>/ (flat layout, autolens_inference#36)
 - 2026-10-19 — *run* — 412541 failed — wall 47:04: hst-imaging-mass-samplers clean slate: hpc_a100_jax_cpu_sparse_fp64 (submit_hst_cleanslate_jax_cpu_sparse), --lens-light both, seeds 0-1, pin 2026.10.17.1 (PYAUTO_LIB_BASE=/mnt/ral/jnightin/inference/pins/2026.10.17.1), output root output/cleanslate_2026_10_17, results tag cleanslate_2026_10_17, prepared export output/prepared/cleanslate_2026_10_17/hpc_a100_jax_cpu_sparse_fp64/seed_&lt;n>/&lt;variant>/; human-authorised 2026-10-17 — CANCELLED by scancel ~15:51Z on the human's decision, not a run failure (sacct CANCELLED, elapsed 1-23:04:43). Complete at cancel (.completed markers): seed 0 slam_base light[1], source_lp[1], source_pix[1], source_pix[2], mass_total[1]; seed 1 source_lp[1], source_pix[1]. Incomplete: seed 0 slam_base_lightfixed mass_total[1] (running), seed 1 source_pix[2] (running) onward and its lightfixed leg. Partial stage dirs left on disk under output/autolens/imaging/hst/slam/&lt;variant>/hpc_a100_jax_cpu_sparse_fp64/seed_&lt;n>/ (flat layout, autolens_inference#36)
-- 2026-10-19 — *run* — 412539 finished: hst-imaging-mass-samplers clean slate: hpc_a100_jax_cpu_dense_fp64 (submit_hst_cleanslate_jax_cpu_dense), --lens-light both, seeds 0-1, pin 2026.10.17.1 (PYAUTO_LIB_BASE=/mnt/ral/jnightin/inference/pins/2026.10.17.1), output root output/cleanslate_2026_10_17, results tag cleanslate_2026_10_17, prepared export output/prepared/cleanslate_2026_10_17/hpc_a100_jax_cpu_dense_fp64/seed_&lt;n>/&lt;variant>/; human-authorised 2026-10-17 — COMPLETED both seeds (sacct read 2026-10-19 15:49:05Z): 412539_0 ended 2026-10-18T23:46:01, 412539_1 ended 2026-10-18T20:43:11; rows not re-read in this record; on 2026-10-19 its output and rows moved to the flat layout (autolens_inference#36): output/autolens/imaging/hst/slam/&lt;variant>/hpc_a100_jax_cpu_dense_fp64/seed_&lt;n>/, output/autolens/prepared/hpc_a100_jax_cpu_dense_fp64/, results/slam/imaging/hst/&lt;variant>/hpc_a100_jax_cpu_dense_fp64/
-- 2026-10-18 — *note* — HUMAN DECISION 2026-10-18, verbatim: "lets just drop dense numba we would never use it." The numba_cpu dense leg (RAL 412563, failed with pool-worker SIGSEGV) is dropped from hst-imaging-mass-samplers with no rerun; the campaign's CPU base is jax_cpu dense, jax_cpu sparse and numba_cpu sparse. Canonical record: https://github.com/PyAutoLabs/PyAutoInsight/blob/main/decisions/hst-cleanslate-drop-numba-dense.md (Insight commit e289c04 on PR #36).
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/autolens_inference.md)
 

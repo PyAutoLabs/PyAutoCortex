@@ -3,8 +3,8 @@
   "organ": "cortex",
   "repo": "PyAutoCortex",
   "status": "yellow",
-  "headline": "YELLOW \u2014 11 active \u00b7 17 running",
-  "updated": "2026-10-19T17:20:12Z",
+  "headline": "YELLOW \u2014 11 active \u00b7 16 running",
+  "updated": "2026-10-19T17:21:21Z",
   "pages_url": "https://pyautolabs.github.io/PyAutoCortex/",
   "items": [
     {
@@ -108,12 +108,6 @@
       "text": "euclid_dr1: 402722 running (ral)",
       "url": null,
       "prompt": "Use the cortex skill. \u2014 resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
-    },
-    {
-      "severity": "info",
-      "text": "autolens_inference: 412543 running (gpu)",
-      "url": "https://github.com/PyAutoLabs/autolens_inference/issues/4",
-      "prompt": "Use the cortex skill. \u2014 resume autolens_inference: read PyAutoCortex projects/autolens_inference.md (Now, Runs, Log) and then /home/jammy/Code/PyAutoLabs/lens/autolens_inference/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
     }
   ]
 }
