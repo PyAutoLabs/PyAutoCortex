@@ -12,7 +12,7 @@ One ledger per science project: what is on the cluster right now, what the human
 |-------|------:|
 | [Running](#projects) | 16 |
 | [Open](#projects) | 47 |
-| [Projects](#projects) | 11 |
+| [Projects](#projects) | 12 |
 
 <details><summary>📋 check in since last time</summary>
 
@@ -53,6 +53,7 @@ Last check-in: 2026-10-17T11:18Z.
 | autofit_inference | 0 | 0 | 2026-10-16 |
 | euclid_detailed | 0 | 0 | 2026-10-15 |
 | cowls | 0 | 0 | 2026-10-15 |
+| cowls_ansofi | 0 | 0 | 2026-10-19 |
 
 ## Projects
 
@@ -601,6 +602,42 @@ _nothing on the cluster_
 - 2026-10-15 — *note* — ledger opened
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/cowls.md)
+
+active · ral · no issue yet
+
+</details>
+
+</details>
+
+<details id="project-cowls_ansofi"><summary><b>cowls_ansofi</b> — autolens_inference Delaunay-1250 numba CPU SLaM on COSJ100024+015334, F444W only · no runs recorded · updated 2026-10-19</summary>
+
+**Registered:** 2026-10-19
+
+**Local:** `` /mnt/c/Users/Jammy/Science/active/cowls_ansofi ``
+
+**RAL:** `` /mnt/ral/jnightin/active/cowls_ansofi ``
+
+**Current position**
+
+Born 2026-10-19. Repo PyAutoLabs/cowls_ansofi (private), M25 COSJ100024+015334 F444W dataset and scripts/slam.py ready; test mode passes all five searches (144 s, numba sparse on every stage). Next: hpc/sync push-submit cpu submit_slam (8 CPU, 64 GB, 5 days, partition ral).
+
+<details><summary title="Copy resume prompt for cowls_ansofi">📋</summary>
+
+```
+Use the cortex skill. — resume cowls_ansofi: read PyAutoCortex projects/cowls_ansofi.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/active/cowls_ansofi/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
+```
+
+</details>
+
+**Runs** (0)
+
+_nothing on the cluster_
+
+<details><summary>Recent log — 1 of 1 entry</summary>
+
+- 2026-10-19 — *note* — ledger opened
+
+[full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/cowls_ansofi.md)
 
 active · ral · no issue yet
 
