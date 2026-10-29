@@ -11,7 +11,7 @@ One ledger per science project: what is on the cluster right now, what the human
 | Where | Count |
 |-------|------:|
 | [Running](#projects) | 16 |
-| [Open](#projects) | 42 |
+| [Open](#projects) | 43 |
 | [Projects](#projects) | 8 |
 
 <details><summary>📋 check in since last time</summary>
@@ -42,7 +42,7 @@ Last check-in: 2026-10-17T11:18Z.
 
 | Project | Running | Open | Last update |
 |---|---:|---:|---|
-| euclid_dr1 | 16 | 42 | 2026-10-10 |
+| euclid_dr1 | 16 | 43 | 2026-10-29 |
 | analytic_gaussian | 0 | 0 | 2026-10-29 |
 | ep_toy_gaussian | 0 | 0 | 2026-10-29 |
 | slope_hierarchy_scale | 0 | 0 | 2026-10-29 |
@@ -53,7 +53,7 @@ Last check-in: 2026-10-17T11:18Z.
 
 ## Projects
 
-<details id="project-euclid_dr1"><summary><b>euclid_dr1</b> — Does the sep1 DR1 delivery reproduce the ten prelim lenses by eye · 16 running · 42 open · updated 2026-10-10</summary>
+<details id="project-euclid_dr1"><summary><b>euclid_dr1</b> — Does the sep1 DR1 delivery reproduce the ten prelim lenses by eye · 16 running · 43 open · updated 2026-10-29</summary>
 
 **Registered:** 2026-09-11
 
@@ -73,7 +73,7 @@ Use the cortex skill. — resume euclid_dr1: read PyAutoCortex projects/euclid_d
 
 </details>
 
-**Runs** (58)
+**Runs** (59)
 
 | Job | State | Partition | Date | Description |
 |---|---|---|---|---|
@@ -135,8 +135,9 @@ Use the cortex skill. — resume euclid_dr1: read PyAutoCortex projects/euclid_d
 | `402910` | open | ral | 2026-10-10 | DR1 SED fill 4 pass 2 (retry) part 02/4 (euclid_dr1_sed_fill4_retry_p02): indices 0-999 of sed_fill_20261009/part02.txt; same script submit_sersic_waveband_sed… |
 | `402911` | open | ral | 2026-10-10 | DR1 SED fill 4 pass 2 (retry) part 03/4 (euclid_dr1_sed_fill4_retry_p03): indices 0-999 of sed_fill_20261009/part03.txt; same script submit_sersic_waveband_sed… |
 | `402912` | open | ral | 2026-10-10 | DR1 SED fill 4 pass 2 (retry) part 04/4 (euclid_dr1_sed_fill4_retry_p04): indices 0-862 of sed_fill_20261009/part04.txt; same script submit_sersic_waveband_sed… |
+| `413331` | open | ral | 2026-10-29 | LensTwin p4 stellar+dark identifiability: 5 DR1 lenses x {NFW, gNFW free slope} x 5 seeds (50 tasks, twins/stellar_dark_identifiability/submit_ral, private lib… |
 
-<details><summary>Full descriptions (43 shortened above)</summary>
+<details><summary>Full descriptions (44 shortened above)</summary>
 
 - `342650` — euclid_dr1 sep1 reproduction: the ten euclid_dr1_prelim lenses refitted from the sep1 delivery through prelim's route (hpc/batch_cpu/submit_initial_lens_model_two_stage: vis_lp then vis_pix), array 0-9, wall budget 36:00; the by-eye reference is prelim run 342629
 - `350804` — DR1 dr1_sep1_rest priority-250 vis_lp array (euclid_dr1_vis_lp_prio250), 0-249, manifest hpc/run_manifests/positions_priority_250.txt, positions finder 2.1 positions
@@ -181,16 +182,17 @@ Use the cortex skill. — resume euclid_dr1: read PyAutoCortex projects/euclid_d
 - `402910` — DR1 SED fill 4 pass 2 (retry) part 02/4 (euclid_dr1_sed_fill4_retry_p02): indices 0-999 of sed_fill_20261009/part02.txt; same script submit_sersic_waveband_sed_fill_20261010 and manifest; afterany on pass 1 400282/400308/400309/400310 (old, running tasks) and 402719-402722; complete tiles exit at once and tiles with vis given up are skipped, so it reruns only what is still incomplete; %25, 6 h, partition ral only, --nice=100
 - `402911` — DR1 SED fill 4 pass 2 (retry) part 03/4 (euclid_dr1_sed_fill4_retry_p03): indices 0-999 of sed_fill_20261009/part03.txt; same script submit_sersic_waveband_sed_fill_20261010 and manifest; afterany on pass 1 400282/400308/400309/400310 (old, running tasks) and 402719-402722; complete tiles exit at once and tiles with vis given up are skipped, so it reruns only what is still incomplete; %25, 6 h, partition ral only, --nice=100
 - `402912` — DR1 SED fill 4 pass 2 (retry) part 04/4 (euclid_dr1_sed_fill4_retry_p04): indices 0-862 of sed_fill_20261009/part04.txt; same script submit_sersic_waveband_sed_fill_20261010 and manifest; afterany on pass 1 400282/400308/400309/400310 (old, running tasks) and 402719-402722; complete tiles exit at once and tiles with vis given up are skipped, so it reruns only what is still incomplete; %25, 6 h, partition ral only, --nice=100
+- `413331` — LensTwin p4 stellar+dark identifiability: 5 DR1 lenses x {NFW, gNFW free slope} x 5 seeds (50 tasks, twins/stellar_dark_identifiability/submit_ral, private lib main bf18d5c/7efb52a, NumPy route)
 
 </details>
 
-<details><summary>Recent log — 5 of 136 entries</summary>
+<details><summary>Recent log — 5 of 137 entries</summary>
 
+- 2026-10-29 — *run* — 413331 submitted: LensTwin p4 stellar+dark identifiability: 5 DR1 lenses x {NFW, gNFW free slope} x 5 seeds (50 tasks, twins/stellar_dark_identifiability/submit_ral, private lib main bf18d5c/7efb52a, NumPy route)
 - 2026-10-10 — *run* — 402912 submitted: DR1 SED fill 4 pass 2 (retry) part 04/4 (euclid_dr1_sed_fill4_retry_p04): indices 0-862 of sed_fill_20261009/part04.txt; same script submit_sersic_waveband_sed_fill_20261010 and manifest; afterany on pass 1 400282/400308/400309/400310 (old, running tasks) and 402719-402722; complete tiles exit at once and tiles with vis given up are skipped, so it reruns only what is still incomplete; %25, 6 h, partition ral only, --nice=100
 - 2026-10-10 — *run* — 402911 submitted: DR1 SED fill 4 pass 2 (retry) part 03/4 (euclid_dr1_sed_fill4_retry_p03): indices 0-999 of sed_fill_20261009/part03.txt; same script submit_sersic_waveband_sed_fill_20261010 and manifest; afterany on pass 1 400282/400308/400309/400310 (old, running tasks) and 402719-402722; complete tiles exit at once and tiles with vis given up are skipped, so it reruns only what is still incomplete; %25, 6 h, partition ral only, --nice=100
 - 2026-10-10 — *run* — 402910 submitted: DR1 SED fill 4 pass 2 (retry) part 02/4 (euclid_dr1_sed_fill4_retry_p02): indices 0-999 of sed_fill_20261009/part02.txt; same script submit_sersic_waveband_sed_fill_20261010 and manifest; afterany on pass 1 400282/400308/400309/400310 (old, running tasks) and 402719-402722; complete tiles exit at once and tiles with vis given up are skipped, so it reruns only what is still incomplete; %25, 6 h, partition ral only, --nice=100
 - 2026-10-10 — *run* — 402909 submitted: DR1 SED fill 4 pass 2 (retry) part 01/4 (euclid_dr1_sed_fill4_retry_p01): indices 0-999 of sed_fill_20261009/part01.txt; same script submit_sersic_waveband_sed_fill_20261010 and manifest; afterany on pass 1 400282/400308/400309/400310 (old, running tasks) and 402719-402722; complete tiles exit at once and tiles with vis given up are skipped, so it reruns only what is still incomplete; %25, 6 h, partition ral only, --nice=100
-- 2026-10-10 — *run* — 400314 failed: DR1 SED fill 3 pass 2 (retry) part 04/4 (euclid_dr1_sed_fill3_retry_p04): same script and manifest part04.txt, afterany on pass 1 400282/400308/400309/400310 and the old fill 397469/70/71/74; complete tiles exit at once, so it reruns only what is still incomplete; %25, 6 h, partition ral only
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid_dr1.md)
 
