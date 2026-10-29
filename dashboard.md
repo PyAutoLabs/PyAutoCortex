@@ -44,10 +44,10 @@ Last check-in: 2026-10-17T11:18Z.
 |---|---:|---:|---|
 | subhalo_validation | 0 | 5 | 2026-09-07 |
 | euclid_dr1 | 16 | 42 | 2026-10-10 |
-| analytic_gaussian | 0 | 0 | 2026-10-23 |
-| ep_toy_gaussian | 0 | 0 | 2026-10-14 |
-| slope_hierarchy_scale | 0 | 0 | 2026-10-14 |
-| ic50_workspace | 0 | 0 | 2026-10-14 |
+| analytic_gaussian | 0 | 0 | 2026-10-29 |
+| ep_toy_gaussian | 0 | 0 | 2026-10-29 |
+| slope_hierarchy_scale | 0 | 0 | 2026-10-29 |
+| ic50_workspace | 0 | 0 | 2026-10-29 |
 | autolens_inference | 0 | 0 | 2026-10-21 |
 | autofit_inference | 0 | 0 | 2026-10-16 |
 | euclid_detailed | 0 | 0 | 2026-10-15 |
@@ -117,7 +117,7 @@ active · ral · [subhalo_validation#2](https://github.com/PyAutoLabs/subhalo_va
 
 **Local:** `` /mnt/c/Users/Jammy/Workspace/Science/active/euclid_dr1 ``
 
-**RAL:** `` /mnt/ral/jnightin/euclid_dr1 ``
+**RAL:** `` /mnt/ral/jnightin/active/euclid_dr1 ``
 
 **Current position**
 
@@ -258,13 +258,13 @@ active · ral · no issue yet
 
 </details>
 
-<details id="project-analytic_gaussian"><summary><b>analytic_gaussian</b> — Graphical and EP against a closed-form Gaussian posterior, at ensemble scale · no runs recorded · updated 2026-10-23</summary>
+<details id="project-analytic_gaussian"><summary><b>analytic_gaussian</b> — Graphical and EP against a closed-form Gaussian posterior, at ensemble scale · no runs recorded · updated 2026-10-29</summary>
 
 **Registered:** not recorded
 
 **Local:** `` /mnt/c/Users/Jammy/Workspace/Science/development/analytic_gaussian ``
 
-**RAL:** `` /mnt/ral/jnightin/active/analytic_gaussian ``
+**RAL:** `` /mnt/ral/jnightin/development/analytic_gaussian ``
 
 **Current position**
 
@@ -282,13 +282,13 @@ Use the cortex skill. — resume analytic_gaussian: read PyAutoCortex projects/a
 
 _nothing on the cluster_
 
-<details><summary>Recent log — 5 of 9 entries</summary>
+<details><summary>Recent log — 5 of 10 entries</summary>
 
+- 2026-10-29 — *note* — moved to the development/ category on the laptop and on RAL (ral_root in its row) on the human's decision (2026-10-29); hpc/sync.conf HPC_BASE updated, hpc/sync check passes
 - 2026-10-23 — *note* — second wave-1 finding closed (PyAutoFit#1713, PR #1714 merged, autofit_workspace_test#116): the `invalid value encountered in add` warnings on seeds 25 and 172 are a readout-only defect — under the mode projection an accepted truncated-normal scatter message sits ~19 sigma into its tail, its log_partition underflows to −inf (true log Z ≈ −187.9), the sigma evidence goes +inf and the EP log_evidence NaN from sweep 4; posteriors bit-identical to the ens_n5 sidecars. The library now names the term once per fit and returns an explicit NaN. The cure (tail-stable log_partition via log_ndtr) is message maths, filed in the Mind as draft/bug/autofit/truncated_normal_log_partition_tail_underflow.md for the human.
 - 2026-10-23 — *note* — criterion 6 amended (PyAutoFit#1711, PR #1712): the 19/400 zero-SUCCESS seed-legs of wave 1 split into 13 NO_CHANGE-only prior factors (zero-iteration Laplace convergence at the start point, projection accepted, closed-form match a 5e-5 / b 2e-5 on seed 140 leg A — a converged update, not stale; library reporting aligned, no EP maths changed) and 6 BAD_PROJECTION-only hierarchical factors (the #1405 scatter state, cured by projection="moments" #1656; seeds 29 and 71 re-run under moments give HierarchicalFactor SUCCESS 28 and 23). Criterion 6 now counts SUCCESS or NO_CHANGE as a completed update; the matching ensemble_seed.py any_factor_never_succeeded change is the human's to apply in the science checkout. Side finding: seed 29 leg B under moments still misses the sigma cell (a 0.225 / b 0.416) while sigma stays inside [q05, q95].
 - 2026-10-14 — *note* — PyAutoFit#1656 (merged 2026-09-30, released 2026.10.7.1) ports the minimal-EP referee's moment matching as LaplaceOptimiser(projection="moments"); on analytic_gaussian.py leg B autofit EP sigma 6.3401 ± 2.4609 vs closed form 6.5667 ± 2.8832 (mode path 9.3722, BAD_PROJECTION=19). A wave-2 ensemble on the moments path needs a private PyAutoFit checkout on RAL: the shared mirror is 404b3e5f7 and lacks it. The criterion-2 mu-threshold diagnostic is still unrun.
 - 2026-10-14 — *note* — output/ vaulted to z_vault/ on laptop and RAL (mv, nothing deleted), anticipating reruns; output/ left empty, results/ untouched; z_vault/ gitignored locally
-- 2026-09-30 — *note* — astra (Codex gpt-6-astra) on criterion 2, verbatim: 'Neither is established as "wrong" by this result alone. I favour inadequate calibration of the threshold, with moderate confidence, but would not yet certify the control.' Decisive diagnostic: independently reconstruct the same EP factorisation at the fixed point on a passing, an edge and the worst mu seed and compare tilted vs q moments; audit the per-site sigma>0 clip (analytic_ep_minimal.py:333). Opus reviewer concurs independently (a_mu = 0.041*(E_ref[mu]-m0)/std_ref over 200 seeds, corr 0.98; calibration seeds 0-4 had |a_mu| 0.002-0.020 vs 95th pct 0.077). Full answer: PyAutoCortex#50 comment https://github.com/PyAutoLabs/PyAutoCortex/issues/50#issuecomment-5908448194
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/analytic_gaussian.md)
 
@@ -298,13 +298,13 @@ active · ral · [PyAutoCortex#34](https://github.com/PyAutoLabs/PyAutoCortex/is
 
 </details>
 
-<details id="project-ep_toy_gaussian"><summary><b>ep_toy_gaussian</b> — NUTS versus three EP fits on the #1405 collapse toy at N=50 · no runs recorded · updated 2026-10-14</summary>
+<details id="project-ep_toy_gaussian"><summary><b>ep_toy_gaussian</b> — NUTS versus three EP fits on the #1405 collapse toy at N=50 · no runs recorded · updated 2026-10-29</summary>
 
 **Registered:** not recorded
 
 **Local:** `` /mnt/c/Users/Jammy/Workspace/Science/development/ep_toy_gaussian ``
 
-**RAL:** `` /mnt/ral/jnightin/active/ep_toy_gaussian ``
+**RAL:** `` /mnt/ral/jnightin/development/ep_toy_gaussian ``
 
 **Current position**
 
@@ -322,13 +322,13 @@ Use the cortex skill. — resume ep_toy_gaussian: read PyAutoCortex projects/ep_
 
 _nothing on the cluster_
 
-<details><summary>Recent log — 5 of 10 entries</summary>
+<details><summary>Recent log — 5 of 11 entries</summary>
 
+- 2026-10-29 — *note* — moved to the development/ category on the laptop and on RAL (ral_root in its row) on the human's decision (2026-10-29); hpc/sync.conf HPC_BASE updated, hpc/sync check passes
 - 2026-10-14 — *note* — Wave 2 still unsubmitted. RAL shared mirror 404b3e5f7 already carries the EMFILE fixes (#1632/#1634) wave 2 needs; it lacks #1655 (ProjectionException recovery), so a private PyAutoFit checkout is optional here but advisable.
 - 2026-10-14 — *note* — output/ vaulted to z_vault/ on laptop and RAL (mv, nothing deleted), anticipating reruns; output/ left empty, results/ untouched; z_vault/ gitignored locally
 - 2026-09-30 — *note* — RAL mirror PyAutoFit now 404b3e5f7 (2026-09-27), contains #1632 (b82fb3f69) and #1634 (fa2d540ac); 5 commits behind origin/main, none in blackjax/graphical/dynesty; deps at floor except anesthetic 2.8.14 &lt; 2.9.0 (plots only). Sample n50_seed42_w2 is free locally and on RAL but must be added to toy.SAMPLES (scripts/toy.py) before submission, and SAMPLE must be exported to the job (hpc/sync submit does not forward laptop env)
 - 2026-09-30 — *note* — wave-2 prep: 342639 NUTS OOM was XLA compilation of the vmapped window-adaptation scan, not sampling (sacct MaxRSS 8,180,536K at ReqMem 8G; py-spy on a local N=50 run sits in backend_compile_and_load; local probes N=10 3.2 GB peak / 132 s warmup compile, N=20 >=5.4 GB / 247 s, N=50 still compiling at 5 min) — submit_nuts --mem raised 8gb -> 64gb locally, uncommitted (est. peak 15-25 GB on RAL; ral nodes ~921 GB); EP peak ~590 MB, submit_ep stays 8gb
-- 2026-09-24 — *note* — per-search overhead profile on this toy (2026-09-24, laptop, N=5, max_steps=3): 2.45 s per Dynesty factor search, ~1.47 s dynesty run_nested + ~0.98 s autofit wrapper (plots, a redundant second run_nested pass, samples writes); inside run_nested instance_from_vector is 57 % of the likelihood callback for a 1-parameter model. Speed-up prompt filed in the Mind: draft/refactor/autofit/ep_factor_search_wrapper_overhead.md
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/ep_toy_gaussian.md)
 
@@ -338,13 +338,13 @@ active · ral · [ep_toy_gaussian#1](https://github.com/PyAutoLabs/ep_toy_gaussi
 
 </details>
 
-<details id="project-slope_hierarchy_scale"><summary><b>slope_hierarchy_scale</b> — Hierarchical slope recovery with graphical and EP at N=25 to 50 · no runs recorded · updated 2026-10-14</summary>
+<details id="project-slope_hierarchy_scale"><summary><b>slope_hierarchy_scale</b> — Hierarchical slope recovery with graphical and EP at N=25 to 50 · no runs recorded · updated 2026-10-29</summary>
 
 **Registered:** not recorded
 
 **Local:** `` /mnt/c/Users/Jammy/Workspace/Science/development/slope_hierarchy_scale ``
 
-**RAL:** `` /mnt/ral/jnightin/active/slope_hierarchy_scale ``
+**RAL:** `` /mnt/ral/jnightin/development/slope_hierarchy_scale ``
 
 **Current position**
 
@@ -362,13 +362,13 @@ Use the cortex skill. — resume slope_hierarchy_scale: read PyAutoCortex projec
 
 _nothing on the cluster_
 
-<details><summary>Recent log — 5 of 14 entries</summary>
+<details><summary>Recent log — 5 of 15 entries</summary>
 
+- 2026-10-29 — *note* — moved to the development/ category on the laptop and on RAL (ral_root in its row) on the human's decision (2026-10-29); hpc/sync.conf HPC_BASE updated, hpc/sync check passes
 - 2026-10-14 — *note* — output/ vaulted to z_vault/ on laptop and RAL (mv, nothing deleted), anticipating reruns; output/ left empty, results/ untouched; z_vault/ gitignored locally
 - 2026-09-30 — *note* — graphical baselines recorded late at the 2026-09-30 check-in. 342348_[0-24] per-lens (one_by_one Nautilus, A100, 25/25, 6.9-8.8 min/task, 0 float32 truncations): naive parent mean 1.9992 +/- 0.0178 (SEM), std of medians 0.0889, deconvolved scatter 0.0852 (rms 1-sigma half-width 0.0255); truth inside the 1-sigma interval for 17/25 lenses; per-lens JSONs on RAL at results/one_by_one_sample_n25_seed42/dataset_*.json (not pulled; aggregate never written by the array). 342350_0 joint hierarchical NUTS: science completed despite the post-processing OOM — 500 warm-up (8h08m) + 1000 samples (7h17m), 1 chain, 0 divergences, acceptance 0.84, rhat_max 1.012, ess_min 133/302 params; parent mean 1.9936 [1.9761, 2.0136] 68%, sigma 0.0871 [0.0744, 0.1041] 68% (95% [0.0636, 0.1190]) vs truth 2.0/0.1 and realised draws 1.9917/0.0864 — the N=5 high-scatter bias (0.143) is gone at N=25. Computed from RAL samples.csv (graphical_nuts/f16c32e17f570603a1dc061f95792798/files); results/graphical_nuts_sample_n25_seed42.json never written (killed at 64 GB in latent/arviz post-processing) — pull samples.csv and write the summary offline
 - 2026-09-30 — *run* — 342351_0 failed — wall 27:41: n25_scale_up: EP arm on the CPU partition, hpc/batch_cpu/submit_ep, max_steps 12; RAL PyAutoFit mirror 68ff9bd57 predates PyAutoFit#1580, so this arm runs without the stale-mask fixed-point fix — CANCELLED 2026-09-09 20:56:19 BST (sacct 1-03:41:06): log stops at the first Nautilus status line 2026-09-08 17:15:36, no factor finished; superseded by 342410 then 343299, output parked as ep_dead_342351; recorded late at the 2026-09-30 check-in
 - 2026-09-30 — *run* — 342350_0 failed — wall 16:29: n25_scale_up: joint hierarchical NUTS fit, hpc/batch_gpu/submit_graphical — OUT_OF_MEMORY 2026-09-09 13:06:31 BST (sacct 0:125, cgroup oom-kill): NUTS warm-up 500 + sampling 1000 steps completed and samples.csv was written 12:14 (output/sample_n25_seed42/graphical/graphical_nuts/f16c32e17f570603a1dc061f95792798/files/samples.csv), then killed during latent samples / arviz post-processing; recorded late at the 2026-09-30 check-in
-- 2026-09-30 — *run* — 342348_[0-24] finished — wall 3:22: n25_scale_up: one lens per array task, hpc/batch_gpu/submit_one_by_one, sample_n25_seed42 — all 25 tasks COMPLETED 2026-09-08 17:14-20:37 BST (sacct, 6:54-8:50 per task, serial on the GPU): per-lens one_by_one slopes are the baseline, e.g. dataset_0 2.0417 [2.0130, 2.0730] (truth 2.0305), dataset_24 2.0333 [2.0205, 2.0463] (truth 2.0439); recorded late at the 2026-09-30 check-in
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/slope_hierarchy_scale.md)
 
@@ -378,13 +378,13 @@ active · both · [slope_hierarchy_scale#2](https://github.com/PyAutoLabs/slope_
 
 </details>
 
-<details id="project-ic50_workspace"><summary><b>ic50_workspace</b> — EP against the graphical joint fit on IC50 dose-response data, scaling up · no runs recorded · updated 2026-10-14</summary>
+<details id="project-ic50_workspace"><summary><b>ic50_workspace</b> — EP against the graphical joint fit on IC50 dose-response data, scaling up · no runs recorded · updated 2026-10-29</summary>
 
 **Registered:** not recorded
 
 **Local:** `` /mnt/c/Users/Jammy/Workspace/Science/development/ic50_workspace ``
 
-**RAL:** `` /mnt/ral/jnightin/active/ic50_workspace ``
+**RAL:** `` /mnt/ral/jnightin/development/ic50_workspace ``
 
 **Current position**
 
@@ -402,13 +402,13 @@ Use the cortex skill. — resume ic50_workspace: read PyAutoCortex projects/ic50
 
 _nothing on the cluster_
 
-<details><summary>Recent log — 5 of 12 entries</summary>
+<details><summary>Recent log — 5 of 13 entries</summary>
 
+- 2026-10-29 — *note* — moved to the development/ category on the laptop and on RAL (ral_root in its row) on the human's decision (2026-10-29); hpc/sync.conf HPC_BASE updated, hpc/sync check passes
 - 2026-10-14 — *note* — output/ vaulted to z_vault/ on laptop and RAL (mv, nothing deleted), anticipating reruns; output/ left empty, results/ untouched; z_vault/ gitignored locally
 - 2026-09-30 — *note* — Ladder read: EP s/sweep 26/50/140/~300 s at N=5/10/25/50 vs graphical wall 21/42/119/281 s. EP hill_coef widths flat at ~0.8 because util.py reports factor-message (likelihood) widths and the global factor freezes hill_coef; graphical widths shrink but fall to 56/75 and 65/150 within 3 sigma at N=25/50 (overconfident). coef_mean passes 3 sigma for both methods on every completed rung.
 - 2026-09-30 — *note* — 342411 N=50 failure diagnosed: AssertionError at autofit/messages/abstract.py:316 while projecting the global factor after EP sweep 4 (mirror 66f9f8d5d); the 4th global search had max logL -337 (vs -69 at sweep 3) and logz +/- nan. Library defect: project asserts on non-finite suff_stats and factor_step (optimiser.py:150) does not catch AssertionError, so one bad projection kills the run; no later commit touches the path. A local rerun at 66f9f8d5d converged in sweep 3 without failing (unseeded Dynesty, non-deterministic). Mind bug prompt draft/bug/autofit/ep_project_nonfinite_suff_stats_ic50_n50.md
 - 2026-09-09 — *run* — 342411 failed — wall 0:38: ep_scale_up: EP scale ladder, sim rungs 5/10/25/50, nlive 150 max_steps 12 — finished 2026-09-09 23:19:29 BST (sacct COMPLETED 00:38:49, the ladder catches rung failures): rungs N=5/10/25 passed the global coef_mean assertions; rung N=50 FAILED — AssertionError: assert np.isfinite(suff_stats).all() in autofit/messages/abstract.py:316 project (via mapper/prior/abstract.py:237), error.342411.err
-- 2026-09-09 — *run* — 342412 finished — wall 0:07: ep_scale_up: graphical scale ladder, sim rungs 5/10/25/50, nlive 150 — COMPLETED 2026-09-09 22:48:42 BST (sacct 00:07:59): all four rungs N=5/10/25/50 passed the global coef_mean assertions (within 3σ); results/graphical_ladder_n*_summary.json
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/ic50_workspace.md)
 
@@ -534,13 +534,13 @@ active · ral · no issue yet
 
 </details>
 
-<details id="project-euclid"><summary><b>euclid</b> — The original Euclid DR1 grade-AB catalogue project, superseded by euclid_dr1 · dormant · no runs recorded · updated 2026-10-15</summary>
+<details id="project-euclid"><summary><b>euclid</b> — The original Euclid DR1 grade-AB catalogue project, superseded by euclid_dr1 · dormant · no runs recorded · updated 2026-10-29</summary>
 
 **Registered:** not recorded
 
 **Local:** `` /mnt/c/Users/Jammy/Workspace/Science/complete/euclid ``
 
-**RAL:** `` /mnt/ral/jnightin/active/euclid ``
+**RAL:** `` /mnt/ral/jnightin/complete/euclid ``
 
 **Current position**
 
@@ -550,8 +550,9 @@ Dormant: superseded by euclid_dr1 (euclid_dr1_prelim is defunct). The tree is ke
 
 _nothing on the cluster_
 
-<details><summary>Recent log — 4 of 4 entries</summary>
+<details><summary>Recent log — 5 of 5 entries</summary>
 
+- 2026-10-29 — *note* — RAL tree moved to the complete/ category to mirror the laptop, on the human's decision (2026-10-29); hpc/sync.conf HPC_BASE updated
 - 2026-10-15 — *note* — superseded by euclid_dr1 (euclid_dr1_prelim defunct) per the human; stays dormant; folder under Science/active and RAL active/; ral_root repointed to the category layout (PyAutoCortex#67)
 - 2026-08-28 — *note* — question: Do we recover Sersic indices or is prior pile-up artefact — planned, never run [archive/tasks/euclid/sersic_index_recovery.md]
 - 2026-08-28 — *note* — question: Can a fitted Euclid lens be resimulated and recovered — planned, never run [archive/tasks/euclid/resimulate_fitted_lens_simulator.md]
@@ -565,7 +566,7 @@ dormant · both · no issue yet
 
 </details>
 
-<details><summary>8 retired</summary>
+<details><summary>11 retired</summary>
 
 - [inference_programme](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/inference_programme.md) — The first inference programme, retired and restarted as autolens_inference — retired 2026-09-07: restarting from scratch: the project setup was unsatisfactory and it informed how the Cortex manages projects; RAL outputs stashed at /mnt/ral/jnightin/inference_programme_retired_2026-09-07
 - [subhalo](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/subhalo.md) — SLaM subhalo modelling of the SLACS lens sample — retired 2026-10-29: defunct; local tree deleted by the human 2026-10-29
@@ -575,6 +576,9 @@ dormant · both · no issue yet
 - [pj011646_final](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/pj011646_final.md) — Final masked PJ0116-24 power-law and multipole subhalo comparison — retired 2026-10-14: complete; tree moved to z_projects_complete 2026-10-14
 - [cowls](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/cowls.md) — euclid_detailed SLaM pipeline on COWLS JWST strong lenses, from COSJ100024+015334 — retired 2026-10-29: defunct; local tree deleted by the human 2026-10-29
 - [cowls_ansofi](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/cowls_ansofi.md) — autolens_inference Delaunay-1250 numba CPU SLaM on COSJ100024+015334, F444W only — retired 2026-10-29: defunct; local tree deleted by the human 2026-10-29
+- [euclid_group](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid_group.md) — Euclid group-scale lens modelling, complete; kept for reference — registered retired 2026-10-29 by human decision: storage tree, non-git; no RAL tree verified
+- [cti](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/cti.md) — Charge transfer inefficiency modelling, archived COSMA-era storage — registered retired 2026-10-29 by human decision: archived CTI storage tree (COSMA era), non-git; no RAL tree verified
+- [vignette](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/vignette.md) — Strong-lens vignette figures and mosaic, archived — registered retired 2026-10-29 by human decision: archived vignette figures and DR1 material, non-git; no RAL tree
 
 </details>
 
@@ -586,7 +590,7 @@ dormant · both · no issue yet
 | cowls_diana | retired | retired 2026-10-14: human moved the tree to z_vault 2026-10-14 |
 | subhalo_simulations | retired | retired 2026-10-14: superseded by subhalo_validation; tree moved to z_vault 2026-10-14 |
 | pj011646 | retired | retired 2026-10-02: Human requested both PJ011646 and aris_PJ011646 archived intact to z_vault on laptop and RAL; superseded by pj011646_final |
-| concr | retired | retired 2026-10-14: human moved the tree to z_vault 2026-10-14 |
+| concr | retired | retired 2026-10-14: human moved the tree to z_vault 2026-10-14; the tree is Science/complete/concr_cosmology (local_path repointed 2026-10-29) |
 
 ---
 

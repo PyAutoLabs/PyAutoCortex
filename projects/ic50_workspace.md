@@ -12,6 +12,7 @@ The scale ladder is in. EP passes N=5/10/25 with coef_mean within 3σ and cost g
 
 ## Log
 
+- 2026-10-29 — note — moved to the development/ category on the laptop and on RAL (ral_root in its row) on the human's decision (2026-10-29); hpc/sync.conf HPC_BASE updated, hpc/sync check passes
 - 2026-10-14 — note — output/ vaulted to z_vault/ on laptop and RAL (mv, nothing deleted), anticipating reruns; output/ left empty, results/ untouched; z_vault/ gitignored locally
 - 2026-09-30 — note — Ladder read: EP s/sweep 26/50/140/~300 s at N=5/10/25/50 vs graphical wall 21/42/119/281 s. EP hill_coef widths flat at ~0.8 because util.py reports factor-message (likelihood) widths and the global factor freezes hill_coef; graphical widths shrink but fall to 56/75 and 65/150 within 3 sigma at N=25/50 (overconfident). coef_mean passes 3 sigma for both methods on every completed rung.
 - 2026-09-30 — note — 342411 N=50 failure diagnosed: AssertionError at autofit/messages/abstract.py:316 while projecting the global factor after EP sweep 4 (mirror 66f9f8d5d); the 4th global search had max logL -337 (vs -69 at sweep 3) and logz +/- nan. Library defect: project asserts on non-finite suff_stats and factor_step (optimiser.py:150) does not catch AssertionError, so one bad projection kills the run; no later commit touches the path. A local rerun at 66f9f8d5d converged in sweep 3 without failing (unseeded Dynesty, non-deterministic). Mind bug prompt draft/bug/autofit/ep_project_nonfinite_suff_stats_ic50_n50.md

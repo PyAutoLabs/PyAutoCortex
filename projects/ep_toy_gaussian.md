@@ -12,6 +12,7 @@ Wave 1 (n50_seed42: 342639 + 342640_[0-2]) failed on infrastructure — EP x3 on
 
 ## Log
 
+- 2026-10-29 — note — moved to the development/ category on the laptop and on RAL (ral_root in its row) on the human's decision (2026-10-29); hpc/sync.conf HPC_BASE updated, hpc/sync check passes
 - 2026-10-14 — note — Wave 2 still unsubmitted. RAL shared mirror 404b3e5f7 already carries the EMFILE fixes (#1632/#1634) wave 2 needs; it lacks #1655 (ProjectionException recovery), so a private PyAutoFit checkout is optional here but advisable.
 - 2026-10-14 — note — output/ vaulted to z_vault/ on laptop and RAL (mv, nothing deleted), anticipating reruns; output/ left empty, results/ untouched; z_vault/ gitignored locally
 - 2026-09-30 — note — RAL mirror PyAutoFit now 404b3e5f7 (2026-09-27), contains #1632 (b82fb3f69) and #1634 (fa2d540ac); 5 commits behind origin/main, none in blackjax/graphical/dynesty; deps at floor except anesthetic 2.8.14 < 2.9.0 (plots only). Sample n50_seed42_w2 is free locally and on RAL but must be added to toy.SAMPLES (scripts/toy.py) before submission, and SAMPLE must be exported to the job (hpc/sync submit does not forward laptop env)
