@@ -3,8 +3,8 @@
   "organ": "cortex",
   "repo": "PyAutoCortex",
   "status": "yellow",
-  "headline": "YELLOW \u2014 12 active \u00b7 16 running",
-  "updated": "2026-10-23T15:27:28Z",
+  "headline": "YELLOW \u2014 9 active \u00b7 16 running",
+  "updated": "2026-10-29T12:49:17Z",
   "pages_url": "https://pyautolabs.github.io/PyAutoCortex/",
   "items": [
     {
@@ -17,97 +17,97 @@
       "severity": "info",
       "text": "euclid_dr1: 345279 running (ral)",
       "url": null,
-      "prompt": "Use the cortex skill. \u2014 resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
+      "prompt": "Use the cortex skill. \u2014 resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Workspace/Science/active/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
     },
     {
       "severity": "info",
       "text": "euclid_dr1: 345305 running (ral)",
       "url": null,
-      "prompt": "Use the cortex skill. \u2014 resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
+      "prompt": "Use the cortex skill. \u2014 resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Workspace/Science/active/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
     },
     {
       "severity": "info",
       "text": "euclid_dr1: 350804 running (ral)",
       "url": null,
-      "prompt": "Use the cortex skill. \u2014 resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
+      "prompt": "Use the cortex skill. \u2014 resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Workspace/Science/active/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
     },
     {
       "severity": "info",
       "text": "euclid_dr1: 351085 running (ral)",
       "url": null,
-      "prompt": "Use the cortex skill. \u2014 resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
+      "prompt": "Use the cortex skill. \u2014 resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Workspace/Science/active/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
     },
     {
       "severity": "info",
       "text": "euclid_dr1: 351086 running (ral)",
       "url": null,
-      "prompt": "Use the cortex skill. \u2014 resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
+      "prompt": "Use the cortex skill. \u2014 resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Workspace/Science/active/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
     },
     {
       "severity": "info",
       "text": "euclid_dr1: 351087 running (ral)",
       "url": null,
-      "prompt": "Use the cortex skill. \u2014 resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
+      "prompt": "Use the cortex skill. \u2014 resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Workspace/Science/active/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
     },
     {
       "severity": "info",
       "text": "euclid_dr1: 351088 running (ral)",
       "url": null,
-      "prompt": "Use the cortex skill. \u2014 resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
+      "prompt": "Use the cortex skill. \u2014 resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Workspace/Science/active/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
     },
     {
       "severity": "info",
       "text": "euclid_dr1: 351089 running (ral)",
       "url": null,
-      "prompt": "Use the cortex skill. \u2014 resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
+      "prompt": "Use the cortex skill. \u2014 resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Workspace/Science/active/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
     },
     {
       "severity": "info",
       "text": "euclid_dr1: 356227 running (ral)",
       "url": null,
-      "prompt": "Use the cortex skill. \u2014 resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
+      "prompt": "Use the cortex skill. \u2014 resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Workspace/Science/active/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
     },
     {
       "severity": "info",
       "text": "euclid_dr1: 356319 running (ral)",
       "url": null,
-      "prompt": "Use the cortex skill. \u2014 resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
+      "prompt": "Use the cortex skill. \u2014 resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Workspace/Science/active/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
     },
     {
       "severity": "info",
       "text": "euclid_dr1: 384040 running (ral)",
       "url": null,
-      "prompt": "Use the cortex skill. \u2014 resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
+      "prompt": "Use the cortex skill. \u2014 resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Workspace/Science/active/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
     },
     {
       "severity": "info",
       "text": "euclid_dr1: 384046 running (ral)",
       "url": null,
-      "prompt": "Use the cortex skill. \u2014 resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
+      "prompt": "Use the cortex skill. \u2014 resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Workspace/Science/active/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
     },
     {
       "severity": "info",
       "text": "euclid_dr1: 402719 running (ral)",
       "url": null,
-      "prompt": "Use the cortex skill. \u2014 resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
+      "prompt": "Use the cortex skill. \u2014 resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Workspace/Science/active/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
     },
     {
       "severity": "info",
       "text": "euclid_dr1: 402720 running (ral)",
       "url": null,
-      "prompt": "Use the cortex skill. \u2014 resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
+      "prompt": "Use the cortex skill. \u2014 resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Workspace/Science/active/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
     },
     {
       "severity": "info",
       "text": "euclid_dr1: 402721 running (ral)",
       "url": null,
-      "prompt": "Use the cortex skill. \u2014 resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
+      "prompt": "Use the cortex skill. \u2014 resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Workspace/Science/active/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
     },
     {
       "severity": "info",
       "text": "euclid_dr1: 402722 running (ral)",
       "url": null,
-      "prompt": "Use the cortex skill. \u2014 resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Science/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
+      "prompt": "Use the cortex skill. \u2014 resume euclid_dr1: read PyAutoCortex projects/euclid_dr1.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Workspace/Science/active/euclid_dr1/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say."
     }
   ]
 }

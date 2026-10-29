@@ -11,4 +11,5 @@ Registered 2026-10-15 (PyAutoCortex#67): SLACS sample under dataset/, output/ em
 
 ## Log
 
+- 2026-10-29 — note — retired: defunct; local tree deleted by the human 2026-10-29
 - 2026-10-15 — note — ledger opened

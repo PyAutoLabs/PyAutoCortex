@@ -11,4 +11,5 @@ Born 2026-10-15. Repo PyAutoLabs/cowls (private), M25 COSJ100024+015334 dataset 
 
 ## Log
 
+- 2026-10-29 — note — retired: defunct; local tree deleted by the human 2026-10-29
 - 2026-10-15 — note — ledger opened
