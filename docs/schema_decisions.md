@@ -475,3 +475,18 @@ Choices made in phase 2 — the conductor, the board and the workflows
     is registered `active` by human decision, the one exception to 52(a): an
     active project needs a ledger, and git is not what makes it science.
     Why: one layout on both machines means a path is derived, never looked up.
+
+62. **`development/` is a Science category, and drift is checked, not
+    hoped for** (2026-10-29, PyAutoBrain#543). The laptop Science tree gained
+    `development/` beside `active/` for projects that develop or validate the
+    software (`analytic_gaussian`, `ep_toy_gaussian`, `ic50_workspace`,
+    `slope_hierarchy_scale`); like `active/` it holds `active`, `dormant` or
+    `planned` rows. The conductor's `drift` verb compares `projects.yaml`
+    with the tree — unregistered folders, vanished `local_path`s, category
+    against status, `ral_root` category — and `census`/`checkin` print its
+    summary line on the laptop. It writes nothing and stays out of
+    `census()`, so the board rendered in CI does not depend on the machine.
+    Why: when Science moved from `C:\Users\Jammy\Science` to
+    `Workspace\Science`, every `local_path` went stale and `pull` quietly
+    reached 3 of 12 active projects for weeks; nothing in the organism
+    compared the map with the territory.

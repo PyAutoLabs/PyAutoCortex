@@ -189,6 +189,22 @@ five entries, and the `cortex.py` lines the human is likely to type next. It
 flips no state and writes no entry of its own — the jobs output is read by
 the human or the agent in the session and recorded with `running` / `done`.
 
+### Drift
+
+`pyauto-brain cortex drift` checks the body map against the laptop Science
+tree, `<root>/<category>/<project>` with categories `active`, `development`,
+`complete`, `archive` (the root is derived from the rows' `local_path`s;
+`--science-root` overrides). Errors: a folder in `active/` or `development/`
+with no row; a non-retired row whose `local_path` is gone; a folder whose
+category disagrees with its status (`active`/`development` hold
+`active|dormant|planned`, `complete`/`archive` hold `retired|dormant`); a
+derived root that does not exist while other rows' folders do. Warnings: an
+unregistered folder in `complete/` or `archive/` (storage), a non-retired
+row whose `ral_root` category differs from its `local_path` category. Rows
+outside the Science tree (repo-backed roots under the workspace) are exempt
+from the category rules. It writes nothing; `census` and `checkin` print one
+summary line, off the laptop a skip.
+
 ### `checkin.yaml`
 
 ```yaml
