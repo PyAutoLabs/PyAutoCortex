@@ -118,7 +118,7 @@ euclid_dr1_prelim:
 euclid_dr1:
   remote: none
   local_path: /mnt/c/Users/Jammy/Workspace/Science/active/euclid_dr1
-  ral_root: /mnt/ral/jnightin/euclid_dr1
+  ral_root: /mnt/ral/jnightin/active/euclid_dr1
   mirror: none
   sync_cli: hpc/sync
   sync_verbs: [push, pull, logs, sync, push-data-init, pull-full, status, submit, push-submit, jobs, sacct, cancel, wait-and-pull, tail, du, check, clear-logs]
@@ -132,10 +132,10 @@ euclid_dr1:
 analytic_gaussian:
   remote: none
   local_path: /mnt/c/Users/Jammy/Workspace/Science/development/analytic_gaussian
-  ral_root: /mnt/ral/jnightin/active/analytic_gaussian
+  ral_root: /mnt/ral/jnightin/development/analytic_gaussian
   mirror: none
   sync_cli: hpc/sync
-  sync_verbs: [push, pull, logs, sync, status, submit, push-submit, jobs, sacct, cancel, tail, du, check]
+  sync_verbs: [push, pull, logs, sync, push-data-init, pull-full, status, submit, push-submit, jobs, sacct, cancel, wait-and-pull, tail, du, check, clear-logs]
   ledger: wiki/project/state.md
   assistant: autofit_assistant
   witness_file: results/**/*.json
@@ -146,10 +146,10 @@ analytic_gaussian:
 ep_toy_gaussian:
   remote: PyAutoLabs/ep_toy_gaussian
   local_path: /mnt/c/Users/Jammy/Workspace/Science/development/ep_toy_gaussian
-  ral_root: /mnt/ral/jnightin/active/ep_toy_gaussian
+  ral_root: /mnt/ral/jnightin/development/ep_toy_gaussian
   mirror: none
   sync_cli: hpc/sync
-  sync_verbs: [push, pull, logs, sync, status, submit, push-submit, jobs, sacct, cancel, tail, du, check]
+  sync_verbs: [push, pull, logs, sync, push-data-init, pull-full, status, submit, push-submit, jobs, sacct, cancel, wait-and-pull, tail, du, check, clear-logs]
   ledger: wiki/project/state.md
   assistant: autofit_assistant
   witness_file: results/**/*.json
@@ -222,10 +222,10 @@ slope_hierarchy:
 slope_hierarchy_scale:
   remote: PyAutoLabs/slope_hierarchy_scale
   local_path: /mnt/c/Users/Jammy/Workspace/Science/development/slope_hierarchy_scale
-  ral_root: /mnt/ral/jnightin/active/slope_hierarchy_scale
+  ral_root: /mnt/ral/jnightin/development/slope_hierarchy_scale
   mirror: none
   sync_cli: hpc/sync
-  sync_verbs: [push, pull, sync, status, submit, push-submit, jobs, tail, check]
+  sync_verbs: [push, pull, logs, sync, push-data-init, pull-full, status, submit, push-submit, jobs, sacct, cancel, wait-and-pull, tail, du, check, clear-logs]
   ledger: wiki/project/state.md
   assistant: autolens_assistant
   witness_file: results/**/*.json
@@ -264,7 +264,7 @@ concr:
 ic50_workspace:
   remote: Jammy2211/ic50_workspace
   local_path: /mnt/c/Users/Jammy/Workspace/Science/development/ic50_workspace
-  ral_root: /mnt/ral/jnightin/active/ic50_workspace
+  ral_root: /mnt/ral/jnightin/development/ic50_workspace
   mirror: none
   sync_cli: hpc/sync
   sync_verbs: [push, pull, logs, sync, push-data-init, pull-full, status, submit, push-submit, jobs, sacct, cancel, wait-and-pull, tail, du, check, clear-logs]
