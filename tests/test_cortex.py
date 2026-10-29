@@ -419,7 +419,7 @@ def test_retire_preserves_every_other_byte_of_projects_yaml(tmp_path):
 def test_every_verb_is_registered():
     parser = cortex.build_parser()
     verbs = set(parser._subparsers._group_actions[0].choices)
-    assert verbs == {"check", "new", "run", "running", "done", "log", "now", "issue", "link", "retire"}
+    assert verbs == {"check", "new", "run", "running", "done", "log", "now", "issue", "link", "retire", "birth"}
 
 
 def test_a_bad_root_is_a_usage_error(tmp_path):
@@ -439,3 +439,66 @@ def test_today_is_injectable_and_validated(tmp_path):
     assert r.returncode == 1 and "--today must be YYYY-MM-DD" in r.stderr
     assert _run("log", "example", "x", root=root).returncode == 0
     assert _ledger(root).log[0].date == date.today().isoformat()
+
+
+BIRTH = ("birth", "fresh", "--local-path", "/tmp/sci/active/fresh",
+         "--ral-root", "/mnt/ral/u/active/fresh", "--sync-verbs", "push,pull,jobs",
+         "--assistant", "autolens_assistant", "--summary", "A new project",
+         "--today", TODAY)
+
+
+def test_birth_appends_one_row_and_opens_its_ledger_byte_for_byte(tmp_path):
+    root = _copy(tmp_path)
+    before = (root / "projects.yaml").read_text()
+    r = _run(*BIRTH, root=root)
+    assert r.returncode == 0, r.stderr
+    after = (root / "projects.yaml").read_text()
+    assert after.startswith(before.rstrip("\n"))
+    rows, _ = cortex.load_projects(root)
+    assert rows["fresh"]["local_path"] == "/tmp/sci/active/fresh"
+    assert rows["fresh"]["sync_verbs"] == ["push", "pull", "jobs"]
+    assert rows["fresh"]["status"] == "active"
+    assert _ledger(root, "fresh").log[0].text() == "ledger opened"
+    assert _problems(root) == []
+
+
+def test_birth_refuses_a_taken_key_a_taken_path_and_a_bad_value(tmp_path):
+    root = _copy(tmp_path)
+    assert _run(*BIRTH, root=root).returncode == 0
+    snapshot = (root / "projects.yaml").read_text()
+    r = _run(*BIRTH, root=root)
+    assert r.returncode == 1 and "already a projects.yaml key" in r.stderr
+    r = _run("birth", "twin", *BIRTH[2:], root=root)
+    assert r.returncode == 1 and "already the local_path of fresh" in r.stderr
+    r = _run("birth", "Bad", *BIRTH[2:], root=root)
+    assert r.returncode == 1 and "not a project key" in r.stderr
+    r = _run("birth", "quoted", "--local-path", '/tmp/a"b', "--ral-root", "/r",
+             "--sync-verbs", "pull", "--summary", "x", root=root)
+    assert r.returncode == 1 and "double quote" in r.stderr
+    assert (root / "projects.yaml").read_text() == snapshot
+
+
+def test_birth_quotes_a_value_holding_a_colon_and_reads_it_back(tmp_path):
+    root = _copy(tmp_path)
+    r = _run(*BIRTH, "--note", "born 2026-10-29: from autolens_assistant", root=root)
+    assert r.returncode == 0, r.stderr
+    rows, _ = cortex.load_projects(root)
+    assert rows["fresh"]["note"] == "born 2026-10-29: from autolens_assistant"
+    assert _problems(root) == []
+
+
+def test_a_failed_ledger_restores_projects_yaml(tmp_path):
+    root = _copy(tmp_path)
+    snapshot = (root / "projects.yaml").read_text()
+    r = _run(*BIRTH[:-4], "--summary", " ".join(["word"] * 40), root=root)
+    assert r.returncode == 1 and "words" in r.stderr
+    assert (root / "projects.yaml").read_text() == snapshot
+    assert not (root / "projects" / "fresh.md").exists()
+
+
+def test_birth_refuses_a_backslash_that_yaml_would_read_as_an_escape(tmp_path):
+    root = _copy(tmp_path)
+    snapshot = (root / "projects.yaml").read_text()
+    r = _run(*BIRTH, "--note", "see: C:\\new dir", root=root)
+    assert r.returncode == 1 and "backslash" in r.stderr
+    assert (root / "projects.yaml").read_text() == snapshot
