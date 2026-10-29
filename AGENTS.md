@@ -109,8 +109,14 @@ not re-derive them.
     project's GitHub issue (Now, Runs, the last five entries) between two
     markers; the Brain's `cortex issue --apply` writes it there.
   - `link <project> <Repo#N | URL | none>` — sets the ledger's `Issue:`.
-  - `retire <project> --why "<one line>"` — the only verb that writes
-    `projects.yaml`: the row's `status:` becomes `retired`, its `note:`
+  - `birth <project> --local-path … --ral-root … --sync-verbs a,b
+    --summary "<one line>" [...]` — appends one row and opens its ledger: an
+    add-only diff that `ledger_merge.py` classifies as a birth, so it lands by
+    itself. It refuses a taken key or `local_path` and restores
+    `projects.yaml` if the row or the ledger fails. The Brain's `cortex
+    birth` derives the fields from a scaffolded project folder and calls it.
+  - `retire <project> --why "<one line>"` — with `birth`, the only verbs that
+    write `projects.yaml`: the row's `status:` becomes `retired`, its `note:`
     records why, and the ledger logs it. It refuses while the ledger still
     lists a run.
 - **`dashboard.md` / `dashboard.html`** — GENERATED, never hand-edited: the

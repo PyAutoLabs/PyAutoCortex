@@ -490,3 +490,19 @@ Choices made in phase 2 — the conductor, the board and the workflows
     `Workspace\Science`, every `local_path` went stale and `pull` quietly
     reached 3 of 12 active projects for weeks; nothing in the organism
     compared the map with the territory.
+
+63. **A project is born by its assistant and registered by the Cortex**
+    (2026-10-29, PyAutoBrain#545). `scripts/cortex.py birth` appends one row
+    and opens its ledger — with `retire`, the only verbs that write
+    `projects.yaml`, and the only one that adds a row. The Brain's `cortex
+    birth` derives that row from a project folder the domain assistant's
+    `start-new-project` already scaffolded, cuts `claude/birth-<key>`, and
+    pushes only when `ledger_merge.py classify --base origin/main` calls the
+    commit a birth (the add-only rule in `scripts/ledger_merge.py`,
+    2026-09-17), so it lands by itself.
+    Scaffolding stays with the assistants: they are public and must not
+    learn the private Science tree, and a second, Cortex-owned project
+    template would drift from theirs.
+    Why: projects were started by hand-copying an older one and never got a
+    row; `drift` (decision 62) now reports such a folder as unregistered, and
+    birth is the one step that prevents it.

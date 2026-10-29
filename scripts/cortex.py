@@ -759,7 +759,7 @@ def cmd_issue(args) -> int:
 # --------------------------------------------------------------------------- #
 def retire_project(root: Path, key: str, why: str, today: date) -> str:
     """Flip one `projects.yaml` row to `status: retired` and stamp the reason
-    on its `note:`. The only verb that writes `projects.yaml`. It does not
+    on its `note:`. With `birth`, the only verbs that write `projects.yaml`. It does not
     delete the row (it is the one record of where the data lives), it does not
     touch the ledger file (history is not rewritten by a change of status), and
     it refuses while the ledger still lists a run on the cluster."""
@@ -821,6 +821,91 @@ def retire_project(root: Path, key: str, why: str, today: date) -> str:
     return f"retired {key}"
 
 
+def _yaml_scalar(field: str, value: str) -> str:
+    """A `projects.yaml` scalar: bare, or `"..."` (no escapes) when it holds
+    `#`, `:` or edge spaces. A double quote, a backslash (YAML would read it
+    as an escape inside quotes) or a newline cannot be written."""
+    value = str(value)
+    if '"' in value or "\\" in value or "\n" in value:
+        raise CortexError(f"{field} cannot hold a double quote, a backslash or a "
+                          "newline (projects.yaml quotes with no escapes)")
+    if not value.strip():
+        raise CortexError(f"{field} is empty")
+    if "#" in value or ":" in value or value != value.strip():
+        return f'"{value}"'
+    return value
+
+
+def birth_project(root: Path, key: str, row: dict, summary: str, today: date, *,
+                  issue: str = "none", now: str = "") -> str:
+    """Append one `projects.yaml` row and open its ledger — a project birth.
+
+    The second verb that writes `projects.yaml` (with `retire`), and the only
+    one that adds a row. It refuses a key or a `local_path` already in the
+    map, writes the row in `PROJECT_FIELDS` order at the end of the file,
+    reads the file back and restores it on any problem, then opens the ledger
+    with `new_ledger`. The diff is add-only — a row plus its ledger — which
+    `ledger_merge.py` classifies as a birth, so it lands by itself."""
+    if not PROJECT_KEY_RE.match(key or ""):
+        raise CortexError(f"{key!r} is not a project key (^[a-z][a-z0-9_]*$)")
+    projects, problems = load_projects(root)
+    if problems:
+        raise CortexError("projects.yaml does not parse clean — run `check` "
+                          "and fix it before a birth: " + "; ".join(problems))
+    if key in projects:
+        raise CortexError(f"{key} is already a projects.yaml key")
+    unknown = set(row) - set(PROJECT_FIELDS + PROJECT_OPTIONAL_FIELDS)
+    missing = [f for f in PROJECT_FIELDS if not row.get(f)]
+    if unknown or missing:
+        raise CortexError("a birth row needs every field and no others — "
+                          + "; ".join([f"missing {', '.join(missing)}"] * bool(missing)
+                                      + [f"unknown {', '.join(sorted(unknown))}"] * bool(unknown)))
+    local = row["local_path"].rstrip("/")
+    for other, r in projects.items():
+        if (r.get("local_path") or "").rstrip("/") == local:
+            raise CortexError(f"{local} is already the local_path of {other}")
+    if (root / LEDGER_DIR / f"{key}.md").exists():
+        raise CortexError(f"{LEDGER_DIR}/{key}.md already exists")
+
+    lines = [f"{key}:"]
+    for field in PROJECT_FIELDS + PROJECT_OPTIONAL_FIELDS:
+        if field not in row:
+            continue
+        value = row[field]
+        if field == "sync_verbs":
+            verbs = list(value)
+            if not verbs or not all(re.match(r"^[a-z][a-z0-9-]*$", v) for v in verbs):
+                raise CortexError(f"sync_verbs must be bare words, not {verbs!r}")
+            lines.append(f"  sync_verbs: [{', '.join(verbs)}]")
+        else:
+            lines.append(f"  {field}: {_yaml_scalar(field, value)}")
+
+    path = root / "projects.yaml"
+    original = path.read_text(encoding="utf-8")
+    path.write_text(original.rstrip("\n") + "\n\n" + "\n".join(lines) + "\n",
+                    encoding="utf-8")
+    rows, problems = load_projects(root)
+    back = rows.get(key, {})
+    differs = [f for f in row if (back.get(f) != list(row[f]) if f == "sync_verbs"
+                                  else back.get(f) != str(row[f]))]
+    if problems or not back or differs:
+        path.write_text(original, encoding="utf-8")
+        if problems:
+            why = "; ".join(problems)
+        elif not back:
+            why = f"{key} is missing"
+        else:
+            why = f"{key} came back with {', '.join(differs)} changed"
+        raise CortexError("the row would not read back as written — projects.yaml "
+                          f"is unchanged: {why}")
+    try:
+        new_ledger(root, key, summary, today, issue=issue, now=now)
+    except CortexError:
+        path.write_text(original, encoding="utf-8")
+        raise
+    return f"born {key}: projects.yaml row + {LEDGER_DIR}/{key}.md"
+
+
 # --------------------------------------------------------------------------- #
 # CLI
 # --------------------------------------------------------------------------- #
@@ -854,6 +939,22 @@ def cmd_log(args) -> int:
 
 def cmd_now(args) -> int:
     print(set_now(args.root, args.project, args.text))
+    return 0
+
+
+def cmd_birth(args) -> int:
+    row = {
+        "remote": args.remote, "local_path": args.local_path, "ral_root": args.ral_root,
+        "mirror": args.mirror, "sync_cli": args.sync_cli,
+        "sync_verbs": [v.strip() for v in args.sync_verbs.split(",") if v.strip()],
+        "ledger": args.ledger, "assistant": args.assistant,
+        "witness_file": args.witness_file, "partition": args.partition,
+        "status": args.status,
+    }
+    if args.note:
+        row["note"] = args.note
+    print(birth_project(args.root, args.project, row, args.summary, _today(args),
+                        issue=args.issue, now=args.now or ""))
     return 0
 
 
@@ -933,7 +1034,29 @@ def build_parser() -> argparse.ArgumentParser:
     _common(p)
     p.set_defaults(func=cmd_link)
 
-    p = sub.add_parser("retire", help="retire a project's row (the only verb that writes projects.yaml)")
+    p = sub.add_parser("birth", help="add a project's row and open its ledger (a birth; "
+                                     "lands by itself)")
+    p.add_argument("project")
+    p.add_argument("--local-path", required=True)
+    p.add_argument("--ral-root", required=True)
+    p.add_argument("--remote", default="none")
+    p.add_argument("--mirror", default="none")
+    p.add_argument("--sync-cli", default="hpc/sync")
+    p.add_argument("--sync-verbs", required=True, help="comma-separated")
+    p.add_argument("--ledger", default="wiki/project/state.md")
+    p.add_argument("--assistant", default="none")
+    p.add_argument("--witness-file", default="results/**/*.json")
+    p.add_argument("--partition", default="ral", choices=PARTITIONS)
+    p.add_argument("--status", default="active", choices=PROJECT_STATUSES)
+    p.add_argument("--note")
+    p.add_argument("--summary", required=True, help=f"one line, at most {SUMMARY_MAX_WORDS} words")
+    p.add_argument("--issue", default="none", help="Repo#N or an issue URL (default none)")
+    p.add_argument("--now", help="the opening `## Now` text")
+    _common(p, dated=True)
+    p.set_defaults(func=cmd_birth)
+
+    p = sub.add_parser("retire", help="retire a project's row (with `birth`, the only verbs "
+                                      "that write projects.yaml)")
     p.add_argument("project")
     p.add_argument("--why", required=True)
     _common(p, dated=True)
