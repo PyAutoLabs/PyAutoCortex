@@ -205,6 +205,18 @@ outside the Science tree (repo-backed roots under the workspace) are exempt
 from the category rules. It writes nothing; `census` and `checkin` print one
 summary line, off the laptop a skip.
 
+### Birth
+
+A new project is scaffolded by its domain assistant (`start-new-project`)
+into `<Science root>/<active|development>/<key>/`, then registered with
+`pyauto-brain cortex birth <key> --category … --assistant … --summary …`,
+which derives the row from the folder and the other rows and writes it
+through `scripts/cortex.py birth` on `claude/birth-<key>`. `cortex.py birth`
+appends the row in field order at the end of `projects.yaml`, reads it back
+(restoring the file on any problem) and opens the ledger with `new`. The
+diff — one row plus `projects/<key>.md` — is a birth to `ledger_merge.py`,
+so the branch lands on `main` by itself.
+
 ### `checkin.yaml`
 
 ```yaml
