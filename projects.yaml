@@ -61,7 +61,7 @@ inference_programme:
 
 subhalo_validation:
   remote: PyAutoLabs/subhalo_validation
-  local_path: /mnt/c/Users/Jammy/Science/active/subhalo_validation
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/active/subhalo_validation
   ral_root: /mnt/ral/jnightin/active/subhalo_validation
   mirror: none
   sync_cli: hpc/sync
@@ -89,7 +89,7 @@ subhalo:
 
 euclid:
   remote: none
-  local_path: /mnt/c/Users/Jammy/Science/active/euclid
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/complete/euclid
   ral_root: /mnt/ral/jnightin/active/euclid
   mirror: none
   sync_cli: hpc/sync
@@ -117,7 +117,7 @@ euclid_dr1_prelim:
 
 euclid_dr1:
   remote: none
-  local_path: /mnt/c/Users/Jammy/Science/euclid_dr1
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/active/euclid_dr1
   ral_root: /mnt/ral/jnightin/euclid_dr1
   mirror: none
   sync_cli: hpc/sync
@@ -131,7 +131,7 @@ euclid_dr1:
 
 analytic_gaussian:
   remote: none
-  local_path: /mnt/c/Users/Jammy/Science/active/analytic_gaussian
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/development/analytic_gaussian
   ral_root: /mnt/ral/jnightin/active/analytic_gaussian
   mirror: none
   sync_cli: hpc/sync
@@ -145,7 +145,7 @@ analytic_gaussian:
 
 ep_toy_gaussian:
   remote: PyAutoLabs/ep_toy_gaussian
-  local_path: /mnt/c/Users/Jammy/Science/active/ep_toy_gaussian
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/development/ep_toy_gaussian
   ral_root: /mnt/ral/jnightin/active/ep_toy_gaussian
   mirror: none
   sync_cli: hpc/sync
@@ -165,7 +165,7 @@ ep_toy_gaussian:
 # --------------------------------------------------------------------------- #
 profiling:
   remote: none
-  local_path: /mnt/c/Users/Jammy/Science/archive/profiling
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/archive/profiling
   ral_root: /mnt/ral/jnightin/archive/profiling
   mirror: none
   sync_cli: hpc/sync
@@ -193,7 +193,7 @@ cowls_diana:
 
 subhalo_simulations:
   remote: none
-  local_path: /mnt/c/Users/Jammy/Science/archive/subhalo_simulations
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/archive/subhalo_simulations
   ral_root: /mnt/ral/jnightin/archive/subhalo_simulations
   mirror: none
   sync_cli: hpc/sync
@@ -207,7 +207,7 @@ subhalo_simulations:
 
 slope_hierarchy:
   remote: Jammy2211/slope_hierarchy
-  local_path: /mnt/c/Users/Jammy/Science/complete/slope_hierarchy
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/complete/slope_hierarchy
   ral_root: /mnt/ral/jnightin/complete/slope_hierarchy
   mirror: none
   sync_cli: hpc/sync
@@ -221,7 +221,7 @@ slope_hierarchy:
 
 slope_hierarchy_scale:
   remote: PyAutoLabs/slope_hierarchy_scale
-  local_path: /mnt/c/Users/Jammy/Science/active/slope_hierarchy_scale
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/development/slope_hierarchy_scale
   ral_root: /mnt/ral/jnightin/active/slope_hierarchy_scale
   mirror: none
   sync_cli: hpc/sync
@@ -263,7 +263,7 @@ concr:
 
 ic50_workspace:
   remote: Jammy2211/ic50_workspace
-  local_path: /mnt/c/Users/Jammy/Science/active/ic50_workspace
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/development/ic50_workspace
   ral_root: /mnt/ral/jnightin/active/ic50_workspace
   mirror: none
   sync_cli: hpc/sync
@@ -319,7 +319,7 @@ euclid_sersics:
 
 pj011646_final:
   remote: none
-  local_path: /mnt/c/Users/Jammy/Science/complete/PJ011646_final
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/complete/PJ011646_final
   ral_root: /mnt/ral/jnightin/complete/PJ011646_final
   mirror: none
   sync_cli: hpc/sync
@@ -333,7 +333,7 @@ pj011646_final:
 
 euclid_detailed:
   remote: PyAutoLabs/euclid_detailed
-  local_path: /mnt/c/Users/Jammy/Science/active/euclid_detailed
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/active/euclid_detailed
   ral_root: /mnt/ral/jnightin/active/euclid_detailed
   mirror: none
   sync_cli: hpc/sync
