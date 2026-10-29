@@ -11,8 +11,8 @@ One ledger per science project: what is on the cluster right now, what the human
 | Where | Count |
 |-------|------:|
 | [Running](#projects) | 16 |
-| [Open](#projects) | 47 |
-| [Projects](#projects) | 9 |
+| [Open](#projects) | 42 |
+| [Projects](#projects) | 8 |
 
 <details><summary>📋 check in since last time</summary>
 
@@ -42,7 +42,6 @@ Last check-in: 2026-10-17T11:18Z.
 
 | Project | Running | Open | Last update |
 |---|---:|---:|---|
-| subhalo_validation | 0 | 5 | 2026-09-07 |
 | euclid_dr1 | 16 | 42 | 2026-10-10 |
 | analytic_gaussian | 0 | 0 | 2026-10-29 |
 | ep_toy_gaussian | 0 | 0 | 2026-10-29 |
@@ -53,63 +52,6 @@ Last check-in: 2026-10-17T11:18Z.
 | euclid_detailed | 0 | 0 | 2026-10-15 |
 
 ## Projects
-
-<details id="project-subhalo_validation"><summary><b>subhalo_validation</b> — Do the SLaM subhalo pipelines false-detect on lenses with no subhalo · 0 running · 5 open · updated 2026-09-07</summary>
-
-**Registered:** not recorded
-
-**Local:** `` /mnt/c/Users/Jammy/Workspace/Science/active/subhalo_validation ``
-
-**RAL:** `` /mnt/ral/jnightin/active/subhalo_validation ``
-
-**Current position**
-
-Five chains on RAL under the corrected adapt settings: rectangular_adapt on pl_eff_0 / pl_eff_1_outer (job A done, job B 342311 submitted) and the delaunay_adapt_split reruns plus rectangular_adapt on pl_sersic_0. pl_sersic_0 on delaunay_adapt_split is accepted (no false detection, +2.557).
-Next: pull when the numba chains land and read the evidence_increase of each; no more 1000-pixel runs.
-
-<details><summary title="Copy resume prompt for subhalo_validation">📋</summary>
-
-```
-Use the cortex skill. — resume subhalo_validation: read PyAutoCortex projects/subhalo_validation.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Workspace/Science/active/subhalo_validation/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
-```
-
-</details>
-
-**Runs** (5)
-
-| Job | State | Partition | Date | Description |
-|---|---|---|---|---|
-| `342299_1` | open | ral | 2026-09-07 | delaunay_adapt_split_pl_eff_0: job B, numba chain at the standard 1250-pixel Delaunay mesh (8c / 96gb / 48 h); reloads job A 342231_1; the 09-07 ruling: run al… |
-| `342299_2` | open | ral | 2026-09-07 | delaunay_adapt_split_pl_eff_1_outer: job B, numba chain at the standard 1250-pixel Delaunay mesh (8c / 96gb / 48 h); reloads job A 342231_2; the 09-07 ruling:… |
-| `342311_1` | open | ral | 2026-09-07 | rectangular_adapt_pl_eff_0: job B, numba chain (8c / 96gb / 48 h) at the standard 1250-pixel mesh under PIPELINE=rectangular_adapt; reloads job A 342237_1; the… |
-| `342311_2` | open | ral | 2026-09-07 | rectangular_adapt_pl_eff_1_outer: job B, numba chain (8c / 96gb / 48 h) at the standard 1250-pixel mesh under PIPELINE=rectangular_adapt; reloads job A 342237_… |
-| `342311_0` | open | ral | 2026-09-07 | rectangular_adapt_pl_sersic_0: job B, numba chain (8c / 96gb / 48 h) at the standard 1250-pixel mesh under PIPELINE=rectangular_adapt; reloads job A 342237_0;… |
-
-<details><summary>Full descriptions (5 shortened above)</summary>
-
-- `342299_1` — delaunay_adapt_split_pl_eff_0: job B, numba chain at the standard 1250-pixel Delaunay mesh (8c / 96gb / 48 h); reloads job A 342231_1; the 09-07 ruling: run all datasets at 1250, no more pix1000
-- `342299_2` — delaunay_adapt_split_pl_eff_1_outer: job B, numba chain at the standard 1250-pixel Delaunay mesh (8c / 96gb / 48 h); reloads job A 342231_2; the 09-07 ruling: run all datasets at 1250, no more pix1000
-- `342311_1` — rectangular_adapt_pl_eff_0: job B, numba chain (8c / 96gb / 48 h) at the standard 1250-pixel mesh under PIPELINE=rectangular_adapt; reloads job A 342237_1; the 09-07 ask: submit the rectangular runs too
-- `342311_2` — rectangular_adapt_pl_eff_1_outer: job B, numba chain (8c / 96gb / 48 h) at the standard 1250-pixel mesh under PIPELINE=rectangular_adapt; reloads job A 342237_2; the 09-07 ask: submit the rectangular runs too
-- `342311_0` — rectangular_adapt_pl_sersic_0: job B, numba chain (8c / 96gb / 48 h) at the standard 1250-pixel mesh under PIPELINE=rectangular_adapt; reloads job A 342237_0; the 09-07 ask: submit the rectangular runs too
-
-</details>
-
-<details><summary>Recent log — 5 of 40 entries</summary>
-
-- 2026-09-07 — *result* — accepted delaunay_adapt_split_pl_sersic_0 (R-20260907-01): Accepted. The numba delaunay_adapt_split chain on pl_sersic_0 (job 342273_0, 22 h 08 m, 1250 Hilbert / 1310 Delaunay pixels) lands evidence_increase +2.557 (&lt; 5): no false detection. The best cell parks a 1.6e6 Msun nuisance subhalo at (-1.43, -2.36)", outside the ring. The shift from the legacy -0.30 comes with the S/N-3 adapt cap, adaptive over-sampling and the numba pool, not a code fault. Results are good; run the remaining datasets at 1250 pixels; no more 1000-pixel runs.
-- 2026-09-07 — *run* — 342311_0 submitted: rectangular_adapt_pl_sersic_0 — job B, numba chain (8c / 96gb / 48 h) at the standard 1250-pixel mesh under PIPELINE=rectangular_adapt; reloads job A 342237_0; the 09-07 ask: submit the rectangular runs too
-- 2026-09-07 — *run* — 342311_2 submitted: rectangular_adapt_pl_eff_1_outer — job B, numba chain (8c / 96gb / 48 h) at the standard 1250-pixel mesh under PIPELINE=rectangular_adapt; reloads job A 342237_2; the 09-07 ask: submit the rectangular runs too
-- 2026-09-07 — *run* — 342311_1 submitted: rectangular_adapt_pl_eff_0 — job B, numba chain (8c / 96gb / 48 h) at the standard 1250-pixel mesh under PIPELINE=rectangular_adapt; reloads job A 342237_1; the 09-07 ask: submit the rectangular runs too
-- 2026-09-07 — *run* — 342299_2 submitted: delaunay_adapt_split_pl_eff_1_outer — job B, numba chain at the standard 1250-pixel Delaunay mesh (8c / 96gb / 48 h); reloads job A 342231_2; the 09-07 ruling: run all datasets at 1250, no more pix1000
-
-[full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/subhalo_validation.md)
-
-active · ral · [subhalo_validation#2](https://github.com/PyAutoLabs/subhalo_validation/issues/2)
-
-</details>
-
-</details>
 
 <details id="project-euclid_dr1"><summary><b>euclid_dr1</b> — Does the sep1 DR1 delivery reproduce the ten prelim lenses by eye · 16 running · 42 open · updated 2026-10-10</summary>
 
@@ -566,9 +508,10 @@ dormant · both · no issue yet
 
 </details>
 
-<details><summary>11 retired</summary>
+<details><summary>12 retired</summary>
 
 - [inference_programme](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/inference_programme.md) — The first inference programme, retired and restarted as autolens_inference — retired 2026-09-07: restarting from scratch: the project setup was unsatisfactory and it informed how the Cortex manages projects; RAL outputs stashed at /mnt/ral/jnightin/inference_programme_retired_2026-09-07
+- [subhalo_validation](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/subhalo_validation.md) — Do the SLaM subhalo pipelines false-detect on lenses with no subhalo — retired 2026-10-29: retired by the human 2026-10-29; final runs pulled, tree moved to the archive/ category on the laptop and on RAL
 - [subhalo](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/subhalo.md) — SLaM subhalo modelling of the SLACS lens sample — retired 2026-10-29: defunct; local tree deleted by the human 2026-10-29
 - [euclid_dr1_prelim](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid_dr1_prelim.md) — Refit the ten DR1-prelim tiles and rebuild the catalogue on RAL — retired 2026-09-25: retire euclid_dr1_prelim; tree moved to z_vault by the human
 - [slope_hierarchy](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/slope_hierarchy.md) — Hierarchical slope recovery at N=5, wrapped up and succeeded by slope_hierarchy_scale — retired 2026-09-08: wrapped up 2026-07-22 at N=5; succeeded by slope_hierarchy_scale; tree vaulted under z_projects_complete/

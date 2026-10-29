@@ -61,8 +61,8 @@ inference_programme:
 
 subhalo_validation:
   remote: PyAutoLabs/subhalo_validation
-  local_path: /mnt/c/Users/Jammy/Workspace/Science/active/subhalo_validation
-  ral_root: /mnt/ral/jnightin/active/subhalo_validation
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/archive/subhalo_validation
+  ral_root: /mnt/ral/jnightin/archive/subhalo_validation
   mirror: none
   sync_cli: hpc/sync
   sync_verbs: [push, pull, logs, sync, push-data-init, pull-full, status, submit, push-submit, jobs, sacct, cancel, wait-and-pull, tail, du, check, clear-logs]
@@ -70,8 +70,8 @@ subhalo_validation:
   assistant: autolens_assistant
   witness_file: results/**/*.json
   partition: ral
-  status: active
-  note: "pulls land in the checkout (PULL_DIRS output results); run_chain.sh chains A→B afterok; witness evidence_increase < 5, subhalo_stage, test_mode"
+  status: retired
+  note: "retired 2026-10-29: retired by the human 2026-10-29; final runs pulled, tree moved to the archive/ category on the laptop and on RAL"
 
 subhalo:
   remote: none
