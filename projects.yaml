@@ -90,7 +90,7 @@ subhalo:
 euclid:
   remote: none
   local_path: /mnt/c/Users/Jammy/Workspace/Science/complete/euclid
-  ral_root: /mnt/ral/jnightin/active/euclid
+  ral_root: /mnt/ral/jnightin/complete/euclid
   mirror: none
   sync_cli: hpc/sync
   sync_verbs: [push, pull, sync, status]
@@ -249,7 +249,7 @@ pj011646:
 
 concr:
   remote: Jammy2211/cosmology_and_cancer
-  local_path: /mnt/c/Users/Jammy/Science/archive/concr
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/complete/concr_cosmology
   ral_root: /mnt/ral/jnightin/archive/concr
   mirror: none
   sync_cli: hpc/sync
@@ -259,7 +259,7 @@ concr:
   witness_file: results/**/*.json
   partition: both
   status: retired
-  note: "retired 2026-10-14: human moved the tree to z_vault 2026-10-14"
+  note: "retired 2026-10-14: human moved the tree to z_vault 2026-10-14; the tree is Science/complete/concr_cosmology (local_path repointed 2026-10-29)"
 
 ic50_workspace:
   remote: Jammy2211/ic50_workspace
@@ -372,3 +372,45 @@ cowls_ansofi:
   partition: ral
   status: retired
   note: "retired 2026-10-29: defunct; local tree deleted by the human 2026-10-29"
+
+euclid_group:
+  remote: none
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/complete/euclid_group
+  ral_root: /mnt/ral/jnightin/complete/euclid_group
+  mirror: none
+  sync_cli: hpc/sync
+  sync_verbs: [pull]
+  ledger: README.md
+  assistant: none
+  witness_file: results/**/*.json
+  partition: both
+  status: retired
+  note: "registered retired 2026-10-29 by human decision: storage tree, non-git; no RAL tree verified"
+
+cti:
+  remote: none
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/archive/cti
+  ral_root: /mnt/ral/jnightin/archive/cti
+  mirror: none
+  sync_cli: hpc/sync
+  sync_verbs: [pull]
+  ledger: notes
+  assistant: none
+  witness_file: results/**/*.json
+  partition: both
+  status: retired
+  note: "registered retired 2026-10-29 by human decision: archived CTI storage tree (COSMA era), non-git; no RAL tree verified"
+
+vignette:
+  remote: none
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/archive/vignette
+  ral_root: /mnt/ral/jnightin/archive/vignette
+  mirror: none
+  sync_cli: hpc/sync
+  sync_verbs: [pull]
+  ledger: text.md
+  assistant: none
+  witness_file: results/**/*.json
+  partition: both
+  status: retired
+  note: "registered retired 2026-10-29 by human decision: archived vignette figures and DR1 material, non-git; no RAL tree"

@@ -534,13 +534,13 @@ active · ral · no issue yet
 
 </details>
 
-<details id="project-euclid"><summary><b>euclid</b> — The original Euclid DR1 grade-AB catalogue project, superseded by euclid_dr1 · dormant · no runs recorded · updated 2026-10-15</summary>
+<details id="project-euclid"><summary><b>euclid</b> — The original Euclid DR1 grade-AB catalogue project, superseded by euclid_dr1 · dormant · no runs recorded · updated 2026-10-29</summary>
 
 **Registered:** not recorded
 
 **Local:** `` /mnt/c/Users/Jammy/Workspace/Science/complete/euclid ``
 
-**RAL:** `` /mnt/ral/jnightin/active/euclid ``
+**RAL:** `` /mnt/ral/jnightin/complete/euclid ``
 
 **Current position**
 
@@ -550,8 +550,9 @@ Dormant: superseded by euclid_dr1 (euclid_dr1_prelim is defunct). The tree is ke
 
 _nothing on the cluster_
 
-<details><summary>Recent log — 4 of 4 entries</summary>
+<details><summary>Recent log — 5 of 5 entries</summary>
 
+- 2026-10-29 — *note* — RAL tree moved to the complete/ category to mirror the laptop, on the human's decision (2026-10-29); hpc/sync.conf HPC_BASE updated
 - 2026-10-15 — *note* — superseded by euclid_dr1 (euclid_dr1_prelim defunct) per the human; stays dormant; folder under Science/active and RAL active/; ral_root repointed to the category layout (PyAutoCortex#67)
 - 2026-08-28 — *note* — question: Do we recover Sersic indices or is prior pile-up artefact — planned, never run [archive/tasks/euclid/sersic_index_recovery.md]
 - 2026-08-28 — *note* — question: Can a fitted Euclid lens be resimulated and recovered — planned, never run [archive/tasks/euclid/resimulate_fitted_lens_simulator.md]
@@ -565,7 +566,7 @@ dormant · both · no issue yet
 
 </details>
 
-<details><summary>8 retired</summary>
+<details><summary>11 retired</summary>
 
 - [inference_programme](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/inference_programme.md) — The first inference programme, retired and restarted as autolens_inference — retired 2026-09-07: restarting from scratch: the project setup was unsatisfactory and it informed how the Cortex manages projects; RAL outputs stashed at /mnt/ral/jnightin/inference_programme_retired_2026-09-07
 - [subhalo](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/subhalo.md) — SLaM subhalo modelling of the SLACS lens sample — retired 2026-10-29: defunct; local tree deleted by the human 2026-10-29
@@ -575,6 +576,9 @@ dormant · both · no issue yet
 - [pj011646_final](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/pj011646_final.md) — Final masked PJ0116-24 power-law and multipole subhalo comparison — retired 2026-10-14: complete; tree moved to z_projects_complete 2026-10-14
 - [cowls](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/cowls.md) — euclid_detailed SLaM pipeline on COWLS JWST strong lenses, from COSJ100024+015334 — retired 2026-10-29: defunct; local tree deleted by the human 2026-10-29
 - [cowls_ansofi](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/cowls_ansofi.md) — autolens_inference Delaunay-1250 numba CPU SLaM on COSJ100024+015334, F444W only — retired 2026-10-29: defunct; local tree deleted by the human 2026-10-29
+- [euclid_group](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid_group.md) — Euclid group-scale lens modelling, complete; kept for reference — registered retired 2026-10-29 by human decision: storage tree, non-git; no RAL tree verified
+- [cti](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/cti.md) — Charge transfer inefficiency modelling, archived COSMA-era storage — registered retired 2026-10-29 by human decision: archived CTI storage tree (COSMA era), non-git; no RAL tree verified
+- [vignette](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/vignette.md) — Strong-lens vignette figures and mosaic, archived — registered retired 2026-10-29 by human decision: archived vignette figures and DR1 material, non-git; no RAL tree
 
 </details>
 
@@ -586,7 +590,7 @@ dormant · both · no issue yet
 | cowls_diana | retired | retired 2026-10-14: human moved the tree to z_vault 2026-10-14 |
 | subhalo_simulations | retired | retired 2026-10-14: superseded by subhalo_validation; tree moved to z_vault 2026-10-14 |
 | pj011646 | retired | retired 2026-10-02: Human requested both PJ011646 and aris_PJ011646 archived intact to z_vault on laptop and RAL; superseded by pj011646_final |
-| concr | retired | retired 2026-10-14: human moved the tree to z_vault 2026-10-14 |
+| concr | retired | retired 2026-10-14: human moved the tree to z_vault 2026-10-14; the tree is Science/complete/concr_cosmology (local_path repointed 2026-10-29) |
 
 ---
 
