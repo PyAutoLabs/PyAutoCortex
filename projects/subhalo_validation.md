@@ -10,14 +10,15 @@ Next: pull when the numba chains land and read the evidence_increase of each; no
 
 ## Runs
 
-- 342299_1 — open — ral — 2026-09-07 — delaunay_adapt_split_pl_eff_0: job B, numba chain at the standard 1250-pixel Delaunay mesh (8c / 96gb / 48 h); reloads job A 342231_1; the 09-07 ruling: run all datasets at 1250, no more pix1000
-- 342299_2 — open — ral — 2026-09-07 — delaunay_adapt_split_pl_eff_1_outer: job B, numba chain at the standard 1250-pixel Delaunay mesh (8c / 96gb / 48 h); reloads job A 342231_2; the 09-07 ruling: run all datasets at 1250, no more pix1000
-- 342311_1 — open — ral — 2026-09-07 — rectangular_adapt_pl_eff_0: job B, numba chain (8c / 96gb / 48 h) at the standard 1250-pixel mesh under PIPELINE=rectangular_adapt; reloads job A 342237_1; the 09-07 ask: submit the rectangular runs too
-- 342311_2 — open — ral — 2026-09-07 — rectangular_adapt_pl_eff_1_outer: job B, numba chain (8c / 96gb / 48 h) at the standard 1250-pixel mesh under PIPELINE=rectangular_adapt; reloads job A 342237_2; the 09-07 ask: submit the rectangular runs too
-- 342311_0 — open — ral — 2026-09-07 — rectangular_adapt_pl_sersic_0: job B, numba chain (8c / 96gb / 48 h) at the standard 1250-pixel mesh under PIPELINE=rectangular_adapt; reloads job A 342237_0; the 09-07 ask: submit the rectangular runs too
 
 ## Log
 
+- 2026-10-29 — note — retired: retired by the human 2026-10-29; final runs pulled, tree moved to the archive/ category on the laptop and on RAL
+- 2026-10-29 — run — 342299_1 finished — wall 42:49: delaunay_adapt_split_pl_eff_0: job B, numba chain at the standard 1250-pixel Delaunay mesh (8c / 96gb / 48 h); reloads job A 342231_1; the 09-07 ruling: run all datasets at 1250, no more pix1000 — COMPLETED 2026-09-09T11:45 per sacct; closed when the project was retired
+- 2026-10-29 — run — 342299_2 finished — wall 37:44: delaunay_adapt_split_pl_eff_1_outer: job B, numba chain at the standard 1250-pixel Delaunay mesh (8c / 96gb / 48 h); reloads job A 342231_2; the 09-07 ruling: run all datasets at 1250, no more pix1000 — COMPLETED 2026-09-09T06:40 per sacct; closed when the project was retired
+- 2026-10-29 — run — 342311_0 finished — wall 17:42: rectangular_adapt_pl_sersic_0: job B, numba chain (8c / 96gb / 48 h) at the standard 1250-pixel mesh under PIPELINE=rectangular_adapt; reloads job A 342237_0; the 09-07 ask: submit the rectangular runs too — COMPLETED 2026-09-08T11:13 per sacct; closed when the project was retired
+- 2026-10-29 — run — 342311_1 finished — wall 20:39: rectangular_adapt_pl_eff_0: job B, numba chain (8c / 96gb / 48 h) at the standard 1250-pixel mesh under PIPELINE=rectangular_adapt; reloads job A 342237_1; the 09-07 ask: submit the rectangular runs too — COMPLETED 2026-09-08T14:10 per sacct; closed when the project was retired
+- 2026-10-29 — run — 342311_2 finished — wall 22:02: rectangular_adapt_pl_eff_1_outer: job B, numba chain (8c / 96gb / 48 h) at the standard 1250-pixel mesh under PIPELINE=rectangular_adapt; reloads job A 342237_2; the 09-07 ask: submit the rectangular runs too — COMPLETED 2026-09-08T15:33 per sacct; closed when the project was retired
 - 2026-09-07 — result — accepted delaunay_adapt_split_pl_sersic_0 (R-20260907-01): Accepted. The numba delaunay_adapt_split chain on pl_sersic_0 (job 342273_0, 22 h 08 m, 1250 Hilbert / 1310 Delaunay pixels) lands evidence_increase +2.557 (< 5): no false detection.
   The best cell parks a 1.6e6 Msun nuisance subhalo at (-1.43, -2.36)", outside the ring. The shift from the legacy -0.30 comes with the S/N-3 adapt cap, adaptive over-sampling and the numba pool, not a code fault. Results are good; run the remaining datasets at 1250 pixels; no more 1000-pixel runs.
 - 2026-09-07 — run — 342311_0 submitted: rectangular_adapt_pl_sersic_0 — job B, numba chain (8c / 96gb / 48 h) at the standard 1250-pixel mesh under PIPELINE=rectangular_adapt; reloads job A 342237_0; the 09-07 ask: submit the rectangular runs too
