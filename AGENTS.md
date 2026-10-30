@@ -102,6 +102,11 @@ not re-derive them.
   - `running <project> <jobid>` / `done <project> <jobid> [--failed] [--wall
     H:MM] [--note …]` — what the cluster said; `done` moves the run into the
     log.
+  - `sync-runs <project> --digest <digest.json> [--dry-run]` — the same two
+    facts, read from a PyAutoFit campaign digest (`autofit.campaign`): `open`
+    runs whose tasks started become `running`, runs whose tasks all ended go
+    through `done` with the task counts. Matched by SLURM job id; never writes
+    a `result`, `lesson` or `## Now` (decision 64).
   - `log <project> "<text>" [--kind note|result|lesson]` — the human's words,
     dated today, at the head of the log.
   - `now <project> "<text>"` — rewrites `## Now`.
