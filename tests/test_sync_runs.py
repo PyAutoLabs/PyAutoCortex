@@ -214,3 +214,74 @@ def test_check_validates_the_campaign_fields(tmp_path, field, value, message):
     yml.write_text(yml.read_text().replace(
         '  note: "the fixture project"', f'  note: "the fixture project"\n  {field}: {value}', 1))
     assert any(message in p for p in cortex.check_problems(root)), cortex.check_problems(root)
+
+
+def test_pending_array_slice_keeps_the_run_on_the_ledger(tmp_path):
+    # review finding 1: the scheduler reports a pending slice as one compound row
+    root = _copy(tmp_path)
+    tasks = [_task(3002, 0, "completed"), _task(3002, 1, "completed"),
+             {"key": "3002_[2-3]", "job_id": "3002_[2-3]", "state": "pending"}]
+    out = cortex.sync_runs(root, "example", _digest(tmp_path, tasks),
+                           cortex.date.fromisoformat(TODAY))
+    runs, _ = _runs(root)
+    assert runs["3002_[0-3]"] == "running"
+    assert out[0] == "sync-runs: example: 0 changed"
+    # an index with no row at all also keeps it on the ledger
+    root2 = _copy(tmp_path / "b")
+    tasks = [_task(3002, i, "completed") for i in range(3)]
+    cortex.sync_runs(root2, "example", _digest(tmp_path / "b", tasks),
+                     cortex.date.fromisoformat(TODAY))
+    assert "3002_[0-3]" in _runs(root2)[0]
+    # cancelled stubs count per index and do end the run
+    root3 = _copy(tmp_path / "c")
+    tasks = [_task(3002, 0, "completed"),
+             {"key": "3002_[1-3]", "job_id": "3002_[1-3]", "state": "cancelled"}]
+    out = cortex.sync_runs(root3, "example", _digest(tmp_path / "c", tasks),
+                           cortex.date.fromisoformat(TODAY))
+    assert "3 cancelled, 1 completed" in out[1]
+    assert "3002_[0-3]" not in _runs(root3)[0]
+
+
+def test_bare_job_with_a_pending_stub_is_not_done(tmp_path):
+    root = _copy(tmp_path)
+    tasks = [_task(3003, 0, "completed"),
+             {"key": "3003_[1-9%2]", "job_id": "3003_[1-9%2]", "state": "pending"}]
+    cortex.sync_runs(root, "example", _digest(tmp_path, tasks),
+                     cortex.date.fromisoformat(TODAY))
+    assert _runs(root)[0]["3003"] == "running"
+
+
+def test_a_refused_sync_writes_nothing(tmp_path):
+    # review finding 2: every edit is made in memory and written once
+    root = _copy(tmp_path)
+    before = (root / EX).read_text()
+    digest = _digest(tmp_path, [_task(3002, i, "completed") for i in range(4)]
+                     + [_task(3003, 0, "running")])
+    orig = cortex.parse_ledger
+    calls = {"n": 0}
+
+    def failing(text, key, path, rel):
+        led = orig(text, key, path, rel)
+        calls["n"] += 1
+        if calls["n"] > 1:  # the read-back of the combined edit
+            led.problems.append("injected")
+        return led
+
+    cortex.parse_ledger = failing
+    try:
+        with pytest.raises(cortex.CortexError):
+            cortex.sync_runs(root, "example", digest, cortex.date.fromisoformat(TODAY))
+    finally:
+        cortex.parse_ledger = orig
+    assert (root / EX).read_text() == before
+
+
+def test_entry_older_than_the_log_head_is_refused(tmp_path):
+    # review finding 3: newest-first holds for the running entry too
+    root = _copy(tmp_path)
+    before = (root / EX).read_text()
+    digest = _digest(tmp_path, [_task(3003, 0, "running")])
+    r = _run("sync-runs", "example", "--digest", str(digest), "--today", "2026-08-01", root=root)
+    assert r.returncode == 1
+    assert "newest-first" in r.stderr
+    assert (root / EX).read_text() == before

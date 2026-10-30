@@ -979,19 +979,73 @@ def read_digest(path: Path) -> "tuple[dict, list[dict]]":
     return digest, tasks
 
 
+def _indices(text: str) -> "set[int] | None":
+    """The array indices a bracket like `[2-3]`, `[586,588-594]` or `[0-9%4]`
+    names; None when there is no bracket. A part that does not parse is skipped."""
+    m = re.search(r"\[([^\]]*)\]", text or "")
+    if not m:
+        return None
+    out: "set[int]" = set()
+    for part in m.group(1).split("%")[0].split(","):
+        lo, _, hi = part.strip().partition("-")
+        if lo.isdigit() and (not hi or hi.isdigit()):
+            out.update(range(int(lo), int(hi or lo) + 1))
+    return out
+
+
+def _task_indices(t: dict) -> "set[int] | None":
+    """The array indices one `tasks.jsonl` row stands for: its `key` suffix
+    (`3002_1`), or — for a pending array slice the scheduler reports as one row
+    (`job_id` `3002_[2-3]`) — every index in its bracket. None when the row names
+    no index (a plain job)."""
+    for field in ("key", "job_id"):
+        found = _indices(str(t.get(field, "")))
+        if found is not None:
+            return found
+    suffix = str(t.get("key", "")).rpartition("_")[2]
+    return {int(suffix)} if suffix.isdigit() else None
+
+
 def _tasks_of(ident: str, tasks: "list[dict]") -> "list[dict]":
+    """The rows of the run's job (base id of `job_id`, so a compound pending stub
+    `3002_[2-3]` belongs to job 3002) that touch the indices the ident names."""
     job, wanted = _task_set(ident)
     out = []
     for t in tasks:
-        if str(t.get("job_id")) != job:
+        if str(t.get("job_id", "")).split("_")[0] != job:
             continue
         if wanted is not None:
-            key = str(t.get("key", ""))
-            suffix = key.rpartition("_")[2]
-            if not suffix.isdigit() or int(suffix) not in wanted:
+            idx = _task_indices(t)
+            if idx is None or not (idx & wanted):
                 continue
         out.append(t)
     return out
+
+
+def _weight(t: dict, wanted: "set[int] | None") -> int:
+    """How many tasks a row counts for: one, or the indices of a compound slice
+    (inside the ident's set when it names one)."""
+    idx = _task_indices(t)
+    if idx is None or len(idx) <= 1:
+        return 1
+    return len(idx & wanted) if wanted is not None else len(idx)
+
+
+def _all_ended(ident: str, matched: "list[dict]") -> bool:
+    """Every task the run stands for has ended. For an ident naming indices,
+    each index needs a row and all its rows must be terminal; for a bare job id,
+    no row (compound pending stubs included) may be unfinished."""
+    if not matched:
+        return False
+    if any(str(t["state"]) not in TERMINAL_TASK_STATES for t in matched):
+        return False
+    _, wanted = _task_set(ident)
+    if wanted is None:
+        return True
+    covered: "set[int]" = set()
+    for t in matched:
+        covered |= _task_indices(t) or set()
+    return wanted <= covered
 
 
 def _wall(tasks: "list[dict]") -> "str | None":
@@ -1007,9 +1061,11 @@ def _wall(tasks: "list[dict]") -> "str | None":
     return f"{seconds // 3600}:{seconds % 3600 // 60:02d}"
 
 
-def _counts(tasks: "list[dict]") -> str:
+def _counts(tasks: "list[dict]", wanted: "set[int] | None" = None) -> str:
     from collections import Counter
-    c = Counter(str(t["state"]) for t in tasks)
+    c: "Counter[str]" = Counter()
+    for t in tasks:
+        c[str(t["state"])] += _weight(t, wanted)
     return ", ".join(f"{n} {s}" for s, n in sorted(c.items(), key=lambda x: (-x[1], x[0])))
 
 
@@ -1029,50 +1085,70 @@ def sync_runs(root: Path, key: str, digest_path: Path, today: date, *,
     """Bring `## Runs` in line with a campaign digest — cluster facts only.
 
     A run line is matched to the digest's tasks by its SLURM job id (the array
-    job), narrowed to the array indices its ident names (`3002_[0-3]`). An `open`
-    run with a task that has started becomes `running` (with a `run` entry); a run
-    whose matched tasks have all ended goes through `done`, with the task counts
-    as its note and `--failed` when none completed. Nothing else is written:
-    never a `result` or `lesson`, never `## Now`. Returns the lines to print, the
-    first `sync-runs: <project>: <n> changed`."""
+    job), narrowed to the array indices its ident names (`3002_[0-3]`); a pending
+    array slice reported as one row (`3002_[2-3]`) stands for each of its
+    indices. An `open` run with a task that has started becomes `running` (with a
+    `run` entry); a run all of whose tasks have ended — every index it names
+    covered by a terminal row — leaves `## Runs` as `done` would, with the task
+    counts as its note and `failed` when none completed. Every edit is made in
+    memory, read back, and written once: a refusal writes nothing. Never a
+    `result` or `lesson`, never `## Now`. Returns the lines to print, the first
+    `sync-runs: <project>: <n> changed`."""
     digest, tasks = read_digest(digest_path)
     led = _ledger_at(root, key)
     campaign = digest.get("campaign") or "?"
     source = f"digest {campaign} updated {digest.get('updated') or '?'}"
     changes: "list[str]" = []
     notes: "list[str]" = []
+    entries: "list[str]" = []
+    remaining: "list[Run]" = []
     seen_jobs: "set[str]" = set()
-    for run in list(led.runs):
+    stamp = today.isoformat()
+    for run in led.runs:
+        job, wanted = _task_set(run.ident)
+        seen_jobs.add(job)
         matched = _tasks_of(run.ident, tasks)
-        seen_jobs.add(_task_set(run.ident)[0])
         if not matched:
             notes.append(f"  {run.ident}: not in the digest — unchanged")
+            remaining.append(run)
             continue
+        counts = _counts(matched, wanted)
         states = [str(t["state"]) for t in matched]
-        if all(s in TERMINAL_TASK_STATES for s in states):
-            completed = states.count("completed")
-            failed = completed == 0
-            note = f"{_counts(matched)} ({source})"
-            changes.append(f"  {run.ident}: done — {'failed' if failed else 'finished'}: "
-                           f"{_counts(matched)}")
-            if not dry_run:
-                finish_run(root, key, run.ident, today, failed=failed,
-                           wall=_wall(matched), note=note)
-        elif run.state == "open" and any(s in STARTED_TASK_STATES for s in states):
-            changes.append(f"  {run.ident}: open → running ({_counts(matched)})")
-            if not dry_run:
-                set_running(root, key, run.ident)
-                current = _ledger_at(root, key)
-                raw = current.path.read_text(encoding="utf-8")
-                _write(current, _prepend_entry(
-                    raw, f"- {today.isoformat()} — run — {run.ident} running: {run.what} "
-                         f"— {_counts(matched)} ({source})"))
-    unknown = sorted({str(t.get("job_id")) for t in tasks
-                      if t.get("job_id") and str(t.get("job_id")) not in seen_jobs})
+        if _all_ended(run.ident, matched):
+            completed = sum(_weight(t, wanted) for t in matched if t["state"] == "completed")
+            verb = "failed" if completed == 0 else "finished"
+            wall = _wall(matched)
+            head = " — ".join([f"{run.ident} {verb}"] + ([f"wall {wall}"] if wall else []))
+            entries.append(f"- {stamp} — run — {head}: {run.what} — {counts} ({source})")
+            changes.append(f"  {run.ident}: done — {verb}: {counts}")
+            continue
+        if run.state == "open" and any(s in STARTED_TASK_STATES for s in states):
+            run.state = "running"
+            entries.append(f"- {stamp} — run — {run.ident} running: {run.what} — {counts} "
+                           f"({source})")
+            changes.append(f"  {run.ident}: open → running ({counts})")
+        remaining.append(run)
+    unknown = sorted({str(t.get("job_id", "")).split("_")[0] for t in tasks
+                      if t.get("job_id")} - seen_jobs)
     if unknown:
         shown = ", ".join(unknown[:8]) + (f" … (+{len(unknown) - 8})" if len(unknown) > 8 else "")
         notes.append(f"  {len(unknown)} digest job(s) are not runs in {led.rel} "
                      f"and were ignored: {shown}")
+
+    if entries and not dry_run:
+        if led.log and stamp < led.log[0].date:
+            raise CortexError(f"the log's head is {led.log[0].date}; entries dated {stamp} "
+                              f"would break newest-first — nothing written")
+        text = _replace_section(led.path.read_text(encoding="utf-8"), "Runs",
+                                _runs_body(remaining))
+        for entry in entries:
+            text = _prepend_entry(text, entry)
+        after = parse_ledger(text, led.key, led.path, led.rel)
+        if after.problems:
+            raise CortexError("the edit would not read back — nothing written: "
+                              + "; ".join(after.problems))
+        led.path.write_text(text, encoding="utf-8")
+
     head = f"sync-runs: {key}: {len(changes)} changed" + (" (dry run)" if dry_run else "")
     return [head] + changes + notes
 
