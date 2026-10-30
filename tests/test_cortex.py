@@ -419,7 +419,7 @@ def test_retire_preserves_every_other_byte_of_projects_yaml(tmp_path):
 def test_every_verb_is_registered():
     parser = cortex.build_parser()
     verbs = set(parser._subparsers._group_actions[0].choices)
-    assert verbs == {"check", "new", "run", "running", "done", "log", "now", "issue", "link", "retire", "birth"}
+    assert verbs == {"check", "new", "run", "running", "done", "log", "now", "issue", "link", "retire", "birth", "sync-runs"}
 
 
 def test_a_bad_root_is_a_usage_error(tmp_path):

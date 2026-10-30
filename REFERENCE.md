@@ -56,7 +56,7 @@ Four kinds:
 
 | Kind | Written by | What it is |
 |---|---|---|
-| `run` | `cortex.py run` / `done` | `<jobid> submitted: <what>` · `<jobid> finished — wall H:MM: <what>` · `<jobid> failed: <what>` |
+| `run` | `cortex.py run` / `done` / `sync-runs` | `<jobid> submitted: <what>` · `<jobid> running: <what> — <counts> (digest …)` · `<jobid> finished — wall H:MM: <what>` · `<jobid> failed: <what>` |
 | `result` | `cortex.py log --kind result` | what the human read off the results, in their words |
 | `lesson` | `cortex.py log --kind lesson` | something the human wants kept — a trap, a rule, a fact about the setup |
 | `note` | `cortex.py log` (default), `new`, `retire` | anything else: a thought, a plan, `ledger opened`, `retired: <why>` |
@@ -96,6 +96,7 @@ creates an issue; `Issue:` is set with `new --issue` or `link`.
 | `issue <project> [-n N]` | nothing (prints) | — |
 | `link <project> <ref>` | the `Issue:` header line | the ref is not `Repo#N`, an issue URL or `none` |
 | `retire <project> --why "…"` | `projects.yaml` (`status: retired`, `note:`), one `note` entry | the row is already retired; the ledger still lists a run; `--why` holds `"` |
+| `sync-runs <project> [--digest PATH] [--dry-run]` | each run line the digest settles: `open` → `running` (+ a `run` entry), or `done` with the task counts | the digest is not a schema-1 `digest.json` with a readable `tasks.jsonl` beside it; no `--digest` and no `digest:` in the row |
 
 Every verb takes `--root <dir>` (default: this checkout) and every dated verb
 `--today YYYY-MM-DD`, so the tests run against a copy of the fixture with a
@@ -123,7 +124,9 @@ scans the raw column-0 keys and reports every duplicate with its line numbers:
 | `witness_file` | glob relative to the mirror | kept for the projects' own tooling; the Cortex no longer scores it |
 | `partition` | `gpu` \| `ral` \| `both` | which SLURM partition(s) the project runs on; `run` needs `--partition` on `both` |
 | `status` | `active` \| `dormant` \| `planned` \| `retired` | `retire` writes the last |
-| `note` | free text, **optional** | the only optional field; an empty `note:` is drift |
+| `note` | free text, **optional** | an empty `note:` is drift |
+| `campaign_file` | path relative to `local_path` (or absolute), **optional** | the project's PyAutoFit `campaign.yaml`; must end `.yaml`/`.yml`, no `..` |
+| `digest` | path relative to `local_path` (or absolute), **optional** | the pulled campaign `digest.json` `sync-runs` reads by default; must name a `digest.json`, no `..` |
 
 **Partition rule (human, 2026-09-30).** `both` means a project has GPU jobs *and*
 CPU jobs, each on its own partition — never a CPU-only array submitted as
@@ -134,6 +137,34 @@ hours. Only exemption: small CPU timing legs on `gpu` without `--gres` with ≤8
 CPUs/task, throttle ≤`%2` and no pending gres/gpu jobs (`squeue -p gpu -t PD`).
 Record a run as GPU only after `scontrol show job` shows `gres/gpu` in its TRES.
 Never reorder, hold or cancel another campaign's jobs without the human's OK.
+
+## Run status from a campaign digest (`sync-runs`)
+
+A project whose runs are PyAutoFit campaigns (`autofit.campaign`) has a
+`digest.json` with a `tasks.jsonl` beside it, pulled from the cluster by the
+project's sync CLI. `sync-runs` reads them and brings `## Runs` in line:
+
+- **The key is the SLURM job id.** A run line `3002_[0-3]` is matched to the
+  `tasks.jsonl` rows whose `job_id` is `3002` and whose `key`
+  (`<job>_<array index>`) falls in `0–3`; a bare `3002` takes every task of
+  the array. The digest's `campaign` name is reported, not matched on.
+- An `open` run with a task in `running`/`timeout_pending` or already ended
+  becomes `running`, with one `run` entry giving the task counts.
+- A run whose matched tasks have all ended (`completed`, `failed`, `timeout`,
+  `oom`, `node_fail`, `cancelled`, `preempted`) goes through `done`: the counts
+  are its note, the wall is first start → last end, and it is `failed` when no
+  task completed.
+- A run with no tasks in the digest, and a digest job with no run line, are
+  printed and left alone — `sync-runs` never adds a run (`run` records a
+  submission) and never removes one it cannot account for.
+- It is idempotent, `--dry-run` writes nothing, and the first line printed is
+  `sync-runs: <project>: <n> changed`. Exit 0 on success (changes or not),
+  1 on a malformed digest.
+
+**The boundary.** Run status is a cluster fact, so a script may record it
+from the scheduler's accounting. What the runs *mean* is the human's: a
+`result` or `lesson` entry and `## Now` are only ever written on their ask, and
+`sync-runs` writes neither (schema decision 64).
 
 ## Repository layout
 

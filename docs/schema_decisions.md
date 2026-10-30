@@ -506,3 +506,19 @@ Choices made in phase 2 — the conductor, the board and the workflows
     Why: projects were started by hand-copying an older one and never got a
     row; `drift` (decision 62) now reports such a folder as unregistered, and
     birth is the one step that prevents it.
+
+64. **Run status may be synced from a campaign digest; meaning may not**
+    (2026-10-30, PyAutoCortex#82; hpc-campaign ruling F3 — named "decision 62"
+    in the hpc-campaign ledger before 62 and 63 were taken). `cortex.py
+    sync-runs <project> --digest <digest.json>` reads a PyAutoFit
+    `autofit.campaign` digest and its `tasks.jsonl`, matches run lines by
+    SLURM job id (narrowed to the array indices the ident names), flips
+    `open → running` and calls `done` with the task counts when every matched
+    task has ended. The two run states stay (`open`, `running`); a finished run
+    is still a log entry. It writes `run` entries only — never `result`,
+    `lesson` or `## Now` — and never adds or drops a run it cannot account for.
+    `projects.yaml` gains two optional fields, `campaign_file` and `digest`.
+    Why: a status check of a campaign was 5–10 ssh round trips and a
+    hand-read `squeue`; the digest is one small file the collector already
+    writes. Decision 60 still holds: nothing in a ledger is inferred from
+    results, and a run's start and end are cluster facts.

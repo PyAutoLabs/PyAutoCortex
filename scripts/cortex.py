@@ -33,6 +33,7 @@ Usage:
     python3 scripts/cortex.py issue <project> [-n 5]               # the issue-top block
     python3 scripts/cortex.py link <project> <Repo#N | URL | none>  # set `Issue:`
     python3 scripts/cortex.py retire <project> --why "<one line>"   # a project's row
+    python3 scripts/cortex.py sync-runs <project> --digest <digest.json> [--dry-run]
 
 Exit codes: 0 = done · 1 = drift or a refused edit · 2 = bad arguments.
 """
@@ -40,9 +41,10 @@ Exit codes: 0 = done · 1 = drift or a refused edit · 2 = bad arguments.
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import sys
-from datetime import date
+from datetime import date, datetime
 from pathlib import Path
 
 import yaml
@@ -69,7 +71,9 @@ LOG_WINDOW = 5
 PROJECT_FIELDS = ("remote", "local_path", "ral_root", "mirror", "sync_cli",
                   "sync_verbs", "ledger", "assistant", "witness_file", "partition",
                   "status")
-PROJECT_OPTIONAL_FIELDS = ("note",)
+PROJECT_OPTIONAL_FIELDS = ("note", "campaign_file", "digest")
+#: the optional campaign fields: paths relative to `local_path` (or absolute).
+CAMPAIGN_FIELDS = ("campaign_file", "digest")
 PARTITIONS = ("gpu", "ral", "both")
 PROJECT_STATUSES = ("active", "dormant", "planned", "retired")
 
@@ -278,6 +282,16 @@ def _finish_row(key: str, row: dict, problems: "list[str]") -> None:
     if assistant and assistant != "none" and not re.match(r"^[A-Za-z0-9_.-]+$", assistant):
         problems.append(f"projects.yaml: {key}.assistant must be 'none' or a bare "
                         f"workspace-relative directory name (got {assistant!r})")
+    for f in CAMPAIGN_FIELDS:
+        value = row.get(f)
+        if not value:
+            continue
+        if ".." in Path(value).parts:
+            problems.append(f"projects.yaml: {key}.{f} must not climb out with `..`")
+        if f == "campaign_file" and not value.endswith((".yaml", ".yml")):
+            problems.append(f"projects.yaml: {key}.campaign_file must be a .yaml file")
+        if f == "digest" and Path(value).name != "digest.json":
+            problems.append(f"projects.yaml: {key}.digest must name a digest.json")
 
 
 def load_projects(root: Path) -> "tuple[dict[str, dict], list[str]]":
@@ -907,6 +921,163 @@ def birth_project(root: Path, key: str, row: dict, summary: str, today: date, *,
 
 
 # --------------------------------------------------------------------------- #
+# sync-runs: run status from a campaign digest (schema decision 64)
+# --------------------------------------------------------------------------- #
+DIGEST_SCHEMA = 1
+#: a task's state in `tasks.jsonl` (PyAutoFit `autofit.campaign`) that ends it.
+TERMINAL_TASK_STATES = ("completed", "failed", "timeout", "oom", "node_fail",
+                        "cancelled", "preempted")
+#: states that say a task has begun on the cluster (or already ended).
+STARTED_TASK_STATES = ("running", "timeout_pending") + TERMINAL_TASK_STATES
+
+
+def _task_set(ident: str) -> "tuple[str, set[int] | None]":
+    """The job id and the array indices a run ident names (None = every task)."""
+    m = re.match(r"^(\d+)(?:_(\d+)|_\[([\d,\-]+)\])?$", ident)
+    if not m:
+        raise CortexError(f"run ident does not parse: {ident}")
+    job, one, many = m.groups()
+    if one is not None:
+        return job, {int(one)}
+    if many is None:
+        return job, None
+    out: "set[int]" = set()
+    for part in many.split(","):
+        lo, _, hi = part.partition("-")
+        out.update(range(int(lo), int(hi or lo) + 1))
+    return job, out
+
+
+def read_digest(path: Path) -> "tuple[dict, list[dict]]":
+    """`digest.json` and the `tasks.jsonl` beside it; a CortexError if either is
+    missing or malformed. `path` may be the file or its folder."""
+    path = Path(path)
+    if path.is_dir():
+        path = path / "digest.json"
+    try:
+        digest = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as e:
+        raise CortexError(f"{path}: not a readable digest ({e})")
+    if not isinstance(digest, dict) or digest.get("schema") != DIGEST_SCHEMA:
+        raise CortexError(f"{path}: not a schema-{DIGEST_SCHEMA} campaign digest")
+    tasks_path = path.with_name("tasks.jsonl")
+    tasks: "list[dict]" = []
+    try:
+        lines = tasks_path.read_text(encoding="utf-8").splitlines()
+    except OSError as e:
+        raise CortexError(f"{tasks_path}: missing beside the digest ({e})")
+    for n, line in enumerate(lines, 1):
+        if not line.strip():
+            continue
+        try:
+            row = json.loads(line)
+        except ValueError:
+            raise CortexError(f"{tasks_path}:{n}: not JSON")
+        if not isinstance(row, dict) or "state" not in row:
+            raise CortexError(f"{tasks_path}:{n}: a task row needs a state")
+        tasks.append(row)
+    return digest, tasks
+
+
+def _tasks_of(ident: str, tasks: "list[dict]") -> "list[dict]":
+    job, wanted = _task_set(ident)
+    out = []
+    for t in tasks:
+        if str(t.get("job_id")) != job:
+            continue
+        if wanted is not None:
+            key = str(t.get("key", ""))
+            suffix = key.rpartition("_")[2]
+            if not suffix.isdigit() or int(suffix) not in wanted:
+                continue
+        out.append(t)
+    return out
+
+
+def _wall(tasks: "list[dict]") -> "str | None":
+    """H:MM from the first task start to the last task end, when both are known."""
+    try:
+        starts = [datetime.fromisoformat(t["start"]) for t in tasks if t.get("start")]
+        ends = [datetime.fromisoformat(t["end"]) for t in tasks if t.get("end")]
+    except (TypeError, ValueError):
+        return None
+    if not starts or not ends:
+        return None
+    seconds = max(0, int((max(ends) - min(starts)).total_seconds()))
+    return f"{seconds // 3600}:{seconds % 3600 // 60:02d}"
+
+
+def _counts(tasks: "list[dict]") -> str:
+    from collections import Counter
+    c = Counter(str(t["state"]) for t in tasks)
+    return ", ".join(f"{n} {s}" for s, n in sorted(c.items(), key=lambda x: (-x[1], x[0])))
+
+
+def _digest_path(root: Path, key: str, given: "str | None") -> Path:
+    if given:
+        return Path(given)
+    rows, _ = load_projects(root)
+    row = rows.get(key, {})
+    if not row.get("digest"):
+        raise CortexError(f"give --digest, or set {key}.digest in projects.yaml")
+    p = Path(row["digest"])
+    return p if p.is_absolute() else Path(row.get("local_path", "")) / p
+
+
+def sync_runs(root: Path, key: str, digest_path: Path, today: date, *,
+              dry_run: bool = False) -> "list[str]":
+    """Bring `## Runs` in line with a campaign digest — cluster facts only.
+
+    A run line is matched to the digest's tasks by its SLURM job id (the array
+    job), narrowed to the array indices its ident names (`3002_[0-3]`). An `open`
+    run with a task that has started becomes `running` (with a `run` entry); a run
+    whose matched tasks have all ended goes through `done`, with the task counts
+    as its note and `--failed` when none completed. Nothing else is written:
+    never a `result` or `lesson`, never `## Now`. Returns the lines to print, the
+    first `sync-runs: <project>: <n> changed`."""
+    digest, tasks = read_digest(digest_path)
+    led = _ledger_at(root, key)
+    campaign = digest.get("campaign") or "?"
+    source = f"digest {campaign} updated {digest.get('updated') or '?'}"
+    changes: "list[str]" = []
+    notes: "list[str]" = []
+    seen_jobs: "set[str]" = set()
+    for run in list(led.runs):
+        matched = _tasks_of(run.ident, tasks)
+        seen_jobs.add(_task_set(run.ident)[0])
+        if not matched:
+            notes.append(f"  {run.ident}: not in the digest — unchanged")
+            continue
+        states = [str(t["state"]) for t in matched]
+        if all(s in TERMINAL_TASK_STATES for s in states):
+            completed = states.count("completed")
+            failed = completed == 0
+            note = f"{_counts(matched)} ({source})"
+            changes.append(f"  {run.ident}: done — {'failed' if failed else 'finished'}: "
+                           f"{_counts(matched)}")
+            if not dry_run:
+                finish_run(root, key, run.ident, today, failed=failed,
+                           wall=_wall(matched), note=note)
+        elif run.state == "open" and any(s in STARTED_TASK_STATES for s in states):
+            changes.append(f"  {run.ident}: open → running ({_counts(matched)})")
+            if not dry_run:
+                set_running(root, key, run.ident)
+                current = _ledger_at(root, key)
+                raw = current.path.read_text(encoding="utf-8")
+                _write(current, _prepend_entry(
+                    raw, f"- {today.isoformat()} — run — {run.ident} running: {run.what} "
+                         f"— {_counts(matched)} ({source})"))
+    unknown = sorted({str(t.get("job_id")) for t in tasks
+                      if t.get("job_id") and str(t.get("job_id")) not in seen_jobs})
+    if unknown:
+        shown = ", ".join(unknown[:8]) + (f" … (+{len(unknown) - 8})" if len(unknown) > 8 else "")
+        notes.append(f"  {len(unknown)} digest job(s) are not runs in {led.rel} "
+                     f"and were ignored: {shown}")
+    head = f"sync-runs: {key}: {len(changes)} changed" + (" (dry run)" if dry_run else "")
+    return [head] + changes + notes
+
+
+# --------------------------------------------------------------------------- #
 # CLI
 # --------------------------------------------------------------------------- #
 def cmd_new(args) -> int:
@@ -955,6 +1126,13 @@ def cmd_birth(args) -> int:
         row["note"] = args.note
     print(birth_project(args.root, args.project, row, args.summary, _today(args),
                         issue=args.issue, now=args.now or ""))
+    return 0
+
+
+def cmd_sync_runs(args) -> int:
+    path = _digest_path(args.root, args.project, args.digest)
+    for line in sync_runs(args.root, args.project, path, _today(args), dry_run=args.dry_run):
+        print(line)
     return 0
 
 
@@ -1054,6 +1232,14 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--now", help="the opening `## Now` text")
     _common(p, dated=True)
     p.set_defaults(func=cmd_birth)
+
+    p = sub.add_parser("sync-runs", help="flip run lines from a campaign digest "
+                                         "(open → running, done with counts)")
+    p.add_argument("project")
+    p.add_argument("--digest", help="digest.json (or its folder); default the row's `digest`")
+    p.add_argument("--dry-run", action="store_true", help="print what would change; write nothing")
+    _common(p, dated=True)
+    p.set_defaults(func=cmd_sync_runs)
 
     p = sub.add_parser("retire", help="retire a project's row (with `birth`, the only verbs "
                                       "that write projects.yaml)")
