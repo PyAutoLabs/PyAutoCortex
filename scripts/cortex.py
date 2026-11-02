@@ -34,6 +34,7 @@ Usage:
     python3 scripts/cortex.py link <project> <Repo#N | URL | none>  # set `Issue:`
     python3 scripts/cortex.py retire <project> --why "<one line>"   # a project's row
     python3 scripts/cortex.py sync-runs <project> --digest <digest.json> [--dry-run]
+    python3 scripts/cortex.py library <project> <index_dir> [--name NAME] [--dry-run]
 
 Exit codes: 0 = done · 1 = drift or a refused edit · 2 = bad arguments.
 """
@@ -41,6 +42,7 @@ Exit codes: 0 = done · 1 = drift or a refused edit · 2 = bad arguments.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import sys
@@ -58,8 +60,11 @@ LEDGER_DIR = "projects"
 SECTIONS = ("Now", "Runs", "Log")
 HEADER_KEYS = ("Project", "Issue")
 #: what an entry is: a run set off or finished (recorded by this script), a
-#: result the human read off, a lesson they want kept, or anything else.
-KINDS = ("run", "result", "lesson", "note")
+#: result the human read off, a lesson they want kept, anything else, or the
+#: results index a library was built from (`library`, decision 65).
+KINDS = ("run", "result", "lesson", "note", "library")
+#: the kinds `log --kind` may write; `library` is written only by `library`.
+LOG_KINDS = ("run", "result", "lesson", "note")
 #: a run on the cluster is `open` (submitted, not seen running) or `running`;
 #: there is no third state — a finished run is a log entry, not a run line.
 RUN_STATES = ("open", "running")
@@ -97,7 +102,7 @@ RUN_LINE_RE = re.compile(
     r"^- (?P<ident>\d+(?:_\d+|_\[[\d,\-]+\])?) — (?P<state>open|running) — "
     r"(?P<partition>[a-z][a-z0-9_-]*) — (?P<date>\d{4}-\d{2}-\d{2}) — (?P<what>\S.*)$")
 LOG_LINE_RE = re.compile(
-    r"^- (?P<date>\d{4}-\d{2}-\d{2}) — (?P<kind>run|result|lesson|note) — (?P<text>\S.*)$")
+    r"^- (?P<date>\d{4}-\d{2}-\d{2}) — (?P<kind>" + "|".join(KINDS) + r") — (?P<text>\S.*)$")
 CONT_RE = re.compile(r"^  (?P<text>\S.*)$")
 HEADER_KEY_RE = re.compile(r"^([A-Z][A-Za-z0-9-]*):(?:[ \t]+(.*?))?[ \t]*$")
 HEADER_LINES = 12
@@ -579,8 +584,8 @@ def _prepend_entry(text: str, entry_line: str) -> str:
 
 
 def add_entry(root: Path, key: str, kind: str, text: str, today: date) -> str:
-    if kind not in KINDS:
-        raise CortexError(f"--kind must be one of {', '.join(KINDS)}")
+    if kind not in LOG_KINDS:
+        raise CortexError(f"--kind must be one of {', '.join(LOG_KINDS)}")
     text = _one_line(text, "the entry")
     led = _ledger_at(root, key)
     raw = led.path.read_text(encoding="utf-8")
@@ -1154,6 +1159,122 @@ def sync_runs(root: Path, key: str, digest_path: Path, today: date, *,
 
 
 # --------------------------------------------------------------------------- #
+# the results index a library was built from (`library`, decision 65)
+# --------------------------------------------------------------------------- #
+#: the schema of a PyAutoFit results index (`autofit.results.record.SCHEMA`).
+INDEX_SCHEMA = 1
+#: the fields `ResultRecord.from_dict` cannot do without.
+INDEX_RECORD_FIELDS = ("output_path", "root", "state")
+#: `autofit.ResultState`, in its own order — the order the counts are shown in;
+#: a state outside it follows, alphabetically.
+RESULT_STATES = ("completed", "running", "interrupted_valid_ckpt", "corrupt_ckpt",
+                 "corrupt_zip", "failed", "superseded", "never_started")
+#: the folder name `ResultsIndex` defaults to, so a bare default name says nothing.
+DEFAULT_INDEX_DIRNAME = ".autofit_index"
+
+
+def read_index_records(index_dir: Path) -> "list[dict]":
+    """The records of a PyAutoFit results index, as `ResultsIndex.records()`
+    returns them: `records/*.json`, skipping a file that does not read, lacks a
+    required field or is not `schema` 1, one per `output_path`, sorted by it.
+    A CortexError when the folder or its `index.json` is missing or unreadable;
+    an empty or absent `records/` is zero records."""
+    index_dir = Path(index_dir)
+    if not index_dir.is_dir():
+        raise CortexError(f"{index_dir}: no such results index folder")
+    manifest_path = index_dir / "index.json"
+    if not manifest_path.is_file():
+        raise CortexError(f"{index_dir}: no index.json — not a results index "
+                          f"(`python -m autofit.results index` writes one)")
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as e:
+        raise CortexError(f"{manifest_path}: not readable JSON ({e})")
+    if not isinstance(manifest, dict) or manifest.get("schema") != INDEX_SCHEMA:
+        raise CortexError(f"{manifest_path}: not a schema-{INDEX_SCHEMA} results index")
+    by_path: "dict[str, dict]" = {}
+    records_dir = index_dir / "records"
+    if records_dir.is_dir():
+        for p in sorted(records_dir.glob("*.json")):
+            try:
+                rec = json.loads(p.read_text(encoding="utf-8"))
+            except (OSError, ValueError):
+                continue
+            if not isinstance(rec, dict) or any(f not in rec for f in INDEX_RECORD_FIELDS):
+                continue
+            if rec.get("schema", INDEX_SCHEMA) != INDEX_SCHEMA:
+                continue
+            by_path[rec["output_path"]] = rec
+    return [by_path[k] for k in sorted(by_path)]
+
+
+def index_hash(records: "list[dict]") -> str:
+    """`autofit.export.index_hash`, from the JSON: sha256 over each record, in
+    output-path order, of `<output_path>|<state>|<completed_at>\\n` (a missing
+    completion time is `None`, as Python formats it)."""
+    digest = hashlib.sha256()
+    for rec in records:
+        digest.update(f"{rec['output_path']}|{rec['state']}|{rec.get('completed_at')}\n"
+                      .encode())
+    return digest.hexdigest()
+
+
+def _state_counts(records: "list[dict]") -> str:
+    from collections import Counter
+    c: "Counter[str]" = Counter(str(rec["state"]) for rec in records)
+    order = [s for s in RESULT_STATES if c[s]] + sorted(s for s in c if s not in RESULT_STATES)
+    return ", ".join(f"{s} {c[s]}" for s in order)
+
+
+def _index_name(index_dir: Path) -> str:
+    """The default `--name`: the index folder's name, or its parent's when it is
+    the default `.autofit_index`."""
+    d = Path(index_dir).resolve()
+    return d.parent.name if d.name == DEFAULT_INDEX_DIRNAME else d.name
+
+
+def library_entry(index_dir: Path, name: str) -> "tuple[str, str]":
+    """The entry text for a results index and its full hash:
+    `<name>: index <hash12> — <N> results (<state> <n>, …)`."""
+    records = read_index_records(index_dir)
+    digest = index_hash(records)
+    n = len(records)
+    text = f"{name}: index {digest[:12]} — {n} result{'' if n == 1 else 's'}"
+    if records:
+        text += f" ({_state_counts(records)})"
+    return text, digest
+
+
+def record_library(root: Path, key: str, index_dir: Path, today: date, *,
+                   name: "str | None" = None, dry_run: bool = False) -> "list[str]":
+    """Append one `library` entry naming the results index a library was built
+    from — facts read from the index files only (decision 65). One entry per
+    call: a re-run appends another dated line, it never edits one. Made in
+    memory, read back, written once; never `result`, `lesson` or `## Now`.
+    Returns the lines to print, the first `library: <project>: <entry>`."""
+    rows, _ = load_projects(root)
+    if PROJECT_KEY_RE.match(key or "") and key not in rows:
+        raise CortexError(f"{key} is not a projects.yaml key")
+    name = _one_line(name if name is not None else _index_name(index_dir), "--name")
+    text, digest = library_entry(index_dir, name)
+    led = _ledger_at(root, key)
+    stamp = today.isoformat()
+    if not dry_run:
+        if led.log and stamp < led.log[0].date:
+            raise CortexError(f"the log's head is {led.log[0].date}; an entry dated {stamp} "
+                              f"would break newest-first — nothing written")
+        new = _prepend_entry(led.path.read_text(encoding="utf-8"),
+                             f"- {stamp} — library — {text}")
+        after = parse_ledger(new, led.key, led.path, led.rel)
+        if after.problems:
+            raise CortexError("the edit would not read back — nothing written: "
+                              + "; ".join(after.problems))
+        led.path.write_text(new, encoding="utf-8")
+    head = f"library: {key}: {text}" + (" (dry run)" if dry_run else "")
+    return [head, f"  index sha256 {digest}"]
+
+
+# --------------------------------------------------------------------------- #
 # CLI
 # --------------------------------------------------------------------------- #
 def cmd_new(args) -> int:
@@ -1212,6 +1333,13 @@ def cmd_sync_runs(args) -> int:
     return 0
 
 
+def cmd_library(args) -> int:
+    for line in record_library(args.root, args.project, Path(args.index_dir), _today(args),
+                               name=args.name, dry_run=args.dry_run):
+        print(line)
+    return 0
+
+
 def cmd_retire(args) -> int:
     print(retire_project(args.root, args.project, args.why, _today(args)))
     return 0
@@ -1266,7 +1394,7 @@ def build_parser() -> argparse.ArgumentParser:
     p = sub.add_parser("log", help="write a dated entry in the human's words")
     p.add_argument("project")
     p.add_argument("text")
-    p.add_argument("--kind", default="note", choices=KINDS)
+    p.add_argument("--kind", default="note", choices=LOG_KINDS)
     _common(p, dated=True)
     p.set_defaults(func=cmd_log)
 
@@ -1316,6 +1444,15 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--dry-run", action="store_true", help="print what would change; write nothing")
     _common(p, dated=True)
     p.set_defaults(func=cmd_sync_runs)
+
+    p = sub.add_parser("library", help="log the results index a library was built from "
+                                       "(its hash and state counts)")
+    p.add_argument("project")
+    p.add_argument("index_dir", help="a PyAutoFit results index folder (holds index.json)")
+    p.add_argument("--name", help="what the entry calls it (default: the index folder's name)")
+    p.add_argument("--dry-run", action="store_true", help="print the entry; write nothing")
+    _common(p, dated=True)
+    p.set_defaults(func=cmd_library)
 
     p = sub.add_parser("retire", help="retire a project's row (with `birth`, the only verbs "
                                       "that write projects.yaml)")

@@ -522,3 +522,26 @@ Choices made in phase 2 — the conductor, the board and the workflows
     hand-read `squeue`; the digest is one small file the collector already
     writes. Decision 60 still holds: nothing in a ledger is inferred from
     results, and a run's start and end are cluster facts.
+
+65. **A `library` entry records which results a library was built from**
+    (2026-11-02, PyAutoCortex#84; results-library phase 5b — decide-and-flag,
+    awaiting the human's ruling at merge). The log gains a fifth kind,
+    `library`, written only by `cortex.py library <project> <index_dir>
+    [--name NAME]` (`log --kind` cannot write it): `<name>: index <hash12> —
+    <N> results (<state> <n>, …)`, read from a PyAutoFit results index
+    (`autofit.results`: `index.json` schema 1 and `records/*.json`). The hash
+    is `autofit.export.index_hash`, recomputed from the JSON without
+    importing autofit: sha256 over the records sorted by `output_path`, each
+    contributing `<output_path>|<state>|<completed_at>\n`, skipping a record
+    that does not read, lacks a required field or is not `schema` 1, as
+    `ResultsIndex.load` does. The counts are the records' non-zero states in
+    `ResultState` order. Facts read from the index files only, never inferred
+    (decision 60): it never writes a `result` or a `lesson` and never touches
+    `## Now` or `## Runs`. One entry per invocation — a re-run appends another
+    dated line rather than editing one, as every entry is append-only.
+    Why: a release (a catalogue, a paper's fits) has to say which results it
+    was built from, and the export package already names them by this hash;
+    a dated ledger line with the same 12 digits ties the science history to
+    the package without anyone retyping a number. Like a run's start and end
+    (decision 64), which results an index holds is a fact a script may read;
+    what they mean stays the human's.
