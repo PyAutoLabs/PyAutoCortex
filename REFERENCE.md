@@ -29,7 +29,7 @@ project.
 
 ## Log
 
-- <YYYY-MM-DD> — <run | result | lesson | note> — <text>
+- <YYYY-MM-DD> — <run | result | lesson | note | library> — <text>
   an optional continuation line, indented two spaces
 ```
 
@@ -52,7 +52,7 @@ A job id appears once per file. A retired project lists no runs.
 ### Log lines (`## Log`)
 
 Newest first — `check` refuses a date that is later than the entry above it.
-Four kinds:
+Five kinds:
 
 | Kind | Written by | What it is |
 |---|---|---|
@@ -60,6 +60,7 @@ Four kinds:
 | `result` | `cortex.py log --kind result` | what the human read off the results, in their words |
 | `lesson` | `cortex.py log --kind lesson` | something the human wants kept — a trap, a rule, a fact about the setup |
 | `note` | `cortex.py log` (default), `new`, `retire` | anything else: a thought, a plan, `ledger opened`, `retired: <why>` |
+| `library` | `cortex.py library` only | `<name>: index <hash12> — <N> results (<state> <n>, …)` — the results index a library was built from (decision 65) |
 
 The board and the issue block show the newest `LOG_WINDOW = 5` entries; the
 file keeps them all. An entry is never edited or removed: a wrong entry is
@@ -96,6 +97,7 @@ creates an issue; `Issue:` is set with `new --issue` or `link`.
 | `issue <project> [-n N]` | nothing (prints) | — |
 | `link <project> <ref>` | the `Issue:` header line | the ref is not `Repo#N`, an issue URL or `none` |
 | `retire <project> --why "…"` | `projects.yaml` (`status: retired`, `note:`), one `note` entry | the row is already retired; the ledger still lists a run; `--why` holds `"` |
+| `library <project> <index_dir> [--name NAME] [--dry-run]` | one `library` entry at the head of the log | the folder or its `index.json` is missing; `index.json` is not schema 1; the key is not a row; a `--today` earlier than the head entry |
 | `sync-runs <project> [--digest PATH] [--dry-run]` | each run line the digest settles: `open` → `running` (+ a `run` entry), or `done` with the task counts | the digest is not a schema-1 `digest.json` with a readable `tasks.jsonl` beside it; no `--digest` and no `digest:` in the row |
 
 Every verb takes `--root <dir>` (default: this checkout) and every dated verb
@@ -165,6 +167,41 @@ project's sync CLI. `sync-runs` reads them and brings `## Runs` in line:
 from the scheduler's accounting. What the runs *mean* is the human's: a
 `result` or `lesson` entry and `## Now` are only ever written on their ask, and
 `sync-runs` writes neither (schema decision 64).
+
+## The results index a library was built from (`library`)
+
+A results library — a catalogue, a data release, a paper's fits — is built
+from a PyAutoFit results index (`autofit.results.ResultsIndex`): a folder
+holding `index.json` (schema 1) and `records/<sha1>.json`, one `ResultRecord`
+per result. `library <project> <index_dir>` reads those files and prepends one
+entry naming exactly which results the library was built from:
+
+```
+- 2026-09-03 — library — dr1 v1.0: index 6369f0eaac33 — 5 results (completed 2, failed 1, superseded 1, never_started 1)
+```
+
+- **The hash is `autofit.export.index_hash`**, computed from the JSON with no
+  autofit import: sha256 over the records sorted by `output_path`, each
+  contributing `<output_path>|<state>|<completed_at>\n` (a missing completion
+  time is `None`). The entry shows its first 12 hex digits; the verb prints
+  the full hash. As in `ResultsIndex.load`, a record that does not read, lacks
+  `output_path`/`root`/`state`, or is not `schema` 1 is skipped.
+- **The counts are the records' states**, non-zero only, in `ResultState`
+  order (`completed`, `running`, `interrupted_valid_ckpt`, `corrupt_ckpt`,
+  `corrupt_zip`, `failed`, `superseded`, `never_started`); a state outside it
+  follows, alphabetically. The `counts` in `index.json` are not read: the
+  records are the truth, and the hash is taken over them.
+- `--name` is what the entry calls the library; by default the index folder's
+  name, or its parent's when it is autofit's default `.autofit_index`.
+- An index whose `records/` is empty or absent is 0 results. A missing folder,
+  a missing or non-schema-1 `index.json`, or a key with no row refuses, exit 1,
+  nothing written.
+- **One entry per call.** A re-run appends another dated line; no entry is
+  ever edited. `--dry-run` prints the entry and writes nothing.
+
+**The boundary** is decision 60's: the entry is facts read from the index
+files, never inferred. `library` writes no `result` or `lesson`, never touches
+`## Now` or `## Runs` (schema decision 65).
 
 ## Repository layout
 

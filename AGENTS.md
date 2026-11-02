@@ -77,7 +77,7 @@ not re-derive them.
   ledger file"). Title `# <key> — <one-line summary>`; header `Project:` and
   `Issue:` (`Repo#N`, an issue URL, or `none`); then exactly three sections:
   `## Now`, `## Runs` (`open | running`), `## Log` (newest first, kind
-  `run | result | lesson | note`). Every `status: active` row must have one.
+  `run | result | lesson | note | library`). Every `status: active` row must have one.
   `projects/AGENTS.md` is the doctrine for the folder.
 - **`archive/`** — frozen: the 2026-08/09 task, ruling and batch ledgers,
   kept because the science repos cite their ids. Nothing writes there; any
@@ -107,6 +107,11 @@ not re-derive them.
     runs whose tasks started become `running`, runs whose tasks all ended go
     through `done` with the task counts. Matched by SLURM job id; never writes
     a `result`, `lesson` or `## Now` (decision 64).
+  - `library <project> <index_dir> [--name NAME] [--dry-run]` — one `library`
+    entry naming the PyAutoFit results index (`autofit.results`) a library was
+    built from: its hash (equal to `autofit.export.index_hash`) and its state
+    counts, read from the index files. Facts only; never a `result`, `lesson`
+    or `## Now`; a re-run appends another line (decision 65).
   - `log <project> "<text>" [--kind note|result|lesson]` — the human's words,
     dated today, at the head of the log.
   - `now <project> "<text>"` — rewrites `## Now`.
