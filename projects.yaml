@@ -331,6 +331,20 @@ pj011646_final:
   status: retired
   note: "retired 2026-10-14: complete; tree moved to z_projects_complete 2026-10-14"
 
+sdssj0946_subhalo:
+  remote: none
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/active/sdssj0946_subhalo
+  ral_root: /mnt/ral/jnightin/active/sdssj0946_subhalo
+  mirror: none
+  sync_cli: hpc/sync
+  sync_verbs: [push, pull, logs, sync, push-data-init, pull-full, status, submit, push-submit, jobs, sacct, cancel, wait-and-pull, tail, du, check, clear-logs]
+  ledger: wiki/project/state.md
+  assistant: autolens_assistant
+  witness_file: results/**/*.json
+  partition: gpu
+  status: active
+  note: "born 2026-11-06: reproduction of He et al. 2025 (arXiv:2506.07978) on HST F814W of SDSSJ0946+1006 — SLaM chain (MGE lens light, DelaunayNN 1250 px + AdaptSplit, EPL+shear) then no/dark/luminous NFW subhalo (n_live 1200) on RAL A100s; local git, no remote"
+
 euclid_detailed:
   remote: PyAutoLabs/euclid_detailed
   local_path: /mnt/c/Users/Jammy/Workspace/Science/active/euclid_detailed
