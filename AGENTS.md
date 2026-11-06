@@ -5,222 +5,105 @@ discovering this repository. PyAutoCortex is the **Cortex** organ of the PyAuto
 organism — where the organism keeps track of what is true.
 
 <!-- repos_sync:map:begin -->
-**You are one organ of the PyAuto organism** — an agentic ecosystem for
-human-led, natural-language software development. The organs below are
-peer repositories; this repo is one of them, not a part of another.
-Canonical boundaries live in `PyAutoBrain/ORGANISM.md`; the full body map
-(every repo, not just organs) is `PyAutoMind/repos.yaml`.
+**You are one peer organ of the PyAuto organism** (human-led, natural-language software development), not a part of another. Boundaries: `PyAutoBrain/ORGANISM.md`; every repo: `PyAutoMind/repos.yaml`.
 
 | Organ | Repo | Role |
 |-------|------|------|
-| **Brain** | PyAutoBrain | Reasoning/orchestration layer; how work is decomposed and routed; the specialist agents. |
-| **Broca** | PyAutoBroca | Assistant evaluation history, upkeep evidence, collection receipts and an operational dashboard. Brain interprets; Mind tracks fixes; public assistants remain independent. |
-| **Mind** | PyAutoMind | Intent, goals, priorities, workflow state; every task starts as a markdown prompt here. |
-| **Cortex** | PyAutoCortex | The Cortex — what is true in the science: the body map (`projects.yaml`) and one ledger per science project (runs, results, learnings, where to pick up); the science mirror of the Mind. |
-| **Memory** | PyAutoMemory | Long-term scientific/software/project knowledge (see science pointer below). |
-| **Eyes** | PyAutoEyes | The Eyes — cross-project visualization dashboard over the `<lib>_visualization` repos: their registry, the `gallery/viz_manifest.yaml` read contract and the Pages board linking their PNGs. Renders and copies nothing, never judges figures (the Brain's Eyes conductor does) and never edits plot code. |
-| **Ears** | PyAutoEars | The Ears — community listening: read-only public conversation collection, the versioned community snapshot contract, coverage receipts and the dashboard. GitHub stays authoritative; Brain's Community conductor judges and drafts replies; never posts, labels, files issues or exports transcripts. |
-| **Heart** | PyAutoHeart | Health/readiness — the authoritative "is it safe to release?" verdict. |
-| **Hands** | PyAutoHands | Packaging, tagging, notebook generation, PyPI release execution. |
-| **Pulse** | PyAutoPulse | The Pulse — cross-project profiling dashboard over the `<lib>_profiling` repos: campaign intent, instance registry, the versioned `profiling-summary` read contract, ingest receipts and the Pages board. Validates the contract only; never judges, scores or issues verdicts (the Brain's profiling conductor judges). |
-| **Insight** | PyAutoInsight | Inference campaign intent, the cross-project inference instance registry, the versioned `inference-summary` read contract, ingest receipts and the evidence dashboard. Projects execute, Cortex records the science, Mind owns task state; never infers scientific acceptance or submits compute. |
-| **DNA** | PyAutoDNA | Software-stack specifications, environment inventory receipts, support rationale, upgrade campaigns and adoption history. Brain coordinates, Heart validates readiness, Hands releases, Nerves enforces runtime compatibility; collection never upgrades environments. |
-| **Nerves** | PyAutoNerves | The Nerves — the configuration/serialization layer connecting workspace conventions to libraries (layered config, version handshake, test_mode), delivered as the `autonerves` package. |
-| **Gut** | PyAutoGut | Lifecycle of condemned self-material (stale branches, stashes, dead code/tests): held as recoverable git refs through a transit window, voided on a sweep. The storage mirror of Memory. |
+| **Brain** | PyAutoBrain | Reasoning and orchestration: decomposes and routes work through its conductors and faculties. |
+| **Broca** | PyAutoBroca | Assistant evaluation history, upkeep evidence and its dashboard. |
+| **Mind** | PyAutoMind | Intent, priorities and workflow state; every task starts as a prompt here. |
+| **Cortex** | PyAutoCortex | What is true in the science: the project body map and one ledger per project. |
+| **Memory** | PyAutoMemory | Long-term scientific, software and project knowledge. |
+| **Eyes** | PyAutoEyes | Cross-project figure dashboard over the `<lib>_visualization` repos. |
+| **Ears** | PyAutoEars | Read-only community listening: conversation snapshots and coverage. |
+| **Heart** | PyAutoHeart | Health/readiness — the authoritative release verdict. |
+| **Hands** | PyAutoHands | Packaging, tagging, notebooks and PyPI release execution. |
+| **Pulse** | PyAutoPulse | Cross-project profiling dashboard over the `<lib>_profiling` repos. |
+| **Insight** | PyAutoInsight | Inference campaign intent, instance registry and evidence dashboard. |
+| **DNA** | PyAutoDNA | Software-stack specifications, environment inventories and upgrade campaigns. |
+| **Nerves** | PyAutoNerves | Configuration/serialization layer (`autonerves`): layered config, version handshake, test_mode. |
+| **Gut** | PyAutoGut | Condemned branches, stashes and dead code, held as recoverable refs until swept. |
 
-Call chain (always this order): **Brain → Heart (gate) → Build (execute)**. Brain agents are **conductors** (front-door; a human drives them; they decide *and* act) or **faculties** (read-only opinions the conductors consult; they judge and stop). New capability grows as a faculty, not a new organ, unless it owns state or effects no existing organ can.
+Call chain: **Brain → Heart (gate) → Build (execute)**. Conductors decide *and* act; faculties judge read-only and stop. New capability grows as a faculty, not an organ, unless it owns state or effects no organ can.
 
 Generated from `PyAutoMind/repos.yaml` + `PyAutoBrain/ORGANISM.md`; edit there, then run `python3 PyAutoMind/scripts/repos_sync.py --write`.
 <!-- repos_sync:map:end -->
 ## What this repo is
 
 **The Mind decides what to build, the Brain routes the work and executes
-nothing, the Cortex keeps track of what is true.** The Cortex is a
-**project ledger**: `project → runs → log`. It owns two pieces of state no
-other organ holds — the **science body map** (`projects.yaml`: every science
-project, where it lives on the laptop and on RAL, how it syncs, where its own
-commentary ledger is) and **one ledger per project** (`projects/<key>.md`:
-where the human is with it, what is on the cluster, and a dated history of
-what they set off, saw and learned).
+nothing, the Cortex keeps track of what is true.** The Cortex is a **project
+ledger**: `project → runs → log`. It holds the **science body map**
+(`projects.yaml`: every science project, its laptop and RAL paths, how it
+syncs) and **one ledger per project** (`projects/<key>.md`: a **Now**, the
+**Runs** on the cluster, and a **Log** that only ever gets longer).
 
-It is **not a second PyAutoMind**, and it is **not a task tracker**
-(2026-09-12, schema decision 60). Science is not worked as a queue of
-pre-registered questions that get done and retired: the human does runs, looks
-at results, thinks, and organically decides where to go next. So a ledger
-holds no state machine, no witness, no verdict — it holds a **Now**, the
-**Runs** on the cluster, and a **Log** that only ever gets longer. The board is
-a live view of what has been going through the human's head on each project,
-and the thing that makes a project easy to pick up after time away.
+It is **not a second PyAutoMind** and **not a task tracker** (schema decision
+60): no state machine, no witness, no verdict. **Nothing in a ledger is
+inferred from results** — run submission, start and end are cluster facts the
+script records; a `result` or `lesson` is the human's own words, written on
+their ask.
 
-**Nothing in a ledger is inferred from results.** A run's submission, start
-and end are cluster facts and the script records them. A `result` or a
-`lesson` is the human's own words, written on their ask. An agent that reads a
-results file tells the human what it sees; the human says what to log.
-
-The schema — the ledger file, the run and log line grammars, the
-`projects.yaml` subset — and the `scripts/cortex.py` verbs are in
+Schema, line grammars, every `scripts/cortex.py` verb, the `projects.yaml`
+fields, the merge classification, check-in and the board are in
 [REFERENCE.md](REFERENCE.md). Every choice is dated in
 [docs/schema_decisions.md](docs/schema_decisions.md); read decisions there, do
 not re-derive them.
 
-## Layout (operational)
+## Layout
 
-- **`projects.yaml`** — the science body map. One row per project. **This is
-  code, not ledger**: `sync_cli` and `local_path` are paths a conductor will
-  execute under, so a change to it is a human's turn — with one exception, a
-  **birth**: a diff that only adds rows, each with its `projects/<key>.md` in
-  the same push, is ledger and lands by itself (three birth PRs sat six days
-  before the gate learned the difference, 2026-09-17). Editing or dropping a
-  row is still code. `cortex.py` reads it with PyYAML and validates the
-  fields (REFERENCE.md "projects.yaml").
-- **`projects/<key>.md`** — one ledger per project (REFERENCE.md "The
-  ledger file"). Title `# <key> — <one-line summary>`; header `Project:` and
-  `Issue:` (`Repo#N`, an issue URL, or `none`); then exactly three sections:
-  `## Now`, `## Runs` (`open | running`), `## Log` (newest first, kind
-  `run | result | lesson | note | library`). Every `status: active` row must have one.
-  `projects/AGENTS.md` is the doctrine for the folder.
-- **`archive/`** — frozen: the 2026-08/09 task, ruling and batch ledgers,
-  kept because the science repos cite their ids. Nothing writes there; any
-  change under it is code for the merge gate.
-- **`checkin.yaml`** — one key, `refreshed: <UTC ISO 8601>`: when the science
-  state was last actually checked in, written by `pyauto-brain cortex checkin
-  --apply` and read back by the board. It means *last check-in*, never last
-  render; the HTML board reddens it on the reader's own clock once it is more
-  than an hour old.
-- **`scripts/cortex.py`** — the one lifecycle script (PyYAML + stdlib):
-  - `check` — every structural rule, hermetic; `cortex check: OK` or `DRIFT`
-    with one `  - …` line per finding, exit 1.
-  - `new <project> --summary "<one line>" [--issue Repo#N]` — opens a ledger
-    for a row of `projects.yaml`.
-  - `run <project> <jobid> "<what>" [--partition P]` — records a submission:
-    the run goes under `## Runs` as `open` and the log gets a `run` entry.
-    The partition is recorded, not chosen here — but CPU-only arrays go on
-    `ral` only, never `gpu`/`ral,gpu`/`gpu,ral` (human rule, 2026-09-30: they
-    filled both A100 nodes' CPUs and idled all 8 GPUs); a partition name is not
-    a device, so check `gres/gpu` in `scontrol show job` before calling a run
-    GPU. Rule and narrow timing-leg exemption: `REFERENCE.md` → `partition`.
-  - `running <project> <jobid>` / `done <project> <jobid> [--failed] [--wall
-    H:MM] [--note …]` — what the cluster said; `done` moves the run into the
-    log.
-  - `sync-runs <project> --digest <digest.json> [--dry-run]` — the same two
-    facts, read from a PyAutoFit campaign digest (`autofit.campaign`): `open`
-    runs whose tasks started become `running`, runs whose tasks all ended go
-    through `done` with the task counts. Matched by SLURM job id; never writes
-    a `result`, `lesson` or `## Now` (decision 64).
-  - `library <project> <index_dir> [--name NAME] [--dry-run]` — one `library`
-    entry naming the PyAutoFit results index (`autofit.results`) a library was
-    built from: its hash (equal to `autofit.export.index_hash`) and its state
-    counts, read from the index files. Facts only; never a `result`, `lesson`
-    or `## Now`; a re-run appends another line (decision 65).
-  - `log <project> "<text>" [--kind note|result|lesson]` — the human's words,
-    dated today, at the head of the log.
-  - `now <project> "<text>"` — rewrites `## Now`.
-  - `issue <project>` — prints the concise block that sits at the top of the
-    project's GitHub issue (Now, Runs, the last five entries) between two
-    markers; the Brain's `cortex issue --apply` writes it there.
-  - `link <project> <Repo#N | URL | none>` — sets the ledger's `Issue:`.
-  - `birth <project> --local-path … --ral-root … --sync-verbs a,b
-    --summary "<one line>" [...]` — appends one row and opens its ledger: an
-    add-only diff that `ledger_merge.py` classifies as a birth, so it lands by
-    itself. It refuses a taken key or `local_path` and restores
-    `projects.yaml` if the row or the ledger fails. The Brain's `cortex
-    birth` derives the fields from a scaffolded project folder and calls it.
-  - `retire <project> --why "<one line>"` — with `birth`, the only verbs that
-    write `projects.yaml`: the row's `status:` becomes `retired`, its `note:`
-    records why, and the ledger logs it. It refuses while the ledger still
-    lists a run.
-- **`dashboard.md` / `dashboard.html`** — GENERATED, never hand-edited: the
-  board, rendered by the Brain's cortex conductor and self-healed on `main`.
-  They are ledger for the merge gate.
+- **`projects.yaml`** — the body map. **Code, not ledger**: `sync_cli` and
+  `local_path` are paths a conductor executes under, so editing or dropping a
+  row is a human's turn. Exception: a **birth** (add-only rows, each with its
+  ledger in the same push, via `cortex.py birth`) lands by itself.
+- **`projects/<key>.md`** — one ledger per project; `projects/AGENTS.md` is
+  the folder's doctrine. Every `status: active` row must have one.
+- **`archive/`** — frozen 2026-08/09 ledgers the science repos cite. Never
+  written; any change under it is code.
+- **`checkin.yaml`** — `refreshed:`, the last real check-in (not the last
+  render); the board reddens it after an hour.
+- **`scripts/cortex.py`** — the one lifecycle script; every ledger write goes
+  through a verb (REFERENCE.md "the verb reference").
+- **`dashboard.md` / `dashboard.html`** — generated by the Brain's cortex
+  conductor and self-healed on `main`; never hand-edited.
 - **`scripts/ledger_merge.py`** — the default-deny classifier behind
-  `.github/workflows/ledger_merge.yml`: a `claude/**` push whose whole diff is
-  ledger (`projects/`, `checkin.yaml`, the two generated dashboards) lands on
-  `main` by itself; anything else waits for a human — `projects/AGENTS.md`
-  included (doctrine, not an entry), and anything under `archive/`. `python3
+  `ledger_merge.yml`: a `claude/**` push whose whole diff is ledger lands on
+  `main` by itself; anything else waits for a human. `python3
   scripts/ledger_merge.py classify --base origin/main` predicts the verdict.
 
 ## Driving the Cortex
 
-The Cortex holds state and checks itself; it does not reason. The reasoning
-lives in the Brain's **cortex conductor** — `pyauto-brain cortex <verb>`, or
-`python3 PyAutoBrain/agents/conductors/cortex/_cortex.py <verb> --cortex
-<checkout>` with no Brain install. It is read-mostly, and it splits where the
-machines split: `pull` shows what the cluster says (the laptop only — every
-`local_path` is a laptop path), `checkin` stamps, renders and pushes anywhere.
-The only bytes it writes of its own are the two generated pages and
-`checkin.yaml`; every change to a *ledger* goes through `scripts/cortex.py`.
-
-| Verb | What it does |
-|------|--------------|
-| `pull [--project KEY] [--dry-run]` | **the laptop leg** — pull every active project through its own `sync_cli`, then run its `jobs` verb where it has one and show the output verbatim. It writes nothing. It runs on the laptop only: a project's `local_path` exists on one machine, so where none is present it exits **2**, names each missing root and says "this is not the laptop — run `checkin` here and `pull` on the laptop"; where some are present it pulls those and lists the rest as skipped. `--dry-run` reaches nothing |
-| `checkin [--dry-run \| --apply] [--push \| --no-push] [--project KEY]` | **the check-in** — the one door, on any surface: stamp `checkin.yaml`, re-render the board, push the ledger where the rule allows, and summarise **by project** (Now, the runs as the ledger holds them, the last five entries, the commands you are likely to type next). It shells out to no sync CLI. `--dry-run` is the default and writes nothing; `--skip-pull` is accepted and ignored with a notice |
-| `census [--json]` | what the Cortex is holding, by project — the one-screen answer |
-| `drift [--science-root PATH] [--json]` | **the laptop leg** — where `projects.yaml` and the Science tree disagree: unregistered project folders, rows whose folder is gone, category vs status, `ral_root` category. Reads, never writes; exit **1** on an error-severity finding; a one-line skip off the laptop. `census` and `checkin` print its summary line |
-| `dashboard --check` \| `--apply` | render `dashboard.md` + `dashboard.html`; `--check` exits **1 on drift**, **2 on bad args**, anything else = the renderer could not run |
-| `issue [--project KEY] [--apply]` | the concise ledger block for each project's GitHub issue; `--apply` writes it into the issue body between the markers (needs `gh`) |
-
-**`--apply` here, `--write` there.** The conductor's verbs spell the writing
-flag `--apply` (the Brain's house spelling); `scripts/cortex.py` verbs write
-directly and take `--today` for tests.
+The reasoning lives in the Brain's **cortex conductor** (`pyauto-brain cortex
+<verb>`, or `python3 PyAutoBrain/agents/conductors/cortex/_cortex.py <verb>
+--cortex <checkout>`). It splits where the machines split: **`pull`** shows
+what the cluster says and runs on the laptop only (every `local_path` is a
+laptop path; elsewhere it exits 2 and says so); **`checkin`** stamps,
+re-renders and pushes on any surface and reaches no cluster. `census`,
+`drift`, `dashboard`, `issue` and `birth` are the rest; `pyauto-brain help
+cortex` has each. The conductor's writing flag is `--apply`; `cortex.py` verbs write
+directly.
 
 **Nothing here submits a job by itself.** A submission is made only on the
-human's ask — by the human, or by the agent in the session — with the
-project's own `sync_cli submit` line, followed at once by `cortex.py run
-<project> <jobid> "<what>"`. `running` and `done` may be typed by the agent
-from what `jobs` printed, because those are cluster facts; `log --kind result`
-and `--kind lesson` are typed only for words the human said. `pull` is the
-only leg that shells out, and only to the project's own CLI — the conductor
-adds no SSH of its own. `checkin` reaches no cluster at all, which is why it
-runs on any surface while `pull` needs the laptop the science lives on.
+human's ask, with the project's own `sync_cli submit`, followed at once by
+`cortex.py run <project> <jobid> "<what>"`. `running` / `done` may be typed
+from what `jobs` printed (cluster facts). CPU-only arrays go on `ral`, never
+`gpu` (human rule, 2026-09-30); call a run GPU only after `scontrol show job`
+shows `gres/gpu` (REFERENCE.md → `partition`).
 
-### What runs by itself
-
-Three workflows, and only these may write:
-
-| Workflow | Trigger | May write |
-|---|---|---|
-| `cortex_check.yml` | push/PR on the ledger, scripts, tests, the dashboards | **nothing** — `cortex.py check` + pytest |
-| `dashboard_refresh.yml` | push to main, PR, nightly 03:35 UTC, dispatch | `dashboard.md`, `dashboard.html` (self-heal on main; a PR run errors instead of healing) |
-| `pages_dashboard.yml` | push to `dashboard.html`, dispatch | nothing in the repo — it publishes to Pages |
-| `ledger_merge.yml` | push to `claude/**`, dispatch | merges a ledger-only branch to main |
-
-**No scheduled job mutates the ledger.** The main-writers share `concurrency:
-group: cortex-main-writers`, so two bots never race for the tip of main, and
-each re-dispatches by name what its `GITHUB_TOKEN` push cannot wake.
-
-The board is published at **<https://pyautolabs.github.io/PyAutoCortex/>** —
-`dashboard.html` as the index.
+Only `dashboard_refresh.yml` (the two pages) and `ledger_merge.yml` (ledger
+branches) write to `main`; `cortex_check.yml` and `pages_dashboard.yml` write
+nothing. **No scheduled job mutates the ledger.** The board is
+<https://pyautolabs.github.io/PyAutoCortex/>.
 
 ## The workspace-paths exception
 
-Every other organ keeps its paths inside the workspace. The Cortex is the one
-exception, and it is confined to `projects.yaml`: a project's `local_path` and
-`mirror` are absolute laptop paths **outside** the workspace (the Science
-folder under `/mnt/c/…`), because that is where the datasets, the `output/`
-trees and the pulled results live and the review happens at the laptop. The
-exception is stated in the file's header and here, and nowhere else — a ledger
-points into a project through its `projects.yaml` row, never with a bare
-absolute path of its own.
-
-## What is out of scope, and why
-
-Quoted verbatim from `PyAutoMind/complete/archive/shelved/batch_science_lane.md`
-so nobody re-derives these:
-
-> - **RAL as canonical home for the science project.** Refused above. The datasets
->   and `output/` stay under `/mnt/c/…/Science/`.
-> - **A git-courier cron on the RAL login node.** Its value collapses once the
->   laptop is canonical: the laptop has to be on to hold and push the data anyway,
->   so a courier saves almost nothing.
-> - **Globus Compute endpoint / self-hosted GitHub runner on the login node.**
->   Same reasoning, plus both are persistent login-node processes needing an
->   operator conversation.
-> - Recorded so nobody re-derives them: SSH from a Claude container is a
->   non-starter in every variant (HTTPS-only proxied egress, no keys); Open
->   OnDemand is an admin-installed inbound portal; Cirun cannot reach someone
->   else's SLURM.
-
-Every Cortex project therefore runs from the laptop.
+The Cortex is the one organ with paths outside the workspace, confined to
+`projects.yaml`: `local_path` and `mirror` are absolute laptop paths (the
+Science folder under `/mnt/c/…`) where datasets and `output/` live. A ledger
+points into a project only through its row, never with a bare absolute path.
+Every Cortex project runs from the laptop: RAL as canonical home, a login-node
+courier, Globus/self-hosted runners and SSH from a Claude container were all
+refused — see `PyAutoMind/complete/archive/shelved/batch_science_lane.md`
+before reopening any of them.
 
 ## Hard rules
 
@@ -235,8 +118,7 @@ Every Cortex project therefore runs from the laptop.
    failing check leaves the branch for a human.
 5. **Never touch `archive/`.** It is frozen; the merge gate refuses it.
 6. **No hand-written HTML.** `dashboard.html` is rendered by the cortex
-   conductor; a hand edit is drift that `dashboard_refresh.yml` will overwrite
-   on the next push to `main`.
+   conductor; a hand edit is drift that `dashboard_refresh.yml` will overwrite.
 
 <!-- repos_sync:remote:begin -->
 ## Remote sessions (Claude Code on web and mobile)
@@ -257,12 +139,6 @@ nothing has set it up — this block is what does.
   `mcp__github__*` tools; `PyAutoBrain/skills/GITHUB_ACCESS.md` maps each
   `gh` operation onto its tool and is the one full page on the subject.
 <!-- repos_sync:remote:end -->
-## When in doubt
-
-Read [README.md](README.md) and [REFERENCE.md](REFERENCE.md). The birth epic's
-ledger is `PyAutoMind/complete/archive/epics/cortex_birth_epic.md`; the
-2026-09-12 redesign is schema decision 60.
-
 <!-- repos_sync:history:begin -->
 ## Never rewrite history
 
