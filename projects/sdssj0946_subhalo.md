@@ -10,8 +10,10 @@ Pipeline written and test-mode validated; chain about to be submitted to RAL gpu
 ## Runs
 
 - 414440 — open — gpu — 2026-11-06 — SLaM chain (SP→Pix1→Pix2→L→M→ST), RAL gpu A100, base PyAuto_wt/sdssj0946-h25
+- 414452 — open — gpu — 2026-11-06 — Subhalo phase array 0-2 (none/dark/luminous, n_live 1200), afterok:414440
 
 ## Log
 
+- 2026-11-06 — run — 414452 submitted: Subhalo phase array 0-2 (none/dark/luminous, n_live 1200), afterok:414440
 - 2026-11-06 — run — 414440 submitted: SLaM chain (SP→Pix1→Pix2→L→M→ST), RAL gpu A100, base PyAuto_wt/sdssj0946-h25
 - 2026-11-06 — note — ledger opened
