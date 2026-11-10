@@ -9,11 +9,15 @@ Pipeline written and test-mode validated; chain about to be submitted to RAL gpu
 
 ## Runs
 
-- 414796 — open — gpu — 2026-11-10 — Subhalo array none/dark/luminous, priors mapped y->-y from H25, afterok:414795
-- 414821 — open — gpu — 2026-11-10 — Luminous subhalo resubmitted (414796_2 crashed at start-up: concurrent search_internal removal race)
+- 414911 — open — gpu — 2026-11-10 — H25 mock (Table 3 luminous subhalo): SLaM chain
+- 414912 — open — gpu — 2026-11-10 — H25 mock: subhalo array none/dark/luminous, afterok:414911
 
 ## Log
 
+- 2026-11-10 — run — 414912 submitted: H25 mock: subhalo array none/dark/luminous, afterok:414911
+- 2026-11-10 — run — 414911 submitted: H25 mock (Table 3 luminous subhalo): SLaM chain
+- 2026-11-10 — run — 414821 finished — wall 5:06: Luminous subhalo resubmitted (414796_2 crashed at start-up: concurrent search_internal removal race)
+- 2026-11-10 — run — 414796 finished — wall 4:18: Subhalo array none/dark/luminous, priors mapped y->-y from H25, afterok:414795
 - 2026-11-10 — run — 414821 submitted: Luminous subhalo resubmitted (414796_2 crashed at start-up: concurrent search_internal removal race)
 - 2026-11-10 — run — 414795 finished — wall 0:16: Source Tune rerun on current main (Sibson + AdaptSplit log-det fixes); SP..M reused
 - 2026-11-10 — run — 414796 submitted: Subhalo array none/dark/luminous, priors mapped y->-y from H25, afterok:414795
