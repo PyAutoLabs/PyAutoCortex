@@ -9,11 +9,11 @@ Pipeline written and test-mode validated; chain about to be submitted to RAL gpu
 
 ## Runs
 
-- 414911 — open — gpu — 2026-11-10 — H25 mock (Table 3 luminous subhalo): SLaM chain
-- 414912 — open — gpu — 2026-11-10 — H25 mock: subhalo array none/dark/luminous, afterok:414911
 
 ## Log
 
+- 2026-11-11 — run — 414912 finished — wall 4:24: H25 mock: subhalo array none/dark/luminous, afterok:414911
+- 2026-11-11 — run — 414911 finished — wall 4:30: H25 mock (Table 3 luminous subhalo): SLaM chain
 - 2026-11-10 — run — 414912 submitted: H25 mock: subhalo array none/dark/luminous, afterok:414911
 - 2026-11-10 — run — 414911 submitted: H25 mock (Table 3 luminous subhalo): SLaM chain
 - 2026-11-10 — run — 414821 finished — wall 5:06: Luminous subhalo resubmitted (414796_2 crashed at start-up: concurrent search_internal removal race)
