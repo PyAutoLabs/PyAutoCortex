@@ -75,7 +75,7 @@ subhalo_validation:
 
 subhalo:
   remote: none
-  local_path: /mnt/c/Users/Jammy/Science/active/subhalo
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/active/subhalo
   ral_root: /mnt/ral/jnightin/active/subhalo
   mirror: none
   sync_cli: hpc/sync
@@ -103,7 +103,7 @@ euclid:
 
 euclid_dr1_prelim:
   remote: none
-  local_path: /mnt/c/Users/Jammy/Science/archive/euclid_dr1_prelim
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/archive/euclid_dr1_prelim
   ral_root: /mnt/ral/jnightin/archive/euclid_dr1_prelim
   mirror: none
   sync_cli: hpc/sync
@@ -179,7 +179,7 @@ profiling:
 
 cowls_diana:
   remote: none
-  local_path: /mnt/c/Users/Jammy/Science/archive/cowls_diana
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/archive/cowls_diana
   ral_root: /mnt/ral/jnightin/archive/cowls_diana
   mirror: none
   sync_cli: hpc/sync
@@ -235,7 +235,7 @@ slope_hierarchy_scale:
 
 pj011646:
   remote: Jammy2211/PJ011646
-  local_path: /mnt/c/Users/Jammy/Science/archive/PJ011646
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/archive/PJ011646
   ral_root: /mnt/ral/jnightin/archive/PJ011646
   mirror: none
   sync_cli: hpc/sync
@@ -305,7 +305,7 @@ autofit_inference:
 
 euclid_sersics:
   remote: none
-  local_path: /mnt/c/Users/Jammy/Science/euclid_sersics
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/euclid_sersics
   ral_root: /mnt/ral/jnightin/euclid_sersics
   mirror: none
   sync_cli: hpc/sync
@@ -361,7 +361,7 @@ euclid_detailed:
 
 cowls:
   remote: PyAutoLabs/cowls
-  local_path: /mnt/c/Users/Jammy/Science/active/cowls
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/active/cowls
   ral_root: /mnt/ral/jnightin/active/cowls
   mirror: none
   sync_cli: hpc/sync
@@ -375,7 +375,7 @@ cowls:
 
 cowls_ansofi:
   remote: PyAutoLabs/cowls_ansofi
-  local_path: /mnt/c/Users/Jammy/Science/active/cowls_ansofi
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/active/cowls_ansofi
   ral_root: /mnt/ral/jnightin/active/cowls_ansofi
   mirror: none
   sync_cli: hpc/sync
