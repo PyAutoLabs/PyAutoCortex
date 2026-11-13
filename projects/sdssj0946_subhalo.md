@@ -12,6 +12,7 @@ Pipeline written and test-mode validated; chain about to be submitted to RAL gpu
 
 ## Log
 
+- 2026-11-13 — note — shelved (status dormant) on the human's decision in the 2026-11-13 project review
 - 2026-11-11 — run — 414912 finished — wall 4:24: H25 mock: subhalo array none/dark/luminous, afterok:414911
 - 2026-11-11 — run — 414911 finished — wall 4:30: H25 mock (Table 3 luminous subhalo): SLaM chain
 - 2026-11-10 — run — 414912 submitted: H25 mock: subhalo array none/dark/luminous, afterok:414911

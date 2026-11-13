@@ -98,8 +98,8 @@ euclid:
   assistant: none
   witness_file: catalogue/**/*.csv
   partition: both
-  status: dormant
-  note: "NO PyAutoLabs remote by ruling 2026-09-01: tracks DR1 tile-keyed catalogue CSV, personal remote Jammy2211/euclid-dr1-modeling, nested Overleaf paper repo, 34 GB; code half = PyAutoLabs/euclid_strong_lens_modeling_pipeline; witness undefined until a science task pre-registers one; dormant 2026-09-07: superseded by euclid_dr1_prelim, which phase 4 births; local output/ cleared 2026-09-07 (60 GB of May–June DR1 grade_ab runs, still on RAL under /mnt/ral/jnightin/euclid); superseded by euclid_dr1 (euclid_dr1_prelim defunct) per the human 2026-10-15; folder kept under Science/active and RAL active/ by human decision 2026-10-14; RAL tree moved to the category layout 2026-10-15"
+  status: retired
+  note: "retired 2026-11-13: Retired on the human's decision in the 2026-11-13 project review (was dormant, superseded by euclid_dr1); previously: NO PyAutoLabs remote by ruling 2026-09-01: tracks DR1 tile-keyed catalogue CSV, personal remote Jammy2211/euclid-dr1-modeling, nested Overleaf paper repo, 34 GB; code half = PyAutoLabs/euclid_strong_lens_modeling_pipeline; witness undefined until a science task pre-registers one; dormant 2026-09-07: superseded by euclid_dr1_prelim, which phase 4 births; local output/ cleared 2026-09-07 (60 GB of May–June DR1 grade_ab runs, still on RAL under /mnt/ral/jnightin/euclid); superseded by euclid_dr1 (euclid_dr1_prelim defunct) per the human 2026-10-15; folder kept under Science/active and RAL active/ by human decision 2026-10-14; RAL tree moved to the category layout 2026-10-15"
 
 euclid_dr1_prelim:
   remote: none
@@ -117,8 +117,8 @@ euclid_dr1_prelim:
 
 euclid_dr1:
   remote: none
-  local_path: /mnt/c/Users/Jammy/Workspace/Science/active/euclid_dr1
-  ral_root: /mnt/ral/jnightin/active/euclid_dr1
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/complete/euclid_dr1
+  ral_root: /mnt/ral/jnightin/complete/euclid_dr1
   mirror: none
   sync_cli: hpc/sync
   sync_verbs: [push, pull, logs, sync, push-data-init, pull-full, status, submit, push-submit, jobs, sacct, cancel, wait-and-pull, tail, du, check, clear-logs]
@@ -126,8 +126,8 @@ euclid_dr1:
   assistant: autolens_assistant
   witness_file: results/**/*.json
   partition: ral
-  status: active
-  note: "born 2026-09-11: the actual DR1 run on the sep1 segmentation delivery (Segmentation.zip = 3 nested batch zips, 15032 tiles, every tile already in the pipeline dataset layout); born by cloning euclid_strong_lens_modeling_pipeline main with config/visualize colormap back to autoarray; first task reruns the ten euclid_dr1_prelim lenses on the new data; remote none until the human creates one"
+  status: retired
+  note: "retired 2026-11-13: Complete, on the human's decision in the 2026-11-13 project review; previously: born 2026-09-11: the actual DR1 run on the sep1 segmentation delivery (Segmentation.zip = 3 nested batch zips, 15032 tiles, every tile already in the pipeline dataset layout); born by cloning euclid_strong_lens_modeling_pipeline main with config/visualize colormap back to autoarray; first task reruns the ten euclid_dr1_prelim lenses on the new data; remote none until the human creates one"
 
 analytic_gaussian:
   remote: none
@@ -286,8 +286,8 @@ autolens_inference:
   assistant: autolens_assistant
   witness_file: results/**/*.json
   partition: both
-  status: active
-  note: "born 2026-09-10 as the from-scratch restart of inference_programme (retired PyAutoCortex#22); nothing inherited; phase 1 = birth (PyAutoMind#399), first task slam_hst_base"
+  status: retired
+  note: "retired 2026-11-13: Retired on the human's decision in the 2026-11-13 project review; previously: born 2026-09-10 as the from-scratch restart of inference_programme (retired PyAutoCortex#22); nothing inherited; phase 1 = birth (PyAutoMind#399), first task slam_hst_base"
 
 autofit_inference:
   remote: PyAutoLabs/autofit_inference
@@ -300,8 +300,8 @@ autofit_inference:
   assistant: autofit_assistant
   witness_file: results/**/*.json
   partition: ral
-  status: active
-  note: "born 2026-10-07 as search-extensibility B1 (PyAutoMind#492); harness B2; B3 wave-1 pilot (autofit_inference#4) flipped this to active 2026-10-08"
+  status: dormant
+  note: "born 2026-10-07 as search-extensibility B1 (PyAutoMind#492); harness B2; B3 wave-1 pilot (autofit_inference#4) flipped this to active 2026-10-08; dormant (shelved) on the human's decision in the 2026-11-13 project review"
 
 euclid_sersics:
   remote: none
@@ -342,8 +342,8 @@ sdssj0946_subhalo:
   assistant: autolens_assistant
   witness_file: results/**/*.json
   partition: gpu
-  status: active
-  note: "born 2026-11-06: reproduction of He et al. 2025 (arXiv:2506.07978) on HST F814W of SDSSJ0946+1006 — SLaM chain (MGE lens light, DelaunayNN 1250 px + AdaptSplit, EPL+shear) then no/dark/luminous NFW subhalo (n_live 1200) on RAL A100s; local git, no remote"
+  status: dormant
+  note: "born 2026-11-06: reproduction of He et al. 2025 (arXiv:2506.07978) on HST F814W of SDSSJ0946+1006 — SLaM chain (MGE lens light, DelaunayNN 1250 px + AdaptSplit, EPL+shear) then no/dark/luminous NFW subhalo (n_live 1200) on RAL A100s; local git, no remote; dormant (shelved) on the human's decision in the 2026-11-13 project review"
 
 euclid_detailed:
   remote: PyAutoLabs/euclid_detailed
@@ -356,8 +356,8 @@ euclid_detailed:
   assistant: autolens_assistant
   witness_file: results/**/*.json
   partition: ral
-  status: active
-  note: "born 2026-10-15: advanced SLaM remodel (light[1] MGE 4x30 + point, 1250 source pixels, power-law mass[1]) of 31 euclid_dr1 grade-A threshold-100 success lenses flagged by eye — 20 source_residuals, 11 lens_light_residuals; euclid_dr1 fits pulled to output_dr1; source_lp JAX-CPU then numba-CPU like euclid_dr1; not yet submitted"
+  status: dormant
+  note: "born 2026-10-15: advanced SLaM remodel (light[1] MGE 4x30 + point, 1250 source pixels, power-law mass[1]) of 31 euclid_dr1 grade-A threshold-100 success lenses flagged by eye — 20 source_residuals, 11 lens_light_residuals; euclid_dr1 fits pulled to output_dr1; source_lp JAX-CPU then numba-CPU like euclid_dr1; not yet submitted; dormant (shelved) on the human's decision in the 2026-11-13 project review"
 
 cowls:
   remote: PyAutoLabs/cowls

@@ -11,4 +11,5 @@ Born 2026-10-15. Repo, 31 datasets, output_dr1 (euclid_dr1 fits) and scripts/sla
 
 ## Log
 
+- 2026-11-13 — note — shelved (status dormant) on the human's decision in the 2026-11-13 project review
 - 2026-10-15 — note — ledger opened
