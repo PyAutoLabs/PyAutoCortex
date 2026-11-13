@@ -53,9 +53,10 @@ on:
 # contents: write → the merge push to main and the branch delete.
 # pull-requests: write → merge through an open PR when the branch has one, so
 #   the PR records as MERGED rather than being orphaned by a direct push.
-# actions: write → re-dispatch cortex_check.yml on main. A push made with
-#   GITHUB_TOKEN triggers nothing, so without this main's check never runs on
-#   the merge commit.
+# actions: write → re-dispatch cortex_check.yml and pages_dashboard.yml on
+#   main. A push made with GITHUB_TOKEN triggers nothing, so without this
+#   main's check never runs on the merge commit and the Pages board keeps the
+#   previous render.
 permissions:
   contents: write
   pull-requests: write
@@ -308,12 +309,17 @@ jobs:
           done
 
       # The merge push above was made with GITHUB_TOKEN, which triggers no
-      # workflows, so main's check must be asked explicitly or the merge
-      # commit is never checked on main.
-      - name: Run the check on main
+      # workflows, so main's check and the Pages board must be asked for
+      # explicitly — or the merge commit is never checked on main and Pages
+      # keeps serving the previous render (dashboard_refresh.yml dispatches
+      # Pages after its own heal push for the same reason). A redundant Pages
+      # dispatch is harmless: pages_dashboard.yml cancels in progress.
+      - name: Run the check on main and publish the board
         if: steps.merge.outputs.via != ''
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh workflow run cortex_check.yml --repo "${{ github.repository }}" --ref main \
             || echo "::warning::could not dispatch cortex_check.yml — its next push-triggered run will check main"
+          gh workflow run pages_dashboard.yml --repo "${{ github.repository }}" --ref main \
+            || echo "::warning::could not dispatch pages_dashboard.yml — the Pages board will lag until its next trigger"
