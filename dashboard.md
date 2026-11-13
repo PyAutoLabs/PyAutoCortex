@@ -12,7 +12,9 @@ One ledger per science project: what is on the cluster right now, what the human
 |-------|------:|
 | [Running](#projects) | 0 |
 | [Open](#projects) | 0 |
-| [Projects](#projects) | 4 |
+| [Active](#active) | 4 |
+| [Dormant](#dormant) | 3 |
+| [Retired](#retired) | 20 |
 
 <details><summary>📋 check in since last time</summary>
 
@@ -31,14 +33,16 @@ Help plan follow-up analyses or runs when requested, using the project’s own e
 
 Continue from decisions and authorizations already established in this conversation. After taking action, report what changed, what was recorded and what remains unresolved.
 
-Last check-in: 2026-10-17T11:18Z.
+Last check-in: 2026-11-13T10:53Z.
 ```
 
 </details>
 
-### Last check-in: 2026-10-17T11:18Z
+### Last check-in: 2026-11-13T10:53Z
 
 ## Summary
+
+### Active
 
 | Project | Running | Open | Last update |
 |---|---:|---:|---|
@@ -47,7 +51,42 @@ Last check-in: 2026-10-17T11:18Z.
 | slope_hierarchy_scale | 0 | 0 | 2026-10-29 |
 | ic50_workspace | 0 | 0 | 2026-10-29 |
 
+### Dormant
+
+| Project | Running | Open | Last update |
+|---|---:|---:|---|
+| autofit_inference | 0 | 0 | 2026-11-13 |
+| sdssj0946_subhalo | 0 | 0 | 2026-11-13 |
+| euclid_detailed | 0 | 0 | 2026-11-13 |
+
+### Retired
+
+| Project | Note | Last update |
+|---|---|---|
+| inference_programme | retired 2026-09-07: restarting from scratch: the project setup was unsatisfactory and it informed how the Cortex manage… | 2026-09-07 |
+| subhalo_validation | retired 2026-10-29: retired by the human 2026-10-29; final runs pulled, tree moved to the archive/ category on the lapt… | 2026-10-29 |
+| subhalo | retired 2026-10-29: defunct; local tree deleted by the human 2026-10-29 | 2026-10-29 |
+| euclid | retired 2026-11-13: Retired on the human's decision in the 2026-11-13 project review (was dormant, superseded by euclid… | 2026-11-13 |
+| euclid_dr1_prelim | retired 2026-09-25: retire euclid_dr1_prelim; tree moved to z_vault by the human | 2026-09-25 |
+| euclid_dr1 | retired 2026-11-13: Complete, on the human's decision in the 2026-11-13 project review; previously: born 2026-09-11: th… | 2026-11-13 |
+| profiling | retired 2026-10-14: human moved the tree to z_vault 2026-10-14 | - |
+| cowls_diana | retired 2026-10-14: human moved the tree to z_vault 2026-10-14 | - |
+| subhalo_simulations | retired 2026-10-14: superseded by subhalo_validation; tree moved to z_vault 2026-10-14 | - |
+| slope_hierarchy | retired 2026-09-08: wrapped up 2026-07-22 at N=5; succeeded by slope_hierarchy_scale; tree vaulted under z_projects_com… | 2026-07-22 |
+| pj011646 | retired 2026-10-02: Human requested both PJ011646 and aris_PJ011646 archived intact to z_vault on laptop and RAL; super… | - |
+| concr | retired 2026-10-14: human moved the tree to z_vault 2026-10-14; the tree is Science/complete/concr_cosmology (local_pat… | - |
+| autolens_inference | retired 2026-11-13: Retired on the human's decision in the 2026-11-13 project review; previously: born 2026-09-10 as th… | 2026-11-13 |
+| euclid_sersics | retired 2026-09-25: retire euclid_sersics as well; local tree deleted 2026-10-14 (no actionable results) | 2026-09-25 |
+| pj011646_final | retired 2026-10-14: complete; tree moved to z_projects_complete 2026-10-14 | 2026-10-14 |
+| cowls | retired 2026-10-29: defunct; local tree deleted by the human 2026-10-29 | 2026-10-29 |
+| cowls_ansofi | retired 2026-10-29: defunct; local tree deleted by the human 2026-10-29 | 2026-10-29 |
+| euclid_group | registered retired 2026-10-29 by human decision: storage tree, non-git; no RAL tree verified | 2026-10-29 |
+| cti | registered retired 2026-10-29 by human decision: archived CTI storage tree (COSMA era), non-git; no RAL tree verified | 2026-10-29 |
+| vignette | registered retired 2026-10-29 by human decision: archived vignette figures and DR1 material, non-git; no RAL tree | 2026-10-29 |
+
 ## Projects
+
+### Active
 
 <details id="project-analytic_gaussian"><summary><b>analytic_gaussian</b> — Graphical and EP against a closed-form Gaussian posterior, at ensemble scale · no runs recorded · updated 2026-10-29</summary>
 
@@ -209,6 +248,8 @@ active · ral · [PyAutoCortex#36](https://github.com/PyAutoLabs/PyAutoCortex/is
 
 </details>
 
+### Dormant
+
 <details id="project-autofit_inference"><summary><b>autofit_inference</b> — PyAutoFit search benchmark on gaussian_x3: which searches find the right answer fastest · dormant · no runs recorded · updated 2026-11-13</summary>
 
 **Registered:** 2026-10-08
@@ -302,25 +343,23 @@ dormant · ral · no issue yet
 
 </details>
 
-<details><summary>15 retired</summary>
+### Retired
 
-- [inference_programme](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/inference_programme.md) — The first inference programme, retired and restarted as autolens_inference — retired 2026-09-07: restarting from scratch: the project setup was unsatisfactory and it informed how the Cortex manages projects; RAL outputs stashed at /mnt/ral/jnightin/inference_programme_retired_2026-09-07
-- [subhalo_validation](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/subhalo_validation.md) — Do the SLaM subhalo pipelines false-detect on lenses with no subhalo — retired 2026-10-29: retired by the human 2026-10-29; final runs pulled, tree moved to the archive/ category on the laptop and on RAL
-- [subhalo](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/subhalo.md) — SLaM subhalo modelling of the SLACS lens sample — retired 2026-10-29: defunct; local tree deleted by the human 2026-10-29
-- [euclid](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid.md) — The original Euclid DR1 grade-AB catalogue project, superseded by euclid_dr1 — retired 2026-11-13: Retired on the human's decision in the 2026-11-13 project review (was dormant, superseded by euclid_dr1); previously: NO PyAutoLabs remote by ruling 2026-09-01: tracks DR1 tile-keyed catalogue CSV, personal remote Jammy2211/euclid-dr1-modeling, nested Overleaf paper repo, 34 GB; code half = PyAutoLabs/euclid_strong_lens_modeling_pipeline; witness undefined until a science task pre-registers one; dormant 2026-09-07: superseded by euclid_dr1_prelim, which phase 4 births; local output/ cleared 2026-09-07 (60 GB of May–June DR1 grade_ab runs, still on RAL under /mnt/ral/jnightin/euclid); superseded by euclid_dr1 (euclid_dr1_prelim defunct) per the human 2026-10-15; folder kept under Science/active and RAL active/ by human decision 2026-10-14; RAL tree moved to the category layout 2026-10-15
-- [euclid_dr1_prelim](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid_dr1_prelim.md) — Refit the ten DR1-prelim tiles and rebuild the catalogue on RAL — retired 2026-09-25: retire euclid_dr1_prelim; tree moved to z_vault by the human
-- [euclid_dr1](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid_dr1.md) — Does the sep1 DR1 delivery reproduce the ten prelim lenses by eye — retired 2026-11-13: Complete, on the human's decision in the 2026-11-13 project review; previously: born 2026-09-11: the actual DR1 run on the sep1 segmentation delivery (Segmentation.zip = 3 nested batch zips, 15032 tiles, every tile already in the pipeline dataset layout); born by cloning euclid_strong_lens_modeling_pipeline main with config/visualize colormap back to autoarray; first task reruns the ten euclid_dr1_prelim lenses on the new data; remote none until the human creates one
-- [slope_hierarchy](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/slope_hierarchy.md) — Hierarchical slope recovery at N=5, wrapped up and succeeded by slope_hierarchy_scale — retired 2026-09-08: wrapped up 2026-07-22 at N=5; succeeded by slope_hierarchy_scale; tree vaulted under z_projects_complete/
-- [autolens_inference](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/autolens_inference.md) — Do the PyAutoLens inference backends agree on the HST SLaM posterior — retired 2026-11-13: Retired on the human's decision in the 2026-11-13 project review; previously: born 2026-09-10 as the from-scratch restart of inference_programme (retired PyAutoCortex#22); nothing inherited; phase 1 = birth (PyAutoMind#399), first task slam_hst_base
-- [euclid_sersics](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid_sersics.md) — Why does the lens-light Sersic index pile up at the n=5 prior edge — retired 2026-09-25: retire euclid_sersics as well; local tree deleted 2026-10-14 (no actionable results)
-- [pj011646_final](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/pj011646_final.md) — Final masked PJ0116-24 power-law and multipole subhalo comparison — retired 2026-10-14: complete; tree moved to z_projects_complete 2026-10-14
-- [cowls](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/cowls.md) — euclid_detailed SLaM pipeline on COWLS JWST strong lenses, from COSJ100024+015334 — retired 2026-10-29: defunct; local tree deleted by the human 2026-10-29
-- [cowls_ansofi](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/cowls_ansofi.md) — autolens_inference Delaunay-1250 numba CPU SLaM on COSJ100024+015334, F444W only — retired 2026-10-29: defunct; local tree deleted by the human 2026-10-29
-- [euclid_group](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid_group.md) — Euclid group-scale lens modelling, complete; kept for reference — registered retired 2026-10-29 by human decision: storage tree, non-git; no RAL tree verified
-- [cti](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/cti.md) — Charge transfer inefficiency modelling, archived COSMA-era storage — registered retired 2026-10-29 by human decision: archived CTI storage tree (COSMA era), non-git; no RAL tree verified
-- [vignette](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/vignette.md) — Strong-lens vignette figures and mosaic, archived — registered retired 2026-10-29 by human decision: archived vignette figures and DR1 material, non-git; no RAL tree
-
-</details>
+- [inference_programme](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/inference_programme.md) — The first inference programme, retired and restarted as autolens_inference — retired 2026-09-07: restarting from scratch: the project setup was unsatisfactory and it informed how the Cortex manages projects; RAL outputs stashed at /mnt/ral/jnightin/inference_programme_retired_2026-09-07 — updated 2026-09-07
+- [subhalo_validation](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/subhalo_validation.md) — Do the SLaM subhalo pipelines false-detect on lenses with no subhalo — retired 2026-10-29: retired by the human 2026-10-29; final runs pulled, tree moved to the archive/ category on the laptop and on RAL — updated 2026-10-29
+- [subhalo](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/subhalo.md) — SLaM subhalo modelling of the SLACS lens sample — retired 2026-10-29: defunct; local tree deleted by the human 2026-10-29 — updated 2026-10-29
+- [euclid](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid.md) — The original Euclid DR1 grade-AB catalogue project, superseded by euclid_dr1 — retired 2026-11-13: Retired on the human's decision in the 2026-11-13 project review (was dormant, superseded by euclid_dr1); previously: NO PyAutoLabs remote by ruling 2026-09-01: tracks DR1 tile-keyed catalogue CSV, personal remote Jammy2211/euclid-dr1-modeling, nested Overleaf paper repo, 34 GB; code half = PyAutoLabs/euclid_strong_lens_modeling_pipeline; witness undefined until a science task pre-registers one; dormant 2026-09-07: superseded by euclid_dr1_prelim, which phase 4 births; local output/ cleared 2026-09-07 (60 GB of May–June DR1 grade_ab runs, still on RAL under /mnt/ral/jnightin/euclid); superseded by euclid_dr1 (euclid_dr1_prelim defunct) per the human 2026-10-15; folder kept under Science/active and RAL active/ by human decision 2026-10-14; RAL tree moved to the category layout 2026-10-15 — updated 2026-11-13
+- [euclid_dr1_prelim](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid_dr1_prelim.md) — Refit the ten DR1-prelim tiles and rebuild the catalogue on RAL — retired 2026-09-25: retire euclid_dr1_prelim; tree moved to z_vault by the human — updated 2026-09-25
+- [euclid_dr1](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid_dr1.md) — Does the sep1 DR1 delivery reproduce the ten prelim lenses by eye — retired 2026-11-13: Complete, on the human's decision in the 2026-11-13 project review; previously: born 2026-09-11: the actual DR1 run on the sep1 segmentation delivery (Segmentation.zip = 3 nested batch zips, 15032 tiles, every tile already in the pipeline dataset layout); born by cloning euclid_strong_lens_modeling_pipeline main with config/visualize colormap back to autoarray; first task reruns the ten euclid_dr1_prelim lenses on the new data; remote none until the human creates one — updated 2026-11-13
+- [slope_hierarchy](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/slope_hierarchy.md) — Hierarchical slope recovery at N=5, wrapped up and succeeded by slope_hierarchy_scale — retired 2026-09-08: wrapped up 2026-07-22 at N=5; succeeded by slope_hierarchy_scale; tree vaulted under z_projects_complete/ — updated 2026-07-22
+- [autolens_inference](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/autolens_inference.md) — Do the PyAutoLens inference backends agree on the HST SLaM posterior — retired 2026-11-13: Retired on the human's decision in the 2026-11-13 project review; previously: born 2026-09-10 as the from-scratch restart of inference_programme (retired PyAutoCortex#22); nothing inherited; phase 1 = birth (PyAutoMind#399), first task slam_hst_base — updated 2026-11-13
+- [euclid_sersics](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid_sersics.md) — Why does the lens-light Sersic index pile up at the n=5 prior edge — retired 2026-09-25: retire euclid_sersics as well; local tree deleted 2026-10-14 (no actionable results) — updated 2026-09-25
+- [pj011646_final](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/pj011646_final.md) — Final masked PJ0116-24 power-law and multipole subhalo comparison — retired 2026-10-14: complete; tree moved to z_projects_complete 2026-10-14 — updated 2026-10-14
+- [cowls](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/cowls.md) — euclid_detailed SLaM pipeline on COWLS JWST strong lenses, from COSJ100024+015334 — retired 2026-10-29: defunct; local tree deleted by the human 2026-10-29 — updated 2026-10-29
+- [cowls_ansofi](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/cowls_ansofi.md) — autolens_inference Delaunay-1250 numba CPU SLaM on COSJ100024+015334, F444W only — retired 2026-10-29: defunct; local tree deleted by the human 2026-10-29 — updated 2026-10-29
+- [euclid_group](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid_group.md) — Euclid group-scale lens modelling, complete; kept for reference — registered retired 2026-10-29 by human decision: storage tree, non-git; no RAL tree verified — updated 2026-10-29
+- [cti](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/cti.md) — Charge transfer inefficiency modelling, archived COSMA-era storage — registered retired 2026-10-29 by human decision: archived CTI storage tree (COSMA era), non-git; no RAL tree verified — updated 2026-10-29
+- [vignette](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/vignette.md) — Strong-lens vignette figures and mosaic, archived — registered retired 2026-10-29 by human decision: archived vignette figures and DR1 material, non-git; no RAL tree — updated 2026-10-29
 
 #### No ledger
 
