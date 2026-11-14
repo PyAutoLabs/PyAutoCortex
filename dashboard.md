@@ -11,7 +11,7 @@ One ledger per science project: what is on the cluster right now, what the human
 | Where | Count |
 |-------|------:|
 | [Running](#projects) | 0 |
-| [Open](#projects) | 0 |
+| [Open](#projects) | 1 |
 | [Active](#active) | 4 |
 | [Dormant](#dormant) | 3 |
 | [Retired](#retired) | 20 |
@@ -33,12 +33,12 @@ Help plan follow-up analyses or runs when requested, using the project’s own e
 
 Continue from decisions and authorizations already established in this conversation. After taking action, report what changed, what was recorded and what remains unresolved.
 
-Last check-in: 2026-11-13T12:22Z.
+Last check-in: 2026-11-13T14:04Z.
 ```
 
 </details>
 
-### Last check-in: 2026-11-13T12:22Z
+### Last check-in: 2026-11-13T14:04Z
 
 ## Summary
 
@@ -56,7 +56,7 @@ Last check-in: 2026-11-13T12:22Z.
 | Project | Running | Open | Last update |
 |---|---:|---:|---|
 | autofit_inference | 0 | 0 | 2026-11-13 |
-| sdssj0946_subhalo | 0 | 0 | 2026-11-13 |
+| sdssj0946_subhalo | 0 | 1 | 2026-11-13 |
 | euclid_detailed | 0 | 0 | 2026-11-13 |
 
 ### Retired
@@ -282,7 +282,7 @@ dormant · ral · [autofit_inference#8](https://github.com/PyAutoLabs/autofit_in
 
 </details>
 
-<details id="project-sdssj0946_subhalo"><summary><b>sdssj0946_subhalo</b> — Reproduce He et al. 2025 SDSSJ0946+1006 luminous subhalo on RAL A100 GPUs · dormant · no runs recorded · updated 2026-11-13</summary>
+<details id="project-sdssj0946_subhalo"><summary><b>sdssj0946_subhalo</b> — Reproduce He et al. 2025 SDSSJ0946+1006 luminous subhalo on RAL A100 GPUs · dormant · 0 running · 1 open · updated 2026-11-13</summary>
 
 **Registered:** 2026-11-06
 
@@ -294,17 +294,19 @@ dormant · ral · [autofit_inference#8](https://github.com/PyAutoLabs/autofit_in
 
 Pipeline written and test-mode validated; chain about to be submitted to RAL gpu.
 
-**Runs** (0)
+**Runs** (1)
 
-_nothing on the cluster_
+| Job | State | Partition | Date | Description |
+|---|---|---|---|---|
+| `415324` | open | gpu | 11-13 | Luminous subhalo rerun on real data with n_live 2400 (2x) to check Nautilus convergence; array task 2 only |
 
-<details><summary>Recent log — 5 of 16 entries</summary>
+<details><summary>Recent log — 5 of 17 entries</summary>
 
+- 2026-11-13 — *run* — 415324 submitted: Luminous subhalo rerun on real data with n_live 2400 (2x) to check Nautilus convergence; array task 2 only
 - 2026-11-13 — *note* — shelved (status dormant) on the human's decision in the 2026-11-13 project review
 - 2026-11-11 — *run* — 414912 finished — wall 4:24: H25 mock: subhalo array none/dark/luminous, afterok:414911
 - 2026-11-11 — *run* — 414911 finished — wall 4:30: H25 mock (Table 3 luminous subhalo): SLaM chain
 - 2026-11-10 — *run* — 414912 submitted: H25 mock: subhalo array none/dark/luminous, afterok:414911
-- 2026-11-10 — *run* — 414911 submitted: H25 mock (Table 3 luminous subhalo): SLaM chain
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/sdssj0946_subhalo.md)
 
