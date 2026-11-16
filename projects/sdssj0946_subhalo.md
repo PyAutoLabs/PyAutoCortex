@@ -5,13 +5,15 @@ Issue: none
 
 ## Now
 
-Luminous posterior is bimodal (light vs mass solution), and the chain decides which wins. Next: none/dark on rep1-4 for within-chain evidence; rerun light_only after the subhalo-name fix.
+Luminous posterior is bimodal (light vs mass solution), and the chain decides which wins. Running: light_only rerun (415521). Next: none/dark on rep1-4 for within-chain evidence.
 
 ## Runs
 
+- 415521 — open — gpu — 2026-11-16 — light_only rerun on the h25 chain (n_live 2400), galaxy renamed satellite after 415458_4 failed on the PyAutoLens subhalo-name assumption
 
 ## Log
 
+- 2026-11-16 — run — 415521 submitted: light_only rerun on the h25 chain (n_live 2400), galaxy renamed satellite after 415458_4 failed on the PyAutoLens subhalo-name assumption
 - 2026-11-16 — result — Repeats and tests (pulled 2026-11-16): the luminous posterior has two solutions, a light solution (bright Sersic at y 0.47, mass unconstrained) and a mass solution (NFW ~10^9.9 at the dark-fit position y 0.66, faint light). Which wins depends on the chain: light on h25 and reps 1, 2, 4; tied on rep3 (posterior 59% mass). Chain log Z varies by ~10-30 per search, so luminous - dark must be measured within each chain (none/dark only on h25 so far). Extra subhalo over-sampling changes nothing (log Z -850.02 both); independent centres on h25 leave the mass unconstrained (log Z -851.05). Details: wiki/project/2026-11-14-luminous-convergence-and-repeats.md sections 3-4
 - 2026-11-16 — run — 415458 finished — wall 15:11: Subhalo tests on the h25 chain, n_live 2400: luminous_oversample (subhalo light added to the adaptive over-sampling centres), light_only (no NFW), luminous_two_centre (independent mass and light centres) — luminous_oversample and luminous_two_centre completed; light_only FAILED at start (PyAutoLens reads subhalo.mass.centre for any galaxy named subhalo)
 - 2026-11-16 — run — 415448 finished — wall 27:10: Luminous end-to-end repeat experiment: array 0-3, each a fresh SLaM chain + luminous subhalo (n_live 2400) into h25_rep1..4, to measure how much the luminous result depends on the earlier phases (e.g. source_pix[2] regularization) — all 4 completed (walls 21:11, 14:53, 27:10, 15:34); pulled 2026-11-16
