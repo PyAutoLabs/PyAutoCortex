@@ -5,15 +5,16 @@ Issue: none
 
 ## Now
 
-Luminous mass unconstrained in lensing terms too (H25's 1D numbers are similarly broad). Running: 4 end-to-end luminous repeats (415448) and subhalo tests (415458: over-sampling, light-only, two-centre).
+Luminous posterior is bimodal (light vs mass solution), and the chain decides which wins. Next: none/dark on rep1-4 for within-chain evidence; rerun light_only after the subhalo-name fix.
 
 ## Runs
 
-- 415448 — open — gpu — 2026-11-14 — Luminous end-to-end repeat experiment: array 0-3, each a fresh SLaM chain + luminous subhalo (n_live 2400) into h25_rep1..4, to measure how much the luminous result depends on the earlier phases (e.g. source_pix[2] regularization)
-- 415458 — open — gpu — 2026-11-14 — Subhalo tests on the h25 chain, n_live 2400: luminous_oversample (subhalo light added to the adaptive over-sampling centres), light_only (no NFW), luminous_two_centre (independent mass and light centres)
 
 ## Log
 
+- 2026-11-16 — result — Repeats and tests (pulled 2026-11-16): the luminous posterior has two solutions, a light solution (bright Sersic at y 0.47, mass unconstrained) and a mass solution (NFW ~10^9.9 at the dark-fit position y 0.66, faint light). Which wins depends on the chain: light on h25 and reps 1, 2, 4; tied on rep3 (posterior 59% mass). Chain log Z varies by ~10-30 per search, so luminous - dark must be measured within each chain (none/dark only on h25 so far). Extra subhalo over-sampling changes nothing (log Z -850.02 both); independent centres on h25 leave the mass unconstrained (log Z -851.05). Details: wiki/project/2026-11-14-luminous-convergence-and-repeats.md sections 3-4
+- 2026-11-16 — run — 415458 finished — wall 15:11: Subhalo tests on the h25 chain, n_live 2400: luminous_oversample (subhalo light added to the adaptive over-sampling centres), light_only (no NFW), luminous_two_centre (independent mass and light centres) — luminous_oversample and luminous_two_centre completed; light_only FAILED at start (PyAutoLens reads subhalo.mass.centre for any galaxy named subhalo)
+- 2026-11-16 — run — 415448 finished — wall 27:10: Luminous end-to-end repeat experiment: array 0-3, each a fresh SLaM chain + luminous subhalo (n_live 2400) into h25_rep1..4, to measure how much the luminous result depends on the earlier phases (e.g. source_pix[2] regularization) — all 4 completed (walls 21:11, 14:53, 27:10, 15:34); pulled 2026-11-16
 - 2026-11-14 — note — Simona's question (2026-11-14): something in the new run gives an unbound luminous satellite mass not seen in Qiuhan's paper, same priors, maybe a code change. Checked: her plot is our run; the projected lensing mass of the luminous NFW within 0.1-0.5 arcsec spans ~2 dex (dark fit: ~0.1 dex), so it is a real 2D non-constraint, not a projection effect. Candidate code difference: subhalo light over-sampled at only 2x2; tested by 415458_3.
 - 2026-11-14 — run — 415458 submitted: Subhalo tests on the h25 chain, n_live 2400: luminous_oversample (subhalo light added to the adaptive over-sampling centres), light_only (no NFW), luminous_two_centre (independent mass and light centres)
 - 2026-11-14 — note — Correction to the 2026-11-14 result: H25 also share the subhalo mass and light centre (Sec. III.6), and their luminous mass is just as broad (log10 m200 9.5 +0.7/-1.1, c 1.7 +1.2/-0.9), so the unbounded luminous mass matches H25 rather than differing from it. Still different: luminous - dark +5.8 vs H25 +16.
