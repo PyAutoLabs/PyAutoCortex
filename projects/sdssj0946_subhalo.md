@@ -5,7 +5,7 @@ Issue: none
 
 ## Now
 
-Luminous posterior is bimodal (light vs mass solution), and the chain decides which wins. Running: light_only rerun (415521). Next: none/dark on rep1-4 for within-chain evidence.
+Dark reproduces H25; no luminous fit does (ours is light-only-like or mass-only-like, never H25's bright light plus bounded mass). Running: light_only (415521). Next: check the luminosity conversion; get H25's chains.
 
 ## Runs
 
@@ -13,6 +13,7 @@ Luminous posterior is bimodal (light vs mass solution), and the chain decides wh
 
 ## Log
 
+- 2026-11-16 — result — Comparison with H25 at matched 95% intervals (H25 Table 2 errors are 95%, not 68%): our dark fit reproduces H25; no luminous fit does. H25: bright light (log L 8.4 [8.2,8.5]) with a bounded mass (log m200 8.4-10.2). Ours is either the light solution (mass does no lensing, unbounded to 10^7, light ~2x fainter than H25, luminosity conversion unchecked) or the mass solution (mass does all the lensing, light 5-13x fainter); at most 3% of any posterior lies in H25's region. Simona was right; the 2026-11-14 note that our luminous mass matches H25 was wrong (68% vs 95%). Details: journal section 5.
 - 2026-11-16 — note — Correction to the 2026-11-16 result: the mass solution (NFW ~10^9.6-9.9 near the dark position) is only found on rep3 (tied with the light solution, posterior 59%) and rep1 (11 below in log L). On h25, rep2 and rep4 Nautilus barely explored it, so the earlier statement that the light solution wins by 3-15 on four chains was wrong. Both the chain and the sampler's mode-finding decide which solution appears.
 - 2026-11-16 — run — 415521 submitted: light_only rerun on the h25 chain (n_live 2400), galaxy renamed satellite after 415458_4 failed on the PyAutoLens subhalo-name assumption
 - 2026-11-16 — result — Repeats and tests (pulled 2026-11-16): the luminous posterior has two solutions, a light solution (bright Sersic at y 0.47, mass unconstrained) and a mass solution (NFW ~10^9.9 at the dark-fit position y 0.66, faint light). Which wins depends on the chain: light on h25 and reps 1, 2, 4; tied on rep3 (posterior 59% mass). Chain log Z varies by ~10-30 per search, so luminous - dark must be measured within each chain (none/dark only on h25 so far). Extra subhalo over-sampling changes nothing (log Z -850.02 both); independent centres on h25 leave the mass unconstrained (log Z -851.05). Details: wiki/project/2026-11-14-luminous-convergence-and-repeats.md sections 3-4
