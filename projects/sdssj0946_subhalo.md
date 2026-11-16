@@ -22,9 +22,11 @@ Dark reproduces H25; no luminous fit does. Running: light_only on h25 (415521); 
 - 415573 — open — gpu — 2026-11-16 — H25 mock rep3: none / dark / luminous / light_only (array 0,1,2,4, n_live 2400), afterok:415572
 - 415574 — open — gpu — 2026-11-16 — H25 mock rep4: fresh SLaM chain (UNIQUE_TAG h25_rep4)
 - 415575 — open — gpu — 2026-11-16 — H25 mock rep4: none / dark / luminous / light_only (array 0,1,2,4, n_live 2400), afterok:415574
+- 415576 — open — gpu — 2026-11-16 — Luminous solution tests on h25 (n_live 2400): h25mass (m200 limited to H25's 8.4-10.2), masspos / lightpos (centre limited around the mass / light solution), tuned (Nautilus n_networks 16, enlarge_per_dim 1.3, split_threshold 25, f_live 0.001). Sampling or likelihood?
 
 ## Log
 
+- 2026-11-16 — run — 415576 submitted: Luminous solution tests on h25 (n_live 2400): h25mass (m200 limited to H25's 8.4-10.2), masspos / lightpos (centre limited around the mass / light solution), tuned (Nautilus n_networks 16, enlarge_per_dim 1.3, split_threshold 25, f_live 0.001). Sampling or likelihood?
 - 2026-11-16 — run — 415575 submitted: H25 mock rep4: none / dark / luminous / light_only (array 0,1,2,4, n_live 2400), afterok:415574
 - 2026-11-16 — run — 415574 submitted: H25 mock rep4: fresh SLaM chain (UNIQUE_TAG h25_rep4)
 - 2026-11-16 — run — 415573 submitted: H25 mock rep3: none / dark / luminous / light_only (array 0,1,2,4, n_live 2400), afterok:415572
