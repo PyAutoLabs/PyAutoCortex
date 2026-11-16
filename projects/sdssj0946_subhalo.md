@@ -5,14 +5,38 @@ Issue: none
 
 ## Now
 
-Dark reproduces H25; no luminous fit does (ours is light-only-like or mass-only-like, never H25's bright light plus bounded mass). Running: light_only (415521). Next: check the luminosity conversion; get H25's chains.
+Dark reproduces H25; no luminous fit does. Running: light_only on h25 (415521); none + dark on real reps 1-4 (is luminous > dark robust across chains?); H25 mock x4 end-to-end with none/dark/luminous/light_only (does the pipeline recover the true luminous subhalo, or the steep dark one as H25 report?).
 
 ## Runs
 
 - 415521 — open — gpu — 2026-11-16 — light_only rerun on the h25 chain (n_live 2400), galaxy renamed satellite after 415458_4 failed on the PyAutoLens subhalo-name assumption
+- 415562 — open — gpu — 2026-11-16 — Real data rep1: none + dark (array 0-1, n_live 2400), within-chain luminous - dark
+- 415564 — open — gpu — 2026-11-16 — Real data rep2: none + dark (array 0-1, n_live 2400)
+- 415566 — open — gpu — 2026-11-16 — Real data rep3: none + dark (array 0-1, n_live 2400)
+- 415567 — open — gpu — 2026-11-16 — Real data rep4: none + dark (array 0-1, n_live 2400)
+- 415568 — open — gpu — 2026-11-16 — H25 mock rep1: fresh SLaM chain (UNIQUE_TAG h25_rep1)
+- 415569 — open — gpu — 2026-11-16 — H25 mock rep1: none / dark / luminous / light_only (array 0,1,2,4, n_live 2400), afterok:415568
+- 415570 — open — gpu — 2026-11-16 — H25 mock rep2: fresh SLaM chain (UNIQUE_TAG h25_rep2)
+- 415571 — open — gpu — 2026-11-16 — H25 mock rep2: none / dark / luminous / light_only (array 0,1,2,4, n_live 2400), afterok:415570
+- 415572 — open — gpu — 2026-11-16 — H25 mock rep3: fresh SLaM chain (UNIQUE_TAG h25_rep3)
+- 415573 — open — gpu — 2026-11-16 — H25 mock rep3: none / dark / luminous / light_only (array 0,1,2,4, n_live 2400), afterok:415572
+- 415574 — open — gpu — 2026-11-16 — H25 mock rep4: fresh SLaM chain (UNIQUE_TAG h25_rep4)
+- 415575 — open — gpu — 2026-11-16 — H25 mock rep4: none / dark / luminous / light_only (array 0,1,2,4, n_live 2400), afterok:415574
 
 ## Log
 
+- 2026-11-16 — run — 415575 submitted: H25 mock rep4: none / dark / luminous / light_only (array 0,1,2,4, n_live 2400), afterok:415574
+- 2026-11-16 — run — 415574 submitted: H25 mock rep4: fresh SLaM chain (UNIQUE_TAG h25_rep4)
+- 2026-11-16 — run — 415573 submitted: H25 mock rep3: none / dark / luminous / light_only (array 0,1,2,4, n_live 2400), afterok:415572
+- 2026-11-16 — run — 415572 submitted: H25 mock rep3: fresh SLaM chain (UNIQUE_TAG h25_rep3)
+- 2026-11-16 — run — 415571 submitted: H25 mock rep2: none / dark / luminous / light_only (array 0,1,2,4, n_live 2400), afterok:415570
+- 2026-11-16 — run — 415570 submitted: H25 mock rep2: fresh SLaM chain (UNIQUE_TAG h25_rep2)
+- 2026-11-16 — run — 415569 submitted: H25 mock rep1: none / dark / luminous / light_only (array 0,1,2,4, n_live 2400), afterok:415568
+- 2026-11-16 — run — 415568 submitted: H25 mock rep1: fresh SLaM chain (UNIQUE_TAG h25_rep1)
+- 2026-11-16 — run — 415567 submitted: Real data rep4: none + dark (array 0-1, n_live 2400)
+- 2026-11-16 — run — 415566 submitted: Real data rep3: none + dark (array 0-1, n_live 2400)
+- 2026-11-16 — run — 415564 submitted: Real data rep2: none + dark (array 0-1, n_live 2400)
+- 2026-11-16 — run — 415562 submitted: Real data rep1: none + dark (array 0-1, n_live 2400), within-chain luminous - dark
 - 2026-11-16 — result — Comparison with H25 at matched 95% intervals (H25 Table 2 errors are 95%, not 68%): our dark fit reproduces H25; no luminous fit does. H25: bright light (log L 8.4 [8.2,8.5]) with a bounded mass (log m200 8.4-10.2). Ours is either the light solution (mass does no lensing, unbounded to 10^7, light ~2x fainter than H25, luminosity conversion unchecked) or the mass solution (mass does all the lensing, light 5-13x fainter); at most 3% of any posterior lies in H25's region. Simona was right; the 2026-11-14 note that our luminous mass matches H25 was wrong (68% vs 95%). Details: journal section 5.
 - 2026-11-16 — note — Correction to the 2026-11-16 result: the mass solution (NFW ~10^9.6-9.9 near the dark position) is only found on rep3 (tied with the light solution, posterior 59%) and rep1 (11 below in log L). On h25, rep2 and rep4 Nautilus barely explored it, so the earlier statement that the light solution wins by 3-15 on four chains was wrong. Both the chain and the sampler's mode-finding decide which solution appears.
 - 2026-11-16 — run — 415521 submitted: light_only rerun on the h25 chain (n_live 2400), galaxy renamed satellite after 415458_4 failed on the PyAutoLens subhalo-name assumption
