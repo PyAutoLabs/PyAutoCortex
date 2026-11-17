@@ -5,27 +5,28 @@ Issue: none
 
 ## Now
 
-Dark reproduces H25; no luminous fit does. Running: light_only on h25 (415521); none + dark on real reps 1-4 (is luminous > dark robust across chains?); H25 mock x4 end-to-end with none/dark/luminous/light_only (does the pipeline recover the true luminous subhalo, or the steep dark one as H25 report?).
+Dark detection robust (+49 to +60); luminous beats dark by +1 to +12 per chain; light only ties luminous on h25. Running: mock none/dark/luminous/light_only on 4 repeats; luminous solution tests (415576).
 
 ## Runs
 
-- 415521 — open — gpu — 2026-11-16 — light_only rerun on the h25 chain (n_live 2400), galaxy renamed satellite after 415458_4 failed on the PyAutoLens subhalo-name assumption
-- 415562 — open — gpu — 2026-11-16 — Real data rep1: none + dark (array 0-1, n_live 2400), within-chain luminous - dark
-- 415564 — open — gpu — 2026-11-16 — Real data rep2: none + dark (array 0-1, n_live 2400)
-- 415566 — open — gpu — 2026-11-16 — Real data rep3: none + dark (array 0-1, n_live 2400)
-- 415567 — open — gpu — 2026-11-16 — Real data rep4: none + dark (array 0-1, n_live 2400)
-- 415568 — open — gpu — 2026-11-16 — H25 mock rep1: fresh SLaM chain (UNIQUE_TAG h25_rep1)
 - 415569 — open — gpu — 2026-11-16 — H25 mock rep1: none / dark / luminous / light_only (array 0,1,2,4, n_live 2400), afterok:415568
-- 415570 — open — gpu — 2026-11-16 — H25 mock rep2: fresh SLaM chain (UNIQUE_TAG h25_rep2)
 - 415571 — open — gpu — 2026-11-16 — H25 mock rep2: none / dark / luminous / light_only (array 0,1,2,4, n_live 2400), afterok:415570
-- 415572 — open — gpu — 2026-11-16 — H25 mock rep3: fresh SLaM chain (UNIQUE_TAG h25_rep3)
 - 415573 — open — gpu — 2026-11-16 — H25 mock rep3: none / dark / luminous / light_only (array 0,1,2,4, n_live 2400), afterok:415572
-- 415574 — open — gpu — 2026-11-16 — H25 mock rep4: fresh SLaM chain (UNIQUE_TAG h25_rep4)
 - 415575 — open — gpu — 2026-11-16 — H25 mock rep4: none / dark / luminous / light_only (array 0,1,2,4, n_live 2400), afterok:415574
 - 415576 — open — gpu — 2026-11-16 — Luminous solution tests on h25 (n_live 2400): h25mass (m200 limited to H25's 8.4-10.2), masspos / lightpos (centre limited around the mass / light solution), tuned (Nautilus n_networks 16, enlarge_per_dim 1.3, split_threshold 25, f_live 0.001). Sampling or likelihood?
 
 ## Log
 
+- 2026-11-17 — result — Within-chain comparison (pulled 2026-11-17): dark - none +49 to +60 on all five real chains with the same H25-consistent dark subhalo; luminous - dark +6.2, +5.1, +11.8, +1.0, +11.2 (H25 +16), so luminous wins on every chain but the chain scatter is as large as the effect. On h25, light_only ties luminous (log Z -850.86 vs -850.02): the mass is not needed once the light is in. The H25 mock input reads log L 8.08 in our conversion (our light solution 8.02-8.08), so the 2x fainter gap is probably the conversion. On the h25 mock chain, luminous - dark is only +1.8 and the luminous c is too high (2.17 vs true 1.51). Details: journal section 8.
+- 2026-11-17 — run — 415574 finished — wall 4:03: H25 mock rep4: fresh SLaM chain (UNIQUE_TAG h25_rep4)
+- 2026-11-17 — run — 415572 finished — wall 3:56: H25 mock rep3: fresh SLaM chain (UNIQUE_TAG h25_rep3)
+- 2026-11-17 — run — 415570 finished — wall 3:53: H25 mock rep2: fresh SLaM chain (UNIQUE_TAG h25_rep2)
+- 2026-11-17 — run — 415568 finished — wall 3:48: H25 mock rep1: fresh SLaM chain (UNIQUE_TAG h25_rep1)
+- 2026-11-17 — run — 415567 finished — wall 7:58: Real data rep4: none + dark (array 0-1, n_live 2400)
+- 2026-11-17 — run — 415566 finished — wall 8:46: Real data rep3: none + dark (array 0-1, n_live 2400)
+- 2026-11-17 — run — 415564 finished — wall 8:28: Real data rep2: none + dark (array 0-1, n_live 2400)
+- 2026-11-17 — run — 415562 finished — wall 11:23: Real data rep1: none + dark (array 0-1, n_live 2400), within-chain luminous - dark
+- 2026-11-17 — run — 415521 finished — wall 7:40: light_only rerun on the h25 chain (n_live 2400), galaxy renamed satellite after 415458_4 failed on the PyAutoLens subhalo-name assumption — light_only on h25: log Z -850.86 vs luminous -850.02
 - 2026-11-16 — run — 415576 submitted: Luminous solution tests on h25 (n_live 2400): h25mass (m200 limited to H25's 8.4-10.2), masspos / lightpos (centre limited around the mass / light solution), tuned (Nautilus n_networks 16, enlarge_per_dim 1.3, split_threshold 25, f_live 0.001). Sampling or likelihood?
 - 2026-11-16 — run — 415575 submitted: H25 mock rep4: none / dark / luminous / light_only (array 0,1,2,4, n_live 2400), afterok:415574
 - 2026-11-16 — run — 415574 submitted: H25 mock rep4: fresh SLaM chain (UNIQUE_TAG h25_rep4)
