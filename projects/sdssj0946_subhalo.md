@@ -14,9 +14,17 @@ Dark detection robust (+49 to +60); luminous beats dark by +1 to +12 per chain; 
 - 415573 — open — gpu — 2026-11-16 — H25 mock rep3: none / dark / luminous / light_only (array 0,1,2,4, n_live 2400), afterok:415572
 - 415575 — open — gpu — 2026-11-16 — H25 mock rep4: none / dark / luminous / light_only (array 0,1,2,4, n_live 2400), afterok:415574
 - 415576 — open — gpu — 2026-11-16 — Luminous solution tests on h25 (n_live 2400): h25mass (m200 limited to H25's 8.4-10.2), masspos / lightpos (centre limited around the mass / light solution), tuned (Nautilus n_networks 16, enlarge_per_dim 1.3, split_threshold 25, f_live 0.001). Sampling or likelihood?
+- 415756 — open — gpu — 2026-11-17 — Real data rep1: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25
+- 415757 — open — gpu — 2026-11-17 — Real data rep2: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25
+- 415758 — open — gpu — 2026-11-17 — Real data rep3: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25
+- 415759 — open — gpu — 2026-11-17 — Real data rep4: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25
 
 ## Log
 
+- 2026-11-17 — run — 415759 submitted: Real data rep4: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25
+- 2026-11-17 — run — 415758 submitted: Real data rep3: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25
+- 2026-11-17 — run — 415757 submitted: Real data rep2: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25
+- 2026-11-17 — run — 415756 submitted: Real data rep1: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25
 - 2026-11-17 — result — Within-chain comparison (pulled 2026-11-17): dark - none +49 to +60 on all five real chains with the same H25-consistent dark subhalo; luminous - dark +6.2, +5.1, +11.8, +1.0, +11.2 (H25 +16), so luminous wins on every chain but the chain scatter is as large as the effect. On h25, light_only ties luminous (log Z -850.86 vs -850.02): the mass is not needed once the light is in. The H25 mock input reads log L 8.08 in our conversion (our light solution 8.02-8.08), so the 2x fainter gap is probably the conversion. On the h25 mock chain, luminous - dark is only +1.8 and the luminous c is too high (2.17 vs true 1.51). Details: journal section 8.
 - 2026-11-17 — run — 415574 finished — wall 4:03: H25 mock rep4: fresh SLaM chain (UNIQUE_TAG h25_rep4)
 - 2026-11-17 — run — 415572 finished — wall 3:56: H25 mock rep3: fresh SLaM chain (UNIQUE_TAG h25_rep3)
