@@ -5,22 +5,23 @@ Issue: none
 
 ## Now
 
-Dark detection robust (+49 to +60); luminous beats dark by +1 to +12 per chain; light only ties luminous on h25. Running: mock none/dark/luminous/light_only on 4 repeats; luminous solution tests (415576).
+Mock reproduces the real-data pattern (light only close to luminous although the truth has mass), so light-only preference does not mean no mass. H25's bounded mass range costs nothing in likelihood. Running: lightpos, tuned (415576_8-9); light_only on real rep1/3/4.
 
 ## Runs
 
-- 415569 — open — gpu — 2026-11-16 — H25 mock rep1: none / dark / luminous / light_only (array 0,1,2,4, n_live 2400), afterok:415568
-- 415571 — open — gpu — 2026-11-16 — H25 mock rep2: none / dark / luminous / light_only (array 0,1,2,4, n_live 2400), afterok:415570
-- 415573 — open — gpu — 2026-11-16 — H25 mock rep3: none / dark / luminous / light_only (array 0,1,2,4, n_live 2400), afterok:415572
-- 415575 — open — gpu — 2026-11-16 — H25 mock rep4: none / dark / luminous / light_only (array 0,1,2,4, n_live 2400), afterok:415574
 - 415576 — open — gpu — 2026-11-16 — Luminous solution tests on h25 (n_live 2400): h25mass (m200 limited to H25's 8.4-10.2), masspos / lightpos (centre limited around the mass / light solution), tuned (Nautilus n_networks 16, enlarge_per_dim 1.3, split_threshold 25, f_live 0.001). Sampling or likelihood?
 - 415756 — open — gpu — 2026-11-17 — Real data rep1: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25
-- 415757 — open — gpu — 2026-11-17 — Real data rep2: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25
 - 415758 — open — gpu — 2026-11-17 — Real data rep3: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25
 - 415759 — open — gpu — 2026-11-17 — Real data rep4: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25
 
 ## Log
 
+- 2026-11-18 — result — Mock repeats and first solution tests (pulled 2026-11-18). Mock (truth luminous, m200 10^9.76): every chain reproduces H25's steep dark subhalo (c 2.1-3.2 vs true 1.51, off position, ~0.6 dex too much inner mass); luminous - dark +2 to +11 (H25 mock +12); light only beats dark (+1 to +10) and is within 1-5 of luminous, with the luminous mass underestimated. So the real-data pattern (light only ties luminous, mass unconstrained) is what a luminous subhalo with mass produces. Real data: light_only rep2 ties luminous (+0.6). luminous_h25mass (m200 limited to 10^8.4-10.2) reaches the same best log L as the full fit (-793.11 vs -793.15) and log Z -849.30 vs -850.02: the unbounded mass is the undetectable low-mass tail. masspos evidence share (~4%) matches the full run. No sign Nautilus misses a better solution on h25. Details: journal section 9.
+- 2026-11-18 — run — 415757 finished — wall 7:23: Real data rep2: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25 — light_only rep2: log Z -843.10 vs luminous -843.67
+- 2026-11-18 — run — 415575 finished — wall 11:57: H25 mock rep4: none / dark / luminous / light_only (array 0,1,2,4, n_live 2400), afterok:415574 — mock rep4
+- 2026-11-18 — run — 415573 finished — wall 12:32: H25 mock rep3: none / dark / luminous / light_only (array 0,1,2,4, n_live 2400), afterok:415572 — mock rep3
+- 2026-11-18 — run — 415571 finished — wall 10:03: H25 mock rep2: none / dark / luminous / light_only (array 0,1,2,4, n_live 2400), afterok:415570 — mock rep2
+- 2026-11-18 — run — 415569 finished — wall 16:25: H25 mock rep1: none / dark / luminous / light_only (array 0,1,2,4, n_live 2400), afterok:415568 — mock rep1 none/dark/luminous/light_only
 - 2026-11-17 — run — 415759 submitted: Real data rep4: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25
 - 2026-11-17 — run — 415758 submitted: Real data rep3: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25
 - 2026-11-17 — run — 415757 submitted: Real data rep2: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25
