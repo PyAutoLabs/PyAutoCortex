@@ -11,7 +11,7 @@ One ledger per science project: what is on the cluster right now, what the human
 | Where | Count |
 |-------|------:|
 | [Running](#projects) | 0 |
-| [Open](#projects) | 9 |
+| [Open](#projects) | 3 |
 | [Active](#active) | 5 |
 | [Dormant](#dormant) | 2 |
 | [Retired](#retired) | 20 |
@@ -50,7 +50,7 @@ Last check-in: 2026-11-13T14:04Z.
 | ep_toy_gaussian | 0 | 0 | 2026-10-29 |
 | slope_hierarchy_scale | 0 | 0 | 2026-10-29 |
 | ic50_workspace | 0 | 0 | 2026-10-29 |
-| sdssj0946_subhalo | 0 | 9 | 2026-11-17 |
+| sdssj0946_subhalo | 0 | 3 | 2026-11-18 |
 
 ### Dormant
 
@@ -248,7 +248,7 @@ active · ral · [PyAutoCortex#36](https://github.com/PyAutoLabs/PyAutoCortex/is
 
 </details>
 
-<details id="project-sdssj0946_subhalo"><summary><b>sdssj0946_subhalo</b> — Reproduce He et al. 2025 SDSSJ0946+1006 luminous subhalo on RAL A100 GPUs · 0 running · 9 open · updated 2026-11-17</summary>
+<details id="project-sdssj0946_subhalo"><summary><b>sdssj0946_subhalo</b> — Reproduce He et al. 2025 SDSSJ0946+1006 luminous subhalo on RAL A100 GPUs · 0 running · 3 open · updated 2026-11-18</summary>
 
 **Registered:** 2026-11-06
 
@@ -258,7 +258,7 @@ active · ral · [PyAutoCortex#36](https://github.com/PyAutoLabs/PyAutoCortex/is
 
 **Current position**
 
-Dark detection robust (+49 to +60); luminous beats dark by +1 to +12 per chain; light only ties luminous on h25. Running: mock none/dark/luminous/light_only on 4 repeats; luminous solution tests (415576).
+Mock reproduces the real-data pattern (light only close to luminous although the truth has mass), so light-only preference does not mean no mass. H25's bounded mass range costs nothing in likelihood. Running: lightpos, tuned (415576_8-9); light_only on real rep1/3/4.
 
 <details><summary title="Copy resume prompt for sdssj0946_subhalo">📋</summary>
 
@@ -268,19 +268,13 @@ Use the cortex skill. — resume sdssj0946_subhalo: read PyAutoCortex projects/s
 
 </details>
 
-**Runs** (9)
+**Runs** (3)
 
 | Job | State | Partition | Date | Description |
 |---|---|---|---|---|
 | `415759` | open | gpu | 11-17 | Real data rep4: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25 |
 | `415758` | open | gpu | 11-17 | Real data rep3: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25 |
-| `415757` | open | gpu | 11-17 | Real data rep2: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25 |
-| `415756` | open | gpu | 11-17 | Real data rep1: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25 |
 | `415576` | open | gpu | 11-16 | Luminous solution tests on h25 (n_live 2400): h25mass (m200 limited to H25's 8.4-10.2), masspos / lightpos (centre limited around the mass / light solution), t… |
-| `415575` | open | gpu | 11-16 | H25 mock rep4: none / dark / luminous / light_only (array 0,1,2,4, n_live 2400), afterok:415574 |
-| `415573` | open | gpu | 11-16 | H25 mock rep3: none / dark / luminous / light_only (array 0,1,2,4, n_live 2400), afterok:415572 |
-| `415571` | open | gpu | 11-16 | H25 mock rep2: none / dark / luminous / light_only (array 0,1,2,4, n_live 2400), afterok:415570 |
-| `415569` | open | gpu | 11-16 | H25 mock rep1: none / dark / luminous / light_only (array 0,1,2,4, n_live 2400), afterok:415568 |
 
 <details><summary>Full descriptions (1 shortened above)</summary>
 
@@ -288,13 +282,13 @@ Use the cortex skill. — resume sdssj0946_subhalo: read PyAutoCortex projects/s
 
 </details>
 
-<details><summary>Recent log — 5 of 56 entries</summary>
+<details><summary>Recent log — 5 of 64 entries</summary>
 
-- 2026-11-17 — *run* — 415759 submitted: Real data rep4: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25
-- 2026-11-17 — *run* — 415758 submitted: Real data rep3: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25
-- 2026-11-17 — *run* — 415757 submitted: Real data rep2: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25
-- 2026-11-17 — *run* — 415756 submitted: Real data rep1: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25
-- 2026-11-17 — *result* — Within-chain comparison (pulled 2026-11-17): dark - none +49 to +60 on all five real chains with the same H25-consistent dark subhalo; luminous - dark +6.2, +5.1, +11.8, +1.0, +11.2 (H25 +16), so luminous wins on every chain but the chain scatter is as large as the effect. On h25, light_only ties luminous (log Z -850.86 vs -850.02): the mass is not needed once the light is in. The H25 mock input reads log L 8.08 in our conversion (our light solution 8.02-8.08), so the 2x fainter gap is probably the conversion. On the h25 mock chain, luminous - dark is only +1.8 and the luminous c is too high (2.17 vs true 1.51). Details: journal section 8.
+- 2026-11-18 — *result* — Evidence check closes on h25: the lightpos and masspos boxes (each 0.04 of the centre prior) weighted by their prior share sum to ln Z -849.98 vs the full luminous fit's -850.02, split ~96/4 between light and mass solutions as the full Nautilus run weighted them. Nautilus is not missing a solution on this chain. light_only rep1 ties luminous (+0.8): light only ties luminous on all three chains done (-0.8, +0.8, +0.6).
+- 2026-11-18 — *run* — 415756 finished — wall 9:12: Real data rep1: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25 — light_only rep1: log Z -825.44 vs luminous -826.22
+- 2026-11-18 — *result* — Mock repeats and first solution tests (pulled 2026-11-18). Mock (truth luminous, m200 10^9.76): every chain reproduces H25's steep dark subhalo (c 2.1-3.2 vs true 1.51, off position, ~0.6 dex too much inner mass); luminous - dark +2 to +11 (H25 mock +12); light only beats dark (+1 to +10) and is within 1-5 of luminous, with the luminous mass underestimated. So the real-data pattern (light only ties luminous, mass unconstrained) is what a luminous subhalo with mass produces. Real data: light_only rep2 ties luminous (+0.6). luminous_h25mass (m200 limited to 10^8.4-10.2) reaches the same best log L as the full fit (-793.11 vs -793.15) and log Z -849.30 vs -850.02: the unbounded mass is the undetectable low-mass tail. masspos evidence share (~4%) matches the full run. No sign Nautilus misses a better solution on h25. Details: journal section 9.
+- 2026-11-18 — *run* — 415757 finished — wall 7:23: Real data rep2: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25 — light_only rep2: log Z -843.10 vs luminous -843.67
+- 2026-11-18 — *run* — 415575 finished — wall 11:57: H25 mock rep4: none / dark / luminous / light_only (array 0,1,2,4, n_live 2400), afterok:415574 — mock rep4
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/sdssj0946_subhalo.md)
 
