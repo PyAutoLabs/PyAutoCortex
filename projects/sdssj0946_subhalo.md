@@ -10,12 +10,13 @@ Mock reproduces the real-data pattern (light only close to luminous although the
 ## Runs
 
 - 415576 — open — gpu — 2026-11-16 — Luminous solution tests on h25 (n_live 2400): h25mass (m200 limited to H25's 8.4-10.2), masspos / lightpos (centre limited around the mass / light solution), tuned (Nautilus n_networks 16, enlarge_per_dim 1.3, split_threshold 25, f_live 0.001). Sampling or likelihood?
-- 415756 — open — gpu — 2026-11-17 — Real data rep1: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25
 - 415758 — open — gpu — 2026-11-17 — Real data rep3: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25
 - 415759 — open — gpu — 2026-11-17 — Real data rep4: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25
 
 ## Log
 
+- 2026-11-18 — result — Evidence check closes on h25: the lightpos and masspos boxes (each 0.04 of the centre prior) weighted by their prior share sum to ln Z -849.98 vs the full luminous fit's -850.02, split ~96/4 between light and mass solutions as the full Nautilus run weighted them. Nautilus is not missing a solution on this chain. light_only rep1 ties luminous (+0.8): light only ties luminous on all three chains done (-0.8, +0.8, +0.6).
+- 2026-11-18 — run — 415756 finished — wall 9:12: Real data rep1: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25 — light_only rep1: log Z -825.44 vs luminous -826.22
 - 2026-11-18 — result — Mock repeats and first solution tests (pulled 2026-11-18). Mock (truth luminous, m200 10^9.76): every chain reproduces H25's steep dark subhalo (c 2.1-3.2 vs true 1.51, off position, ~0.6 dex too much inner mass); luminous - dark +2 to +11 (H25 mock +12); light only beats dark (+1 to +10) and is within 1-5 of luminous, with the luminous mass underestimated. So the real-data pattern (light only ties luminous, mass unconstrained) is what a luminous subhalo with mass produces. Real data: light_only rep2 ties luminous (+0.6). luminous_h25mass (m200 limited to 10^8.4-10.2) reaches the same best log L as the full fit (-793.11 vs -793.15) and log Z -849.30 vs -850.02: the unbounded mass is the undetectable low-mass tail. masspos evidence share (~4%) matches the full run. No sign Nautilus misses a better solution on h25. Details: journal section 9.
 - 2026-11-18 — run — 415757 finished — wall 7:23: Real data rep2: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25 — light_only rep2: log Z -843.10 vs luminous -843.67
 - 2026-11-18 — run — 415575 finished — wall 11:57: H25 mock rep4: none / dark / luminous / light_only (array 0,1,2,4, n_live 2400), afterok:415574 — mock rep4
