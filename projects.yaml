@@ -342,8 +342,8 @@ sdssj0946_subhalo:
   assistant: autolens_assistant
   witness_file: results/**/*.json
   partition: gpu
-  status: dormant
-  note: "born 2026-11-06: reproduction of He et al. 2025 (arXiv:2506.07978) on HST F814W of SDSSJ0946+1006 — SLaM chain (MGE lens light, DelaunayNN 1250 px + AdaptSplit, EPL+shear) then no/dark/luminous NFW subhalo (n_live 1200) on RAL A100s; local git, no remote; dormant (shelved) on the human's decision in the 2026-11-13 project review"
+  status: active
+  note: "born 2026-11-06: reproduction of He et al. 2025 (arXiv:2506.07978) on HST F814W of SDSSJ0946+1006 — SLaM chain (MGE lens light, DelaunayNN 1250 px + AdaptSplit, EPL+shear) then no/dark/luminous NFW subhalo (n_live 1200) on RAL A100s; local git, no remote; dormant 2026-11-13, reactivated 2026-11-13 on the human's request (luminous rerun at n_live 2400)"
 
 euclid_detailed:
   remote: PyAutoLabs/euclid_detailed
