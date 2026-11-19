@@ -428,3 +428,17 @@ vignette:
   partition: both
   status: retired
   note: "registered retired 2026-10-29 by human decision: archived vignette figures and DR1 material, non-git; no RAL tree"
+
+dm_sightlines:
+  remote: none
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/development/dm_sightlines
+  ral_root: /mnt/ral/jnightin/development/dm_sightlines
+  mirror: none
+  sync_cli: hpc/sync
+  sync_verbs: [push, pull, logs, sync, push-data-init, pull-full, status, plan, pilot, resubmit, report, act, results, submit, push-submit, jobs, sacct, cancel, wait-and-pull, tail, du, check, clear-logs]
+  ledger: wiki/project/state.md
+  assistant: autolens_assistant
+  witness_file: results/**/*.json
+  partition: both
+  status: active
+  note: born 2026-11-19 from a research dive (Mind draft/research/autolens/cdm_dark_matter_sightlines_research.md); develops the simulator for promotion into PyAutoGalaxy and PyAutoLens; local git, no remote; no RAL tree created yet
