@@ -442,3 +442,17 @@ dm_sightlines:
   partition: both
   status: active
   note: born 2026-11-19 from a research dive (Mind draft/research/autolens/cdm_dark_matter_sightlines_research.md); develops the simulator for promotion into PyAutoGalaxy and PyAutoLens; local git, no remote; no RAL tree created yet
+
+stars_dm_slope:
+  remote: none
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/development/stars_dm_slope
+  ral_root: /mnt/ral/jnightin/development/stars_dm_slope
+  mirror: none
+  sync_cli: hpc/sync
+  sync_verbs: [push, pull, logs, sync, push-data-init, pull-full, status, submit, push-submit, jobs, sacct, cancel, wait-and-pull, tail, du, check, clear-logs]
+  ledger: wiki/project/state.md
+  assistant: autolens_assistant
+  witness_file: results/**/*.json
+  partition: ral
+  status: active
+  note: born 2026-11-16 from ep_gnfw_slope; registered 2026-11-19 (the folder had no row); no git repository; RAL tree not yet pushed
