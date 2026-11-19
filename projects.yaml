@@ -456,3 +456,17 @@ stars_dm_slope:
   partition: ral
   status: active
   note: born 2026-11-16 from ep_gnfw_slope; registered 2026-11-19 (the folder had no row); no git repository; RAL tree not yet pushed
+
+ep_gnfw_slope:
+  remote: none
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/development/ep_gnfw_slope
+  ral_root: /mnt/ral/jnightin/development/ep_gnfw_slope
+  mirror: none
+  sync_cli: hpc/sync
+  sync_verbs: [push, pull, logs, sync, push-data-init, pull-full, status, submit, push-submit, jobs, sacct, cancel, wait-and-pull, tail, du, check, clear-logs]
+  ledger: wiki/project/state.md
+  assistant: autolens_assistant
+  witness_file: results/**/*.json
+  partition: both
+  status: active
+  note: born 2026-11-13 from the euclid_dr1 LensTwin phase-4 finding; registered 2026-11-19 (the folder had no row); no git repository
