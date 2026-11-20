@@ -545,3 +545,24 @@ Choices made in phase 2 — the conductor, the board and the workflows
     the package without anyone retyping a number. Like a run's start and end
     (decision 64), which results an index holds is a fact a script may read;
     what they mean stays the human's.
+
+66. **The board tells development projects from science projects, by folder**
+    (2026-11-20, PyAutoCortex#95). A project's *category* is the category
+    folder its `local_path` names (`<science root>/<category>/<project>`,
+    decision 62), derived by the conductor from the string alone — never the
+    filesystem, so the board rendered in CI agrees with the laptop's. A row
+    in `development/` is a **Development** project; every other category
+    (`active/`, and `complete/` or `archive/` for retired rows), and a root
+    in no category, is **Science**. `census` (text and `--json`) carries a
+    `category` per project and `Running / Open / Projects` per kind
+    (`Projects` counts the kind's rows that are not retired); the board and
+    the `Science/STATE.md` mirror render a Science section and a Development
+    section (the latter only when a row sits in `development/`), each with
+    the old Summary and Projects layout inside; the check-in read-back names
+    each project's category; `pull` and `checkin` take
+    `--category <category>`. The overall counts table and `state.json` (v1)
+    do not change. Why: a paper-bound project and an exploratory one — whose
+    outcome is library issues and PRs in the Mind, not a paper — sat in one
+    undivided list. **No `category` or `intent` field** (human ruling,
+    2026-11-19): a second copy of the category in `projects.yaml` would be
+    one more thing to drift, and moving the folder is what changes the kind.
