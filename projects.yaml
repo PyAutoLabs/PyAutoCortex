@@ -470,3 +470,17 @@ ep_gnfw_slope:
   partition: both
   status: active
   note: born 2026-11-13 from the euclid_dr1 LensTwin phase-4 finding; registered 2026-11-19 (the folder had no row); no git repository
+
+erc_angular_structure:
+  remote: none
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/development/erc_angular_structure
+  ral_root: /mnt/ral/jnightin/development/erc_angular_structure
+  mirror: none
+  sync_cli: hpc/sync
+  sync_verbs: [push, pull, logs, sync, status, submit, push-submit, jobs, sacct, cancel, wait-and-pull, tail, du, check, clear-logs]
+  ledger: wiki/project/state.md
+  assistant: autolens_assistant
+  witness_file: output/**/*.json
+  partition: ral
+  status: active
+  note: "Local setup. RAL destination configured pending connectivity verification."
