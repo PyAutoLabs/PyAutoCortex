@@ -502,3 +502,27 @@ def test_birth_refuses_a_backslash_that_yaml_would_read_as_an_escape(tmp_path):
     r = _run(*BIRTH, "--note", "see: C:\\new dir", root=root)
     assert r.returncode == 1 and "backslash" in r.stderr
     assert (root / "projects.yaml").read_text() == snapshot
+
+
+# --- the board's two kinds (schema decision 66) ----------------------------
+def test_the_committed_board_files_each_project_under_its_folders_kind():
+    """Every ledgered project's card sits in the Development section when its
+    `local_path` is under `development/`, else in the Science section — the
+    category read from the path string, as the conductor derives it."""
+    yaml = pytest.importorskip("yaml")
+    projects = yaml.safe_load((REPO / "projects.yaml").read_text(encoding="utf-8"))
+    page = (REPO / "dashboard.md").read_text(encoding="utf-8")
+    science, _, development = page.partition("\n## Development\n")
+    assert "\n## Science\n" in science
+    for key, row in projects.items():
+        if not (REPO / "projects" / f"{key}.md").is_file():
+            continue
+        if row.get("status") == "retired":
+            card = f"[{key}]("          # retired rows fold into one line
+        else:
+            card = f'id="project-{key}"'
+        parent = Path(str(row.get("local_path") or "").rstrip("/")).parent.name
+        home, away = ((development, science) if parent == "development"
+                      else (science, development))
+        assert card in home, f"{key} is not in its {parent or 'science'} section"
+        assert card not in away, f"{key} is in both sections"

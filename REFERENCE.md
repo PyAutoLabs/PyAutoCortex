@@ -130,6 +130,13 @@ scans the raw column-0 keys and reports every duplicate with its line numbers:
 | `campaign_file` | path relative to `local_path` (or absolute), **optional** | the project's PyAutoFit `campaign.yaml`; must end `.yaml`/`.yml`, no `..` |
 | `digest` | path relative to `local_path` (or absolute), **optional** | the pulled campaign `digest.json` `sync-runs` reads by default; must name a `digest.json`, no `..` |
 
+**Category is derived, not a field.** A project's category — `active`,
+`development`, `complete` or `archive` — is the folder its `local_path` names
+(`<science root>/<category>/<project>`), read by the conductor from the string
+alone, never the disk. A row in `development/` is a **Development** project;
+any other row is **Science** (schema decision 66). Moving the folder (and its
+`local_path`) is what changes a project's kind.
+
 **Partition rule (human, 2026-09-30).** `both` means a project has GPU jobs *and*
 CPU jobs, each on its own partition — never a CPU-only array submitted as
 `ral,gpu`/`gpu,ral` or to `gpu`, even when `ral` is drained or busy (the jobs
@@ -297,16 +304,24 @@ the stamp on the viewer's clock once it is an hour old.
 
 ## The board
 
-`dashboard.md` and `dashboard.html`, rendered by the conductor: a counts table
-(**Running**, **Open**, **Projects** — the Brain board reads these three
-rows), the check-in chip and stamp, a four-column **Summary** (`Project ·
-Running · Open · Last update` — deliberately no free text, so it fits a
-phone), then one card per project with a ledger: the facts line, **Now**, the
-**Runs**, the **Last 5** entries, and a single 📋 **resume** chip for an active
-project — the paste that has an agent read the ledger and the project's own
-state file and say where you left off. Retired projects fold into one line
-each; dormant rows with no ledger are a small table. No chip on the page
-submits, scores or decides anything.
+`dashboard.md` and `dashboard.html`, rendered by the conductor: the overall
+counts table (**Running**, **Open**, **Active**, **Dormant**, **Retired** —
+the Brain board and the cockpit feed read it, so it does not change), the
+check-in chip and stamp, then two sections (schema decision 66):
+**Science** (`active/`, and `complete/` or `archive/` for retired rows) and
+**Development** (`development/`; shown only when a row sits there). Each
+opens with its own **Running / Open / Projects** counts (`Projects` = its
+rows that are not retired), then the same layout the whole board used to
+have: a four-column **Summary** per status (`Project · Running · Open · Last
+update` — deliberately no free text, so it fits a phone), then one card per
+project with a ledger: the facts line, **Now**, the **Runs**, the **Last 5**
+entries, and a single 📋 **resume** chip for an active project — the paste
+that has an agent read the ledger and the project's own state file and say
+where you left off. Retired projects fold into one line each; rows with no
+ledger are a small table. No chip on the page submits, scores or decides
+anything. The `Science/STATE.md` mirror is split the same way. `census`
+names each project's category, and `pull` / `checkin` take
+`--category <category>` to narrow the sweep.
 
 ## Bootstrap
 
