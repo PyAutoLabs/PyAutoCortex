@@ -9,6 +9,9 @@ Just opened — nothing submitted yet.
 
 ## Runs
 
+- 416179 — open — gpu — 2026-11-24 — phase 4 diagnostics demo: 8 realisations (seeds 0-7), GPU array 0-7%4, one A100 each
+
 ## Log
 
+- 2026-11-24 — run — 416179 submitted: phase 4 diagnostics demo: 8 realisations (seeds 0-7), GPU array 0-7%4, one A100 each
 - 2026-11-19 — note — ledger opened
