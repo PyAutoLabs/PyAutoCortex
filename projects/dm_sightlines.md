@@ -9,9 +9,11 @@ Just opened — nothing submitted yet.
 
 ## Runs
 
+- 416376 — open — gpu — 2026-11-24 — phase 6 tier 3 pilot: Nautilus fit, pixelised source + refitted macro model; smooth floor and fiducial seed 0 (array 0,2; one A100 each)
 
 ## Log
 
+- 2026-11-24 — run — 416376 submitted: phase 6 tier 3 pilot: Nautilus fit, pixelised source + refitted macro model; smooth floor and fiducial seed 0 (array 0,2; one A100 each)
 - 2026-11-24 — run — 416199 finished — wall 0:03: phase 5 ladder sensitivity to subhalo truncation: 4 variants x 8 seeds, GPU array 0-31%8
 - 2026-11-24 — run — 416199 submitted: phase 5 ladder sensitivity to subhalo truncation: 4 variants x 8 seeds, GPU array 0-31%8
 - 2026-11-24 — run — 416190 finished — wall 0:01: cone-extent test with refit tiers: 8 arcsec cone against 5 arcsec restrictions, seeds 0-7, GPU array 0-7%4
