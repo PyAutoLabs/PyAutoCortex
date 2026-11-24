@@ -470,3 +470,17 @@ ep_gnfw_slope:
   partition: both
   status: active
   note: born 2026-11-13 from the euclid_dr1 LensTwin phase-4 finding; registered 2026-11-19 (the folder had no row); no git repository
+
+adapt_snr_cap:
+  remote: none
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/development/adapt_snr_cap
+  ral_root: /mnt/ral/jnightin/development/adapt_snr_cap
+  mirror: none
+  sync_cli: hpc/sync
+  sync_verbs: [push, pull, logs, sync, push-data-init, pull-full, status, submit, push-submit, jobs, sacct, cancel, wait-and-pull, tail, du, check, clear-logs]
+  ledger: wiki/project/state.md
+  assistant: none
+  witness_file: results/**/*.json
+  partition: gpu
+  status: active
+  note: "born 2026-11-24: autolens_workspace Delaunay SLaM (Hilbert 1250 + AdaptSplit), cap3 vs uncapped arms from a shared source_lp, 5 SLACS + 5 BELLS GALLERY + 4 Euclid DR1 high-S/N; local git, no remote"
