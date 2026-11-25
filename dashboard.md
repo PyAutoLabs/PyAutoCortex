@@ -33,12 +33,12 @@ Help plan follow-up analyses or runs when requested, using the project’s own e
 
 Continue from decisions and authorizations already established in this conversation. After taking action, report what changed, what was recorded and what remains unresolved.
 
-Last check-in: 2026-11-25T16:31Z.
+Last check-in: 2026-11-25T17:11Z.
 ```
 
 </details>
 
-### Last check-in: 2026-11-25T16:31Z
+### Last check-in: 2026-11-25T17:11Z
 
 ## Science
 
@@ -246,7 +246,7 @@ Development projects (`development/`): exploratory work that develops or validat
 | slope_hierarchy_scale | 0 | 0 | 2026-10-29 |
 | ic50_workspace | 0 | 0 | 2026-10-29 |
 | dm_sightlines | 0 | 1 | 2026-11-25 |
-| stars_dm_slope | 0 | 0 | 2026-11-19 |
+| stars_dm_slope | 0 | 0 | 2026-11-25 |
 | ep_gnfw_slope | 0 | 0 | 2026-11-19 |
 | adapt_snr_cap | 1 | 2 | 2026-11-25 |
 
@@ -474,7 +474,7 @@ active · both · no issue yet
 
 </details>
 
-<details id="project-stars_dm_slope"><summary><b>stars_dm_slope</b> — Parameterisations and priors for stars plus gNFW dark matter lens models · no runs recorded · updated 2026-11-19</summary>
+<details id="project-stars_dm_slope"><summary><b>stars_dm_slope</b> — Parameterisations and priors for stars plus gNFW dark matter lens models · no runs recorded · updated 2026-11-25</summary>
 
 **Registered:** 2026-11-19
 
@@ -498,9 +498,13 @@ Use the cortex skill. — resume stars_dm_slope: read PyAutoCortex projects/star
 
 _nothing on the cluster_
 
-<details><summary>Recent log — 1 of 1 entry</summary>
+<details><summary>Recent log — 5 of 11 entries</summary>
 
-- 2026-11-19 — *note* — ledger opened
+- 2026-11-25 — *run* — 416877 finished — wall 0:28: phase 2 information maps resubmitted to finish 3 partial maps (indices 336, 340, 348) — 3 completed (digest stars_dm_slope_phase2 updated 2026-11-25T16:10:45Z)
+- 2026-11-25 — *run* — 416523 finished — wall 3:29: phase 2 information-test likelihood maps, 80 datasets (indices 334-413) — 77 completed (digest stars_dm_slope_phase2 updated 2026-11-25T16:10:45Z)
+- 2026-11-25 — *run* — 416495 finished — wall 1:35: phase 2 n_live 1000/2000 sweep, 48 tasks (indices 276-323) — 48 completed (digest stars_dm_slope_phase2 updated 2026-11-25T16:10:45Z)
+- 2026-11-25 — *run* — 416468 finished — wall 2:46: phase 2 free fits, n_live 200/400, 267 tasks (indices 9-275) — 266 completed, 1 timeout (digest stars_dm_slope_phase2 updated 2026-11-25T16:10:45Z)
+- 2026-11-25 — *run* — 416459 finished — wall 0:03: phase 2 reference fits, 9 mocks (campaign indices 0-8) — 9 completed (digest stars_dm_slope_phase2 updated 2026-11-25T16:10:45Z)
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/stars_dm_slope.md)
 
@@ -570,17 +574,17 @@ Use the cortex skill. — resume adapt_snr_cap: read PyAutoCortex projects/adapt
 
 | Job | State | Partition | Date | Description |
 |---|---|---|---|---|
-| `416884` | open | gpu | 11-25 | weighting arms budget, rank, peak_share + control cap3_mesh on the 10 HST lenses (SLACS, BELLS), gpu array 0-9%4; phase 2 of PyAutoArray#714 |
+| `416941` | open | gpu | 11-25 | peak_share_unified arm (peak_share Hilbert mesh, AdaptSplit on the same soft S/N transform) on the 10 HST lenses, gpu array 0-9%4 |
 | `416571` | open | gpu | 11-25 | cap3 vs uncapped SLaM baseline on 5 COWLS M25 lenses x F150W + F277W (10 datasets), gpu array 14-23%4 |
 | `416418` | running | gpu | 11-25 | rerun Euclid tasks 10-13 after positions.json fix |
 
-<details><summary>Recent log — 5 of 6 entries</summary>
+<details><summary>Recent log — 5 of 8 entries</summary>
 
+- 2026-11-25 — *run* — 416941 submitted: peak_share_unified arm (peak_share Hilbert mesh, AdaptSplit on the same soft S/N transform) on the 10 HST lenses, gpu array 0-9%4
+- 2026-11-25 — *run* — 416884 failed: weighting arms budget, rank, peak_share + control cap3_mesh on the 10 HST lenses (SLACS, BELLS), gpu array 0-9%4; phase 2 of PyAutoArray#714 — cancelled by request before any task started; replaced by 416941
 - 2026-11-25 — *run* — 416884 submitted: weighting arms budget, rank, peak_share + control cap3_mesh on the 10 HST lenses (SLACS, BELLS), gpu array 0-9%4; phase 2 of PyAutoArray#714
 - 2026-11-25 — *run* — 416571 submitted: cap3 vs uncapped SLaM baseline on 5 COWLS M25 lenses x F150W + F277W (10 datasets), gpu array 14-23%4
 - 2026-11-25 — *run* — 416362 finished — wall 3:42: cap3 vs uncapped SLaM, 14 lenses (5 SLACS, 5 BELLS, 4 Euclid), gpu array 0-13%4 — 10/14 lenses complete (SLACS + BELLS, both arms); Euclid tasks 10-13 failed in 5 s on the positions.json format, fixed and rerun as 416418
-- 2026-11-25 — *run* — 416418 submitted: rerun Euclid tasks 10-13 after positions.json fix
-- 2026-11-24 — *run* — 416362 submitted: cap3 vs uncapped SLaM, 14 lenses (5 SLACS, 5 BELLS, 4 Euclid), gpu array 0-13%4
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/adapt_snr_cap.md)
 
