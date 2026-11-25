@@ -445,8 +445,8 @@ dm_sightlines:
 
 stars_dm_slope:
   remote: none
-  local_path: /mnt/c/Users/Jammy/Workspace/Science/development/stars_dm_slope
-  ral_root: /mnt/ral/jnightin/development/stars_dm_slope
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/complete/stars_dm_slope
+  ral_root: /mnt/ral/jnightin/complete/stars_dm_slope
   mirror: none
   sync_cli: hpc/sync
   sync_verbs: [push, pull, logs, sync, push-data-init, pull-full, status, submit, push-submit, jobs, sacct, cancel, wait-and-pull, tail, du, check, clear-logs]
@@ -454,8 +454,8 @@ stars_dm_slope:
   assistant: autolens_assistant
   witness_file: results/**/*.json
   partition: ral
-  status: active
-  note: born 2026-11-16 from ep_gnfw_slope; registered 2026-11-19 (the folder had no row); no git repository; RAL tree not yet pushed
+  status: retired
+  note: "retired 2026-11-25: wrap up this cortex project, ensure research is available and intake an issue to get parameterization and any other relevent work into the source code (human, 2026-11-25)"
 
 ep_gnfw_slope:
   remote: none

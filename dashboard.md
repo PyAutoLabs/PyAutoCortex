@@ -12,9 +12,9 @@ One ledger per science project: what is on the cluster right now, what the human
 |-------|------:|
 | [Running](#projects) | 1 |
 | [Open](#projects) | 3 |
-| [Active](#active) | 9 |
+| [Active](#active) | 8 |
 | [Dormant](#dormant) | 2 |
-| [Retired](#retired) | 20 |
+| [Retired](#retired) | 21 |
 
 <details><summary>📋 check in since last time</summary>
 
@@ -33,12 +33,12 @@ Help plan follow-up analyses or runs when requested, using the project’s own e
 
 Continue from decisions and authorizations already established in this conversation. After taking action, report what changed, what was recorded and what remains unresolved.
 
-Last check-in: 2026-11-25T17:11Z.
+Last check-in: 2026-11-25T17:34Z.
 ```
 
 </details>
 
-### Last check-in: 2026-11-25T17:11Z
+### Last check-in: 2026-11-25T17:34Z
 
 ## Science
 
@@ -89,6 +89,7 @@ Paper-bound science projects (`active/`, and `complete/` or `archive/` once reti
 | euclid_group | registered retired 2026-10-29 by human decision: storage tree, non-git; no RAL tree verified | 2026-10-29 |
 | cti | registered retired 2026-10-29 by human decision: archived CTI storage tree (COSMA era), non-git; no RAL tree verified | 2026-10-29 |
 | vignette | registered retired 2026-10-29 by human decision: archived vignette figures and DR1 material, non-git; no RAL tree | 2026-10-29 |
+| stars_dm_slope | retired 2026-11-25: wrap up this cortex project, ensure research is available and intake an issue to get parameterizati… | 2026-11-25 |
 
 ### Projects
 
@@ -214,6 +215,7 @@ dormant · ral · no issue yet
 - [euclid_group](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/euclid_group.md) — Euclid group-scale lens modelling, complete; kept for reference — registered retired 2026-10-29 by human decision: storage tree, non-git; no RAL tree verified — updated 2026-10-29
 - [cti](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/cti.md) — Charge transfer inefficiency modelling, archived COSMA-era storage — registered retired 2026-10-29 by human decision: archived CTI storage tree (COSMA era), non-git; no RAL tree verified — updated 2026-10-29
 - [vignette](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/vignette.md) — Strong-lens vignette figures and mosaic, archived — registered retired 2026-10-29 by human decision: archived vignette figures and DR1 material, non-git; no RAL tree — updated 2026-10-29
+- [stars_dm_slope](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/stars_dm_slope.md) — Parameterisations and priors for stars plus gNFW dark matter lens models — retired 2026-11-25: wrap up this cortex project, ensure research is available and intake an issue to get parameterization and any other relevent work into the source code (human, 2026-11-25) — updated 2026-11-25
 
 #### No ledger
 
@@ -233,7 +235,7 @@ Development projects (`development/`): exploratory work that develops or validat
 |-------|------:|
 | Running | 1 |
 | Open | 3 |
-| Projects | 8 |
+| Projects | 7 |
 
 ### Summary
 
@@ -246,7 +248,6 @@ Development projects (`development/`): exploratory work that develops or validat
 | slope_hierarchy_scale | 0 | 0 | 2026-10-29 |
 | ic50_workspace | 0 | 0 | 2026-10-29 |
 | dm_sightlines | 0 | 1 | 2026-11-25 |
-| stars_dm_slope | 0 | 0 | 2026-11-25 |
 | ep_gnfw_slope | 0 | 0 | 2026-11-19 |
 | adapt_snr_cap | 1 | 2 | 2026-11-25 |
 
@@ -469,46 +470,6 @@ Use the cortex skill. — resume dm_sightlines: read PyAutoCortex projects/dm_si
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/dm_sightlines.md)
 
 active · both · no issue yet
-
-</details>
-
-</details>
-
-<details id="project-stars_dm_slope"><summary><b>stars_dm_slope</b> — Parameterisations and priors for stars plus gNFW dark matter lens models · no runs recorded · updated 2026-11-25</summary>
-
-**Registered:** 2026-11-19
-
-**Local:** `` /mnt/c/Users/Jammy/Workspace/Science/development/stars_dm_slope ``
-
-**RAL:** `` /mnt/ral/jnightin/development/stars_dm_slope ``
-
-**Current position**
-
-Just opened — nothing submitted yet.
-
-<details><summary title="Copy resume prompt for stars_dm_slope">📋</summary>
-
-```
-Use the cortex skill. — resume stars_dm_slope: read PyAutoCortex projects/stars_dm_slope.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Workspace/Science/development/stars_dm_slope/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
-```
-
-</details>
-
-**Runs** (0)
-
-_nothing on the cluster_
-
-<details><summary>Recent log — 5 of 11 entries</summary>
-
-- 2026-11-25 — *run* — 416877 finished — wall 0:28: phase 2 information maps resubmitted to finish 3 partial maps (indices 336, 340, 348) — 3 completed (digest stars_dm_slope_phase2 updated 2026-11-25T16:10:45Z)
-- 2026-11-25 — *run* — 416523 finished — wall 3:29: phase 2 information-test likelihood maps, 80 datasets (indices 334-413) — 77 completed (digest stars_dm_slope_phase2 updated 2026-11-25T16:10:45Z)
-- 2026-11-25 — *run* — 416495 finished — wall 1:35: phase 2 n_live 1000/2000 sweep, 48 tasks (indices 276-323) — 48 completed (digest stars_dm_slope_phase2 updated 2026-11-25T16:10:45Z)
-- 2026-11-25 — *run* — 416468 finished — wall 2:46: phase 2 free fits, n_live 200/400, 267 tasks (indices 9-275) — 266 completed, 1 timeout (digest stars_dm_slope_phase2 updated 2026-11-25T16:10:45Z)
-- 2026-11-25 — *run* — 416459 finished — wall 0:03: phase 2 reference fits, 9 mocks (campaign indices 0-8) — 9 completed (digest stars_dm_slope_phase2 updated 2026-11-25T16:10:45Z)
-
-[full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/stars_dm_slope.md)
-
-active · ral · no issue yet
 
 </details>
 
