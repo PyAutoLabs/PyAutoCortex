@@ -9,9 +9,11 @@ Just opened — nothing submitted yet.
 
 ## Runs
 
+- 416450 — open — gpu — 2026-11-25 — phase 5 ladder sensitivity set 2: O'Riordan preset, Diemer-Joyce concentrations, r50 line-of-sight truncation, pyHalo cone; 4 variants x 8 seeds, parametric-source refits only, GPU array 0-31%4
 
 ## Log
 
+- 2026-11-25 — run — 416450 submitted: phase 5 ladder sensitivity set 2: O'Riordan preset, Diemer-Joyce concentrations, r50 line-of-sight truncation, pyHalo cone; 4 variants x 8 seeds, parametric-source refits only, GPU array 0-31%4
 - 2026-11-25 — run — 416383 finished — wall 3:29: phase 6 tier 3: Nautilus fits (200 live points, widened priors), pixelised source + refitted macro model with and without multipoles; 2 smooth floors, seeds 0-3 x {fiducial, galacticus truncation}; 18 tasks, 4 A100s at a time — 18/18 tasks completed; macro fits about 24 min each, macro_multipoles fits about 57 min each
 - 2026-11-24 — run — 416383 submitted: phase 6 tier 3: Nautilus fits (200 live points, widened priors), pixelised source + refitted macro model with and without multipoles; 2 smooth floors, seeds 0-3 x {fiducial, galacticus truncation}; 18 tasks, 4 A100s at a time
 - 2026-11-24 — run — 416379 finished — wall 0:21: phase 6 tier 3: Nautilus fits, pixelised source + refitted macro model (with and without multipoles); smooth floor, seeds 0-3 x {fiducial, galacticus truncation}; 16 tasks, 2-4 A100s at a time — superseded: 14 pending tasks cancelled before starting and the 2 running ones cancelled at 21 min, to rerun everything with wider priors as 416383
