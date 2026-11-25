@@ -9,7 +9,7 @@ Just opened — nothing submitted yet.
 
 ## Runs
 
-- 416418 — open — gpu — 2026-11-25 — rerun Euclid tasks 10-13 after positions.json fix
+- 416418 — running — gpu — 2026-11-25 — rerun Euclid tasks 10-13 after positions.json fix
 - 416571 — open — gpu — 2026-11-25 — cap3 vs uncapped SLaM baseline on 5 COWLS M25 lenses x F150W + F277W (10 datasets), gpu array 14-23%4
 
 ## Log
