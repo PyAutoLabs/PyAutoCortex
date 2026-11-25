@@ -12,6 +12,7 @@ We will stop trying to do this with Euclid lenses, and perform a follow up corte
 
 ## Log
 
+- 2026-11-25 — note — Source-code prompt updated on the human's ask: assess whether the mass-sheet rescaling can be a separate object from the mass profiles (so it also applies to a power law), and add a physical-units parameterisation (M200 for the halo, a physical stellar mass or M/L for the stars). Now four slices (Mind commit 08b49f25b). Final documents and derived analysis copied to the RAL tree.
 - 2026-11-25 — note — retired: wrap up this cortex project, ensure research is available and intake an issue to get parameterization and any other relevent work into the source code (human, 2026-11-25)
 - 2026-11-25 — note — Source-code work filed in PyAutoMind on the human's ask: draft/feature/autogalaxy/stars_gnfw_lens_model_in_the_mass.md, priority high, three slices (Mind commit 5c9ed7500). Project folder moved to complete/ on the laptop and on RAL; recommendation in wiki/project/recommendation.md.
 - 2026-11-25 — note — Human, on the phase-2 results (four questions: recommend P1-inv and P1'-f-inv; what the weak slope constraint means; the timed-out fit 146; P3 and P3-offset): "1. yes follow the recommendations, 2. We will stop trying to do this with Euclid lenses, and perform a follow up cortex project which tries it at HST data, once 1 is implemented in the source code. 3. dont bother fitting 146 4. drop"
