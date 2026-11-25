@@ -10,8 +10,8 @@ One ledger per science project: what is on the cluster right now, what the human
 
 | Where | Count |
 |-------|------:|
-| [Running](#projects) | 0 |
-| [Open](#projects) | 6 |
+| [Running](#projects) | 1 |
+| [Open](#projects) | 3 |
 | [Active](#active) | 9 |
 | [Dormant](#dormant) | 2 |
 | [Retired](#retired) | 20 |
@@ -33,12 +33,12 @@ Help plan follow-up analyses or runs when requested, using the project’s own e
 
 Continue from decisions and authorizations already established in this conversation. After taking action, report what changed, what was recorded and what remains unresolved.
 
-Last check-in: 2026-11-13T14:04Z.
+Last check-in: 2026-11-25T16:31Z.
 ```
 
 </details>
 
-### Last check-in: 2026-11-13T14:04Z
+### Last check-in: 2026-11-25T16:31Z
 
 ## Science
 
@@ -47,7 +47,7 @@ Paper-bound science projects (`active/`, and `complete/` or `archive/` once reti
 | Science | Count |
 |-------|------:|
 | Running | 0 |
-| Open | 3 |
+| Open | 0 |
 | Projects | 3 |
 
 ### Summary
@@ -56,7 +56,7 @@ Paper-bound science projects (`active/`, and `complete/` or `archive/` once reti
 
 | Project | Running | Open | Last update |
 |---|---:|---:|---|
-| sdssj0946_subhalo | 0 | 3 | 2026-11-18 |
+| sdssj0946_subhalo | 0 | 0 | 2026-11-25 |
 
 #### Dormant
 
@@ -94,7 +94,7 @@ Paper-bound science projects (`active/`, and `complete/` or `archive/` once reti
 
 #### Active
 
-<details id="project-sdssj0946_subhalo"><summary><b>sdssj0946_subhalo</b> — Reproduce He et al. 2025 SDSSJ0946+1006 luminous subhalo on RAL A100 GPUs · 0 running · 3 open · updated 2026-11-18</summary>
+<details id="project-sdssj0946_subhalo"><summary><b>sdssj0946_subhalo</b> — Reproduce He et al. 2025 SDSSJ0946+1006 luminous subhalo on RAL A100 GPUs · no runs recorded · updated 2026-11-25</summary>
 
 **Registered:** 2026-11-06
 
@@ -114,27 +114,17 @@ Use the cortex skill. — resume sdssj0946_subhalo: read PyAutoCortex projects/s
 
 </details>
 
-**Runs** (3)
+**Runs** (0)
 
-| Job | State | Partition | Date | Description |
-|---|---|---|---|---|
-| `415759` | open | gpu | 11-17 | Real data rep4: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25 |
-| `415758` | open | gpu | 11-17 | Real data rep3: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25 |
-| `415576` | open | gpu | 11-16 | Luminous solution tests on h25 (n_live 2400): h25mass (m200 limited to H25's 8.4-10.2), masspos / lightpos (centre limited around the mass / light solution), t… |
+_nothing on the cluster_
 
-<details><summary>Full descriptions (1 shortened above)</summary>
+<details><summary>Recent log — 5 of 67 entries</summary>
 
-- `415576` — Luminous solution tests on h25 (n_live 2400): h25mass (m200 limited to H25's 8.4-10.2), masspos / lightpos (centre limited around the mass / light solution), tuned (Nautilus n_networks 16, enlarge_per_dim 1.3, split_threshold 25, f_live 0.001). Sampling or likelihood?
-
-</details>
-
-<details><summary>Recent log — 5 of 64 entries</summary>
-
+- 2026-11-25 — *run* — 415759 finished — wall 7:37: Real data rep4: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25 — sacct: COMPLETED, ended 2026-11-18 12:00; recorded at the 2026-11-25 check-in
+- 2026-11-25 — *run* — 415758 finished — wall 9:05: Real data rep3: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25 — sacct: COMPLETED, ended 2026-11-18 11:21; recorded at the 2026-11-25 check-in
+- 2026-11-25 — *run* — 415576 finished — wall 25:47: Luminous solution tests on h25 (n_live 2400): h25mass (m200 limited to H25's 8.4-10.2), masspos / lightpos (centre limited around the mass / light solution), tuned (Nautilus n_networks 16, enlarge_per_dim 1.3, split_threshold 25, f_live 0.001). Sampling or likelihood? — sacct: tasks 6-9 COMPLETED, last ended 2026-11-19 01:32; recorded at the 2026-11-25 check-in
 - 2026-11-18 — *result* — Evidence check closes on h25: the lightpos and masspos boxes (each 0.04 of the centre prior) weighted by their prior share sum to ln Z -849.98 vs the full luminous fit's -850.02, split ~96/4 between light and mass solutions as the full Nautilus run weighted them. Nautilus is not missing a solution on this chain. light_only rep1 ties luminous (+0.8): light only ties luminous on all three chains done (-0.8, +0.8, +0.6).
 - 2026-11-18 — *run* — 415756 finished — wall 9:12: Real data rep1: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25 — light_only rep1: log Z -825.44 vs luminous -826.22
-- 2026-11-18 — *result* — Mock repeats and first solution tests (pulled 2026-11-18). Mock (truth luminous, m200 10^9.76): every chain reproduces H25's steep dark subhalo (c 2.1-3.2 vs true 1.51, off position, ~0.6 dex too much inner mass); luminous - dark +2 to +11 (H25 mock +12); light only beats dark (+1 to +10) and is within 1-5 of luminous, with the luminous mass underestimated. So the real-data pattern (light only ties luminous, mass unconstrained) is what a luminous subhalo with mass produces. Real data: light_only rep2 ties luminous (+0.6). luminous_h25mass (m200 limited to 10^8.4-10.2) reaches the same best log L as the full fit (-793.11 vs -793.15) and log Z -849.30 vs -850.02: the unbounded mass is the undetectable low-mass tail. masspos evidence share (~4%) matches the full run. No sign Nautilus misses a better solution on h25. Details: journal section 9.
-- 2026-11-18 — *run* — 415757 finished — wall 7:23: Real data rep2: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25 — light_only rep2: log Z -843.10 vs luminous -843.67
-- 2026-11-18 — *run* — 415575 finished — wall 11:57: H25 mock rep4: none / dark / luminous / light_only (array 0,1,2,4, n_live 2400), afterok:415574 — mock rep4
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/sdssj0946_subhalo.md)
 
@@ -241,7 +231,7 @@ Development projects (`development/`): exploratory work that develops or validat
 
 | Development | Count |
 |-------|------:|
-| Running | 0 |
+| Running | 1 |
 | Open | 3 |
 | Projects | 8 |
 
@@ -258,7 +248,7 @@ Development projects (`development/`): exploratory work that develops or validat
 | dm_sightlines | 0 | 1 | 2026-11-25 |
 | stars_dm_slope | 0 | 0 | 2026-11-19 |
 | ep_gnfw_slope | 0 | 0 | 2026-11-19 |
-| adapt_snr_cap | 0 | 2 | 2026-11-25 |
+| adapt_snr_cap | 1 | 2 | 2026-11-25 |
 
 #### Dormant
 
@@ -556,7 +546,7 @@ active · both · no issue yet
 
 </details>
 
-<details id="project-adapt_snr_cap"><summary><b>adapt_snr_cap</b> — Real-data test of the S/N 3 adapt-image cap: cap3 vs uncapped SLaM, 14 lenses · 0 running · 2 open · updated 2026-11-25</summary>
+<details id="project-adapt_snr_cap"><summary><b>adapt_snr_cap</b> — Real-data test of the S/N 3 adapt-image cap: cap3 vs uncapped SLaM, 14 lenses · 1 running · 2 open · updated 2026-11-25</summary>
 
 **Registered:** 2026-11-24
 
@@ -576,20 +566,21 @@ Use the cortex skill. — resume adapt_snr_cap: read PyAutoCortex projects/adapt
 
 </details>
 
-**Runs** (2)
+**Runs** (3)
 
 | Job | State | Partition | Date | Description |
 |---|---|---|---|---|
+| `416884` | open | gpu | 11-25 | weighting arms budget, rank, peak_share + control cap3_mesh on the 10 HST lenses (SLACS, BELLS), gpu array 0-9%4; phase 2 of PyAutoArray#714 |
 | `416571` | open | gpu | 11-25 | cap3 vs uncapped SLaM baseline on 5 COWLS M25 lenses x F150W + F277W (10 datasets), gpu array 14-23%4 |
-| `416418` | open | gpu | 11-25 | rerun Euclid tasks 10-13 after positions.json fix |
+| `416418` | running | gpu | 11-25 | rerun Euclid tasks 10-13 after positions.json fix |
 
-<details><summary>Recent log — 5 of 5 entries</summary>
+<details><summary>Recent log — 5 of 6 entries</summary>
 
+- 2026-11-25 — *run* — 416884 submitted: weighting arms budget, rank, peak_share + control cap3_mesh on the 10 HST lenses (SLACS, BELLS), gpu array 0-9%4; phase 2 of PyAutoArray#714
 - 2026-11-25 — *run* — 416571 submitted: cap3 vs uncapped SLaM baseline on 5 COWLS M25 lenses x F150W + F277W (10 datasets), gpu array 14-23%4
 - 2026-11-25 — *run* — 416362 finished — wall 3:42: cap3 vs uncapped SLaM, 14 lenses (5 SLACS, 5 BELLS, 4 Euclid), gpu array 0-13%4 — 10/14 lenses complete (SLACS + BELLS, both arms); Euclid tasks 10-13 failed in 5 s on the positions.json format, fixed and rerun as 416418
 - 2026-11-25 — *run* — 416418 submitted: rerun Euclid tasks 10-13 after positions.json fix
 - 2026-11-24 — *run* — 416362 submitted: cap3 vs uncapped SLaM, 14 lenses (5 SLACS, 5 BELLS, 4 Euclid), gpu array 0-13%4
-- 2026-11-24 — *note* — ledger opened
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/adapt_snr_cap.md)
 
