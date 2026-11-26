@@ -11,7 +11,7 @@ One ledger per science project: what is on the cluster right now, what the human
 | Where | Count |
 |-------|------:|
 | [Running](#projects) | 1 |
-| [Open](#projects) | 1 |
+| [Open](#projects) | 3 |
 | [Active](#active) | 9 |
 | [Dormant](#dormant) | 2 |
 | [Retired](#retired) | 22 |
@@ -47,7 +47,7 @@ Paper-bound science projects (`active/`, and `complete/` or `archive/` once reti
 | Science | Count |
 |-------|------:|
 | Running | 0 |
-| Open | 0 |
+| Open | 2 |
 | Projects | 4 |
 
 ### Summary
@@ -57,7 +57,7 @@ Paper-bound science projects (`active/`, and `complete/` or `archive/` once reti
 | Project | Running | Open | Last update |
 |---|---:|---:|---|
 | sdssj0946_subhalo | 0 | 0 | 2026-11-25 |
-| sdssj0946_subhalo_v2 | 0 | 0 | 2026-11-26 |
+| sdssj0946_subhalo_v2 | 0 | 2 | 2026-11-26 |
 
 #### Dormant
 
@@ -137,7 +137,7 @@ active · gpu · no issue yet
 
 </details>
 
-<details id="project-sdssj0946_subhalo_v2"><summary><b>sdssj0946_subhalo_v2</b> — SDSSJ0946 subhalo v2: HilbertSNR, two masks, Vegetti light prior, then light plus dark · no runs recorded · updated 2026-11-26</summary>
+<details id="project-sdssj0946_subhalo_v2"><summary><b>sdssj0946_subhalo_v2</b> — SDSSJ0946 subhalo v2: HilbertSNR, two masks, Vegetti light prior, then light plus dark · 0 running · 2 open · updated 2026-11-26</summary>
 
 **Registered:** 2026-11-26
 
@@ -157,12 +157,17 @@ Use the cortex skill. — resume sdssj0946_subhalo_v2: read PyAutoCortex project
 
 </details>
 
-**Runs** (0)
+**Runs** (2)
 
-_nothing on the cluster_
+| Job | State | Partition | Date | Description |
+|---|---|---|---|---|
+| `417093` | open | gpu | 11-26 | SLaM chain, 3.5 arcsec mask, HilbertSNR adapt images (private base PyAuto_wt/sdssj0946-v2) |
+| `417092` | open | gpu | 11-26 | SLaM chain, 2.2 arcsec mask, HilbertSNR adapt images (private base PyAuto_wt/sdssj0946-v2) |
 
-<details><summary>Recent log — 1 of 1 entry</summary>
+<details><summary>Recent log — 3 of 3 entries</summary>
 
+- 2026-11-26 — *run* — 417093 submitted: SLaM chain, 3.5 arcsec mask, HilbertSNR adapt images (private base PyAuto_wt/sdssj0946-v2)
+- 2026-11-26 — *run* — 417092 submitted: SLaM chain, 2.2 arcsec mask, HilbertSNR adapt images (private base PyAuto_wt/sdssj0946-v2)
 - 2026-11-26 — *note* — ledger opened
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/sdssj0946_subhalo_v2.md)
