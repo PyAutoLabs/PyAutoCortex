@@ -203,10 +203,18 @@ Use the cortex skill. — resume cowls_diana_v2: read PyAutoCortex projects/cowl
 
 | Job | State | Partition | Date | Description |
 |---|---|---|---|---|
-| `417095` | open | ral | 11-26 | SLaM chain (SP to source_tune, no subhalo), ral CPU array tasks 5 COSJ100018+022138 and 8 COSJ100140+020632, 3.0 arcsec mask |
+| `417101` | open | ral | 11-26 | resubmit of 417095 with setup=auto (JAX dense SP, numba sparse Pix1 on): ral CPU array tasks 5 COSJ100018+022138 and 8 COSJ100140+020632; SP loads from disk, P… |
 
-<details><summary>Recent log — 2 of 2 entries</summary>
+<details><summary>Full descriptions (1 shortened above)</summary>
 
+- `417101` — resubmit of 417095 with setup=auto (JAX dense SP, numba sparse Pix1 on): ral CPU array tasks 5 COSJ100018+022138 and 8 COSJ100140+020632; SP loads from disk, Pix1 resumes from checkpoint
+
+</details>
+
+<details><summary>Recent log — 4 of 4 entries</summary>
+
+- 2026-11-26 — *run* — 417101 submitted: resubmit of 417095 with setup=auto (JAX dense SP, numba sparse Pix1 on): ral CPU array tasks 5 COSJ100018+022138 and 8 COSJ100140+020632; SP loads from disk, Pix1 resumes from checkpoint
+- 2026-11-26 — *run* — 417095 failed — wall 2:36: SLaM chain (SP to source_tune, no subhalo), ral CPU array tasks 5 COSJ100018+022138 and 8 COSJ100140+020632, 3.0 arcsec mask — cancelled on purpose: pipeline used use_jax=True (JAX dense) for every search; resubmitted as 417101 with setup=auto (numba sparse for pixelized searches)
 - 2026-11-26 — *run* — 417095 submitted: SLaM chain (SP to source_tune, no subhalo), ral CPU array tasks 5 COSJ100018+022138 and 8 COSJ100140+020632, 3.0 arcsec mask
 - 2026-11-26 — *note* — ledger opened
 
