@@ -459,8 +459,8 @@ stars_dm_slope:
 
 ep_gnfw_slope:
   remote: none
-  local_path: /mnt/c/Users/Jammy/Workspace/Science/development/ep_gnfw_slope
-  ral_root: /mnt/ral/jnightin/development/ep_gnfw_slope
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/archive/ep_gnfw_slope
+  ral_root: /mnt/ral/jnightin/archive/ep_gnfw_slope
   mirror: none
   sync_cli: hpc/sync
   sync_verbs: [push, pull, logs, sync, push-data-init, pull-full, status, submit, push-submit, jobs, sacct, cancel, wait-and-pull, tail, du, check, clear-logs]
@@ -468,8 +468,8 @@ ep_gnfw_slope:
   assistant: autolens_assistant
   witness_file: results/**/*.json
   partition: both
-  status: active
-  note: born 2026-11-13 from the euclid_dr1 LensTwin phase-4 finding; registered 2026-11-19 (the folder had no row); no git repository
+  status: retired
+  note: "retired 2026-11-26: retired on the human's decision in the 2026-11-26 Cortex review"
 
 adapt_snr_cap:
   remote: none
