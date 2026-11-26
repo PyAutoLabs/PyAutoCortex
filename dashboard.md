@@ -12,7 +12,7 @@ One ledger per science project: what is on the cluster right now, what the human
 |-------|------:|
 | [Running](#projects) | 1 |
 | [Open](#projects) | 3 |
-| [Active](#active) | 9 |
+| [Active](#active) | 10 |
 | [Dormant](#dormant) | 2 |
 | [Retired](#retired) | 22 |
 
@@ -48,7 +48,7 @@ Paper-bound science projects (`active/`, and `complete/` or `archive/` once reti
 |-------|------:|
 | Running | 0 |
 | Open | 2 |
-| Projects | 4 |
+| Projects | 5 |
 
 ### Summary
 
@@ -58,6 +58,7 @@ Paper-bound science projects (`active/`, and `complete/` or `archive/` once reti
 |---|---:|---:|---|
 | sdssj0946_subhalo | 0 | 0 | 2026-11-25 |
 | sdssj0946_subhalo_v2 | 0 | 2 | 2026-11-26 |
+| cowls_diana_v2 | 0 | 0 | 2026-11-26 |
 
 #### Dormant
 
@@ -173,6 +174,42 @@ Use the cortex skill. — resume sdssj0946_subhalo_v2: read PyAutoCortex project
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/sdssj0946_subhalo_v2.md)
 
 active · gpu · no issue yet
+
+</details>
+
+</details>
+
+<details id="project-cowls_diana_v2"><summary><b>cowls_diana_v2</b> — SLaM chain (no subhalo) for 9 COWLS JWST F277W lenses, RAL CPU · no runs recorded · updated 2026-11-26</summary>
+
+**Registered:** 2026-11-26
+
+**Local:** `` /mnt/c/Users/Jammy/Workspace/Science/active/cowls_diana_v2 ``
+
+**RAL:** `` /mnt/ral/jnightin/active/cowls_diana_v2 ``
+
+**Current position**
+
+Set up 2026-11-26: 9 lenses, 3.0" minimum mask, sdssj0946_subhalo_v2 chain on RAL CPU; first submissions COSJ100018+022138 and COSJ100140+020632.
+
+<details><summary title="Copy resume prompt for cowls_diana_v2">📋</summary>
+
+```
+Use the cortex skill. — resume cowls_diana_v2: read PyAutoCortex projects/cowls_diana_v2.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Workspace/Science/active/cowls_diana_v2/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
+```
+
+</details>
+
+**Runs** (0)
+
+_nothing on the cluster_
+
+<details><summary>Recent log — 1 of 1 entry</summary>
+
+- 2026-11-26 — *note* — ledger opened
+
+[full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/cowls_diana_v2.md)
+
+active · ral · no issue yet
 
 </details>
 
