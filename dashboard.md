@@ -11,7 +11,7 @@ One ledger per science project: what is on the cluster right now, what the human
 | Where | Count |
 |-------|------:|
 | [Running](#projects) | 1 |
-| [Open](#projects) | 3 |
+| [Open](#projects) | 4 |
 | [Active](#active) | 10 |
 | [Dormant](#dormant) | 2 |
 | [Retired](#retired) | 22 |
@@ -47,7 +47,7 @@ Paper-bound science projects (`active/`, and `complete/` or `archive/` once reti
 | Science | Count |
 |-------|------:|
 | Running | 0 |
-| Open | 2 |
+| Open | 3 |
 | Projects | 5 |
 
 ### Summary
@@ -58,7 +58,7 @@ Paper-bound science projects (`active/`, and `complete/` or `archive/` once reti
 |---|---:|---:|---|
 | sdssj0946_subhalo | 0 | 0 | 2026-11-25 |
 | sdssj0946_subhalo_v2 | 0 | 2 | 2026-11-26 |
-| cowls_diana_v2 | 0 | 0 | 2026-11-26 |
+| cowls_diana_v2 | 0 | 1 | 2026-11-26 |
 
 #### Dormant
 
@@ -179,7 +179,7 @@ active · gpu · no issue yet
 
 </details>
 
-<details id="project-cowls_diana_v2"><summary><b>cowls_diana_v2</b> — SLaM chain (no subhalo) for 9 COWLS JWST F277W lenses, RAL CPU · no runs recorded · updated 2026-11-26</summary>
+<details id="project-cowls_diana_v2"><summary><b>cowls_diana_v2</b> — SLaM chain (no subhalo) for 9 COWLS JWST F277W lenses, RAL CPU · 0 running · 1 open · updated 2026-11-26</summary>
 
 **Registered:** 2026-11-26
 
@@ -199,12 +199,15 @@ Use the cortex skill. — resume cowls_diana_v2: read PyAutoCortex projects/cowl
 
 </details>
 
-**Runs** (0)
+**Runs** (1)
 
-_nothing on the cluster_
+| Job | State | Partition | Date | Description |
+|---|---|---|---|---|
+| `417095` | open | ral | 11-26 | SLaM chain (SP to source_tune, no subhalo), ral CPU array tasks 5 COSJ100018+022138 and 8 COSJ100140+020632, 3.0 arcsec mask |
 
-<details><summary>Recent log — 1 of 1 entry</summary>
+<details><summary>Recent log — 2 of 2 entries</summary>
 
+- 2026-11-26 — *run* — 417095 submitted: SLaM chain (SP to source_tune, no subhalo), ral CPU array tasks 5 COSJ100018+022138 and 8 COSJ100140+020632, 3.0 arcsec mask
 - 2026-11-26 — *note* — ledger opened
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/cowls_diana_v2.md)
