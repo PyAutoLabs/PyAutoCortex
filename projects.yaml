@@ -484,3 +484,16 @@ adapt_snr_cap:
   partition: gpu
   status: active
   note: "born 2026-11-24: autolens_workspace Delaunay SLaM (Hilbert 1250 + AdaptSplit), cap3 vs uncapped arms from a shared source_lp, 5 SLACS + 5 BELLS GALLERY + 4 Euclid DR1 high-S/N; local git, no remote"
+
+erc_angular_structure:
+  remote: none
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/development/erc_angular_structure
+  ral_root: /mnt/ral/jnightin/development/erc_angular_structure
+  mirror: none
+  sync_cli: hpc/sync
+  sync_verbs: [push, pull, logs, sync, push-data-init, pull-full, status, submit, push-submit, jobs, sacct, cancel, wait-and-pull, tail, du, check, clear-logs]
+  ledger: wiki/project/state.md
+  assistant: autolens_assistant
+  witness_file: results/**/*.json
+  partition: ral
+  status: active
