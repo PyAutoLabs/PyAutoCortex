@@ -481,7 +481,7 @@ adapt_snr_cap:
   ledger: wiki/project/state.md
   assistant: none
   witness_file: results/**/*.json
-  partition: gpu
+  partition: both
   status: active
   note: "born 2026-11-24: autolens_workspace Delaunay SLaM (Hilbert 1250 + AdaptSplit), cap3 vs uncapped arms from a shared source_lp, 5 SLACS + 5 BELLS GALLERY + 4 Euclid DR1 high-S/N; local git, no remote"
 

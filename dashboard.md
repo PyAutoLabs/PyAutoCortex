@@ -544,7 +544,7 @@ Use the cortex skill. — resume adapt_snr_cap: read PyAutoCortex projects/adapt
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/adapt_snr_cap.md)
 
-active · gpu · no issue yet
+active · both · no issue yet
 
 </details>
 
