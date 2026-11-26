@@ -12,7 +12,7 @@ One ledger per science project: what is on the cluster right now, what the human
 |-------|------:|
 | [Running](#projects) | 1 |
 | [Open](#projects) | 2 |
-| [Active](#active) | 8 |
+| [Active](#active) | 9 |
 | [Dormant](#dormant) | 2 |
 | [Retired](#retired) | 22 |
 
@@ -48,7 +48,7 @@ Paper-bound science projects (`active/`, and `complete/` or `archive/` once reti
 |-------|------:|
 | Running | 0 |
 | Open | 0 |
-| Projects | 3 |
+| Projects | 4 |
 
 ### Summary
 
@@ -57,6 +57,7 @@ Paper-bound science projects (`active/`, and `complete/` or `archive/` once reti
 | Project | Running | Open | Last update |
 |---|---:|---:|---|
 | sdssj0946_subhalo | 0 | 0 | 2026-11-25 |
+| sdssj0946_subhalo_v2 | 0 | 0 | 2026-11-26 |
 
 #### Dormant
 
@@ -129,6 +130,42 @@ _nothing on the cluster_
 - 2026-11-18 — *run* — 415756 finished — wall 9:12: Real data rep1: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25 — light_only rep1: log Z -825.44 vs luminous -826.22
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/sdssj0946_subhalo.md)
+
+active · gpu · no issue yet
+
+</details>
+
+</details>
+
+<details id="project-sdssj0946_subhalo_v2"><summary><b>sdssj0946_subhalo_v2</b> — SDSSJ0946 subhalo v2: HilbertSNR, two masks, Vegetti light prior, then light plus dark · no runs recorded · updated 2026-11-26</summary>
+
+**Registered:** 2026-11-26
+
+**Local:** `` /mnt/c/Users/Jammy/Workspace/Science/active/sdssj0946_subhalo_v2 ``
+
+**RAL:** `` /mnt/ral/jnightin/active/sdssj0946_subhalo_v2 ``
+
+**Current position**
+
+Set up 2026-11-26 from sdssj0946_subhalo (retired): HilbertSNR + soft S/N adapt images, 2.2 and 3.5 arcsec masks, H25 and Vegetti light priors. Nothing submitted; RAL base needs the HilbertSNR commits first.
+
+<details><summary title="Copy resume prompt for sdssj0946_subhalo_v2">📋</summary>
+
+```
+Use the cortex skill. — resume sdssj0946_subhalo_v2: read PyAutoCortex projects/sdssj0946_subhalo_v2.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Workspace/Science/active/sdssj0946_subhalo_v2/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
+```
+
+</details>
+
+**Runs** (0)
+
+_nothing on the cluster_
+
+<details><summary>Recent log — 1 of 1 entry</summary>
+
+- 2026-11-26 — *note* — ledger opened
+
+[full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/sdssj0946_subhalo_v2.md)
 
 active · gpu · no issue yet
 
