@@ -333,8 +333,8 @@ pj011646_final:
 
 sdssj0946_subhalo:
   remote: none
-  local_path: /mnt/c/Users/Jammy/Workspace/Science/active/sdssj0946_subhalo
-  ral_root: /mnt/ral/jnightin/active/sdssj0946_subhalo
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/complete/sdssj0946_subhalo
+  ral_root: /mnt/ral/jnightin/complete/sdssj0946_subhalo
   mirror: none
   sync_cli: hpc/sync
   sync_verbs: [push, pull, logs, sync, push-data-init, pull-full, status, submit, push-submit, jobs, sacct, cancel, wait-and-pull, tail, du, check, clear-logs]
@@ -343,7 +343,7 @@ sdssj0946_subhalo:
   witness_file: results/**/*.json
   partition: gpu
   status: retired
-  note: "retired 2026-11-26: on the human's request; reproduction of He et al. 2025 closed with the repeat, mock and solution-test experiments (journal sections 8-10); nothing on RAL; previously: born 2026-11-06, reproduction of He et al. 2025 (arXiv:2506.07978) on HST F814W of SDSSJ0946+1006 — SLaM chain (MGE lens light, DelaunayNN 1250 px + AdaptSplit, EPL+shear) then no/dark/luminous NFW subhalo on RAL A100s; local git, no remote"
+  note: "retired 2026-11-26: on the human's request; reproduction of He et al. 2025 closed with the repeat, mock and solution-test experiments (journal sections 8-10; findings in wiki/project/results_summary.md); superseded by sdssj0946_subhalo_v2; folder moved to complete/ on the laptop and RAL 2026-11-26; nothing on RAL; previously: born 2026-11-06, reproduction of He et al. 2025 (arXiv:2506.07978) on HST F814W of SDSSJ0946+1006 — SLaM chain (MGE lens light, DelaunayNN 1250 px + AdaptSplit, EPL+shear) then no/dark/luminous NFW subhalo on RAL A100s; local git, no remote"
 
 euclid_detailed:
   remote: PyAutoLabs/euclid_detailed
