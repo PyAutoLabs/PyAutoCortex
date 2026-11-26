@@ -11,10 +11,10 @@ One ledger per science project: what is on the cluster right now, what the human
 | Where | Count |
 |-------|------:|
 | [Running](#projects) | 1 |
-| [Open](#projects) | 3 |
+| [Open](#projects) | 2 |
 | [Active](#active) | 8 |
 | [Dormant](#dormant) | 2 |
-| [Retired](#retired) | 21 |
+| [Retired](#retired) | 22 |
 
 <details><summary>📋 check in since last time</summary>
 
@@ -90,6 +90,7 @@ Paper-bound science projects (`active/`, and `complete/` or `archive/` once reti
 | cti | registered retired 2026-10-29 by human decision: archived CTI storage tree (COSMA era), non-git; no RAL tree verified | 2026-10-29 |
 | vignette | registered retired 2026-10-29 by human decision: archived vignette figures and DR1 material, non-git; no RAL tree | 2026-10-29 |
 | stars_dm_slope | retired 2026-11-25: wrap up this cortex project, ensure research is available and intake an issue to get parameterizati… | 2026-11-25 |
+| ep_gnfw_slope | retired 2026-11-26: retired on the human's decision in the 2026-11-26 Cortex review | 2026-11-26 |
 
 ### Projects
 
@@ -216,6 +217,7 @@ dormant · ral · no issue yet
 - [cti](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/cti.md) — Charge transfer inefficiency modelling, archived COSMA-era storage — registered retired 2026-10-29 by human decision: archived CTI storage tree (COSMA era), non-git; no RAL tree verified — updated 2026-10-29
 - [vignette](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/vignette.md) — Strong-lens vignette figures and mosaic, archived — registered retired 2026-10-29 by human decision: archived vignette figures and DR1 material, non-git; no RAL tree — updated 2026-10-29
 - [stars_dm_slope](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/stars_dm_slope.md) — Parameterisations and priors for stars plus gNFW dark matter lens models — retired 2026-11-25: wrap up this cortex project, ensure research is available and intake an issue to get parameterization and any other relevent work into the source code (human, 2026-11-25) — updated 2026-11-25
+- [ep_gnfw_slope](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/ep_gnfw_slope.md) — EP recovery of a gNFW inner slope shared across 50 simulated Euclid lenses — retired 2026-11-26: retired on the human's decision in the 2026-11-26 Cortex review — updated 2026-11-26
 
 #### No ledger
 
@@ -234,7 +236,7 @@ Development projects (`development/`): exploratory work that develops or validat
 | Development | Count |
 |-------|------:|
 | Running | 1 |
-| Open | 3 |
+| Open | 2 |
 | Projects | 7 |
 
 ### Summary
@@ -247,9 +249,9 @@ Development projects (`development/`): exploratory work that develops or validat
 | ep_toy_gaussian | 0 | 0 | 2026-10-29 |
 | slope_hierarchy_scale | 0 | 0 | 2026-10-29 |
 | ic50_workspace | 0 | 0 | 2026-10-29 |
-| dm_sightlines | 0 | 1 | 2026-11-25 |
-| ep_gnfw_slope | 0 | 0 | 2026-11-19 |
+| dm_sightlines | 0 | 0 | 2026-11-25 |
 | adapt_snr_cap | 1 | 2 | 2026-11-25 |
+| erc_angular_structure | 0 | 0 | 2026-11-26 |
 
 #### Dormant
 
@@ -427,7 +429,7 @@ active · ral · [PyAutoCortex#36](https://github.com/PyAutoLabs/PyAutoCortex/is
 
 </details>
 
-<details id="project-dm_sightlines"><summary><b>dm_sightlines</b> — CDM lens subhalo and line-of-sight halo simulator in JAX, with image diagnostics · 0 running · 1 open · updated 2026-11-25</summary>
+<details id="project-dm_sightlines"><summary><b>dm_sightlines</b> — CDM lens subhalo and line-of-sight halo simulator in JAX, with image diagnostics · no runs recorded · updated 2026-11-25</summary>
 
 **Registered:** 2026-11-19
 
@@ -447,63 +449,19 @@ Use the cortex skill. — resume dm_sightlines: read PyAutoCortex projects/dm_si
 
 </details>
 
-**Runs** (1)
-
-| Job | State | Partition | Date | Description |
-|---|---|---|---|---|
-| `416450` | open | gpu | 11-25 | phase 5 ladder sensitivity set 2: O'Riordan preset, Diemer-Joyce concentrations, r50 line-of-sight truncation, pyHalo cone; 4 variants x 8 seeds, parametric-so… |
-
-<details><summary>Full descriptions (1 shortened above)</summary>
-
-- `416450` — phase 5 ladder sensitivity set 2: O'Riordan preset, Diemer-Joyce concentrations, r50 line-of-sight truncation, pyHalo cone; 4 variants x 8 seeds, parametric-source refits only, GPU array 0-31%4
-
-</details>
-
-<details><summary>Recent log — 5 of 14 entries</summary>
-
-- 2026-11-25 — *run* — 416450 submitted: phase 5 ladder sensitivity set 2: O'Riordan preset, Diemer-Joyce concentrations, r50 line-of-sight truncation, pyHalo cone; 4 variants x 8 seeds, parametric-source refits only, GPU array 0-31%4
-- 2026-11-25 — *run* — 416383 finished — wall 3:29: phase 6 tier 3: Nautilus fits (200 live points, widened priors), pixelised source + refitted macro model with and without multipoles; 2 smooth floors, seeds 0-3 x {fiducial, galacticus truncation}; 18 tasks, 4 A100s at a time — 18/18 tasks completed; macro fits about 24 min each, macro_multipoles fits about 57 min each
-- 2026-11-24 — *run* — 416383 submitted: phase 6 tier 3: Nautilus fits (200 live points, widened priors), pixelised source + refitted macro model with and without multipoles; 2 smooth floors, seeds 0-3 x {fiducial, galacticus truncation}; 18 tasks, 4 A100s at a time
-- 2026-11-24 — *run* — 416379 finished — wall 0:21: phase 6 tier 3: Nautilus fits, pixelised source + refitted macro model (with and without multipoles); smooth floor, seeds 0-3 x {fiducial, galacticus truncation}; 16 tasks, 2-4 A100s at a time — superseded: 14 pending tasks cancelled before starting and the 2 running ones cancelled at 21 min, to rerun everything with wider priors as 416383
-- 2026-11-24 — *run* — 416376 finished — wall 0:15: phase 6 tier 3 pilot: Nautilus fit, pixelised source + refitted macro model; smooth floor and fiducial seed 0 (array 0,2; one A100 each) — pilot: both fits completed in 15 min each; fiducial seed 0 put the mass slope near its prior edge, so priors were widened
-
-[full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/dm_sightlines.md)
-
-active · both · no issue yet
-
-</details>
-
-</details>
-
-<details id="project-ep_gnfw_slope"><summary><b>ep_gnfw_slope</b> — EP recovery of a gNFW inner slope shared across 50 simulated Euclid lenses · no runs recorded · updated 2026-11-19</summary>
-
-**Registered:** 2026-11-19
-
-**Local:** `` /mnt/c/Users/Jammy/Workspace/Science/development/ep_gnfw_slope ``
-
-**RAL:** `` /mnt/ral/jnightin/development/ep_gnfw_slope ``
-
-**Current position**
-
-Just opened — nothing submitted yet.
-
-<details><summary title="Copy resume prompt for ep_gnfw_slope">📋</summary>
-
-```
-Use the cortex skill. — resume ep_gnfw_slope: read PyAutoCortex projects/ep_gnfw_slope.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Workspace/Science/development/ep_gnfw_slope/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
-```
-
-</details>
-
 **Runs** (0)
 
 _nothing on the cluster_
 
-<details><summary>Recent log — 1 of 1 entry</summary>
+<details><summary>Recent log — 5 of 15 entries</summary>
 
-- 2026-11-19 — *note* — ledger opened
+- 2026-11-25 — *run* — 416450 finished — wall 0:11: phase 5 ladder sensitivity set 2: O'Riordan preset, Diemer-Joyce concentrations, r50 line-of-sight truncation, pyHalo cone; 4 variants x 8 seeds, parametric-source refits only, GPU array 0-31%4 — 32/32 tasks completed
+- 2026-11-25 — *run* — 416450 submitted: phase 5 ladder sensitivity set 2: O'Riordan preset, Diemer-Joyce concentrations, r50 line-of-sight truncation, pyHalo cone; 4 variants x 8 seeds, parametric-source refits only, GPU array 0-31%4
+- 2026-11-25 — *run* — 416383 finished — wall 3:29: phase 6 tier 3: Nautilus fits (200 live points, widened priors), pixelised source + refitted macro model with and without multipoles; 2 smooth floors, seeds 0-3 x {fiducial, galacticus truncation}; 18 tasks, 4 A100s at a time — 18/18 tasks completed; macro fits about 24 min each, macro_multipoles fits about 57 min each
+- 2026-11-24 — *run* — 416383 submitted: phase 6 tier 3: Nautilus fits (200 live points, widened priors), pixelised source + refitted macro model with and without multipoles; 2 smooth floors, seeds 0-3 x {fiducial, galacticus truncation}; 18 tasks, 4 A100s at a time
+- 2026-11-24 — *run* — 416379 finished — wall 0:21: phase 6 tier 3: Nautilus fits, pixelised source + refitted macro model (with and without multipoles); smooth floor, seeds 0-3 x {fiducial, galacticus truncation}; 16 tasks, 2-4 A100s at a time — superseded: 14 pending tasks cancelled before starting and the 2 running ones cancelled at 21 min, to rerun everything with wider priors as 416383
 
-[full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/ep_gnfw_slope.md)
+[full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/dm_sightlines.md)
 
 active · both · no issue yet
 
@@ -550,6 +508,42 @@ Use the cortex skill. — resume adapt_snr_cap: read PyAutoCortex projects/adapt
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/adapt_snr_cap.md)
 
 active · gpu · no issue yet
+
+</details>
+
+</details>
+
+<details id="project-erc_angular_structure"><summary><b>erc_angular_structure</b> — Measure angular mass structure in galaxies with Euclid strong lenses · no runs recorded · updated 2026-11-26</summary>
+
+**Registered:** 2026-11-26
+
+**Local:** `` /mnt/c/Users/Jammy/Workspace/Science/development/erc_angular_structure ``
+
+**RAL:** `` /mnt/ral/jnightin/development/erc_angular_structure ``
+
+**Current position**
+
+Just opened — nothing submitted yet.
+
+<details><summary title="Copy resume prompt for erc_angular_structure">📋</summary>
+
+```
+Use the cortex skill. — resume erc_angular_structure: read PyAutoCortex projects/erc_angular_structure.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Workspace/Science/development/erc_angular_structure/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
+```
+
+</details>
+
+**Runs** (0)
+
+_nothing on the cluster_
+
+<details><summary>Recent log — 1 of 1 entry</summary>
+
+- 2026-11-26 — *note* — ledger opened
+
+[full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/erc_angular_structure.md)
+
+active · ral · no issue yet
 
 </details>
 
