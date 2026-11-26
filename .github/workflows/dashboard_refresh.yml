@@ -51,7 +51,10 @@ on:
 # actions: write → re-dispatch pages_dashboard.yml after a heal: the heal commit
 # is made with GITHUB_TOKEN, which never triggers other workflows, so without
 # the explicit dispatch the Pages page stays stale while the repo copy is fresh
-# (the Mind was bitten by exactly this on 2026-08-21).
+# (the Mind was bitten by exactly this on 2026-08-21). The same permission
+# dispatches cortex_check.yml after a heal, and after a fresh-tip run that
+# ledger_merge.yml or the cron started, so a GITHUB_TOKEN commit on main is
+# always checked (Cortex#103).
 permissions:
   contents: write
   actions: write
@@ -130,6 +133,15 @@ jobs:
               GH_TOKEN="${{ github.token }}" gh workflow run pages_dashboard.yml --ref main \
                 || echo "::warning::could not dispatch pages_dashboard.yml — the Pages page will lag until its next trigger"
             fi
+            # A dispatched run is usually ledger_merge.yml's, after a merge that
+            # left the board fresh: its GITHUB_TOKEN merge commit fired no push
+            # event, so check it from here. A push run needs no dispatch — the
+            # same push already triggered cortex_check.yml.
+            case "${GITHUB_EVENT_NAME}" in
+              workflow_dispatch|schedule)
+                GH_TOKEN="${{ github.token }}" gh workflow run cortex_check.yml --ref main \
+                  || echo "::warning::could not dispatch cortex_check.yml — its next push-triggered run will check main" ;;
+            esac
             exit 0
           fi
           # Only PR runs error-without-healing; push, the nightly schedule and
@@ -168,6 +180,10 @@ jobs:
               # healed page explicitly or the Pages site stays stale.
               GH_TOKEN="${{ github.token }}" gh workflow run pages_dashboard.yml --ref main \
                 || echo "::warning::could not dispatch pages_dashboard.yml — the Pages page will lag until its next trigger"
+              # ...and nothing checks the healed tip unless asked: without this
+              # main shows the stale tip's red check until the next push.
+              GH_TOKEN="${{ github.token }}" gh workflow run cortex_check.yml --ref main \
+                || echo "::warning::could not dispatch cortex_check.yml — its next push-triggered run will check main"
               exit 0
             fi
             echo "push rejected (attempt ${attempt}) — retrying on the new tip of main"

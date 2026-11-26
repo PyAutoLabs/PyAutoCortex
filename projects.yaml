@@ -459,8 +459,8 @@ stars_dm_slope:
 
 ep_gnfw_slope:
   remote: none
-  local_path: /mnt/c/Users/Jammy/Workspace/Science/development/ep_gnfw_slope
-  ral_root: /mnt/ral/jnightin/development/ep_gnfw_slope
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/archive/ep_gnfw_slope
+  ral_root: /mnt/ral/jnightin/archive/ep_gnfw_slope
   mirror: none
   sync_cli: hpc/sync
   sync_verbs: [push, pull, logs, sync, push-data-init, pull-full, status, submit, push-submit, jobs, sacct, cancel, wait-and-pull, tail, du, check, clear-logs]
@@ -468,8 +468,8 @@ ep_gnfw_slope:
   assistant: autolens_assistant
   witness_file: results/**/*.json
   partition: both
-  status: active
-  note: born 2026-11-13 from the euclid_dr1 LensTwin phase-4 finding; registered 2026-11-19 (the folder had no row); no git repository
+  status: retired
+  note: "retired 2026-11-26: retired on the human's decision in the 2026-11-26 Cortex review"
 
 adapt_snr_cap:
   remote: none
@@ -481,6 +481,33 @@ adapt_snr_cap:
   ledger: wiki/project/state.md
   assistant: none
   witness_file: results/**/*.json
-  partition: gpu
+  partition: both
   status: active
   note: "born 2026-11-24: autolens_workspace Delaunay SLaM (Hilbert 1250 + AdaptSplit), cap3 vs uncapped arms from a shared source_lp, 5 SLACS + 5 BELLS GALLERY + 4 Euclid DR1 high-S/N; local git, no remote"
+
+erc_angular_structure:
+  remote: none
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/development/erc_angular_structure
+  ral_root: /mnt/ral/jnightin/development/erc_angular_structure
+  mirror: none
+  sync_cli: hpc/sync
+  sync_verbs: [push, pull, logs, sync, push-data-init, pull-full, status, submit, push-submit, jobs, sacct, cancel, wait-and-pull, tail, du, check, clear-logs]
+  ledger: wiki/project/state.md
+  assistant: autolens_assistant
+  witness_file: results/**/*.json
+  partition: ral
+  status: active
+
+sdssj0946_subhalo_v2:
+  remote: none
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/active/sdssj0946_subhalo_v2
+  ral_root: /mnt/ral/jnightin/active/sdssj0946_subhalo_v2
+  mirror: none
+  sync_cli: hpc/sync
+  sync_verbs: [push, pull, logs, sync, push-data-init, pull-full, status, submit, push-submit, jobs, sacct, cancel, wait-and-pull, tail, du, check, clear-logs]
+  ledger: wiki/project/state.md
+  assistant: autolens_assistant
+  witness_file: results/**/*.json
+  partition: gpu
+  status: active
+  note: "born 2026-11-26: v2 of sdssj0946_subhalo (retired) — repeats the He et al. 2025 SDSSJ0946+1006 analysis with the HilbertSNR image mesh, 2.2 and 3.5 arcsec masks, H25 and Vegetti/He priors on the subhalo light; light plus dark matter models once the library supports them; local git, no remote"

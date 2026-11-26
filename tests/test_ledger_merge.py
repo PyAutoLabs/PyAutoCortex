@@ -336,6 +336,22 @@ def test_the_page_workflow_spells_the_conductor_as_implemented():
     assert "dashboard --cortex . --apply" in text
 
 
+def test_a_landed_merge_refreshes_the_board_and_the_refresh_checks_main():
+    """A GITHUB_TOKEN merge push triggers nothing, so ledger_merge.yml must ask
+    for the refresh (a birth leaves dashboard.md stale), and the refresh must
+    then dispatch the check on the tip it left — or main stays red until the
+    nightly cron (09a0de6, 2026-11-26; Cortex#103)."""
+    wf = REPO / ".github" / "workflows"
+    merge = (wf / "ledger_merge.yml").read_text()
+    refresh = (wf / "dashboard_refresh.yml").read_text()
+    assert "gh workflow run dashboard_refresh.yml" in merge
+    heal = refresh.split('echo "healed on attempt ${attempt}"', 1)[1].split("exit 0", 1)[0]
+    assert "gh workflow run cortex_check.yml" in heal
+    fresh = refresh.split("if check; then", 1)[1].split("exit 0", 1)[0]
+    assert "workflow_dispatch|schedule)" in fresh
+    assert "gh workflow run cortex_check.yml" in fresh
+
+
 def test_no_scheduled_job_mutates_the_ledger():
     """The only scheduled writer renders the two generated pages."""
     for p in (REPO / ".github" / "workflows").glob("*.yml"):
