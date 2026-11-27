@@ -11,7 +11,7 @@ One ledger per science project: what is on the cluster right now, what the human
 | Where | Count |
 |-------|------:|
 | [Running](#projects) | 1 |
-| [Open](#projects) | 6 |
+| [Open](#projects) | 8 |
 | [Active](#active) | 11 |
 | [Dormant](#dormant) | 2 |
 | [Retired](#retired) | 22 |
@@ -331,7 +331,7 @@ Development projects (`development/`): exploratory work that develops or validat
 | Development | Count |
 |-------|------:|
 | Running | 1 |
-| Open | 1 |
+| Open | 3 |
 | Projects | 8 |
 
 ### Summary
@@ -347,7 +347,7 @@ Development projects (`development/`): exploratory work that develops or validat
 | dm_sightlines | 0 | 0 | 2026-11-25 |
 | adapt_snr_cap | 1 | 1 | 2026-11-25 |
 | erc_angular_structure | 0 | 0 | 2026-11-26 |
-| galaxy_sightlines | 0 | 0 | 2026-11-27 |
+| galaxy_sightlines | 0 | 2 | 2026-11-27 |
 
 #### Dormant
 
@@ -644,7 +644,7 @@ active · ral · no issue yet
 
 </details>
 
-<details id="project-galaxy_sightlines"><summary><b>galaxy_sightlines</b> — Full line of sight of a strong lens: dark halos, galaxies, environment; external shear budget · no runs recorded · updated 2026-11-27</summary>
+<details id="project-galaxy_sightlines"><summary><b>galaxy_sightlines</b> — Full line of sight of a strong lens: dark halos, galaxies, environment; external shear budget · 0 running · 2 open · updated 2026-11-27</summary>
 
 **Registered:** 2026-11-27
 
@@ -664,18 +664,29 @@ Use the cortex skill. — resume galaxy_sightlines: read PyAutoCortex projects/g
 
 </details>
 
-**Runs** (0)
+**Runs** (2)
 
-_nothing on the cluster_
+| Job | State | Partition | Date | Description |
+|---|---|---|---|---|
+| `417555` | open | gpu | 11-27 | stage 1 step B pilot: fitted shear of 100 sightlines (2 tasks x 50), three cases each, power law + shear refits from three starts; GPU array 0-1, one A100 each |
+| `417554` | open | gpu | 11-27 | stage 1 step A at full image size: refits from offset starts, recovery of injected shears, one perturbing halo at five distances, three redshifts and three mas… |
 
-<details><summary>Recent log — 2 of 2 entries</summary>
+<details><summary>Full descriptions (1 shortened above)</summary>
 
+- `417554` — stage 1 step A at full image size: refits from offset starts, recovery of injected shears, one perturbing halo at five distances, three redshifts and three masses; one A100, one job
+
+</details>
+
+<details><summary>Recent log — 4 of 4 entries</summary>
+
+- 2026-11-27 — *run* — 417555 submitted: stage 1 step B pilot: fitted shear of 100 sightlines (2 tasks x 50), three cases each, power law + shear refits from three starts; GPU array 0-1, one A100 each
+- 2026-11-27 — *run* — 417554 submitted: stage 1 step A at full image size: refits from offset starts, recovery of injected shears, one perturbing halo at five distances, three redshifts and three masses; one A100, one job
 - 2026-11-27 — *note* — Follow-up to check, separate from stage 1 (human): "my feeling is that we do need to be wary of big luminous galaxies being within 10″ to 20″ contributing to shears, albeit if this was really whats happening on real lenses we would have seen them but we should double check that."
 - 2026-11-27 — *note* — ledger opened
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/galaxy_sightlines.md)
 
-active · ral · no issue yet
+active · both · no issue yet
 
 </details>
 
