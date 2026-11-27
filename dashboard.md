@@ -11,7 +11,7 @@ One ledger per science project: what is on the cluster right now, what the human
 | Where | Count |
 |-------|------:|
 | [Running](#projects) | 1 |
-| [Open](#projects) | 9 |
+| [Open](#projects) | 8 |
 | [Active](#active) | 11 |
 | [Dormant](#dormant) | 2 |
 | [Retired](#retired) | 22 |
@@ -331,7 +331,7 @@ Development projects (`development/`): exploratory work that develops or validat
 | Development | Count |
 |-------|------:|
 | Running | 1 |
-| Open | 4 |
+| Open | 3 |
 | Projects | 8 |
 
 ### Summary
@@ -347,7 +347,7 @@ Development projects (`development/`): exploratory work that develops or validat
 | dm_sightlines | 0 | 0 | 2026-11-25 |
 | adapt_snr_cap | 1 | 1 | 2026-11-25 |
 | erc_angular_structure | 0 | 0 | 2026-11-26 |
-| galaxy_sightlines | 0 | 3 | 2026-11-27 |
+| galaxy_sightlines | 0 | 2 | 2026-11-27 |
 
 #### Dormant
 
@@ -644,7 +644,7 @@ active · ral · no issue yet
 
 </details>
 
-<details id="project-galaxy_sightlines"><summary><b>galaxy_sightlines</b> — Full line of sight of a strong lens: dark halos, galaxies, environment; external shear budget · 0 running · 3 open · updated 2026-11-27</summary>
+<details id="project-galaxy_sightlines"><summary><b>galaxy_sightlines</b> — Full line of sight of a strong lens: dark halos, galaxies, environment; external shear budget · 0 running · 2 open · updated 2026-11-27</summary>
 
 **Registered:** 2026-11-27
 
@@ -664,28 +664,26 @@ Use the cortex skill. — resume galaxy_sightlines: read PyAutoCortex projects/g
 
 </details>
 
-**Runs** (3)
+**Runs** (2)
 
 | Job | State | Partition | Date | Description |
 |---|---|---|---|---|
-| `417561` | open | ral | 11-27 | stage 1 timing on a CPU node: two full-size sightlines and the injected-shear check, 16 cores, one job; decides whether the population can run as a CPU array w… |
 | `417555` | open | gpu | 11-27 | stage 1 step B pilot: fitted shear of 100 sightlines (2 tasks x 50), three cases each, power law + shear refits from three starts; GPU array 0-1, one A100 each |
 | `417554` | open | gpu | 11-27 | stage 1 step A at full image size: refits from offset starts, recovery of injected shears, one perturbing halo at five distances, three redshifts and three mas… |
 
-<details><summary>Full descriptions (2 shortened above)</summary>
+<details><summary>Full descriptions (1 shortened above)</summary>
 
-- `417561` — stage 1 timing on a CPU node: two full-size sightlines and the injected-shear check, 16 cores, one job; decides whether the population can run as a CPU array while the gpu partition is full
 - `417554` — stage 1 step A at full image size: refits from offset starts, recovery of injected shears, one perturbing halo at five distances, three redshifts and three masses; one A100, one job
 
 </details>
 
-<details><summary>Recent log — 5 of 5 entries</summary>
+<details><summary>Recent log — 5 of 6 entries</summary>
 
+- 2026-11-27 — *run* — 417561 finished — wall 0:44: stage 1 timing on a CPU node: two full-size sightlines and the injected-shear check, 16 cores, one job; decides whether the population can run as a CPU array while the gpu partition is full — 1/1 task completed; one full-size sightline took 29 min on 16 cores (ray traces 37 s each, model evaluations 1.6 s each, fits up to 200 evaluations), the second sightline failed on a NaN fixed since; 21/21 injected-shear fits completed
 - 2026-11-27 — *run* — 417561 submitted: stage 1 timing on a CPU node: two full-size sightlines and the injected-shear check, 16 cores, one job; decides whether the population can run as a CPU array while the gpu partition is full
 - 2026-11-27 — *run* — 417555 submitted: stage 1 step B pilot: fitted shear of 100 sightlines (2 tasks x 50), three cases each, power law + shear refits from three starts; GPU array 0-1, one A100 each
 - 2026-11-27 — *run* — 417554 submitted: stage 1 step A at full image size: refits from offset starts, recovery of injected shears, one perturbing halo at five distances, three redshifts and three masses; one A100, one job
 - 2026-11-27 — *note* — Follow-up to check, separate from stage 1 (human): "my feeling is that we do need to be wary of big luminous galaxies being within 10″ to 20″ contributing to shears, albeit if this was really whats happening on real lenses we would have seen them but we should double check that."
-- 2026-11-27 — *note* — ledger opened
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/galaxy_sightlines.md)
 
