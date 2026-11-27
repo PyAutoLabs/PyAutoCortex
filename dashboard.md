@@ -12,7 +12,7 @@ One ledger per science project: what is on the cluster right now, what the human
 |-------|------:|
 | [Running](#projects) | 1 |
 | [Open](#projects) | 10 |
-| [Active](#active) | 11 |
+| [Active](#active) | 12 |
 | [Dormant](#dormant) | 2 |
 | [Retired](#retired) | 22 |
 
@@ -48,7 +48,7 @@ Paper-bound science projects (`active/`, and `complete/` or `archive/` once reti
 |-------|------:|
 | Running | 0 |
 | Open | 5 |
-| Projects | 5 |
+| Projects | 6 |
 
 ### Summary
 
@@ -59,6 +59,7 @@ Paper-bound science projects (`active/`, and `complete/` or `archive/` once reti
 | sdssj0946_subhalo | 0 | 0 | 2026-11-25 |
 | sdssj0946_subhalo_v2 | 0 | 4 | 2026-11-27 |
 | cowls_diana_v2 | 0 | 1 | 2026-11-27 |
+| stars_dm_slope_hst | 0 | 0 | 2026-11-27 |
 
 #### Dormant
 
@@ -224,6 +225,42 @@ Use the cortex skill. — resume cowls_diana_v2: read PyAutoCortex projects/cowl
 - 2026-11-26 — *run* — 417095 failed — wall 2:36: SLaM chain (SP to source_tune, no subhalo), ral CPU array tasks 5 COSJ100018+022138 and 8 COSJ100140+020632, 3.0 arcsec mask — cancelled on purpose: pipeline used use_jax=True (JAX dense) for every search; resubmitted as 417101 with setup=auto (numba sparse for pixelized searches)
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/cowls_diana_v2.md)
+
+active · ral · no issue yet
+
+</details>
+
+</details>
+
+<details id="project-stars_dm_slope_hst"><summary><b>stars_dm_slope_hst</b> — Can HST imaging of SLACS-like lenses constrain a stars plus gNFW inner slope · no runs recorded · updated 2026-11-27</summary>
+
+**Registered:** 2026-11-27
+
+**Local:** `` /mnt/c/Users/Jammy/Workspace/Science/active/stars_dm_slope_hst ``
+
+**RAL:** `` /mnt/ral/jnightin/active/stars_dm_slope_hst ``
+
+**Current position**
+
+Set up 2026-11-27: SLACS calibration done, nine HST mocks and the 80 information-test datasets simulated, local pilot run. RAL proposal drafted in hpc/PROPOSAL.md; nothing submitted.
+
+<details><summary title="Copy resume prompt for stars_dm_slope_hst">📋</summary>
+
+```
+Use the cortex skill. — resume stars_dm_slope_hst: read PyAutoCortex projects/stars_dm_slope_hst.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Workspace/Science/active/stars_dm_slope_hst/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
+```
+
+</details>
+
+**Runs** (0)
+
+_nothing on the cluster_
+
+<details><summary>Recent log — 1 of 1 entry</summary>
+
+- 2026-11-27 — *note* — ledger opened
+
+[full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/stars_dm_slope_hst.md)
 
 active · ral · no issue yet
 
