@@ -668,8 +668,9 @@ Use the cortex skill. — resume galaxy_sightlines: read PyAutoCortex projects/g
 
 _nothing on the cluster_
 
-<details><summary>Recent log — 1 of 1 entry</summary>
+<details><summary>Recent log — 2 of 2 entries</summary>
 
+- 2026-11-27 — *note* — Follow-up to check, separate from stage 1 (human): "my feeling is that we do need to be wary of big luminous galaxies being within 10″ to 20″ contributing to shears, albeit if this was really whats happening on real lenses we would have seen them but we should double check that."
 - 2026-11-27 — *note* — ledger opened
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/galaxy_sightlines.md)
