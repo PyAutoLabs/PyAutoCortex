@@ -536,6 +536,6 @@ galaxy_sightlines:
   ledger: wiki/project/state.md
   assistant: autolens_assistant
   witness_file: results/**/*.json
-  partition: ral
+  partition: both
   status: active
-  note: "born 2026-11-27 from a literature survey for the ERC proposal; sibling of dm_sightlines, whose sightlines package it imports; stage 0 is a halo-model external-shear budget run on the laptop; local git, no remote; no RAL tree created yet"
+  note: "born 2026-11-27 from a literature survey for the ERC proposal; sibling of dm_sightlines, whose sightlines package it imports; stage 0 is a halo-model external-shear budget run on the laptop; local git, no remote; RAL tree created 2026-11-27; stage 1 runs on the gpu partition"
