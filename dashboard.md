@@ -11,7 +11,7 @@ One ledger per science project: what is on the cluster right now, what the human
 | Where | Count |
 |-------|------:|
 | [Running](#projects) | 1 |
-| [Open](#projects) | 2 |
+| [Open](#projects) | 6 |
 | [Active](#active) | 10 |
 | [Dormant](#dormant) | 2 |
 | [Retired](#retired) | 22 |
@@ -47,7 +47,7 @@ Paper-bound science projects (`active/`, and `complete/` or `archive/` once reti
 | Science | Count |
 |-------|------:|
 | Running | 0 |
-| Open | 1 |
+| Open | 5 |
 | Projects | 5 |
 
 ### Summary
@@ -57,7 +57,7 @@ Paper-bound science projects (`active/`, and `complete/` or `archive/` once reti
 | Project | Running | Open | Last update |
 |---|---:|---:|---|
 | sdssj0946_subhalo | 0 | 0 | 2026-11-25 |
-| sdssj0946_subhalo_v2 | 0 | 0 | 2026-11-27 |
+| sdssj0946_subhalo_v2 | 0 | 4 | 2026-11-27 |
 | cowls_diana_v2 | 0 | 1 | 2026-11-26 |
 
 #### Dormant
@@ -138,7 +138,7 @@ active · gpu · no issue yet
 
 </details>
 
-<details id="project-sdssj0946_subhalo_v2"><summary><b>sdssj0946_subhalo_v2</b> — SDSSJ0946 subhalo v2: HilbertSNR, two masks, Vegetti light prior, then light plus dark · no runs recorded · updated 2026-11-27</summary>
+<details id="project-sdssj0946_subhalo_v2"><summary><b>sdssj0946_subhalo_v2</b> — SDSSJ0946 subhalo v2: HilbertSNR, two masks, Vegetti light prior, then light plus dark · 0 running · 4 open · updated 2026-11-27</summary>
 
 **Registered:** 2026-11-26
 
@@ -158,17 +158,22 @@ Use the cortex skill. — resume sdssj0946_subhalo_v2: read PyAutoCortex project
 
 </details>
 
-**Runs** (0)
+**Runs** (4)
 
-_nothing on the cluster_
+| Job | State | Partition | Date | Description |
+|---|---|---|---|---|
+| `417109` | open | gpu | 11-27 | Subhalo phase, 3.5 arcsec mask, Vegetti light prior: luminous / light_only (array 2-3, n_live 2400) |
+| `417108` | open | gpu | 11-27 | Subhalo phase, 2.2 arcsec mask, Vegetti light prior: luminous / light_only (array 2-3, n_live 2400) |
+| `417107` | open | gpu | 11-27 | Subhalo phase, 3.5 arcsec mask, H25 light prior: none / dark / luminous / light_only (array 0-3, n_live 2400) |
+| `417104` | open | gpu | 11-27 | Subhalo phase, 2.2 arcsec mask, H25 light prior: none / dark / luminous / light_only (array 0-3, n_live 2400) |
 
-<details><summary>Recent log — 5 of 5 entries</summary>
+<details><summary>Recent log — 5 of 9 entries</summary>
 
+- 2026-11-27 — *run* — 417109 submitted: Subhalo phase, 3.5 arcsec mask, Vegetti light prior: luminous / light_only (array 2-3, n_live 2400)
+- 2026-11-27 — *run* — 417108 submitted: Subhalo phase, 2.2 arcsec mask, Vegetti light prior: luminous / light_only (array 2-3, n_live 2400)
+- 2026-11-27 — *run* — 417107 submitted: Subhalo phase, 3.5 arcsec mask, H25 light prior: none / dark / luminous / light_only (array 0-3, n_live 2400)
+- 2026-11-27 — *run* — 417104 submitted: Subhalo phase, 2.2 arcsec mask, H25 light prior: none / dark / luminous / light_only (array 0-3, n_live 2400)
 - 2026-11-27 — *run* — 417093 finished — wall 4:19: SLaM chain, 3.5 arcsec mask, HilbertSNR adapt images (private base PyAuto_wt/sdssj0946-v2) — sacct: COMPLETED, ended 2026-11-27 03:03; all six searches complete; logs show HilbertSNR (1250 + 30 edge) for Pix2 and ST
-- 2026-11-27 — *run* — 417092 finished — wall 4:06: SLaM chain, 2.2 arcsec mask, HilbertSNR adapt images (private base PyAuto_wt/sdssj0946-v2) — sacct: COMPLETED, ended 2026-11-27 02:41; all six searches complete; logs show HilbertSNR (1250 + 30 edge) for Pix2 and ST
-- 2026-11-26 — *run* — 417093 submitted: SLaM chain, 3.5 arcsec mask, HilbertSNR adapt images (private base PyAuto_wt/sdssj0946-v2)
-- 2026-11-26 — *run* — 417092 submitted: SLaM chain, 2.2 arcsec mask, HilbertSNR adapt images (private base PyAuto_wt/sdssj0946-v2)
-- 2026-11-26 — *note* — ledger opened
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/sdssj0946_subhalo_v2.md)
 
