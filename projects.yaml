@@ -539,3 +539,17 @@ galaxy_sightlines:
   partition: both
   status: active
   note: "born 2026-11-27 from a literature survey for the ERC proposal; sibling of dm_sightlines, whose sightlines package it imports; stage 0 is a halo-model external-shear budget run on the laptop; local git, no remote; RAL tree created 2026-11-27; stage 1 runs on the gpu partition"
+
+stars_dm_slope_hst:
+  remote: none
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/active/stars_dm_slope_hst
+  ral_root: /mnt/ral/jnightin/active/stars_dm_slope_hst
+  mirror: none
+  sync_cli: hpc/sync
+  sync_verbs: [push, pull, logs, sync, push-data-init, pull-full, status, submit, push-submit, jobs, sacct, cancel, wait-and-pull, tail, du, check, clear-logs]
+  ledger: wiki/project/state.md
+  assistant: autolens_assistant
+  witness_file: results/**/*.json
+  partition: ral
+  status: active
+  note: "born 2026-11-27 from stars_dm_slope (human's ask): repeats its recovery fits and information test on HST / SLACS-like mocks (0.05 arcsec pixels) with that project's parameterisations; no git, no remote; RAL tree not created yet"
