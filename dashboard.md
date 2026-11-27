@@ -11,7 +11,7 @@ One ledger per science project: what is on the cluster right now, what the human
 | Where | Count |
 |-------|------:|
 | [Running](#projects) | 1 |
-| [Open](#projects) | 10 |
+| [Open](#projects) | 13 |
 | [Active](#active) | 12 |
 | [Dormant](#dormant) | 2 |
 | [Retired](#retired) | 22 |
@@ -47,7 +47,7 @@ Paper-bound science projects (`active/`, and `complete/` or `archive/` once reti
 | Science | Count |
 |-------|------:|
 | Running | 0 |
-| Open | 5 |
+| Open | 8 |
 | Projects | 6 |
 
 ### Summary
@@ -59,7 +59,7 @@ Paper-bound science projects (`active/`, and `complete/` or `archive/` once reti
 | sdssj0946_subhalo | 0 | 0 | 2026-11-25 |
 | sdssj0946_subhalo_v2 | 0 | 4 | 2026-11-27 |
 | cowls_diana_v2 | 0 | 1 | 2026-11-27 |
-| stars_dm_slope_hst | 0 | 0 | 2026-11-27 |
+| stars_dm_slope_hst | 0 | 3 | 2026-11-27 |
 
 #### Dormant
 
@@ -232,7 +232,7 @@ active · ral · no issue yet
 
 </details>
 
-<details id="project-stars_dm_slope_hst"><summary><b>stars_dm_slope_hst</b> — Can HST imaging of SLACS-like lenses constrain a stars plus gNFW inner slope · no runs recorded · updated 2026-11-27</summary>
+<details id="project-stars_dm_slope_hst"><summary><b>stars_dm_slope_hst</b> — Can HST imaging of SLACS-like lenses constrain a stars plus gNFW inner slope · 0 running · 3 open · updated 2026-11-27</summary>
 
 **Registered:** 2026-11-27
 
@@ -242,7 +242,7 @@ active · ral · no issue yet
 
 **Current position**
 
-Set up 2026-11-27: SLACS calibration done, nine HST mocks and the 80 information-test datasets simulated, local pilot run. RAL proposal drafted in hpc/PROPOSAL.md; nothing submitted.
+Set up 2026-11-27: SLACS calibration, nine HST mocks, the 80 information-test datasets and a two-fit local pilot are done. The 7-task RAL pilot slice (417571, 417573, 417576) was submitted on the human's word; the full 170-task campaign in hpc/PROPOSAL.md waits for its timings and the human's go.
 
 <details><summary title="Copy resume prompt for stars_dm_slope_hst">📋</summary>
 
@@ -252,12 +252,19 @@ Use the cortex skill. — resume stars_dm_slope_hst: read PyAutoCortex projects/
 
 </details>
 
-**Runs** (0)
+**Runs** (3)
 
-_nothing on the cluster_
+| Job | State | Partition | Date | Description |
+|---|---|---|---|---|
+| `417576` | open | ral | 11-27 | pilot slice: information-test likelihood maps A_g10_r0 and B_g15_r0 (indices 90, 120) |
+| `417573` | open | ral | 11-27 | pilot slice: free fits n_live 400, P1-inv on A, P1 on A, P1-inv on I (indices 9, 15, 72) |
+| `417571` | open | ral | 11-27 | pilot slice: reference fits, mocks A and F (campaign indices 0, 3) |
 
-<details><summary>Recent log — 1 of 1 entry</summary>
+<details><summary>Recent log — 4 of 4 entries</summary>
 
+- 2026-11-27 — *run* — 417576 submitted: pilot slice: information-test likelihood maps A_g10_r0 and B_g15_r0 (indices 90, 120)
+- 2026-11-27 — *run* — 417573 submitted: pilot slice: free fits n_live 400, P1-inv on A, P1 on A, P1-inv on I (indices 9, 15, 72)
+- 2026-11-27 — *run* — 417571 submitted: pilot slice: reference fits, mocks A and F (campaign indices 0, 3)
 - 2026-11-27 — *note* — ledger opened
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/stars_dm_slope_hst.md)
