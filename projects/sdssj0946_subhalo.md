@@ -12,6 +12,8 @@ Mock reproduces the real-data pattern (light only close to luminous although the
 
 ## Log
 
+- 2026-11-26 — note — retired: retired 2026-11-26 on the human's request; reproduction of He et al. 2025 closed with the repeat, mock and solution-test experiments (journal sections 8-10); nothing on RAL
+- 2026-11-26 — result — Last runs (pulled 2026-11-26): tuned Nautilus (n_networks 16, enlarge_per_dim 1.3, split_threshold 25, f_live 0.001) gives the same luminous fit as the default (log Z -849.95 vs -850.02, same posterior), closing the sampling question on h25. light_only ties luminous on all five real chains (-0.8, +0.8, +0.6, -0.6, -0.1). Proposed but not run: a light-and-mass Sersic (stellar mass) plus NFW, following Simona's F160W point. Details: journal sections 8-10.
 - 2026-11-25 — run — 415759 finished — wall 7:37: Real data rep4: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25 — sacct: COMPLETED, ended 2026-11-18 12:00; recorded at the 2026-11-25 check-in
 - 2026-11-25 — run — 415758 finished — wall 9:05: Real data rep3: light_only (n_live 2400), so light only vs luminous is measured on every chain, not just h25 — sacct: COMPLETED, ended 2026-11-18 11:21; recorded at the 2026-11-25 check-in
 - 2026-11-25 — run — 415576 finished — wall 25:47: Luminous solution tests on h25 (n_live 2400): h25mass (m200 limited to H25's 8.4-10.2), masspos / lightpos (centre limited around the mass / light solution), tuned (Nautilus n_networks 16, enlarge_per_dim 1.3, split_threshold 25, f_live 0.001). Sampling or likelihood? — sacct: tasks 6-9 COMPLETED, last ended 2026-11-19 01:32; recorded at the 2026-11-25 check-in
