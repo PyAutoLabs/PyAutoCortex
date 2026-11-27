@@ -12,7 +12,7 @@ One ledger per science project: what is on the cluster right now, what the human
 |-------|------:|
 | [Running](#projects) | 1 |
 | [Open](#projects) | 6 |
-| [Active](#active) | 10 |
+| [Active](#active) | 11 |
 | [Dormant](#dormant) | 2 |
 | [Retired](#retired) | 22 |
 
@@ -332,7 +332,7 @@ Development projects (`development/`): exploratory work that develops or validat
 |-------|------:|
 | Running | 1 |
 | Open | 1 |
-| Projects | 7 |
+| Projects | 8 |
 
 ### Summary
 
@@ -347,6 +347,7 @@ Development projects (`development/`): exploratory work that develops or validat
 | dm_sightlines | 0 | 0 | 2026-11-25 |
 | adapt_snr_cap | 1 | 1 | 2026-11-25 |
 | erc_angular_structure | 0 | 0 | 2026-11-26 |
+| galaxy_sightlines | 0 | 0 | 2026-11-27 |
 
 #### Dormant
 
@@ -636,6 +637,42 @@ _nothing on the cluster_
 - 2026-11-26 — *note* — ledger opened
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/erc_angular_structure.md)
+
+active · ral · no issue yet
+
+</details>
+
+</details>
+
+<details id="project-galaxy_sightlines"><summary><b>galaxy_sightlines</b> — Full line of sight of a strong lens: dark halos, galaxies, environment; external shear budget · no runs recorded · updated 2026-11-27</summary>
+
+**Registered:** 2026-11-27
+
+**Local:** `` /mnt/c/Users/Jammy/Workspace/Science/development/galaxy_sightlines ``
+
+**RAL:** `` /mnt/ral/jnightin/development/galaxy_sightlines ``
+
+**Current position**
+
+Just opened — nothing submitted yet.
+
+<details><summary title="Copy resume prompt for galaxy_sightlines">📋</summary>
+
+```
+Use the cortex skill. — resume galaxy_sightlines: read PyAutoCortex projects/galaxy_sightlines.md (Now, Runs, Log) and then /mnt/c/Users/Jammy/Workspace/Science/development/galaxy_sightlines/wiki/project/state.md and the assistant autolens_assistant's AGENTS.md; tell me where I left off and what I said I would do next. Submit nothing and log nothing until I say.
+```
+
+</details>
+
+**Runs** (0)
+
+_nothing on the cluster_
+
+<details><summary>Recent log — 1 of 1 entry</summary>
+
+- 2026-11-27 — *note* — ledger opened
+
+[full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/galaxy_sightlines.md)
 
 active · ral · no issue yet
 
