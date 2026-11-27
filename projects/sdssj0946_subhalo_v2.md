@@ -9,9 +9,17 @@ Set up 2026-11-26 from sdssj0946_subhalo (retired): HilbertSNR + soft S/N adapt 
 
 ## Runs
 
+- 417104 — open — gpu — 2026-11-27 — Subhalo phase, 2.2 arcsec mask, H25 light prior: none / dark / luminous / light_only (array 0-3, n_live 2400)
+- 417107 — open — gpu — 2026-11-27 — Subhalo phase, 3.5 arcsec mask, H25 light prior: none / dark / luminous / light_only (array 0-3, n_live 2400)
+- 417108 — open — gpu — 2026-11-27 — Subhalo phase, 2.2 arcsec mask, Vegetti light prior: luminous / light_only (array 2-3, n_live 2400)
+- 417109 — open — gpu — 2026-11-27 — Subhalo phase, 3.5 arcsec mask, Vegetti light prior: luminous / light_only (array 2-3, n_live 2400)
 
 ## Log
 
+- 2026-11-27 — run — 417109 submitted: Subhalo phase, 3.5 arcsec mask, Vegetti light prior: luminous / light_only (array 2-3, n_live 2400)
+- 2026-11-27 — run — 417108 submitted: Subhalo phase, 2.2 arcsec mask, Vegetti light prior: luminous / light_only (array 2-3, n_live 2400)
+- 2026-11-27 — run — 417107 submitted: Subhalo phase, 3.5 arcsec mask, H25 light prior: none / dark / luminous / light_only (array 0-3, n_live 2400)
+- 2026-11-27 — run — 417104 submitted: Subhalo phase, 2.2 arcsec mask, H25 light prior: none / dark / luminous / light_only (array 0-3, n_live 2400)
 - 2026-11-27 — run — 417093 finished — wall 4:19: SLaM chain, 3.5 arcsec mask, HilbertSNR adapt images (private base PyAuto_wt/sdssj0946-v2) — sacct: COMPLETED, ended 2026-11-27 03:03; all six searches complete; logs show HilbertSNR (1250 + 30 edge) for Pix2 and ST
 - 2026-11-27 — run — 417092 finished — wall 4:06: SLaM chain, 2.2 arcsec mask, HilbertSNR adapt images (private base PyAuto_wt/sdssj0946-v2) — sacct: COMPLETED, ended 2026-11-27 02:41; all six searches complete; logs show HilbertSNR (1250 + 30 edge) for Pix2 and ST
 - 2026-11-26 — run — 417093 submitted: SLaM chain, 3.5 arcsec mask, HilbertSNR adapt images (private base PyAuto_wt/sdssj0946-v2)
