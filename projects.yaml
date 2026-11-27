@@ -525,3 +525,17 @@ cowls_diana_v2:
   partition: ral
   status: active
   note: "born 2026-11-26: SLaM chain SP -> Pix1 -> Pix2 -> light -> mass_total -> source_tune (sdssj0946_subhalo_v2's, no subhalo stage) on 9 COWLS JWST NIRCam F277W lenses at 0.06 arcsec, 3.0 arcsec minimum mask; RAL CPU array, one task per lens, private base PyAuto_wt/sdssj0946-v2; restricted data gitignored; local git, no remote"
+
+galaxy_sightlines:
+  remote: none
+  local_path: /mnt/c/Users/Jammy/Workspace/Science/development/galaxy_sightlines
+  ral_root: /mnt/ral/jnightin/development/galaxy_sightlines
+  mirror: none
+  sync_cli: hpc/sync
+  sync_verbs: [push, pull, logs, sync, push-data-init, pull-full, status, plan, pilot, resubmit, report, act, results, submit, push-submit, jobs, sacct, cancel, wait-and-pull, tail, du, check, clear-logs]
+  ledger: wiki/project/state.md
+  assistant: autolens_assistant
+  witness_file: results/**/*.json
+  partition: ral
+  status: active
+  note: "born 2026-11-27 from a literature survey for the ERC proposal; sibling of dm_sightlines, whose sightlines package it imports; stage 0 is a halo-model external-shear budget run on the laptop; local git, no remote; no RAL tree created yet"
