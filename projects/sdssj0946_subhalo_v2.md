@@ -9,13 +9,13 @@ Set up 2026-11-26 from sdssj0946_subhalo (retired): HilbertSNR + soft S/N adapt 
 
 ## Runs
 
-- 417104 — open — gpu — 2026-11-27 — Subhalo phase, 2.2 arcsec mask, H25 light prior: none / dark / luminous / light_only (array 0-3, n_live 2400)
-- 417107 — open — gpu — 2026-11-27 — Subhalo phase, 3.5 arcsec mask, H25 light prior: none / dark / luminous / light_only (array 0-3, n_live 2400)
-- 417108 — open — gpu — 2026-11-27 — Subhalo phase, 2.2 arcsec mask, Vegetti light prior: luminous / light_only (array 2-3, n_live 2400)
-- 417109 — open — gpu — 2026-11-27 — Subhalo phase, 3.5 arcsec mask, Vegetti light prior: luminous / light_only (array 2-3, n_live 2400)
 
 ## Log
 
+- 2026-11-28 — run — 417109 finished — wall 11:15: Subhalo phase, 3.5 arcsec mask, Vegetti light prior: luminous / light_only (array 2-3, n_live 2400) — sacct: both tasks COMPLETED 0:0, last ended 2026-11-28 02:12 (wall is the longest task, luminous)
+- 2026-11-28 — run — 417108 finished — wall 9:15: Subhalo phase, 2.2 arcsec mask, Vegetti light prior: luminous / light_only (array 2-3, n_live 2400) — sacct: both tasks COMPLETED 0:0, last ended 2026-11-28 00:02 (wall is the longest task, luminous)
+- 2026-11-27 — run — 417107 finished — wall 9:45: Subhalo phase, 3.5 arcsec mask, H25 light prior: none / dark / luminous / light_only (array 0-3, n_live 2400) — sacct: all 4 tasks COMPLETED 0:0, last ended 2026-11-27 22:03 (wall is the longest task, luminous)
+- 2026-11-27 — run — 417104 finished — wall 7:52: Subhalo phase, 2.2 arcsec mask, H25 light prior: none / dark / luminous / light_only (array 0-3, n_live 2400) — sacct: all 4 tasks COMPLETED 0:0, last ended 2026-11-27 17:36 (wall is the longest task, luminous)
 - 2026-11-27 — run — 417109 submitted: Subhalo phase, 3.5 arcsec mask, Vegetti light prior: luminous / light_only (array 2-3, n_live 2400)
 - 2026-11-27 — run — 417108 submitted: Subhalo phase, 2.2 arcsec mask, Vegetti light prior: luminous / light_only (array 2-3, n_live 2400)
 - 2026-11-27 — run — 417107 submitted: Subhalo phase, 3.5 arcsec mask, H25 light prior: none / dark / luminous / light_only (array 0-3, n_live 2400)
