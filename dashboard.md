@@ -11,7 +11,7 @@ One ledger per science project: what is on the cluster right now, what the human
 | Where | Count |
 |-------|------:|
 | [Running](#projects) | 1 |
-| [Open](#projects) | 4 |
+| [Open](#projects) | 7 |
 | [Active](#active) | 12 |
 | [Dormant](#dormant) | 2 |
 | [Retired](#retired) | 22 |
@@ -47,7 +47,7 @@ Paper-bound science projects (`active/`, and `complete/` or `archive/` once reti
 | Science | Count |
 |-------|------:|
 | Running | 0 |
-| Open | 2 |
+| Open | 5 |
 | Projects | 6 |
 
 ### Summary
@@ -57,7 +57,7 @@ Paper-bound science projects (`active/`, and `complete/` or `archive/` once reti
 | Project | Running | Open | Last update |
 |---|---:|---:|---|
 | sdssj0946_subhalo | 0 | 0 | 2026-11-25 |
-| sdssj0946_subhalo_v2 | 0 | 0 | 2026-11-28 |
+| sdssj0946_subhalo_v2 | 0 | 3 | 2026-11-28 |
 | cowls_diana_v2 | 0 | 0 | 2026-11-28 |
 | stars_dm_slope_hst | 0 | 2 | 2026-11-28 |
 
@@ -139,7 +139,7 @@ active · gpu · no issue yet
 
 </details>
 
-<details id="project-sdssj0946_subhalo_v2"><summary><b>sdssj0946_subhalo_v2</b> — SDSSJ0946 subhalo v2: HilbertSNR, two masks, Vegetti light prior, then light plus dark · no runs recorded · updated 2026-11-28</summary>
+<details id="project-sdssj0946_subhalo_v2"><summary><b>sdssj0946_subhalo_v2</b> — SDSSJ0946 subhalo v2: HilbertSNR, two masks, Vegetti light prior, then light plus dark · 0 running · 3 open · updated 2026-11-28</summary>
 
 **Registered:** 2026-11-26
 
@@ -159,17 +159,27 @@ Use the cortex skill. — resume sdssj0946_subhalo_v2: read PyAutoCortex project
 
 </details>
 
-**Runs** (0)
+**Runs** (3)
 
-_nothing on the cluster_
+| Job | State | Partition | Date | Description |
+|---|---|---|---|---|
+| `417631` | open | gpu | 11-28 | Subhalo phase on h25_rep1, 3.5 arcsec mask, Vegetti light prior: luminous / light_only (array 2-3, n_live 2400; held on afterok:417629 and 417630 start + 20 mi… |
+| `417630` | open | gpu | 11-28 | Subhalo phase on h25_rep1, 3.5 arcsec mask, H25 light prior: none / dark / luminous / light_only (array 0-3, n_live 2400; held on afterok:417629) |
+| `417629` | open | gpu | 11-28 | SLaM chain repeat h25_rep1, 3.5 arcsec mask (independent end-to-end repeat of 417093; private base PyAuto_wt/sdssj0946-v2) |
 
-<details><summary>Recent log — 5 of 14 entries</summary>
+<details><summary>Full descriptions (1 shortened above)</summary>
 
+- `417631` — Subhalo phase on h25_rep1, 3.5 arcsec mask, Vegetti light prior: luminous / light_only (array 2-3, n_live 2400; held on afterok:417629 and 417630 start + 20 min)
+
+</details>
+
+<details><summary>Recent log — 5 of 17 entries</summary>
+
+- 2026-11-28 — *run* — 417631 submitted: Subhalo phase on h25_rep1, 3.5 arcsec mask, Vegetti light prior: luminous / light_only (array 2-3, n_live 2400; held on afterok:417629 and 417630 start + 20 min)
+- 2026-11-28 — *run* — 417630 submitted: Subhalo phase on h25_rep1, 3.5 arcsec mask, H25 light prior: none / dark / luminous / light_only (array 0-3, n_live 2400; held on afterok:417629)
+- 2026-11-28 — *run* — 417629 submitted: SLaM chain repeat h25_rep1, 3.5 arcsec mask (independent end-to-end repeat of 417093; private base PyAuto_wt/sdssj0946-v2)
 - 2026-11-28 — *note* — Subhalo-phase output (12 fits, arrays 417104 / 417107 / 417108 / 417109) pulled to the laptop; hpc/sync status shows nothing left to transfer. scripts/compare_subhalo_fits.py still reads v1's layout.
 - 2026-11-28 — *run* — 417109 finished — wall 11:15: Subhalo phase, 3.5 arcsec mask, Vegetti light prior: luminous / light_only (array 2-3, n_live 2400) — sacct: both tasks COMPLETED 0:0, last ended 2026-11-28 02:12 (wall is the longest task, luminous)
-- 2026-11-28 — *run* — 417108 finished — wall 9:15: Subhalo phase, 2.2 arcsec mask, Vegetti light prior: luminous / light_only (array 2-3, n_live 2400) — sacct: both tasks COMPLETED 0:0, last ended 2026-11-28 00:02 (wall is the longest task, luminous)
-- 2026-11-27 — *run* — 417107 finished — wall 9:45: Subhalo phase, 3.5 arcsec mask, H25 light prior: none / dark / luminous / light_only (array 0-3, n_live 2400) — sacct: all 4 tasks COMPLETED 0:0, last ended 2026-11-27 22:03 (wall is the longest task, luminous)
-- 2026-11-27 — *run* — 417104 finished — wall 7:52: Subhalo phase, 2.2 arcsec mask, H25 light prior: none / dark / luminous / light_only (array 0-3, n_live 2400) — sacct: all 4 tasks COMPLETED 0:0, last ended 2026-11-27 17:36 (wall is the longest task, luminous)
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/sdssj0946_subhalo_v2.md)
 
