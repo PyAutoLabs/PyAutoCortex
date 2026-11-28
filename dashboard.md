@@ -11,7 +11,7 @@ One ledger per science project: what is on the cluster right now, what the human
 | Where | Count |
 |-------|------:|
 | [Running](#projects) | 1 |
-| [Open](#projects) | 9 |
+| [Open](#projects) | 10 |
 | [Active](#active) | 12 |
 | [Dormant](#dormant) | 2 |
 | [Retired](#retired) | 22 |
@@ -47,7 +47,7 @@ Paper-bound science projects (`active/`, and `complete/` or `archive/` once reti
 | Science | Count |
 |-------|------:|
 | Running | 0 |
-| Open | 7 |
+| Open | 8 |
 | Projects | 6 |
 
 ### Summary
@@ -59,7 +59,7 @@ Paper-bound science projects (`active/`, and `complete/` or `archive/` once reti
 | sdssj0946_subhalo | 0 | 0 | 2026-11-25 |
 | sdssj0946_subhalo_v2 | 0 | 3 | 2026-11-28 |
 | cowls_diana_v2 | 0 | 2 | 2026-11-28 |
-| stars_dm_slope_hst | 0 | 2 | 2026-11-28 |
+| stars_dm_slope_hst | 0 | 3 | 2026-11-28 |
 
 #### Dormant
 
@@ -239,7 +239,7 @@ active · ral · no issue yet
 
 </details>
 
-<details id="project-stars_dm_slope_hst"><summary><b>stars_dm_slope_hst</b> — Can HST imaging of SLACS-like lenses constrain a stars plus gNFW inner slope · 0 running · 2 open · updated 2026-11-28</summary>
+<details id="project-stars_dm_slope_hst"><summary><b>stars_dm_slope_hst</b> — Can HST imaging of SLACS-like lenses constrain a stars plus gNFW inner slope · 0 running · 3 open · updated 2026-11-28</summary>
 
 **Registered:** 2026-11-27
 
@@ -249,7 +249,7 @@ active · ral · no issue yet
 
 **Current position**
 
-Pilot slice finished 2026-11-28 and is pulled. The remaining 85 fits (417595, 417602) were submitted 2026-11-28 on the human's word. The 80 information maps are not submitted: they wait for a slope profile that frees f_dm.
+Pilot slice finished 2026-11-28 and is pulled. Submitted 2026-11-28 on the human's word: the remaining 85 fits (417595, 417602) and an 8-task pilot of the slope profile with f_dm free (417659), which replaces the f_dm grid maps. The other 72 profiles wait for that pilot and the human's go.
 
 <details><summary title="Copy resume prompt for stars_dm_slope_hst">📋</summary>
 
@@ -259,20 +259,21 @@ Use the cortex skill. — resume stars_dm_slope_hst: read PyAutoCortex projects/
 
 </details>
 
-**Runs** (2)
+**Runs** (3)
 
 | Job | State | Partition | Date | Description |
 |---|---|---|---|---|
+| `417659` | open | ral | 11-28 | pilot: slope profiles with f_dm free (slope_profile.py), realisation 0 of each of the 8 lenses (indices 90, 100, ..., 160) |
 | `417602` | open | ral | 11-28 | free fits n_live 400, the 78 not in the pilot (indices 10-14, 16-71, 73-89): P1-inv, P1p-f-inv, P1 on 9 mocks, 3 seeds |
 | `417595` | open | ral | 11-28 | reference fits, the 7 mocks not in the pilot (campaign indices 1-2, 4-8) |
 
-<details><summary>Recent log — 5 of 9 entries</summary>
+<details><summary>Recent log — 5 of 10 entries</summary>
 
+- 2026-11-28 — *run* — 417659 submitted: pilot: slope profiles with f_dm free (slope_profile.py), realisation 0 of each of the 8 lenses (indices 90, 100, ..., 160)
 - 2026-11-28 — *run* — 417602 submitted: free fits n_live 400, the 78 not in the pilot (indices 10-14, 16-71, 73-89): P1-inv, P1p-f-inv, P1 on 9 mocks, 3 seeds
 - 2026-11-28 — *run* — 417595 submitted: reference fits, the 7 mocks not in the pilot (campaign indices 1-2, 4-8)
 - 2026-11-28 — *run* — 417576 finished — wall 5:15: pilot slice: information-test likelihood maps A_g10_r0 and B_g15_r0 (indices 90, 120) — 2/2 maps complete, 3.0 h and 5.2 h, peak 2.9 GB
 - 2026-11-27 — *run* — 417573 finished — wall 1:23: pilot slice: free fits n_live 400, P1-inv on A, P1 on A, P1-inv on I (indices 9, 15, 72) — 3/3 tasks completed, 1.0-1.4 h each, peak 5.9 GB
-- 2026-11-27 — *run* — 417571 finished — wall 0:14: pilot slice: reference fits, mocks A and F (campaign indices 0, 3) — 2/2 tasks completed (ref_A, ref_F), 13-14 min each, peak 5.7 GB
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/stars_dm_slope_hst.md)
 
