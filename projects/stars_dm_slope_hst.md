@@ -5,15 +5,17 @@ Issue: none
 
 ## Now
 
-Pilot slice finished 2026-11-28 and is pulled. The remaining 85 fits (417595, 417602) were submitted 2026-11-28 on the human's word. The 80 information maps are not submitted: they wait for a slope profile that frees f_dm.
+Pilot slice finished 2026-11-28 and is pulled. Submitted 2026-11-28 on the human's word: the remaining 85 fits (417595, 417602) and an 8-task pilot of the slope profile with f_dm free (417659), which replaces the f_dm grid maps. The other 72 profiles wait for that pilot and the human's go.
 
 ## Runs
 
 - 417595 — open — ral — 2026-11-28 — reference fits, the 7 mocks not in the pilot (campaign indices 1-2, 4-8)
 - 417602 — open — ral — 2026-11-28 — free fits n_live 400, the 78 not in the pilot (indices 10-14, 16-71, 73-89): P1-inv, P1p-f-inv, P1 on 9 mocks, 3 seeds
+- 417659 — open — ral — 2026-11-28 — pilot: slope profiles with f_dm free (slope_profile.py), realisation 0 of each of the 8 lenses (indices 90, 100, ..., 160)
 
 ## Log
 
+- 2026-11-28 — run — 417659 submitted: pilot: slope profiles with f_dm free (slope_profile.py), realisation 0 of each of the 8 lenses (indices 90, 100, ..., 160)
 - 2026-11-28 — run — 417602 submitted: free fits n_live 400, the 78 not in the pilot (indices 10-14, 16-71, 73-89): P1-inv, P1p-f-inv, P1 on 9 mocks, 3 seeds
 - 2026-11-28 — run — 417595 submitted: reference fits, the 7 mocks not in the pilot (campaign indices 1-2, 4-8)
 - 2026-11-28 — run — 417576 finished — wall 5:15: pilot slice: information-test likelihood maps A_g10_r0 and B_g15_r0 (indices 90, 120) — 2/2 maps complete, 3.0 h and 5.2 h, peak 2.9 GB
