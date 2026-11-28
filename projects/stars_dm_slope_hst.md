@@ -5,16 +5,16 @@ Issue: none
 
 ## Now
 
-Set up 2026-11-27: SLACS calibration, nine HST mocks, the 80 information-test datasets and a two-fit local pilot are done. The 7-task RAL pilot slice (417571, 417573, 417576) was submitted on the human's word; the full 170-task campaign in hpc/PROPOSAL.md waits for its timings and the human's go.
+Pilot slice finished 2026-11-28: all 7 tasks completed and their results are pulled. The full 170-task campaign in hpc/PROPOSAL.md is not submitted; it waits for the human's go.
 
 ## Runs
 
-- 417571 — open — ral — 2026-11-27 — pilot slice: reference fits, mocks A and F (campaign indices 0, 3)
-- 417573 — open — ral — 2026-11-27 — pilot slice: free fits n_live 400, P1-inv on A, P1 on A, P1-inv on I (indices 9, 15, 72)
-- 417576 — open — ral — 2026-11-27 — pilot slice: information-test likelihood maps A_g10_r0 and B_g15_r0 (indices 90, 120)
 
 ## Log
 
+- 2026-11-28 — run — 417576 finished — wall 5:15: pilot slice: information-test likelihood maps A_g10_r0 and B_g15_r0 (indices 90, 120) — 2/2 maps complete, 3.0 h and 5.2 h, peak 2.9 GB
+- 2026-11-27 — run — 417573 finished — wall 1:23: pilot slice: free fits n_live 400, P1-inv on A, P1 on A, P1-inv on I (indices 9, 15, 72) — 3/3 tasks completed, 1.0-1.4 h each, peak 5.9 GB
+- 2026-11-27 — run — 417571 finished — wall 0:14: pilot slice: reference fits, mocks A and F (campaign indices 0, 3) — 2/2 tasks completed (ref_A, ref_F), 13-14 min each, peak 5.7 GB
 - 2026-11-27 — run — 417576 submitted: pilot slice: information-test likelihood maps A_g10_r0 and B_g15_r0 (indices 90, 120)
 - 2026-11-27 — run — 417573 submitted: pilot slice: free fits n_live 400, P1-inv on A, P1 on A, P1-inv on I (indices 9, 15, 72)
 - 2026-11-27 — run — 417571 submitted: pilot slice: reference fits, mocks A and F (campaign indices 0, 3)
