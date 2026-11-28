@@ -5,13 +5,14 @@ Issue: none
 
 ## Now
 
-Set up 2026-11-26 from sdssj0946_subhalo (retired): HilbertSNR + soft S/N adapt images, 2.2 and 3.5 arcsec masks, H25 and Vegetti light priors. Nothing submitted; RAL base needs the HilbertSNR commits first.
+Subhalo phase finished 2026-11-28 and pulled to output/: none / dark / luminous / light only on the 2.2 and 3.5 arcsec masks, H25 and Vegetti light priors (n_live 2400). The fits await the human's review (viewer: Science/scratch/sdssj0946_v2_subhalo/index.html); no result is recorded yet. Light plus dark matter model waits on the library.
 
 ## Runs
 
 
 ## Log
 
+- 2026-11-28 — note — Subhalo-phase output (12 fits, arrays 417104 / 417107 / 417108 / 417109) pulled to the laptop; hpc/sync status shows nothing left to transfer. scripts/compare_subhalo_fits.py still reads v1's layout.
 - 2026-11-28 — run — 417109 finished — wall 11:15: Subhalo phase, 3.5 arcsec mask, Vegetti light prior: luminous / light_only (array 2-3, n_live 2400) — sacct: both tasks COMPLETED 0:0, last ended 2026-11-28 02:12 (wall is the longest task, luminous)
 - 2026-11-28 — run — 417108 finished — wall 9:15: Subhalo phase, 2.2 arcsec mask, Vegetti light prior: luminous / light_only (array 2-3, n_live 2400) — sacct: both tasks COMPLETED 0:0, last ended 2026-11-28 00:02 (wall is the longest task, luminous)
 - 2026-11-27 — run — 417107 finished — wall 9:45: Subhalo phase, 3.5 arcsec mask, H25 light prior: none / dark / luminous / light_only (array 0-3, n_live 2400) — sacct: all 4 tasks COMPLETED 0:0, last ended 2026-11-27 22:03 (wall is the longest task, luminous)
