@@ -11,7 +11,7 @@ One ledger per science project: what is on the cluster right now, what the human
 | Where | Count |
 |-------|------:|
 | [Running](#projects) | 1 |
-| [Open](#projects) | 2 |
+| [Open](#projects) | 3 |
 | [Active](#active) | 12 |
 | [Dormant](#dormant) | 2 |
 | [Retired](#retired) | 22 |
@@ -367,7 +367,7 @@ Development projects (`development/`): exploratory work that develops or validat
 | Development | Count |
 |-------|------:|
 | Running | 1 |
-| Open | 1 |
+| Open | 2 |
 | Projects | 8 |
 
 ### Summary
@@ -383,7 +383,7 @@ Development projects (`development/`): exploratory work that develops or validat
 | dm_sightlines | 0 | 0 | 2026-11-25 |
 | adapt_snr_cap | 1 | 1 | 2026-11-25 |
 | erc_angular_structure | 0 | 0 | 2026-11-26 |
-| galaxy_sightlines | 0 | 0 | 2026-11-27 |
+| galaxy_sightlines | 0 | 1 | 2026-11-28 |
 
 #### Dormant
 
@@ -680,7 +680,7 @@ active · ral · no issue yet
 
 </details>
 
-<details id="project-galaxy_sightlines"><summary><b>galaxy_sightlines</b> — Full line of sight of a strong lens: dark halos, galaxies, environment; external shear budget · no runs recorded · updated 2026-11-27</summary>
+<details id="project-galaxy_sightlines"><summary><b>galaxy_sightlines</b> — Full line of sight of a strong lens: dark halos, galaxies, environment; external shear budget · 0 running · 1 open · updated 2026-11-28</summary>
 
 **Registered:** 2026-11-27
 
@@ -700,17 +700,25 @@ Use the cortex skill. — resume galaxy_sightlines: read PyAutoCortex projects/g
 
 </details>
 
-**Runs** (0)
+**Runs** (1)
 
-_nothing on the cluster_
+| Job | State | Partition | Date | Description |
+|---|---|---|---|---|
+| `417590` | open | gpu | 11-28 | stage 1 step B, the rest of the 1,000 sightlines: fitted shear of 900 full-size sightlines (seeds 100-999, 18 tasks x 50), three cases each, power law + shear… |
 
-<details><summary>Recent log — 5 of 12 entries</summary>
+<details><summary>Full descriptions (1 shortened above)</summary>
 
+- `417590` — stage 1 step B, the rest of the 1,000 sightlines: fitted shear of 900 full-size sightlines (seeds 100-999, 18 tasks x 50), three cases each, power law + shear refits from three starts, fit tolerance 1e-7; GPU array 2-19, one A100 each, at most 4 at a time
+
+</details>
+
+<details><summary>Recent log — 5 of 13 entries</summary>
+
+- 2026-11-28 — *run* — 417590 submitted: stage 1 step B, the rest of the 1,000 sightlines: fitted shear of 900 full-size sightlines (seeds 100-999, 18 tasks x 50), three cases each, power law + shear refits from three starts, fit tolerance 1e-7; GPU array 2-19, one A100 each, at most 4 at a time
 - 2026-11-27 — *run* — 417565 finished — wall 1:41: stage 1 step B CPU pilot: fitted shear of 50 full-size sightlines (5 tasks x 10), three cases each, fit tolerance 1e-7; CPU array 0-4, 8 cores each — 5/5 tasks completed, 50/50 sightlines fitted, none failed; median 421 s per sightline on 8 cores (tasks took 1:07 to 1:41)
 - 2026-11-27 — *run* — 417564 finished — wall 1:55: stage 1 step A at full image size on a CPU node: offset starts, injected shears, one perturbing halo at five distances, three redshifts and three masses (part 3 at fit tolerance 1e-7); 8 cores, one job — 1/1 task completed, all three parts
 - 2026-11-27 — *run* — 417555 finished — wall 0:26: stage 1 step B pilot: fitted shear of 100 sightlines (2 tasks x 50), three cases each, power law + shear refits from three starts; GPU array 0-1, one A100 each — 2/2 tasks completed, 100/100 sightlines fitted, none failed; median 22 s per sightline on one A100 (tasks took 0:26 and 0:24)
 - 2026-11-27 — *run* — 417554 finished — wall 0:08: stage 1 step A at full image size: refits from offset starts, recovery of injected shears, one perturbing halo at five distances, three redshifts and three masses; one A100, one job — 1/1 task completed, all three parts; its validate_full.json was overwritten an hour later by the CPU job 417564 (same output path), the log is kept
-- 2026-11-27 — *run* — 417565 submitted: stage 1 step B CPU pilot: fitted shear of 50 full-size sightlines (5 tasks x 10), three cases each, fit tolerance 1e-7; CPU array 0-4, 8 cores each
 
 [full log](https://github.com/PyAutoLabs/PyAutoCortex/blob/main/projects/galaxy_sightlines.md)
 
