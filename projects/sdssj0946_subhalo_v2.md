@@ -9,9 +9,15 @@ Subhalo phase finished 2026-11-28 and pulled to output/: none / dark / luminous 
 
 ## Runs
 
+- 417629 — open — gpu — 2026-11-28 — SLaM chain repeat h25_rep1, 3.5 arcsec mask (independent end-to-end repeat of 417093; private base PyAuto_wt/sdssj0946-v2)
+- 417630 — open — gpu — 2026-11-28 — Subhalo phase on h25_rep1, 3.5 arcsec mask, H25 light prior: none / dark / luminous / light_only (array 0-3, n_live 2400; held on afterok:417629)
+- 417631 — open — gpu — 2026-11-28 — Subhalo phase on h25_rep1, 3.5 arcsec mask, Vegetti light prior: luminous / light_only (array 2-3, n_live 2400; held on afterok:417629 and 417630 start + 20 min)
 
 ## Log
 
+- 2026-11-28 — run — 417631 submitted: Subhalo phase on h25_rep1, 3.5 arcsec mask, Vegetti light prior: luminous / light_only (array 2-3, n_live 2400; held on afterok:417629 and 417630 start + 20 min)
+- 2026-11-28 — run — 417630 submitted: Subhalo phase on h25_rep1, 3.5 arcsec mask, H25 light prior: none / dark / luminous / light_only (array 0-3, n_live 2400; held on afterok:417629)
+- 2026-11-28 — run — 417629 submitted: SLaM chain repeat h25_rep1, 3.5 arcsec mask (independent end-to-end repeat of 417093; private base PyAuto_wt/sdssj0946-v2)
 - 2026-11-28 — note — Subhalo-phase output (12 fits, arrays 417104 / 417107 / 417108 / 417109) pulled to the laptop; hpc/sync status shows nothing left to transfer. scripts/compare_subhalo_fits.py still reads v1's layout.
 - 2026-11-28 — run — 417109 finished — wall 11:15: Subhalo phase, 3.5 arcsec mask, Vegetti light prior: luminous / light_only (array 2-3, n_live 2400) — sacct: both tasks COMPLETED 0:0, last ended 2026-11-28 02:12 (wall is the longest task, luminous)
 - 2026-11-28 — run — 417108 finished — wall 9:15: Subhalo phase, 2.2 arcsec mask, Vegetti light prior: luminous / light_only (array 2-3, n_live 2400) — sacct: both tasks COMPLETED 0:0, last ended 2026-11-28 00:02 (wall is the longest task, luminous)
