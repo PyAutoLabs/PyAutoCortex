@@ -9,9 +9,11 @@ Just opened — nothing submitted yet.
 
 ## Runs
 
+- 417590 — open — gpu — 2026-11-28 — stage 1 step B, the rest of the 1,000 sightlines: fitted shear of 900 full-size sightlines (seeds 100-999, 18 tasks x 50), three cases each, power law + shear refits from three starts, fit tolerance 1e-7; GPU array 2-19, one A100 each, at most 4 at a time
 
 ## Log
 
+- 2026-11-28 — run — 417590 submitted: stage 1 step B, the rest of the 1,000 sightlines: fitted shear of 900 full-size sightlines (seeds 100-999, 18 tasks x 50), three cases each, power law + shear refits from three starts, fit tolerance 1e-7; GPU array 2-19, one A100 each, at most 4 at a time
 - 2026-11-27 — run — 417565 finished — wall 1:41: stage 1 step B CPU pilot: fitted shear of 50 full-size sightlines (5 tasks x 10), three cases each, fit tolerance 1e-7; CPU array 0-4, 8 cores each — 5/5 tasks completed, 50/50 sightlines fitted, none failed; median 421 s per sightline on 8 cores (tasks took 1:07 to 1:41)
 - 2026-11-27 — run — 417564 finished — wall 1:55: stage 1 step A at full image size on a CPU node: offset starts, injected shears, one perturbing halo at five distances, three redshifts and three masses (part 3 at fit tolerance 1e-7); 8 cores, one job — 1/1 task completed, all three parts
 - 2026-11-27 — run — 417555 finished — wall 0:26: stage 1 step B pilot: fitted shear of 100 sightlines (2 tasks x 50), three cases each, power law + shear refits from three starts; GPU array 0-1, one A100 each — 2/2 tasks completed, 100/100 sightlines fitted, none failed; median 22 s per sightline on one A100 (tasks took 0:26 and 0:24)
